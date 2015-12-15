@@ -1,0 +1,8 @@
+
+
+import urllib;
+
+sock = urllib.urlopen("http://localhost/LinuxSound")
+htmlSource = sock.read()
+sock.close()
+print htmlSource

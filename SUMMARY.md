@@ -2,10 +2,6 @@
 
 * [Introduction](README.md)
 * [Basic concepts of  digital sound] (Sampled/Basic/README.md)
-   * [Resources] (Sampled/Basic/Resources.md)
-   * [Sampled audio] (Sampled/Basic/Sampledaudio.md)
-   * [Sample rate] (Sampled/Basic/Samplerate.md)
-   * [Sample format] (Sampled/Basic/Sampleformat.md)
    * [Frames] (Sampled/Basic/Frames.md)
    * [Pulse-code modulation] (Sampled/Basic/Pulse-codemodulation.md)
    * [Over and Under Run] (Sampled/Basic/OverandUnderRun.md)

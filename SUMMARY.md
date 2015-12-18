@@ -1,7 +1,7 @@
 # Summary
 
-[Introduction](README.md)
-* [Basic concepts of  digital sound] (Sampled/Basic/README.md)
+* [Introduction](README.md)
+* [Basic introductory concepts of  digital sound] (Sampled/Basic/README.md)
 * [User level sound tools] (Sampled/User/README.md)
 * [Sound codecs and file formats] (Sampled/Codecs/README.md)
 * [Overview of Linux sound architecture] (Sampled/Architecture/README.md)

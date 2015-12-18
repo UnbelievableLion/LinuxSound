@@ -47,6 +47,8 @@ class ChapterParser(HTMLParser):
             if self.in_section:
                 self.section_file.write("```" + lang + "\n")
 
+        elif tag == "bockquote":
+            self.section.write("> ")
 
         elif tag == "img" and self.in_section:
             for attr in attrs:

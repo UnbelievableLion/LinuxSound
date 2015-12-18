@@ -1,0 +1,42 @@
+I've been writing Open Content books for many years now, using standard HTML and delivering them from my own web site. This has the advantage of total control of the content and delivery, but the downside of administration, backup, a slow site (I'm on ADSL2), etc.
+
+About a week ago Leven approached me with an offer to put one of my books on Gitbook, an open source Open Content book repository. He converted it to the right format and just left me a few steps to do to put in on Gitbook. I kind of liked it, so I'm looking at puting the rest of my books there. This blog documents from scratch my experience in getting another book there. Why document it? Because there were enough steps in the process, in different places, that a complete description seems worth it.
+
+I'll cover the following topics
+- conversion to Markdown
+- putting the book onto Github
+- copying it across to Gitbook
+- linking the accounts
+
+Conversion from HTML to Markdown
+
+Gitbook uses Markdown rather than HTML. There are converters, but Leven said that he did it by hand, taking about 1 1/2 hours per chapter. Since I was looking at my Linux Sound book of 40 chapters, by hand would take about 60 hours. So I wrote my own Python programs to convert (my) HTML to Markdown. Not hard: three of them so far, about 400 lines total.
+
+I chose that route rather than using a general converter as Gitbook has a particular format and I know my own HTML conventions inside out. For example each of my chapters has a Preface in a 'div' tag with class 'preface' and one program extracts these out to README.md  files as description for each Markdown chapter. The only real wrinkle is that I pulled each chapter from my own web site using Python's urllib rather than working on the source HTML files. This is because the source files use tricks like server-side includes and my web site is full of other stuff, such as source code for other programs that I used during writing. By pulling the files from the Web, I only get the relevant data after server-side processing.
+
+Git
+
+The easiest way to manage books on Gitbook seems to be to put them on Github. This uses the git project control system created by Linus Torvalds to manage Linux development. Creating a git repository is fairly straightforward. From the directory containing my Markdown files, run
+
+git init
+git add -A
+git commit
+
+After modifying any files, do the last two steps again to commit a new version. There are many complexities to git which I can ignore here: noneed for .gitignore files for example, since I created a 'clean' set of project files.
+
+Github
+
+The git repository should be uploaded to a new repository on Github. Create an account if you don't have one, and then follow instructions to create a new repository. I created one called 'LinuxSound'. I prepare my own computer to push to this repository by
+
+git remote add github git@github.com:jannewmarch/LinuxSound.git
+
+and then push the files up by
+
+git pull github master
+git push github master
+
+If you then go your repository, you should see all your files under the master branch. If you have included a README.md its contents should show below the list of files. It's worth spending time making sure the entries on Github are in good shape before copying them to Gitbook.
+
+Gitbook
+
+Create an account on http://www.gitbook.com. Then in your acount, click on a New Book, and fill in the details. Once complete you should be presented with a screen including a button to Link to Github

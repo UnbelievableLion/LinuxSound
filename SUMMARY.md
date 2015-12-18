@@ -1,7 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
-* [Basic concepts of  digital sound] (Sampled/Basic/README.md)
+* [Basic introductory concepts of  digital sound] (Sampled/Basic/README.md)
    * [Resources] (Sampled/Basic/Resources.md)
    * [Sampled audio] (Sampled/Basic/Sampledaudio.md)
    * [Sample rate] (Sampled/Basic/Samplerate.md)
@@ -357,3 +357,4 @@
    * [Playing a KAR file] (Conclusion/Conclusion/PlayingaKARfile.md)
    * [TiMidity plugin] (Conclusion/Conclusion/TiMidityplugin.md)
    * [Conclusion] (Conclusion/Conclusion/Conclusion.md)
+

@@ -56,7 +56,7 @@ class ContentsParser(HTMLParser):
 
         # print PART heading
         if self.in_contents and string.find(data, "PART") >= 0:
-            self.contents_file.write("\n\n" + string.strip(data) + "\n\n")
+            self.contents_file.write("\n## " + string.strip(data) + "\n")
 
         # print chapter heading
         if self.in_contents and self.depth == 1 and self.in_aref:

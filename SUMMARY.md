@@ -1,6 +1,10 @@
 # Contents
 
 * [Introduction](README.md)
+
+
+ PART 1: SAMPLED AUDIO
+
 + [Basic concepts of  digital sound](Sampled/Basic/README.md)
    + [Resources](Sampled/Basic/Resources.md)
    + [Sampled audio](Sampled/Basic/Sampledaudio.md)
@@ -17,6 +21,7 @@
    + [Players](Sampled/User/Players.md)
    + [Sound tools](Sampled/User/Soundtools.md)
    + [Recorders, editors, etc](Sampled/User/Recorders,editors,etc.md)
+   + [Conclusion](Sampled/User/Conclusion.md)
 + [Sound codecs and file formats](Sampled/Codecs/README.md)
    + [Overview](Sampled/Codecs/Overview.md)
    + [PCM](Sampled/Codecs/PCM.md)
@@ -25,9 +30,11 @@
    + [Ogg Vorbis](Sampled/Codecs/OggVorbis.md)
    + [WMA](Sampled/Codecs/WMA.md)
    + [Matroska](Sampled/Codecs/Matroska.md)
+   + [Conclusion](Sampled/Codecs/Conclusion.md)
 + [Overview of Linux sound architecture](Sampled/Architecture/README.md)
    + [Resources](Sampled/Architecture/Resources.md)
    + [Components](Sampled/Architecture/Components.md)
+   + [Conclusion](Sampled/Architecture/Conclusion.md)
 + [ALSA](Sampled/Alsa/README.md)
    + [Resources](Sampled/Alsa/Resources.md)
    + [User space tools](Sampled/Alsa/Userspacetools.md)
@@ -73,6 +80,7 @@
    + [Jack session API](Sampled/SessionManagement/JacksessionAPI.md)
    + [LADISH API](Sampled/SessionManagement/LADISHAPI.md)
    + [Non-session management API](Sampled/SessionManagement/Non-sessionmanagementAPI.md)
+   + [Conclusion](Sampled/SessionManagement/Conclusion.md)
 + [Java Sound](Sampled/JavaSound/README.md)
    + [Introduction](Sampled/JavaSound/Introduction.md)
    + [Key Java Sound classes](Sampled/JavaSound/KeyJavaSoundclasses.md)
@@ -81,7 +89,7 @@
    + [Recording audio to a file](Sampled/JavaSound/Recordingaudiotoafile.md)
    + [Play microphone to speaker](Sampled/JavaSound/Playmicrophonetospeaker.md)
    + [Where does javaSound get its devices from?](Sampled/JavaSound/WheredoesjavaSoundgetitsdevicesfrom?.md)
-   + [Summary](Sampled/JavaSound/Summary.md)
+   + [Conclusion](Sampled/JavaSound/Conclusion.md)
 + [GStreamer](Sampled/GStreamer/README.md)
    + [Resources](Sampled/GStreamer/Resources.md)
 + [libao](Sampled/libao/README.md)
@@ -90,7 +98,7 @@
 + [FFmpeg](Sampled/FFmpeg/README.md)
    + [Resources](Sampled/FFmpeg/Resources.md)
    + [FFmpeg command line tools](Sampled/FFmpeg/FFmpegcommandlinetools.md)
-   + [libavformat/libavdecode](Sampled/FFmpeg/libavformat/libavdecode.md)
+   + [libavformat or libavdecode](Sampled/FFmpeg/libavformatorlibavdecode.md)
 + [OpenMAX and OpenSL](Sampled/OpenMAX/README.md)
    + [Resources](Sampled/OpenMAX/Resources.md)
    + [Quotes](Sampled/OpenMAX/Quotes.md)
@@ -105,6 +113,10 @@
    + [Ogg Vorbis](Sampled/OpenMAX/OggVorbis.md)
    + [Audio decoding](Sampled/OpenMAX/Audiodecoding.md)
    + [Conclusion](Sampled/OpenMAX/Conclusion.md)
+
+
+ PART 2: DIGITAL SIGNAL PROCESSING
+
 + [LADSPA](DSP/LADSPA/README.md)
    + [Resources](DSP/LADSPA/Resources.md)
    + [Files](DSP/LADSPA/Files.md)
@@ -112,15 +124,15 @@
    + [User level tools](DSP/LADSPA/Userleveltools.md)
    + [The type LADSPA_Descriptor](DSP/LADSPA/ThetypeLADSPA_Descriptor.md)
    + [Loading a plugin](DSP/LADSPA/Loadingaplugin.md)
-   + [The](DSP/LADSPA/The.md)
-   + [amp](DSP/LADSPA/amp.md)
-   + [program](DSP/LADSPA/program.md)
-   + [The](DSP/LADSPA/The.md)
-   + [analysePlugin](DSP/LADSPA/analysePlugin.md)
-   + [client](DSP/LADSPA/client.md)
+   + [The amp program](DSP/LADSPA/Theampprogram.md)
+   + [The analysePlugin client](DSP/LADSPA/TheanalysePluginclient.md)
    + [A mono amplifier client](DSP/LADSPA/Amonoamplifierclient.md)
    + [A stereo amplifer with GUI](DSP/LADSPA/AstereoampliferwithGUI.md)
    + [Conclusion](DSP/LADSPA/Conclusion.md)
+
+
+ PART 3: DIVERSIONS
+
 + [Displaying video with overlays using Gtk and FFMpeg](Diversions/Gtk/README.md)
    + [Introduction](Diversions/Gtk/Introduction.md)
    + [FFMpeg](Diversions/Gtk/FFMpeg.md)
@@ -151,6 +163,11 @@
    + [Decoding a JPEG image into RGB format](Diversions/RaspberryPiOpenMAX/DecodingaJPEGimageintoRGBformat.md)
    + [Rendering a JPEG image](Diversions/RaspberryPiOpenMAX/RenderingaJPEGimage.md)
    + [Rendering a JPEG image without tunnelling](Diversions/RaspberryPiOpenMAX/RenderingaJPEGimagewithouttunnelling.md)
+   + [Conclusion](Diversions/RaspberryPiOpenMAX/Conclusion.md)
+
+
+ PART 4: MIDI
+
 + [MIDI](MIDI/MIDI/README.md)
    + [Overview of MIDI](MIDI/MIDI/OverviewofMIDI.md)
 + [User level MIDI tools](MIDI/User/README.md)
@@ -163,7 +180,7 @@
    + [Wild MIDI](MIDI/User/WildMIDI.md)
    + [Comparison](MIDI/User/Comparison.md)
    + [VLC](MIDI/User/VLC.md)
-   + [Programming with Timidity](MIDI/User/	ProgrammingwithTimidity.md)
+   + [Conclusion](MIDI/User/Conclusion.md)
 + [JavaSound](MIDI/JavaSound/README.md)
    + [Introduction](MIDI/JavaSound/Introduction.md)
    + [Resources](MIDI/JavaSound/Resources.md)
@@ -173,6 +190,7 @@
    + [Playing a MIDI file](MIDI/JavaSound/PlayingaMIDIfile.md)
    + [Playing a file to an external MIDI synthesizer](MIDI/JavaSound/PlayingafiletoanexternalMIDIsynthesizer.md)
    + [Changing the soundbank](MIDI/JavaSound/Changingthesoundbank.md)
+   + [Conclusion](MIDI/JavaSound/Conclusion.md)
 + [ALSA](MIDI/Alsa/README.md)
    + [Resources](MIDI/Alsa/Resources.md)
    + [Introduction](MIDI/Alsa/Introduction.md)
@@ -193,6 +211,10 @@
    + [Making TiMidity into  a library](MIDI/Timidity/MakingTiMidityintoalibrary.md)
    + [Building a new interface](MIDI/Timidity/Buildinganewinterface.md)
    + [Summary](MIDI/Timidity/Summary.md)
+
+
+ PART 5: KARAOKE
+
 + [Overview](Karaoke/Overview/README.md)
    + [Overview](Karaoke/Overview/Overview.md)
 + [User Level Tools](Karaoke/User/README.md)
@@ -252,7 +274,6 @@
    + [MidiPlayer](Karaoke/JavaSound/MidiPlayer.md)
    + [DisplayReceiver](Karaoke/JavaSound/DisplayReceiver.md)
    + [MidiGUI](Karaoke/JavaSound/MidiGUI.md)
-   + [Song information](Karaoke/JavaSound/Songinformation.md)
    + [AttributedLyricPanel](Karaoke/JavaSound/AttributedLyricPanel.md)
    + [PianoPanel](Karaoke/JavaSound/PianoPanel.md)
    + [MelodyPanel](Karaoke/JavaSound/MelodyPanel.md)
@@ -308,6 +329,10 @@
    + [Customising TiMidity build](Karaoke/Jack/CustomisingTiMiditybuild.md)
    + [Playing MP3+G with Jack Rack pitch shifting](Karaoke/Jack/PlayingMP3+GwithJackRackpitchshifting.md)
    + [Conclusion](Karaoke/Jack/Conclusion.md)
+
+
+ PART 6: STREAMING AUDIO
+
 + [HTTP](Streaming/HTTP/README.md)
    + [HTTP servers](Streaming/HTTP/HTTPservers.md)
    + [HTTP clients](Streaming/HTTP/HTTPclients.md)
@@ -320,6 +345,10 @@
    + [Introduction](Streaming/DLNA/Introduction.md)
    + [DLNA open source projects](Streaming/DLNA/DLNAopensourceprojects.md)
 + [Flumotion](Streaming/Flumotion/README.md)
+
+
+ PART 7: MISCELLANEOUS
+
 + [Android](Miscellaneous/Android/README.md)
    + [Resources](Miscellaneous/Android/Resources.md)
    + [Identifying devices](Miscellaneous/Android/Identifyingdevices.md)
@@ -344,6 +373,10 @@
    + [Java MIDI](Miscellaneous/RaspberryPi/JavaMIDI.md)
    + [OpenMAX](Miscellaneous/RaspberryPi/OpenMAX.md)
    + [Conclusion](Miscellaneous/RaspberryPi/Conclusion.md)
+
+
+ PART 8: CONCLUSION
+
 + [Conclusion](Conclusion/Conclusion/README.md)
    + [Where did we start?](Conclusion/Conclusion/Wheredidwestart?.md)
    + [Where did I get to?](Conclusion/Conclusion/WheredidIgetto?.md)

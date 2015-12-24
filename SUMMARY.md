@@ -2,9 +2,7 @@
 
 * [Introduction](README.md)
 
-
-## PART 1: SAMPLED AUDIO
-
++ [PART 1: SAMPLED AUDIO]()
 + [Basic concepts of  digital sound](Sampled/Basic/README.md)
    + [Resources](Sampled/Basic/Resources.md)
    + [Sampled audio](Sampled/Basic/Sampledaudio.md)
@@ -114,9 +112,7 @@
    + [Audio decoding](Sampled/OpenMAX/Audiodecoding.md)
    + [Conclusion](Sampled/OpenMAX/Conclusion.md)
 
-
-## PART 2: DIGITAL SIGNAL PROCESSING
-
++ [PART 2: DIGITAL SIGNAL PROCESSING]()
 + [LADSPA](DSP/LADSPA/README.md)
    + [Resources](DSP/LADSPA/Resources.md)
    + [Files](DSP/LADSPA/Files.md)
@@ -130,9 +126,7 @@
    + [A stereo amplifer with GUI](DSP/LADSPA/AstereoampliferwithGUI.md)
    + [Conclusion](DSP/LADSPA/Conclusion.md)
 
-
-## PART 3: DIVERSIONS
-
++ [PART 3: DIVERSIONS]()
 + [Displaying video with overlays using Gtk and FFMpeg](Diversions/Gtk/README.md)
    + [Introduction](Diversions/Gtk/Introduction.md)
    + [FFMpeg](Diversions/Gtk/FFMpeg.md)
@@ -165,9 +159,7 @@
    + [Rendering a JPEG image without tunnelling](Diversions/RaspberryPiOpenMAX/RenderingaJPEGimagewithouttunnelling.md)
    + [Conclusion](Diversions/RaspberryPiOpenMAX/Conclusion.md)
 
-
-## PART 4: MIDI
-
++ [PART 4: MIDI]()
 + [MIDI](MIDI/MIDI/README.md)
    + [Overview of MIDI](MIDI/MIDI/OverviewofMIDI.md)
 + [User level MIDI tools](MIDI/User/README.md)
@@ -212,9 +204,7 @@
    + [Building a new interface](MIDI/Timidity/Buildinganewinterface.md)
    + [Summary](MIDI/Timidity/Summary.md)
 
-
-## PART 5: KARAOKE
-
++ [PART 5: KARAOKE]()
 + [Overview](Karaoke/Overview/README.md)
    + [Overview](Karaoke/Overview/Overview.md)
 + [User Level Tools](Karaoke/User/README.md)
@@ -330,9 +320,7 @@
    + [Playing MP3+G with Jack Rack pitch shifting](Karaoke/Jack/PlayingMP3+GwithJackRackpitchshifting.md)
    + [Conclusion](Karaoke/Jack/Conclusion.md)
 
-
-## PART 6: STREAMING AUDIO
-
++ [PART 6: STREAMING AUDIO]()
 + [HTTP](Streaming/HTTP/README.md)
    + [HTTP servers](Streaming/HTTP/HTTPservers.md)
    + [HTTP clients](Streaming/HTTP/HTTPclients.md)
@@ -346,9 +334,7 @@
    + [DLNA open source projects](Streaming/DLNA/DLNAopensourceprojects.md)
 + [Flumotion](Streaming/Flumotion/README.md)
 
-
-## PART 7: MISCELLANEOUS
-
++ [PART 7: MISCELLANEOUS]()
 + [Android](Miscellaneous/Android/README.md)
    + [Resources](Miscellaneous/Android/Resources.md)
    + [Identifying devices](Miscellaneous/Android/Identifyingdevices.md)
@@ -374,9 +360,7 @@
    + [OpenMAX](Miscellaneous/RaspberryPi/OpenMAX.md)
    + [Conclusion](Miscellaneous/RaspberryPi/Conclusion.md)
 
-
-## PART 8: CONCLUSION
-
++ [PART 8: CONCLUSION]()
 + [Conclusion](Conclusion/Conclusion/README.md)
    + [Where did we start?](Conclusion/Conclusion/Wheredidwestart?.md)
    + [Where did I get to?](Conclusion/Conclusion/WheredidIgetto?.md)

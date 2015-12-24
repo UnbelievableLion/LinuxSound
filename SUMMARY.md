@@ -3,7 +3,7 @@
 * [Introduction](README.md)
 
 
- PART 1: SAMPLED AUDIO
+## PART 1: SAMPLED AUDIO
 
 + [Basic concepts of  digital sound](Sampled/Basic/README.md)
    + [Resources](Sampled/Basic/Resources.md)
@@ -115,7 +115,7 @@
    + [Conclusion](Sampled/OpenMAX/Conclusion.md)
 
 
- PART 2: DIGITAL SIGNAL PROCESSING
+## PART 2: DIGITAL SIGNAL PROCESSING
 
 + [LADSPA](DSP/LADSPA/README.md)
    + [Resources](DSP/LADSPA/Resources.md)
@@ -131,7 +131,7 @@
    + [Conclusion](DSP/LADSPA/Conclusion.md)
 
 
- PART 3: DIVERSIONS
+## PART 3: DIVERSIONS
 
 + [Displaying video with overlays using Gtk and FFMpeg](Diversions/Gtk/README.md)
    + [Introduction](Diversions/Gtk/Introduction.md)
@@ -166,7 +166,7 @@
    + [Conclusion](Diversions/RaspberryPiOpenMAX/Conclusion.md)
 
 
- PART 4: MIDI
+## PART 4: MIDI
 
 + [MIDI](MIDI/MIDI/README.md)
    + [Overview of MIDI](MIDI/MIDI/OverviewofMIDI.md)
@@ -213,7 +213,7 @@
    + [Summary](MIDI/Timidity/Summary.md)
 
 
- PART 5: KARAOKE
+## PART 5: KARAOKE
 
 + [Overview](Karaoke/Overview/README.md)
    + [Overview](Karaoke/Overview/Overview.md)
@@ -331,7 +331,7 @@
    + [Conclusion](Karaoke/Jack/Conclusion.md)
 
 
- PART 6: STREAMING AUDIO
+## PART 6: STREAMING AUDIO
 
 + [HTTP](Streaming/HTTP/README.md)
    + [HTTP servers](Streaming/HTTP/HTTPservers.md)
@@ -347,7 +347,7 @@
 + [Flumotion](Streaming/Flumotion/README.md)
 
 
- PART 7: MISCELLANEOUS
+## PART 7: MISCELLANEOUS
 
 + [Android](Miscellaneous/Android/README.md)
    + [Resources](Miscellaneous/Android/Resources.md)
@@ -375,7 +375,7 @@
    + [Conclusion](Miscellaneous/RaspberryPi/Conclusion.md)
 
 
- PART 8: CONCLUSION
+## PART 8: CONCLUSION
 
 + [Conclusion](Conclusion/Conclusion/README.md)
    + [Where did we start?](Conclusion/Conclusion/Wheredidwestart?.md)

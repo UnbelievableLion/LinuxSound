@@ -1,4 +1,6 @@
-#  MidiPlayer 
+
+##  MidiPlayer 
+
 
 The MidiPlayer creates a Sequence from the file.
      Sequence information is required at many places, and so rather
@@ -6,34 +8,40 @@ The MidiPlayer creates a Sequence from the file.
       (static) object, a SequenceInformation. This makes the sequence effectively
       a global object to the system.
 
+
 The player then gets the default sequencer and transmits MIDI events
       to two Receiver objects: the default synthesizer to play the events
       and a DisplayReceiver to manage all the GUI handling. The Sequencer
       method getTransmitter() is mis-named: each time it is called it returns
-      a
-new
-transmitter, each playing the same events to their
+      a _new_ transmitter, each playing the same events to their
       respective receivers.
-      From
- [
+      From [
 	Java SE Documentation: Chapter 10: Transmitting and Receiving MIDI Messages
-      ] (http://docs.oracle.com/javase/7/docs/technotes/guides/sound/programmer_guide/chapter10.html)
+      ](http://docs.oracle.com/javase/7/docs/technotes/guides/sound/programmer_guide/chapter10.html) 
 
-This code [in their example] introduces a dual invocation of the MidiDevice.getTransmitter method,
+
+   > This code [in their example] introduces a dual invocation of the MidiDevice.getTransmitter method,
 	assigning the results to inPortTrans1 and inPortTrans2. As mentioned earlier, 
 	a device can own multiple transmitters and receivers. Each time 
 	MidiDevice.getTransmitter() is invoked for a given device, another transmitter 
 	is returned, until no more are available, at which time an exception will be thrown.
+
+
+
 That way, the sequencer can send to two receivers.
+
 
 Receivers do not get MetaMessages. These contain information such as Text or Lyric
       events. The DisplayReceiver is registered as an MetaEventListener so that it can manage
       these events as well as other events.
 
+
 The MidiPlayer is:
+
 ```
 
-
+      
+      
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.InvalidMidiDataException;
@@ -202,6 +210,6 @@ public class MidiPlayer {
 	System.out.println(strMessage);
     }
 }
+      
+    
 ```
-
-

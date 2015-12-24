@@ -1,10 +1,12 @@
-#  Java MIDI 
 
-openJDK supports the Java MIDI devices. The program
- `DeviceInfo`reports
+##  Java MIDI 
+
+
+openJDK supports the Java MIDI devices. The program `DeviceInfo`reports
+
 ```
 
- `
+	
 MIDI devices:
     Name: Gervill, Decription: Software MIDI Synthesizer, Vendor: OpenJDK
         Device is a synthesizer
@@ -35,17 +37,17 @@ MIDI devices:
 Default system sequencer is Real Time Sequencer
 Default system synthesizer is Gervill
 
-	`
-
+	
+      
 ```
+
+
+
 
 
 Programs like DumpSequence work okay. But the SimpleMidiPlayer hits 80% CPU
       usage and is unusable.
       So any idea of a Karaoke player using Java on the RPi is simply not on :-(.
-      There is a thread on the Raspberry Pi site discussing
- [
+      There is a thread on the Raspberry Pi site discussing [
 	problems with sound
-      ] (http://www.raspberrypi.org/phpBB3/viewtopic.php?f=38&t=11009)
-.
-
+      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=38&t=11009) .

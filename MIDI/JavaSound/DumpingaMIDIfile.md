@@ -1,23 +1,22 @@
-#  Dumping a MIDI file 
+
+##  Dumping a MIDI file 
+
 
 These two programs from jsresources.org dump a MIDI file to the console.
-      The
- `MidiSystem`creates a
- `Sequence`from a file.
+      The `MidiSystem`creates a `Sequence`from a file.
       Each track of the sequence is looped through and each event within each
-      track is examined. While it would be possible to print
-in situ
-,
-      each event is passed to a
- `Receiver`object which in this case
-      is
- `DumpReceiver`. That object could do anything, but in this case
+      track is examined. While it would be possible to print _in situ_ ,
+      each event is passed to a `Receiver`object which in this case
+      is `DumpReceiver`. That object could do anything, but in this case
       just prints the event to stdout.
 
+
 DumpSequence.java is
+
 ```
 
-/*
+      
+      /*
  *	DumpSequence.java
  *
  *	This file is part of jsresources.org
@@ -245,13 +244,17 @@ public class DumpSequence
 /*** DumpSequence.java ***/
 
 
+      
+    
 ```
 
 
 DmpReceiver.java is
+
 ```
 
-/*
+      
+      /*
  *	DumpReceiver.java
  *
  *	This file is part of jsresources.org
@@ -461,16 +464,16 @@ public class DumpReceiver
 			switch (message.getChannel())
 			{
 			case 0x1:
-				int	nQType = (message.getData1()  0x70) >> 4;
-				int	nQData = message.getData1()  0x0F;
+				int	nQType = (message.getData1() & 0x70) >> 4;
+				int	nQData = message.getData1() & 0x0F;
 				if (nQType == 7)
 				{
-					nQData = nQData  0x1;
+					nQData = nQData & 0x1;
 				}
 				strMessage += QUARTER_FRAME_MESSAGE_TEXT[nQType] + nQData;
 				if (nQType == 7)
 				{
-					int	nFrameType = (message.getData1()  0x06) >> 1;
+					int	nFrameType = (message.getData1() & 0x06) >> 1;
 					strMessage += ", frame type: " + FRAME_TYPE_TEXT[nFrameType];
 				}
 				break;
@@ -537,7 +540,7 @@ public class DumpReceiver
 		        if (abData.length == 0)
 			    nSequenceNumber = 0;
 		        else
-			    nSequenceNumber = ((abData[0]  0xFF) << 8) | (abData[1]  0xFF);
+			    nSequenceNumber = ((abData[0] & 0xFF) << 8) | (abData[1] & 0xFF);
 			strMessage = "Sequence Number: " + nSequenceNumber;
 			break;
 
@@ -579,7 +582,7 @@ public class DumpReceiver
 			break;
 
 		case 0x20:
-			int	nChannelPrefix = abData[0]  0xFF;
+			int	nChannelPrefix = abData[0] & 0xFF;
 			strMessage = "MIDI Channel Prefix: " + nChannelPrefix;
 			break;
 
@@ -588,9 +591,9 @@ public class DumpReceiver
 			break;
 
 		case 0x51:
-			int	nTempo = ((abData[0]  0xFF) << 16)
-					| ((abData[1]  0xFF) << 8)
-					| (abData[2]  0xFF);           // tempo in microseconds per beat
+			int	nTempo = ((abData[0] & 0xFF) << 16)
+					| ((abData[1] & 0xFF) << 8)
+					| (abData[2] & 0xFF);           // tempo in microseconds per beat
 			float bpm = convertTempo(nTempo);
 			// truncate it to 2 digits after dot
 			bpm = (float) (Math.round(bpm*100.0f)/100.0f);
@@ -600,18 +603,18 @@ public class DumpReceiver
 		case 0x54:
 			// System.out.println("data array length: " + abData.length);
 			strMessage = "SMTPE Offset: "
-				+ (abData[0]  0xFF) + ":"
-				+ (abData[1]  0xFF) + ":"
-				+ (abData[2]  0xFF) + "."
-				+ (abData[3]  0xFF) + "."
-				+ (abData[4]  0xFF);
+				+ (abData[0] & 0xFF) + ":"
+				+ (abData[1] & 0xFF) + ":"
+				+ (abData[2] & 0xFF) + "."
+				+ (abData[3] & 0xFF) + "."
+				+ (abData[4] & 0xFF);
 			break;
 
 		case 0x58:
 			strMessage = "Time Signature: "
-				+ (abData[0]  0xFF) + "/" + (1 << (abData[1]  0xFF))
-				+ ", MIDI clocks per metronome tick: " + (abData[2]  0xFF)
-				+ ", 1/32 per 24 MIDI clocks: " + (abData[3]  0xFF);
+				+ (abData[0] & 0xFF) + "/" + (1 << (abData[1] & 0xFF))
+				+ ", MIDI clocks per metronome tick: " + (abData[2] & 0xFF)
+				+ ", 1/32 per 24 MIDI clocks: " + (abData[3] & 0xFF);
 			break;
 
 		case 0x59:
@@ -653,14 +656,14 @@ public class DumpReceiver
 
 	public static int get14bitValue(int nLowerPart, int nHigherPart)
 	{
-		return (nLowerPart  0x7F) | ((nHigherPart  0x7F) << 7);
+		return (nLowerPart & 0x7F) | ((nHigherPart & 0x7F) << 7);
 	}
 
 
 
 	private static int signedByteToUnsigned(byte b)
 	{
-		return b  0xFF;
+		return b & 0xFF;
 	}
 
 	// convert from microseconds per quarter note to beats per minute and vice versa
@@ -685,19 +688,19 @@ public class DumpReceiver
 		for (int i = 0; i < aByte.length; i++)
 		{
 			sbuf.append(' ');
-			sbuf.append(hexDigits[(aByte[i]  0xF0) >> 4]);
-			sbuf.append(hexDigits[aByte[i]  0x0F]);
-			/*byte	bhigh = (byte) ((aByte[i]   0xf0) >> 4);
+			sbuf.append(hexDigits[(aByte[i] & 0xF0) >> 4]);
+			sbuf.append(hexDigits[aByte[i] & 0x0F]);
+			/*byte	bhigh = (byte) ((aByte[i] &  0xf0) >> 4);
 			sbuf.append((char) (bhigh > 9 ? bhigh + 'A' - 10: bhigh + '0'));
-			byte	blow = (byte) (aByte[i]  0x0f);
+			byte	blow = (byte) (aByte[i] & 0x0f);
 			sbuf.append((char) (blow > 9 ? blow + 'A' - 10: blow + '0'));*/
 		}
 		return new String(sbuf);
 	}
 	
 	private static String intToHex(int i) {
-		return ""+hexDigits[(i  0xF0) >> 4]
-		         +hexDigits[i  0x0F];
+		return ""+hexDigits[(i & 0xF0) >> 4]
+		         +hexDigits[i & 0x0F];
 	}
 
 	public static String getHexString(ShortMessage sm)
@@ -743,14 +746,15 @@ public class DumpReceiver
 /*** DumpReceiver.java ***/
 
 
+      
+    
 ```
 
 
-There are several sites with legal free MIDI files. The file
- [
+There are several sites with legal free MIDI files. The file [
 	Amy Winehouse - Rehab
-      ] (http://files.mididb.com/amy-winehouse/rehab.mid)
-gives the result
+      ](http://files.mididb.com/amy-winehouse/rehab.mid) gives the result
+
 ```
 
 	
@@ -796,4 +800,3 @@ tick 520: [C1 22] channel 2: program change 34
 	
       
 ```
-

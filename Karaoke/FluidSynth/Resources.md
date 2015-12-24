@@ -1,34 +1,20 @@
-#  Resources 
+
+##  Resources 
 
 
 
-+  
- [
+
++  [
 	    FluidSynth home page
-	  ] (http://sourceforge.net/apps/trac/fluidsynth/)
-
-
-
-+  
- [
+	  ](http://sourceforge.net/apps/trac/fluidsynth/) 
++  [
 	    FluidSynth download page
-	  ] (http://sourceforge.net/projects/fluidsynth/)
-
-
-
-+  
- [
+	  ](http://sourceforge.net/projects/fluidsynth/) 
++  [
 	    FluidSynth 1.1 Developer Documentation
-	  ] (http://fluidsynth.sourceforge.net/api/)
-
-
-
-+  
- [
+	  ](http://fluidsynth.sourceforge.net/api/) 
++  [
 	    Source Archive fluidsynth Documentation
-	  ] (http://fluidsynth.sourcearchive.com/documentation/1.1.5-1/main.html)
-
-
-
+	  ](http://fluidsynth.sourcearchive.com/documentation/1.1.5-1/main.html) 
 
 

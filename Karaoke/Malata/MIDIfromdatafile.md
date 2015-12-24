@@ -1,10 +1,11 @@
-#  MIDI from data file
+
+##  MIDI from data file
+
 
 Here is where I am currently stuck.
-      The data files are
-not
-MIDI files.
+      The data files are _not_ MIDI files.
       For example, song 10383 Lovers by Abba is
+
 ```
 
 00000000  00 00 4F 4B 00 00 00 00 00 00 00 00 00 00 00 00 ..OK............
@@ -26,8 +27,12 @@ MIDI files.
 ```
 
 
+
+
+
 This isn't a MIDI file. From my Sonken, I have a MIDI file for this
       song (obviously not the same recording) which looks like
+
 ```
 
 00000000  4D 54 68 64 00 00 00 06 00 01 00 03 00 1E 4D 54 MThd..........MT
@@ -46,28 +51,38 @@ This isn't a MIDI file. From my Sonken, I have a MIDI file for this
 000000D0  74 0A FF 01 01 65 0A FF 01 01 6E 00 FF 01 01 5C t....e....n....\
       
 ```
-and this
-is
-a conforming MIDI file.
+
+
+and this _is_ a conforming MIDI file.
+
 
 Just looking at the lyric part, MIDI files require
+
 ```
 
 <delta> FF 01 <string length>
       
 ```
+
+
 It is likely that the Malata just has
+
 ```
 
 <delta>  single-char
       
 ```
+
+
 That's easy to adjust - if we know where they lyrics stop!
+
 
 The lyrics start after a sequence "18 07 18 07 18 07 18 07 00 26".
 
+
 A much trickier problem is that the lyrics are not contiguous!
       They should be
+
 ```
 
 Sit down and listen
@@ -77,7 +92,10 @@ It was in the
 papers today
       
 ```
+
+
 But if we look at the file, lines 2 and 4 are missing:
+
 ```
 
 000000C0  01 5C 00 53 04 69 04 74 06 20 00 64 07 6F 05 77 .\.S.i.t. .d.o.w
@@ -88,9 +106,12 @@ But if we look at the file, lines 2 and 4 are missing:
 00000110  05 75 06 5E 01 00 10 01 33 26 01 70 0D 61 0C 70 .u.^....3&.p.a.p
       
 ```
+
+
 For the missing line 2, there is some sort of pointer 
       "09 6E 08 5E 01 00 1D 01 1E 26",
       and it turns out that the missing lines are elsewhere:
+
 ```
 
 00000790  68 19 5E 01 00 81 C9 1A FF 85 21 26 02 27 02 63 h.^.......!&.'.c
@@ -102,6 +123,9 @@ For the missing line 2, there is some sort of pointer
 ```
 
 
+
+
+
 The Malata displays two lines at a time.
       All of the first lines form a chunk. The second lines form another
       chunk, later on. I haven't found an offset or length
@@ -109,20 +133,17 @@ The Malata displays two lines at a time.
       Each line appears to consist of a delta value (I guess) 
       for the delay of the lyric, followed by a lyric character.
 
+
 Between lines is a section that starts with the character
-      '^' and finishes with the character '
-&
-'.
+      '^' and finishes with the character '&'.
       I haven't any idea what is in these sections apart from two
       observations:
 
-+  The character 0xFF appears twice: the first time it
++ The character 0xFF appears twice: the first time it
 	  signals a shift from first line lyrics to second line
 	  lyrics. The next time it occurs it signals the end
 	  of the lyrics.
-
-
-+  Several times the sequence  "09 6E 08 5E 01 00 1D 01 1E 26"
++ Several times the sequence  "09 6E 08 5E 01 00 1D 01 1E 26"
 	  occurs. This seems to signal a long break (e.g. for a solo)
 	  in the lyrics. In the "Lovers" song this occurs several times:
 	  it occurs in the first line, but sometimes the second line
@@ -133,11 +154,11 @@ Between lines is a section that starts with the character
 
 
 
-The file
- `printLyrics.c`gives a  dump fo the lyrics
+The file `printLyrics.c`gives a  dump fo the lyrics
       for songs like Lovers (non-coded lyrics) plus the
       deltas (assumed) and the stuff between lines
-```sh_cpp
+
+```
 
 #include <stdio.h>
 
@@ -169,24 +190,24 @@ int max_lines;
 void read1() {
     prev_ch = curr_ch;
     curr_ch = getc(fp);
-    // fprintf(ofp, %X %X\n, prev_ch, curr_ch);
+    // fprintf(ofp, "%X %X\n", prev_ch, curr_ch);
 }
 
 void read2() {
   prev_ch = getc(fp);  
   curr_ch = getc(fp);
-    // fprintf(ofp, %X %X\n, prev_ch, curr_ch);
+    // fprintf(ofp, "%X %X\n", prev_ch, curr_ch);
 }
 
 
 void printLine(unsigned char *line) {
-    fprintf(ofp, %2d: , (line - lines[0])/LINE_LEN);
+    fprintf(ofp, "%2d: ", (line - lines[0])/LINE_LEN);
     int m = 0;
     for (m = 0; m < LINE_LEN; m++) {
 	if (line[m] != 0) {
 	    putc(line[m], ofp);
 	} else {
-	    putc( , ofp);
+	    putc(' ', ofp);
 	}
     }
 }
@@ -200,11 +221,11 @@ void printDeltas(unsigned char *deltas) {
     }
 	       
     for (m = 0; m <= max; m++) {
-	fprintf(ofp, %2X , deltas[m]);
+	fprintf(ofp, "%2X ", deltas[m]);
     }
 
     for (m = max+1; m < LINE_LEN; m++) {
-	fprintf(ofp,    );
+	fprintf(ofp, "   ");
     }	
 }
 
@@ -217,7 +238,7 @@ void printSeparator(unsigned char *sep) {
     }
 	       
     for (m = 0; m <= max; m++) {
-	fprintf(ofp, %2X , sep[m]);
+	fprintf(ofp, "%2X ", sep[m]);
     }
     
 }
@@ -231,7 +252,7 @@ int endSection(unsigned char *sep) {
 	    break;
     }
 	       
-    if ((max >= 1)  (sep[max] == 0x26)  (sep[max-1] == 0))
+    if ((max >= 1) && (sep[max] == 0x26) && (sep[max-1] == 0))
 	return 1;
     return 0;
 }
@@ -252,31 +273,31 @@ int main(int argc, char **argv) {
 	fp = stdin;
 	ofp = stdout;
     } else if (argc == 2) {
-	fp = fopen(argv[1], r);
+	fp = fopen(argv[1], "r");
 	ofp = stdout;
     } else {
-	fp = fopen(argv[1], r);
-	ofp = fopen(argv[2], w);
+	fp = fopen(argv[1], "r");
+	ofp = fopen(argv[2], "w");
     }
 
     int n = 0;
     
-    while ((n++ < 6000)  (half <= 2)) {
+    while ((n++ < 6000) && (half <= 2)) {
 	
 	switch (state) {
 	case BEFORE_SONG:
 	    read2();
-	    if ((prev_ch == 0)  (curr_ch == )) {
+	    if ((prev_ch == 0) && (curr_ch == '&')) {
 		state = IN_SONG_AND_LINE;
 	    }
 	    break;
 	case IN_SONG_AND_LINE:
 	    read2();
-	    if (curr_ch == ^) {
+	    if (curr_ch == '^') {
 		state = IN_SONG_BETWEEN;
-		putc(\n, ofp);
+		putc('\n', ofp);
 
-		fprintf(ofp, %d: , lineNo);
+		fprintf(ofp, "%d: ", lineNo);
 
 		charNo = 0;
 		separator[lineNo][charNo++] = prev_ch;
@@ -294,7 +315,7 @@ int main(int argc, char **argv) {
 	    break;
 	case IN_SONG_BETWEEN:
 	    read1();
-	    if (curr_ch == ) {
+	    if (curr_ch == '&') {
 		state = IN_SONG_AND_LINE;
 
 		separator[lineNo][charNo++] = curr_ch;
@@ -304,7 +325,7 @@ int main(int argc, char **argv) {
 	    }  else if (curr_ch == 0xFF) {
 		if (half == 1) {
 		    // the 2nd half
-		    fprintf(ofp, \n\nStarting 2nd half\n\n);
+		    fprintf(ofp, "\n\nStarting 2nd half\n\n");
 		    // discard extra
 		    //getc(fp);
 		    //lineNo = -1;
@@ -320,7 +341,7 @@ int main(int argc, char **argv) {
 	}
     }
 
-    fprintf(ofp, \n\nDumping lines\n\n);
+    fprintf(ofp, "\n\nDumping lines\n\n");
     
     first_lines = lines[0];
     second_lines = lines[0] + (max_lines+1) * LINE_LEN;
@@ -332,7 +353,7 @@ int main(int argc, char **argv) {
     second_separators = separator[0] + (max_lines+1) * LINE_LEN;
 
     for (n = 0; n < max_lines; n++) {
-	fprintf(ofp, %2d: , n);
+	fprintf(ofp, "%2d: ", n);
 	/*
 	if (lines[n][0] == 0) {
 	    break;
@@ -342,7 +363,7 @@ int main(int argc, char **argv) {
 	printLine(first_lines);
 	first_lines += LINE_LEN;
 
-	fprintf(ofp, \n   );
+	fprintf(ofp, "\n   ");
 
 	//printDeltas(deltas[n]);
 	printDeltas(first_deltas);
@@ -351,20 +372,20 @@ int main(int argc, char **argv) {
 	//printSeparator(separator[n]);
 	printSeparator(first_separators);
 	first_separators += LINE_LEN;
-	putc(\n, ofp);
+	putc('\n', ofp);
 
 	if (endSection(first_separators - LINE_LEN)) {
-	    fprintf(ofp, Break occurring in first line\n);
+	    fprintf(ofp, "Break occurring in first line\n");
 	    //continue;
 	}
 
-	fprintf(ofp, %2d: , n + max_lines + 1);
+	fprintf(ofp, "%2d: ", n + max_lines + 1);
 	//printLine(lines[n + max_lines + 1]);
 	printLine(second_lines);
 	second_lines += LINE_LEN;
 
 
-	fprintf(ofp, \n   );
+	fprintf(ofp, "\n   ");
 	//printDeltas(deltas[n + max_lines + 1]);
 	printDeltas(second_deltas);
 	second_deltas += LINE_LEN;
@@ -374,16 +395,16 @@ int main(int argc, char **argv) {
 	second_separators += LINE_LEN;
 
 	if (endSection(second_separators - LINE_LEN)) {
-	    fprintf(ofp, Break occurring in second line\n);
+	    fprintf(ofp, "Break occurring in second line\n");
 	    //continue;
 	}
 
 	/*
 	for (m = 0; m < LINE_LEN/2; m++) {
-	    fprintf(ofp, %2X , separator[n][m]);
+	    fprintf(ofp, "%2X ", separator[n][m]);
 	}
 	*/
-	putc(\n, ofp);
+	putc('\n', ofp);
     }
     
 
@@ -394,7 +415,10 @@ int main(int argc, char **argv) {
 
       
 ```
+
+
 it prints out stuff like
+
 ```
 
  0:  0: \Sit down and listen     
@@ -413,5 +437,6 @@ it prints out stuff like
     1  4  5  6  0  5  3  4  4  0 1B  0  E  6  5  8  9  8 11  8                 4 5E  1  0 10  1 3F 26 
       
 ```
-That's the data - not sure what information it is conveying.
 
+
+That's the data - not sure what information it is conveying.

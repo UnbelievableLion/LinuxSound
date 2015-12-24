@@ -1,26 +1,18 @@
-#  Rendering a JPEG image 
 
-In order to display am image we need to
-render
-it
+##  Rendering a JPEG image 
+
+
+In order to display am image we need to _render_ it
       on some output device. There is no specific component to
-      render images. Broadcom has a
- `video_render`which will accept
-both
-a video stream or a single image.
+      render images. Broadcom has a `video_render`which will accept _both_ a video stream or a single image.
       Now this component only has one input port, and that port is
-      a
-video
-port. If we want to take an image from an output
-image
-port, we would have to play some format
+      a _video_ port. If we want to take an image from an output _image_ port, we would have to play some format
       conversion games. Or, we can connect an image output port
       to a video input port by using a tunnel, and let the
       components sort it out themselves. This is much easier!
 
-To render a JPEG image, we only need to use an
- `image_decode`and a
- `video_render`component. We need to set up the input port for the decoder
+
+To render a JPEG image, we only need to use an `image_decode`and a `video_render`component. We need to set up the input port for the decoder
       as in the last example. The video render component has no
       output port so nothing needs to be done for that.
       The two ports which are  connected by a tunnel do all necessary
@@ -32,10 +24,10 @@ To render a JPEG image, we only need to use an
       until the port settings have changed - otherwise
       the buffer sizes would be wrong.
 
-The program is
- [renderjpeg.c] (renderjpeg.c)
 
-```sh_cpp
+The program is [renderjpeg.c](renderjpeg.c) 
+
+```
 
 	/*
 Copyright (c) 2012, Matt Ownby
@@ -55,7 +47,7 @@ modification, are permitted provided that the following conditions are met:
       names of its contributors may be used to endorse or promote products
       derived from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS AND
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
@@ -69,7 +61,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #include <assert.h>
-#include jpeg.h
+#include "jpeg.h"
 
 #define TIMEOUT_MS 2000
 
@@ -97,7 +89,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     OMX_PARAM_PORTDEFINITIONTYPE portdef;
     int ret;
 
-    printf(Port settings changed\n);
+    printf("Port settings changed\n");
 
     // disable ports
     OMX_SendCommand(decoder->imageDecoder->handle,
@@ -119,10 +111,10 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 		    decoder->imageRender->handle,
 		    decoder->imageRender->inPort);
     if (ret != OMX_ErrorNone) {
-	fprintf(stderr, Error setting up tunnel %X\n, ret);
+	fprintf(stderr, "Error setting up tunnel %X\n", ret);
 	return OMXJPEG_ERROR_MEMORY;
     } else {
-	printf(Tunnel set up ok\n);
+	printf("Tunnel set up ok\n");
     }
 
     // wait for ports to become disabled
@@ -135,7 +127,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 			    OMX_EventCmdComplete, OMX_CommandPortDisable, 1,
 			    decoder->imageRender->inPort, 1, 0,
 			    TIMEOUT_MS);
-    printf(Port disable complete\n);
+    printf("Port disable complete\n");
 
     // enable ports
     OMX_SendCommand(decoder->imageDecoder->handle,
@@ -150,13 +142,13 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 			    OMX_EventCmdComplete,
 			    OMX_CommandStateSet, 1,
 			    OMX_StateIdle, 1, 0, TIMEOUT_MS);
-    printf(Decoder in idle state\n);
+    printf("Decoder in idle state\n");
 
     ilclient_wait_for_event(decoder->imageRender->component,
 			    OMX_EventCmdComplete,
 			    OMX_CommandStateSet, 1,
 			    OMX_StateIdle, 1, 0, TIMEOUT_MS);
-    printf(Render in idle state\n);
+    printf("Render in idle state\n");
 
     ilclient_wait_for_event(decoder->imageDecoder->component,
 			    OMX_EventCmdComplete,
@@ -167,7 +159,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 			    OMX_EventCmdComplete, OMX_CommandPortEnable, 1,
 			    decoder->imageRender->inPort, 1, 0,
 			    TIMEOUT_MS);
-    printf(Ports re-enabled\n);
+    printf("Ports re-enabled\n");
 
     return OMXJPEG_OK;
 }
@@ -177,21 +169,21 @@ prepareRender(OPENMAX_JPEG_DECODER * decoder)
 {
     decoder->imageRender = malloc(sizeof(COMPONENT_DETAILS));
     if (decoder->imageRender == NULL) {
-	perror(malloc image render);
+	perror("malloc image render");
 	return OMXJPEG_ERROR_MEMORY;
     }
 
     int             ret = ilclient_create_component(decoder->client,
-						    decoder->
+						    &decoder->
 						    imageRender->
 						    component,
-						    video_render,
+						    "video_render",
 						    ILCLIENT_DISABLE_ALL_PORTS
 						    |
 						    ILCLIENT_ENABLE_INPUT_BUFFERS
 						    );
     if (ret != 0) {
-	perror(image render);
+	perror("image render");
 	return OMXJPEG_ERROR_CREATING_COMP;
     }
     // grab the handle for later use
@@ -204,7 +196,7 @@ prepareRender(OPENMAX_JPEG_DECODER * decoder)
     port.nVersion.nVersion = OMX_VERSION;
 
     OMX_GetParameter(ILC_GET_HANDLE(decoder->imageRender->component),
-		     OMX_IndexParamVideoInit, port);
+		     OMX_IndexParamVideoInit, &port);
     if (port.nPorts != 1) {
 	return OMXJPEG_ERROR_WRONG_NO_PORTS;
     }
@@ -223,21 +215,21 @@ prepareImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 {
     decoder->imageDecoder = malloc(sizeof(COMPONENT_DETAILS));
     if (decoder->imageDecoder == NULL) {
-	perror(malloc image decoder);
+	perror("malloc image decoder");
 	return OMXJPEG_ERROR_MEMORY;
     }
 
     int             ret = ilclient_create_component(decoder->client,
-						    decoder->
+						    &decoder->
 						    imageDecoder->
 						    component,
-						    image_decode,
+						    "image_decode",
 						    ILCLIENT_DISABLE_ALL_PORTS
 						    |
 						    ILCLIENT_ENABLE_INPUT_BUFFERS);
 
     if (ret != 0) {
-	perror(image decode);
+	perror("image decode");
 	return OMXJPEG_ERROR_CREATING_COMP;
     }
     // grab the handle for later use in OMX calls directly
@@ -250,7 +242,7 @@ prepareImageDecoder(OPENMAX_JPEG_DECODER * decoder)
     port.nVersion.nVersion = OMX_VERSION;
 
     OMX_GetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamImageInit, port);
+		     OMX_IndexParamImageInit, &port);
     if (port.nPorts != 2) {
 	return OMXJPEG_ERROR_WRONG_NO_PORTS;
     }
@@ -269,13 +261,13 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 
     // set input image format
     OMX_IMAGE_PARAM_PORTFORMATTYPE imagePortFormat;
-    memset(imagePortFormat, 0, sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE));
+    memset(&imagePortFormat, 0, sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE));
     imagePortFormat.nSize = sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE);
     imagePortFormat.nVersion.nVersion = OMX_VERSION;
     imagePortFormat.nPortIndex = decoder->imageDecoder->inPort;
     imagePortFormat.eCompressionFormat = OMX_IMAGE_CodingJPEG;
     OMX_SetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamImagePortFormat, imagePortFormat);
+		     OMX_IndexParamImagePortFormat, &imagePortFormat);
 
     // get buffer requirements
     OMX_PARAM_PORTDEFINITIONTYPE portdef;
@@ -283,7 +275,7 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageDecoder->inPort;
     OMX_GetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // enable the port and setup the buffers
     OMX_SendCommand(decoder->imageDecoder->handle,
@@ -298,11 +290,11 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
     int             i;
     for (i = 0; i < decoder->inputBufferHeaderCount; i++) {
 	if (OMX_AllocateBuffer(decoder->imageDecoder->handle,
-			       decoder->ppInputBufferHeader[i],
+			       &decoder->ppInputBufferHeader[i],
 			       decoder->imageDecoder->inPort,
 			       (void *) i,
 			       portdef.nBufferSize) != OMX_ErrorNone) {
-	    perror(Allocate decode buffer);
+	    perror("Allocate decode buffer");
 	    return OMXJPEG_ERROR_MEMORY;
 	}
     }
@@ -315,14 +307,14 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 				decoder->imageDecoder->inPort, 0,
 				0, TIMEOUT_MS);
     if (ret != 0) {
-	fprintf(stderr, Did not get port enable %d\n, ret);
+	fprintf(stderr, "Did not get port enable %d\n", ret);
 	return OMXJPEG_ERROR_EXECUTING;
     }
     // start executing the decoder 
     ret = OMX_SendCommand(decoder->imageDecoder->handle,
 			  OMX_CommandStateSet, OMX_StateExecuting, NULL);
     if (ret != 0) {
-	fprintf(stderr, Error starting image decoder %x\n, ret);
+	fprintf(stderr, "Error starting image decoder %x\n", ret);
 	return OMXJPEG_ERROR_EXECUTING;
     }
     ret = ilclient_wait_for_event(decoder->imageDecoder->component,
@@ -330,7 +322,7 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 				  OMX_StateExecuting, 0, 0, 1, 0,
 				  TIMEOUT_MS);
     if (ret != 0) {
-	fprintf(stderr, Did not receive executing stat %d\n, ret);
+	fprintf(stderr, "Did not receive executing stat %d\n", ret);
 	// return OMXJPEG_ERROR_EXECUTING;
     }
 
@@ -343,19 +335,19 @@ setupOpenMaxJpegDecoder(OPENMAX_JPEG_DECODER ** pDecoder)
 {
     *pDecoder = malloc(sizeof(OPENMAX_JPEG_DECODER));
     if (pDecoder[0] == NULL) {
-	perror(malloc decoder);
+	perror("malloc decoder");
 	return OMXJPEG_ERROR_MEMORY;
     }
     memset(*pDecoder, 0, sizeof(OPENMAX_JPEG_DECODER));
 
     if ((pDecoder[0]->client = ilclient_init()) == NULL) {
-	perror(ilclient_init);
+	perror("ilclient_init");
 	return OMXJPEG_ERROR_ILCLIENT_INIT;
     }
 
     if (OMX_Init() != OMX_ErrorNone) {
 	ilclient_destroy(pDecoder[0]->client);
-	perror(OMX_Init);
+	perror("OMX_Init");
 	return OMXJPEG_ERROR_OMX_INIT;
     }
     // prepare the image decoder
@@ -419,9 +411,9 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 	pBufHeader->nFlags = 0;
 	if (toread <= 0) {
 	    pBufHeader->nFlags = OMX_BUFFERFLAG_EOS;
-	    printf(EOS added to stream\n);
+	    printf("EOS added to stream\n");
 	}
-	printf(Input buffer called to empty %d\n,
+	printf("Input buffer called to empty %d\n",
 	       pBufHeader->nFilledLen);
 
 	// empty the current buffer
@@ -430,7 +422,7 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 				pBufHeader);
 
 	if (ret != OMX_ErrorNone) {
-	    fprintf(stderr, Empty input buffer return code %x\n, ret);
+	    fprintf(stderr, "Empty input buffer return code %x\n", ret);
 	    return OMXJPEG_ERROR_MEMORY;
 	}
 
@@ -440,14 +432,14 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 	while (done == 0) {
 	    // if (decoder->pOutputBufferHeader == NULL) {
 	    if (! bTunnelCreated) {
-		printf(Tunnel not yet created\n);
+		printf("Tunnel not yet created\n");
 		ret =
 		    ilclient_wait_for_event
 		    (decoder->imageDecoder->component,
 		     OMX_EventPortSettingsChanged,
 		     decoder->imageDecoder->outPort, 0, 0, 1, 0, 5);
 
-		if ((ret == 0)  ! bTunnelCreated) {
+		if ((ret == 0) && ! bTunnelCreated) {
 		    portSettingsChanged(decoder);
 		    bTunnelCreated = 1;
 		}
@@ -456,9 +448,9 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 	    // check to see if buffer is now empty
 	    if (pBufHeader->nFilledLen == 0) {
 		done = 1;
-		printf(Input buffer finished emptying\n);
+		printf("Input buffer finished emptying\n");
 	    } else {
-		printf(Still %d in input buffer\n, 
+		printf("Still %d in input buffer\n", 
 		       pBufHeader->nFilledLen);
 		// is there an event we can wait on instead of this?
 		sleep(1);
@@ -474,9 +466,9 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 				OMX_BUFFERFLAG_EOS, 1,
 				0, 2);
     if (ret != 0) {
-	fprintf(stderr, No EOS event on image decoder %d\n, ret);
+	fprintf(stderr, "No EOS event on image decoder %d\n", ret);
     } else {
-	printf(EOS event on decoder\n);
+	printf("EOS event on decoder\n");
     }
     return OMXJPEG_OK;
 }
@@ -575,12 +567,12 @@ main(int argc, char *argv[])
     size_t          imageSize;
     int             s;
     if (argc < 2) {
-	printf(Usage: %s <filename>\n, argv[0]);
+	printf("Usage: %s <filename>\n", argv[0]);
 	return -1;
     }
-    FILE           *fp = fopen(argv[1], rb);
+    FILE           *fp = fopen(argv[1], "rb");
     if (!fp) {
-	printf(File %s not found.\n, argv[1]);
+	printf("File %s not found.\n", argv[1]);
     }
     fseek(fp, 0L, SEEK_END);
     imageSize = ftell(fp);
@@ -590,9 +582,9 @@ main(int argc, char *argv[])
     s = fread(sourceImage, 1, imageSize, fp);
     assert(s == imageSize);
     fclose(fp);
-    printf(File size is %d\n, imageSize);
+    printf("File size is %d\n", imageSize);
     bcm_host_init();
-    s = setupOpenMaxJpegDecoder(pDecoder);
+    s = setupOpenMaxJpegDecoder(&pDecoder);
     assert(s == 0);
     s = decodeImage(pDecoder, sourceImage, imageSize);
     assert(s == 0);
@@ -606,5 +598,3 @@ main(int argc, char *argv[])
 
       
 ```
-
-

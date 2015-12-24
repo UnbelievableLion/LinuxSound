@@ -1,40 +1,35 @@
-#  Playing a MIDI file 
 
-To play a MIDI file, you create a
- `Sequence`from a
- `File`,
-      using the
- `MidiSystem`.
-      You also create a
- `Sequencer`from the
- `MidiSystem`and pass it the sequence. The sequencer will output MIDI messages through
-      its
- `Transmitter`. This completes setup of the 
+##  Playing a MIDI file 
+
+
+To play a MIDI file, you create a `Sequence`from a `File`,
+      using the `MidiSystem`.
+      You also create a `Sequencer`from the `MidiSystem`and pass it the sequence. The sequencer will output MIDI messages through
+      its `Transmitter`. This completes setup of the 
       MIDI event generation side of
       the system.
 
-The play side is constructed by getting a
- `Synthesizer`from
-      the
- `MidiSystem`. The
- `Receiver`is found from the
+
+The play side is constructed by getting a `Synthesizer`from
+      the `MidiSystem`. The `Receiver`is found from the
       synthesizer and is given to the transmitter of MIDI events.
-      Play commences by calling
- `start()`on the sequencer,
+      Play commences by calling `start()`on the sequencer,
       which reads from the file and passes MIDI events to its transmitter.
       These are passed to the synthesizer's receiver and played. The UML class
       diagram for the relevant classes is
 
+
 ![alt text](SimpleMidiPlayer.png)
 
-This code is from
- [
+
+This code is from [
 	Playing an audio file (easy)
-      ] (http://www.jsresources.org/examples/SimpleMidiPlayer.html)
+      ](http://www.jsresources.org/examples/SimpleMidiPlayer.html) 
 
 ```
 
-/*
+      
+      /*
  *	SimpleMidiPlayer.java
  *
  *	This file is part of jsresources.org
@@ -383,6 +378,6 @@ public class SimpleMidiPlayer
 
 /*** SimpleMidiPlayer.java ***/
 
+      
+    
 ```
-
-

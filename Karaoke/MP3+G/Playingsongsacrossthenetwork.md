@@ -1,4 +1,6 @@
-#  Playing songs across the network 
+
+##  Playing songs across the network 
+
 
 I actually want to play songs from my server disk to a
       Raspberry Pi or CubieBoard connected to my TV,
@@ -6,9 +8,10 @@ I actually want to play songs from my server disk to a
       lap. (Later I will try to get Android code running to
       do the same.). This is a distributed system.
 
+
 Mounting server files on a computer is simple: you can use
-      NFS, Samba, ... I am currently using
- `sshfs`as in
+      NFS, Samba, ... I am currently using `sshfs`as in
+
 ```
 
 sshfs -o idmap=user -o rw -o allow_other newmarch@192.168.1.101:/home/httpd/html /server
@@ -16,17 +19,20 @@ sshfs -o idmap=user -o rw -o allow_other newmarch@192.168.1.101:/home/httpd/html
 ```
 
 
-For remote access/control I replace the
- `run`command
+For remote access/control I replace the `run`command
       of the last section by a TCP client/server. On the client,
       controlling the player, I have
-```sh_cpp
+
+```
 
 java SongTableSwing | client 192.168.1.7
       
 ```
+
+
 while on the (Raspberry Pi/CubieBoard) server I run
-```sh_cpp
+
+```
 
 #!/bin/bash
 set -x
@@ -53,9 +59,9 @@ The client/server files are just standard TCP files.
       The client reads a newline-terminated string
       from standard input and writes it to the
       server, and the server prints the same line to standard output.
-      Here is
- `client.c`:
-```sh_cpp
+      Here is `client.c`:
+
+```
 
 #include <stdio.h> 
 #include <sys/types.h>
@@ -72,7 +78,7 @@ int main(int argc, char *argv[]) {
     int nread; 
     struct sockaddr_in serv_addr; 
     if (argc != 2) { 
-	fprintf(stderr, usage: %s IPaddr\n, argv[0]); 
+	fprintf(stderr, "usage: %s IPaddr\n", argv[0]); 
 	exit(1); 
     } 
 
@@ -88,14 +94,14 @@ int main(int argc, char *argv[]) {
 	serv_addr.sin_port = htons(PORT);
  
 	while (connect(sockfd, 
-		       (struct sockaddr *) serv_addr, 
+		       (struct sockaddr *) &serv_addr, 
 		       sizeof(serv_addr)) < 0) {
 	    /* allow for timesouts etc */
 	    perror(NULL);
 	    sleep(1);
 	}
 	
-	printf(%s, buf);
+	printf("%s", buf);
 	nread = strlen(buf);
 	/* transfer data and quit */ 
 	write(sockfd, buf, nread);
@@ -105,9 +111,11 @@ int main(int argc, char *argv[]) {
 
       
 ```
-and here is
- `server.c`
-```sh_cpp
+
+
+and here is `server.c`
+
+```
 
 #include <stdio.h> 
 #include <sys/types.h> 
@@ -145,7 +153,7 @@ int main(int argc, char *argv[]) {
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY); 
     serv_addr.sin_port = htons(TIME_PORT); 
     if (bind(sockfd, 
-	     (struct sockaddr *) serv_addr, 
+	     (struct sockaddr *) &serv_addr, 
 	     sizeof(serv_addr)) < 0) { 
 	perror(NULL); exit(3); 
     } 
@@ -154,13 +162,13 @@ int main(int argc, char *argv[]) {
     for (;;) { 
 	len = sizeof(client_addr); 
 	client_sockfd = accept(sockfd, 
-			       (struct sockaddr *) client_addr, 
-			       len); 
+			       (struct sockaddr *) &client_addr, 
+			       &len); 
 	if (client_sockfd == -1) { 
 	    perror(NULL); continue; 
 	} 
 	while ((nread = read(client_sockfd, buf, SIZE-1)) > 0) {
-	    buf[nread] = \0;
+	    buf[nread] = '\0';
 	    fputs(buf, stdout);
 	    fflush(stdout);
 	}
@@ -170,5 +178,3 @@ int main(int argc, char *argv[]) {
 
       
 ```
-
-

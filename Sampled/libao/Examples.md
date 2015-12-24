@@ -1,6 +1,7 @@
-#  Examples 
 
-```sh_cpp
+##  Examples 
+
+```
 
 /*
  *
@@ -45,7 +46,7 @@ int main(int argc, char **argv)
 
 	/* -- Initialize -- */
 
-	fprintf(stderr, libao example program\n);
+	fprintf(stderr, "libao example program\n");
 
 	ao_initialize();
 
@@ -53,16 +54,16 @@ int main(int argc, char **argv)
 
 	default_driver = ao_default_driver_id();
 
-        memset(format, 0, sizeof(format));
+        memset(&format, 0, sizeof(format));
 	format.bits = 16;
 	format.channels = 2;
 	format.rate = 44100;
 	format.byte_format = AO_FMT_LITTLE;
 
 	/* -- Open driver -- */
-	device = ao_open_live(default_driver, format, NULL /* no options */);
+	device = ao_open_live(default_driver, &format, NULL /* no options */);
 	if (device == NULL) {
-		fprintf(stderr, Error opening device.\n);
+		fprintf(stderr, "Error opening device.\n");
 		return 1;
 	}
 
@@ -76,8 +77,8 @@ int main(int argc, char **argv)
 			sin(2 * M_PI * freq * ((float) i/format.rate)));
 
 		/* Put the same stuff in left and right channel */
-		buffer[4*i] = buffer[4*i+2] = sample  0xff;
-		buffer[4*i+1] = buffer[4*i+3] = (sample >> 8)  0xff;
+		buffer[4*i] = buffer[4*i+2] = sample & 0xff;
+		buffer[4*i+1] = buffer[4*i+3] = (sample >> 8) & 0xff;
 	}
 	ao_play(device, buffer, buf_size);
 
@@ -93,29 +94,20 @@ int main(int argc, char **argv)
 ```
 
 
-Copyright
-Jan Newmarch, jan@newmarch.name
+Copyright © Jan Newmarch, jan@newmarch.name
 
-![alt text](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)"Programming and Using Linux Sound - in depth"
-by
- [Jan Newmarch] (https://jan.newmarch.name)
-is licensed under a
- [Creative Commons Attribution-ShareAlike 4.0 International License] (http://creativecommons.org/licenses/by-sa/4.0/)
-.
-Based on a work at
- [https://jan.newmarch.name/LinuxSound/] (https://jan.newmarch.name/LinuxSound/)
-.
+
+
+
+
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
+
+
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
+
 
 If you like this book, please contribute using Flattr
 
+
 or donate using PayPal
-
-
-
-
 ![alt text](https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_AU/i/scr/pixel.gif)
-
-
-
-
-

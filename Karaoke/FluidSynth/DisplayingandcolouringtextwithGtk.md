@@ -1,4 +1,6 @@
-#  Displaying and colouring text with Gtk 
+
+##  Displaying and colouring text with Gtk 
+
 
 While there are many ways in which Karaoke text can be
       displayed, a common pattern is to display two lines of
@@ -7,21 +9,22 @@ While there are many ways in which Karaoke text can be
       on completion is
       replaced by the next line.
 
+
 In the Java chapter we did that. But the Java libraries have
       not been polished and are distinctly slow and heavyweight.
       They also seem to be low on Oracle's development schedule
       for Java.
       So here we look at an alternative GUI and make use of the
       FluidSynth library. The Gtk library is chosen for reasons
-      outlined in an
- [ earlier chapter ] (../../Diversions/Gtk/)
-on Gtk.
+      outlined in an [ earlier chapter ](../../Diversions/Gtk/) on Gtk.
+
 
 The first task is to build up an array of lyric lines 
       as the file is loaded. We are asssuming KAR format files
       with upfront information as to title, etc, prefixed
       by '@', and newlines prefixed by '\'.
-```sh_cpp
+
+```
 
         
 struct _lyric_t {
@@ -54,12 +57,12 @@ void build_lyric_lines() {
 	gchar *lyric = plyric->lyric;
 	int tick = plyric->tick;
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == '@')  (lyric[1] == 'L')) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'L')) {
 	    lyric_lines.language =  lyric + 2;
 	    continue;
 	}
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == '@')  (lyric[1] == 'T')) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'T')) {
 	    if (lyric_lines.title == NULL) {
 		lyric_lines.title = lyric + 2;
 	    } else {
@@ -95,8 +98,12 @@ void build_lyric_lines() {
 ```
 
 
+
+
+
 This is called from the onload callback
-```sh_cpp
+
+```
 
 	
 int onload_callback(void *data, fluid_player_t *player) {
@@ -143,9 +150,13 @@ int onload_callback(void *data, fluid_player_t *player) {
 ```
 
 
+
+
+
 The standard GUI part is to build an interface consisting of
       two labels, one above the other to hold lines of lyrics.
       This is just ordinary Gtk.
+
 
 The final part is to handle lyric or text events from the
       sequencer. If the event is a '\', then the current text
@@ -154,9 +165,8 @@ The final part is to handle lyric or text events from the
       progressively coloured to indicate what is next
       to be played.
 
-In the
- [ earlier chapter ] (../../Diversions/Gtk/)
-on Gtk we discussed using Cairo to draw in pixbufs, and 
+
+In the [ earlier chapter ](../../Diversions/Gtk/) on Gtk we discussed using Cairo to draw in pixbufs, and 
       Pango to structure the text. The Gtk Label understands
       Pango directly, so we just use Pango to format the 
       text and display it in the label. This involves
@@ -164,17 +174,16 @@ on Gtk we discussed using Cairo to draw in pixbufs, and
       red and the rest in black. This can be set in the label,
       and there is no need to use Cairo.
 
-The program is
- `gtkkaraoke_player.c`
-Warning: the following program crashes regularly
+
+The program is `gtkkaraoke_player.c` _Warning: the following program crashes regularly
 	when trying to copy a Pango attribute list in the Gtk code
 	for sizing
 	a label. Debugging shows that the Pango copy function
 	is set to NULL somewhere in Gtk, and shouldn't be. 
 	I have no fix as yet and haven't replicated the bug 
-	in a simple enough way to log a bug report.
+	in a simple enough way to log a bug report._ 
 
-```sh_cpp
+```
 
 #include <fluidsynth.h>
 #include <fluid_midi.h>
@@ -222,11 +231,11 @@ gchar *current_lyric;   // currently playing lyric line
 GString *front_of_lyric;  // part of lyric to be coloured red
 GString *end_of_lyric;    // part of lyric to not be coloured
 
-gchar *markup[] = {<span foreground=\red\>,
-		   </span><span foreground=\black\>,
-		   </span>};
-gchar *markup_newline[] = {<span foreground=\black\>,
-		   </span>};
+gchar *markup[] = {"<span foreground=\"red\">",
+		   "</span><span foreground=\"black\">",
+		   "</span>"};
+gchar *markup_newline[] = {"<span foreground=\"black\">",
+		   "</span>"};
 GString *marked_up_label;
 
 struct _reset_label_data {
@@ -244,11 +253,11 @@ gint reset_label_cb(gpointer data) {
     reset_label_data *rdata = ( reset_label_data *) data;
 
     if (rdata->label == NULL) {
-	printf(Label is null, cant set its text \n);
+	printf("Label is null, cant set its text \n");
 	return FALSE;
     }
 
-    printf(Resetting label callback to \%s\\n, rdata->text);
+    printf("Resetting label callback to \"%s\"\n", rdata->text);
 
     gdk_threads_enter();
 
@@ -257,7 +266,7 @@ gint reset_label_cb(gpointer data) {
 
     PangoAttrList *attrs;
     gchar *text;
-    pango_parse_markup (str, -1,0, attrs, text, NULL, NULL);
+    pango_parse_markup (str, -1,0, &attrs, &text, NULL, NULL);
  
     gtk_label_set_text(rdata->label, text);
     gtk_label_set_attributes(rdata->label, attrs);
@@ -266,14 +275,14 @@ gint reset_label_cb(gpointer data) {
 
     GtkAllocation* alloc = g_new(GtkAllocation, 1);
     gtk_widget_get_allocation((GtkWidget *) (rdata->label), alloc);
-    printf(Set label text to \%s\\n, gtk_label_get_text(rdata->label));
-    printf(Label has height %d width %d\n, alloc->height, alloc->width);
-    printf(Set other label text to \%s\\n, 
+    printf("Set label text to \"%s\"\n", gtk_label_get_text(rdata->label));
+    printf("Label has height %d width %d\n", alloc->height, alloc->width);
+    printf("Set other label text to \"%s\"\n", 
 	   gtk_label_get_text(rdata->label == lyric_labels[0] ?
 			      lyric_labels[1] : lyric_labels[0]));
     gtk_widget_get_allocation((GtkWidget *) (rdata->label  == lyric_labels[0] ?
 			      lyric_labels[1] : lyric_labels[0]), alloc);
-    printf(Label has height %d width %d\n, alloc->height, alloc->width);
+    printf("Label has height %d width %d\n", alloc->height, alloc->width);
 
     return FALSE;
 }
@@ -288,14 +297,14 @@ int event_callback(void *data, fluid_midi_event_t *event) {
     fluid_synth_t* synth = (fluid_synth_t*) data;
     int type = fluid_midi_event_get_type(event);
     int chan = fluid_midi_event_get_channel(event);
-    if (synth == NULL) printf(Synth is null\n);
+    if (synth == NULL) printf("Synth is null\n");
     switch(type) {
     case MIDI_TEXT:
-	printf(Callback: Playing text event %s (length %d)\n, 
+	printf("Callback: Playing text event %s (length %d)\n", 
 	       (char *) event->paramptr, event->param1);
 
-	if (((char *) event->paramptr)[0] == \\) {
-	    // weve got a new line, change the label text on the NEXT panel
+	if (((char *) event->paramptr)[0] == '\\') {
+	    // we've got a new line, change the label text on the NEXT panel
 	    int next_panel = current_panel; // really (current_panel+2)%2
 	    int next_line = current_line + 2;
 	    gchar *next_lyric;
@@ -315,17 +324,17 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 	    // lyric is in 2 parts: front coloured, end uncoloured
 	    front_of_lyric = g_string_new(lyric+1); // lose \
 	    end_of_lyric = g_string_new(current_lyric);
-	    printf(New line. Setting front to %s end to \%s\\n, lyric+1, current_lyric); 
+	    printf("New line. Setting front to %s end to \"%s\"\n", lyric+1, current_lyric); 
 
 	    // update label for next line after this one
 	    char *str = g_array_index(lyric_lines.lines, GString *, next_line)->str;
-	    printf(Setting text in label %d to \%s\\n, next_panel, str);
+	    printf("Setting text in label %d to \"%s\"\n", next_panel, str);
 
 	    next_lyric = g_array_index(lyric_lines.lines, GString *, next_line)->str;
 	   
 	    gdk_threads_enter();
 
-	    // change the label after one second to avoid visual jar
+	    // change the label after one second to avoid visual "jar"
 	    reset_label_data *label_data;
 	    label_data = g_new(reset_label_data, 1);
 	    label_data->label = (GtkLabel *) lyric_labels[next_panel];
@@ -339,13 +348,13 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 	} else {
 	    // change text colour as chars are played, using Pango attributes
 	    char *lyric =  event->paramptr;
-	    if ((front_of_lyric != NULL)  (lyric != NULL)) {
+	    if ((front_of_lyric != NULL) && (lyric != NULL)) {
 		// add the new lyric to the front of the existing coloured
 		g_string_append(front_of_lyric, lyric);
 		char *s = front_of_lyric->str;
-		printf(Displaying \%s\\n, current_lyric);
-		printf(  Colouring \%s\\n, s);
-		printf(  Not colouring \%s\\n, current_lyric + strlen(s));
+		printf("Displaying \"%s\"\n", current_lyric);
+		printf("  Colouring \"%s\"\n", s);
+		printf("  Not colouring \"%s\"\n", current_lyric + strlen(s));
 
 		// todo: avoid memory leak
 		marked_up_label = g_string_new(markup[0]);
@@ -353,15 +362,15 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 		g_string_append(marked_up_label, markup[1]);
 		g_string_append(marked_up_label, current_lyric + strlen(s));
 		g_string_append(marked_up_label, markup[2]);
-		printf(Marked up label \%s\\n, marked_up_label->str);
+		printf("Marked up label \"%s\"\n", marked_up_label->str);
 
 		/* Example from http://www.ibm.com/developerworks/library/l-u-pango2/
 		 */
 		PangoAttrList *attrs;
 		gchar *text;
 		gdk_threads_enter();
-		pango_parse_markup (marked_up_label->str, -1,0, attrs, text, NULL, NULL);
-		printf(Marked up label parsed ok\n);
+		pango_parse_markup (marked_up_label->str, -1,0, &attrs, &text, NULL, NULL);
+		printf("Marked up label parsed ok\n");
 		gtk_label_set_text((GtkLabel *) lyric_labels[current_panel], 
 				   text);
 		gtk_label_set_attributes(GTK_LABEL(lyric_labels[current_panel]), attrs);
@@ -374,12 +383,12 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 	return  FLUID_OK;
 
     case MIDI_LYRIC:
-	printf(Callback: Playing lyric event %d %s\n, 
+	printf("Callback: Playing lyric event %d %s\n", 
 	       event->param1, (char *) event->paramptr);
 	return  FLUID_OK;
     
     case MIDI_EOT:
-	printf(End of track\n);
+	printf("End of track\n");
 	exit(0);
     }
     // default handler for all other events
@@ -392,7 +401,7 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 void build_lyric_lines() {
     int n;
     lyric_t *plyric;
-    GString *line = g_string_new();
+    GString *line = g_string_new("");
     GArray *lines =  g_array_sized_new(FALSE, FALSE, sizeof(GString *), 64);
 
     lyric_lines.title = NULL;
@@ -402,12 +411,12 @@ void build_lyric_lines() {
 	gchar *lyric = plyric->lyric;
 	int tick = plyric->tick;
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == @)  (lyric[1] == L)) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'L')) {
 	    lyric_lines.language =  lyric + 2;
 	    continue;
 	}
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == @)  (lyric[1] == T)) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'T')) {
 	    if (lyric_lines.title == NULL) {
 		lyric_lines.title = lyric + 2;
 	    } else {
@@ -416,12 +425,12 @@ void build_lyric_lines() {
 	    continue;
 	}
 
-	if (lyric[0] == @) {
+	if (lyric[0] == '@') {
 	    // some other stuff like @KMIDI KARAOKE FILE
 	    continue;
 	}
 
-	if ((lyric[0] == /) || (lyric[0] == \\)) {
+	if ((lyric[0] == '/') || (lyric[0] == '\\')) {
 	    // start of a new line
 	    // add to lines
 	    g_array_append_val(lines, line);
@@ -432,10 +441,10 @@ void build_lyric_lines() {
     }
     lyric_lines.lines = lines;
     
-    printf(Title is %s, performer is %s, language is %s\n, 
+    printf("Title is %s, performer is %s, language is %s\n", 
 	   lyric_lines.title, lyric_lines.performer, lyric_lines.language);
     for (n = 0; n < lines->len; n++) {
-	printf(Line is %s\n, g_array_index(lines, GString *, n)->str);
+	printf("Line is %s\n", g_array_index(lines, GString *, n)->str);
     }
     
 }
@@ -449,22 +458,22 @@ int onload_callback(void *data, fluid_player_t *player) {
     long ticks = 0L;
     lyric_t *plyric;
 
-    printf(Load callback, tracks %d \n, player->ntracks);
+    printf("Load callback, tracks %d \n", player->ntracks);
     int n;
     for (n = 0; n < player->ntracks; n++) {
 	fluid_track_t *track = player->track[n];
-	printf(Track %d\n, n);
+	printf("Track %d\n", n);
 	fluid_midi_event_t *event = fluid_track_first_event(track);
 	while (event != NULL) {
 	    switch (fluid_midi_event_get_type (event)) {
 	    case MIDI_TEXT:
 	    case MIDI_LYRIC:
-		/* theres no fluid_midi_event_get_sysex()
+		/* there's no fluid_midi_event_get_sysex()
 		   or fluid_midi_event_get_time() so we 
 		   have to look inside the opaque struct
 		*/
 		ticks += event->dtime;
-		printf(Loaded event %s for time %ld\n, 
+		printf("Loaded event %s for time %ld\n", 
 		       (char *) event->paramptr,
 		       ticks);
 		plyric = g_new(lyric_t, 1);
@@ -478,10 +487,10 @@ int onload_callback(void *data, fluid_player_t *player) {
 
 
 
-    printf(Saved %d lyric events\n, lyrics->len);
+    printf("Saved %d lyric events\n", lyrics->len);
     for (n = 0; n < lyrics->len; n++) {
 	plyric = g_array_index(lyrics, lyric_t *, n);
-	printf(Saved lyric %s at %ld\n, plyric->lyric, plyric->tick);
+	printf("Saved lyric %s at %ld\n", plyric->lyric, plyric->tick);
     }
 
     build_lyric_lines();
@@ -512,16 +521,16 @@ static gboolean delete_event( GtkWidget *widget,
                               GdkEvent  *event,
                               gpointer   data )
 {
-    /* If you return FALSE in the delete-event signal handler,
-     * GTK will emit the destroy signal. Returning TRUE means
-     * you dont want the window to be destroyed.
-     * This is useful for popping up are you sure you want to quit?
+    /* If you return FALSE in the "delete-event" signal handler,
+     * GTK will emit the "destroy" signal. Returning TRUE means
+     * you don't want the window to be destroyed.
+     * This is useful for popping up 'are you sure you want to quit?'
      * type dialogs. */
 
-    g_print (delete event occurred\n);
+    g_print ("delete event occurred\n");
 
     /* Change TRUE to FALSE and the main window will be destroyed with
-     * a delete-event. */
+     * a "delete-event". */
 
     return TRUE;
 }
@@ -542,10 +551,10 @@ int main(int argc, char** argv)
 
     fluid_audio_driver_t* adriver;
     settings = new_fluid_settings();
-    fluid_settings_setstr(settings, audio.driver, alsa);
-    fluid_settings_setint(settings, synth.polyphony, 64);
-    fluid_settings_setint(settings, synth.reverb.active, FALSE);
-    fluid_settings_setint(settings, synth.sample-rate, 22050);
+    fluid_settings_setstr(settings, "audio.driver", "alsa");
+    fluid_settings_setint(settings, "synth.polyphony", 64);
+    fluid_settings_setint(settings, "synth.reverb.active", FALSE);
+    fluid_settings_setint(settings, "synth.sample-rate", 22050);
     synth = new_fluid_synth(settings);
     player = new_fluid_player(synth);
 
@@ -577,36 +586,36 @@ int main(int argc, char** argv)
     
     /* This is called in all GTK applications. Arguments are parsed
      * from the command line and are returned to the application. */
-    gtk_init (argc, argv);
+    gtk_init (&argc, &argv);
     
     /* create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    /* When the window is given the delete-event signal (this is given
-     * by the window manager, usually by the close option, or on the
+    /* When the window is given the "delete-event" signal (this is given
+     * by the window manager, usually by the "close" option, or on the
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
-    g_signal_connect (window, delete-event,
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (delete_event), NULL);
     
-    /* Here we connect the destroy event to a signal handler.  
+    /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
-     * or if we return FALSE in the delete-event callback. */
-    g_signal_connect (window, destroy,
+     * or if we return FALSE in the "delete-event" callback. */
+    g_signal_connect (window, "destroy",
 		      G_CALLBACK (destroy), NULL);
 
-    g_signal_connect (window, realize, G_CALLBACK (realize_cb), NULL);
+    g_signal_connect (window, "realize", G_CALLBACK (realize_cb), NULL);
     
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
     // Gtk 3.0 deprecates gtk_vbox_new in favour of gtk_grid
-    // but that isnt in Gtk 2.0, so we ignore warnings for now
+    // but that isn't in Gtk 2.0, so we ignore warnings for now
     lyrics_box = gtk_vbox_new(TRUE, 1);
     gtk_widget_show(lyrics_box);
 
-    char *str =   ;
+    char *str = "  ";
     lyric_labels[0] = gtk_label_new(str);
     lyric_labels[1] = gtk_label_new(str);
 
@@ -643,7 +652,10 @@ int main(int argc, char** argv)
 ```
 
 
+
+
+
 When run it looks like
 
-![alt text](label_player.png)
 
+![alt text](label_player.png)

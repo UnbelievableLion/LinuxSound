@@ -15,7 +15,7 @@ class ContentsParser(HTMLParser):
         # this breaks if done in __init__, don't know why
         self.contents_file = open("SUMMARY.md", "w")
         self.contents_file.write("# Contents\n\n")
-        self.contents_file.write("[Introduction](README.md)\n")
+        self.contents_file.write("* [Introduction](README.md)\n")
    
     def handle_starttag(self, tag, attrs):
         #print "Encountered a start tag:", tag
@@ -54,18 +54,22 @@ class ContentsParser(HTMLParser):
             #print "Got contents section"
             self.in_contents = True
 
+        # print PART heading
+        if self.in_contents and string.find(data, "PART") >= 0:
+            self.contents_file.write("\n\n" + string.strip(data) + "\n\n")
+
         # print chapter heading
         if self.in_contents and self.depth == 1 and self.in_aref:
             #print "depth",self. depth, data
-            print "+ [", data, "] (", self.url, ")"
-            self.contents_file.write("+ [" + string.strip(data)  + "] (" +  self.url + "README.md)\n")
+            print "* [", data, "](", self.url, ")"
+            self.contents_file.write("+ [" + string.strip(data)  + "](" +  self.url + "README.md)\n")
 
         # print section heading
         if self.in_contents and self.depth == 2:
             #print "depth",self. depth, data
-            print "   + [", data, "] (", \
+            print "  * [", data, "] (", \
                 self.url+self.lose_spaces(data), ")"
-            self.contents_file.write("   + [" +  string.strip(data) + "] (" + \
+            self.contents_file.write("   + [" +  string.strip(data) + "](" + \
                                      self.url+self.lose_spaces(data) + ".md)\n")
                 
 

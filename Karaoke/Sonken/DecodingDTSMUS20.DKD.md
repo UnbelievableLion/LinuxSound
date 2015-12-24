@@ -1,18 +1,22 @@
-#  Decoding  DTSMUS20.DKD 
+
+##  Decoding  DTSMUS20.DKD 
+
 
 I'm on a Linux system and I use Linux/Unix utilities and applications.
       Equivalents exist under other O/S's such as Windows and Apple.
 
 ###  Song information 
 
-The Unix command
- `strings`lists all the ASCII 8-bit encoded
+
+The Unix command `strings`lists all the ASCII 8-bit encoded
       strings in a file that are at least 4 characters long. Running
       this command on all the DVD files shows that  DTSMUS20.DKD is the 
       only one with lots of english-language strings, and these
       strings are the song titles on the DVD.
 
+
 A brief selection is
+
 ```
 
 	
@@ -27,16 +31,18 @@ A brief selection is
 	
       
 ```
+
+
 The actual strings that would show on your disk depends of course
       on the songs on it. You would need some english language titles
       on it for this to work, of course!
 
-To make further progress you need a binary editor. I use
- `bvi`.
- `emacs`has a binary editor
+
+To make further progress you need a binary editor. I use `bvi`. `emacs`has a binary editor
       mode as well. Search in there for a song title you know is
       on the disk. For example, searching for the Beatles "Here Comes The Sun"
       shows the block
+
 ```
 
 	
@@ -49,6 +55,8 @@ To make further progress you need a binary editor. I use
 	
       
 ```
+
+
 The string  "Here Comes The Sun" starts at 0xAA94C followed by 
       a null byte. This is followed at 0xAA95F by the null-terminated
       "Beatles". Immediately before this is 4 bytes.
@@ -59,16 +67,14 @@ The string  "Here Comes The Sun" starts at 0xAA94C followed by
       Byte 1 is the length of the song information block including the
       4 byte header.
 
-Byte 2 of the header block is 0x12. jim75 at
- [
+
+Byte 2 of the header block is 0x12. jim75 at [
 	Decoding JBK 6628 DVD Karaoke Disc
-      ] (http://old.nabble.com/Decoding-JBK-6628-DVD-Karaoke-Disc-td12261269.html)
-discovered the document
- [
+      ](http://old.nabble.com/Decoding-JBK-6628-DVD-Karaoke-Disc-td12261269.html) discovered the document [
 	JBK_Manual%5B1%5D.doc
-      ] (http://old.nabble.com/file/p12261269/JBK_Manual%255B1%255D.doc)
-.
+      ](http://old.nabble.com/file/p12261269/JBK_Manual%255B1%255D.doc) .
       In there is a list of country codes:
+
 ```
 
 	
@@ -96,12 +102,16 @@ discovered the document
 	
       
 ```
+
+
 The Beatle's song has 0x12 in byte 2 of the header and this matches
       the country codes in the table. This is confirmed by looking at
       other language files (later).
 
+
 I've discovered later that the WMA files have their own codes.
       So far I have seen
+
 ```
 
 	
@@ -111,17 +121,22 @@ I've discovered later that the WMA files have their own codes.
 	
       
 ```
+
+
 I guess you can see the pattern with the earlier ones!
+
 
 Bytes 3 and 4 of the header are 0xD389 which is 54153 in decimal.
       This is one less than the song number in the book (54154).
       So bytes 3 and 4 are a 16-bit short integer, one less than the
       song index in the book.
 
+
 This pattern is repeated throughout the file, so that each record
       is of this format.
 
 ###  Beginning/end of data 
+
 
 There is a long sequence of bytes near the beginning of the file
       "01 01 01 01 01 ...".
@@ -130,35 +145,19 @@ There is a long sequence of bytes near the beginning of the file
       songs, and probably the start of all songs.
       I haven't found any table giving me this start value.
 
+
 Checking a number
       of songs gives me this table:
 
-+  English songs start at 60x9562D, song 24452 type 0x12
-
-
-+  Cantonese at 0x8F5D2, song 13701 type 3
-
-
-+  Korean at 0x9F23, song 37847 type 0
-
-
-+  Indonesian at 0x11F942, song 42002 type 0x17
-
-
-+  Hindi at 0x134227, song 45058 type 0x21
-
-
-+  Phillipine at 0xD5D20, song 62775 type 0x14
-
-
-+  Russian at 0x110428, song 41012 type 5
-
-
-+  Spanish at 0xF5145, song 26487 type 0x16
-
-
-+  Mandarin (1 char) at 0x413BE, song 1388 type 3
-
++ English songs start at 60x9562D, song 24452 type 0x12
++ Cantonese at 0x8F5D2, song 13701 type 3
++ Korean at 0x9F23, song 37847 type 0
++ Indonesian at 0x11F942, song 42002 type 0x17
++ Hindi at 0x134227, song 45058 type 0x21
++ Phillipine at 0xD5D20, song 62775 type 0x14
++ Russian at 0x110428, song 41012 type 5
++ Spanish at 0xF5145, song 26487 type 0x16
++ Mandarin (1 char) at 0x413BE, song 1388 type 3
 
 I can't find the Vietnamese songs, though. There don't seem to
       any on my disk. My song book is lying!
@@ -166,14 +165,17 @@ I can't find the Vietnamese songs, though. There don't seem to
       I haven't found it - these were all found by looking at my song
       book and then in the file.
 
+
 The end of the block is signalled by a sequence of 
       "FF FF FF FF ..." at 0x136C92.
+
 
 But there is lots of stuff
       both before and after the song information block.
       I don't know what it means.
 
 ###  Chinese songs 
+
 
 The first English song in my book is "Gump by Al Wierd", song
       number 24452. In the table of contents file DTSMUS20.DK this is at
@@ -186,7 +188,9 @@ The first English song in my book is "Gump by Al Wierd", song
       I've got Chinese input installed on my computer so I can search for this
       Chinese character.
 
+
 A Google search for "unicode value of 我" shows me
+
 ```
 
 	
@@ -200,11 +204,12 @@ A Google search for "unicode value of 我" shows me
 	
       
 ```
-and then looking up 0x6211 on
- [
+
+
+and then looking up 0x6211 on [
 	Unicode Search 
-      ] (http://www.khngai.com/chinese/tools/codeunicode.php)
-gives gold:
+      ](http://www.khngai.com/chinese/tools/codeunicode.php) gives gold:
+
 ```
 
 	
@@ -215,19 +220,21 @@ gives gold:
 	
       
 ```
+
+
 There's the CED2 in the second line as GB Code.
       So there you go: the character set is GB
       (probably GB2312 with EUC-CN encoding) with code for 我 as CED2.
 
-Just to make sure: using the table by Mary Ansell at
- [
+
+Just to make sure: using the table by Mary Ansell at [
 	GB Code Table
-      ] (http://www.ansell-uebersetzungen.com/gborder.html)
-the bytes "CE D2 B4 F2 C1 CB D2 BB CD A8 B2 BB CB B5 BB B0 B5 
+      ](http://www.ansell-uebersetzungen.com/gborder.html) the bytes "CE D2 B4 F2 C1 CB D2 BB CD A8 B2 BB CB B5 BB B0 B5 
       C4 B5 E7 BB B0 B8 F8 C4 E3" translate into
       "我 打 了 一 通 ..." which is indeed the song.
 
 ###  Other languages 
+
 
 I'm not familiar with other language encodings so haven't investigated
       the Thai, Vietnamese, etc.
@@ -235,12 +242,14 @@ I'm not familiar with other language encodings so haven't investigated
 
 ###  Programs 
 
+
 The earlier investigations by others have created programs in C or C++.
       These are generally standalone programs. I would like to build a
       collection of reusable modules, so I have chosen Java as
       implementation language.
 
 ####  Java goodies 
+
 
 Java is a good O/O language which supports good design.
       It includes a Midi player and Midi classes.
@@ -250,74 +259,52 @@ Java is a good O/O language which supports good design.
 
 ####  Java baddies 
 
-Java doesn't support unsigned integer types. This sucks
-really
-badly here since so many data types are unsigned for these programs. 
+
+Java doesn't support unsigned integer types. This sucks _really_ badly here since so many data types are unsigned for these programs. 
       Even bytes in Java are signed :-(.
       Here are some of the tricks :-(.
 
-+  Make all types the next size up: byte to int, int to long, long to long...
++ Make all types the next size up: byte to int, int to long, long to long...
 	  Just hope that unsigned longs aren't really needed
-
-
-+  If you need an unsigned byte and you've got an int, and you need
++ If you need an unsigned byte and you've got an int, and you need
 	  it to fit into 8 bits, cast to a byte and hope it's not too big :-(
-
-
-+  Typecast all over the place to keep the compiler happy 
-	  e.g. when a byte is required  from an int,
- ` (byte) n `
-
-
-+  Watch signs all over the place. If you want to right shift a number,
-	  the operator
->
->
-preserves sign extensions so eg in binary
-	  1XYZ... shifts to 1111XYZ.. You need to use
->
->
->
-which results
++ Typecast all over the place to keep the compiler happy 
+	  e.g. when a byte is required  from an int, ` (byte) n `
++ Watch signs all over the place. If you want to right shift a number,
+	  the operator >> preserves sign extensions so eg in binary
+	  1XYZ... shifts to 1111XYZ.. You need to use  >>> which results
 	  in 0001XYZ.
-
-
-+  If you want to assign an unsigned byte to an int, watch signs again.
++ If you want to assign an unsigned byte to an int, watch signs again.
 	  You may need
 ```
 
 	    
-	      n = b  0 ? b : 256 - b
+	      n = b ≥ 0 ? b : 256 - b
 	    
 	  
 ```
 
-
-
-+  To build an unsigned int from 2 unsigned bytes, signs will stuff you again:
-	  n = (b1
-<
-<
-8) + b2 will get it wrong if either b1 or b2 is -ve.
++ To build an unsigned int from 2 unsigned bytes, signs will stuff you again:
+	  n = (b1 << 8) + b2 will get it wrong if either b1 or b2 is -ve.
 	  Instead use
 ```
 
 	    
-	      n = ((b1  0 ? b1 : 256 - b1) << 8) + (b2  0 ? b2 : 256 - b2)
+	      n = ((b1 ≥ 0 ? b1 : 256 - b1) << 8) + (b2 ≥ 0 ? b2 : 256 - b2)
 	    
 	  
 ```
 (no joke!)
-
-
-
 ####  Classes 
+
 
 The song class contains information about a single song and is given here:
       SongInformation.java
+
 ```
 
-
+	
+      
 
 
 public class SongInformation {
@@ -410,14 +397,18 @@ public class SongInformation {
     }
 }
 
+	
+      
 ```
 
 
 The song table class holds a list of song information objects and is given by
        SongTable.java
+
 ```
 
-
+	
+      
 import java.util.Vector;
 import java.io.FileInputStream;
 import java.io.*;
@@ -455,7 +446,7 @@ public class SongTable {
 	    len = fstream.read();
 	    lang = fstream.read();
 	    number = readShort(fstream);
-	    if (len == 0xFF  lang == 0xFF  number == 0xFFFFL) {
+	    if (len == 0xFF && lang == 0xFF && number == 0xFFFFL) {
 		break;
 	    }
 	    byte[] bytes = new byte[len - 4];
@@ -604,7 +595,7 @@ public class SongTable {
 	// Should print "54151 Help Yourself Tom Jones"
 	System.out.println(songs.getNumber(54150).toString());
 
-	// Should print "18062 伦巴(恋歌) 伦巴"
+	// Should print "18062 ä¼¦å·´(ææ­) ä¼¦å·´"
 	System.out.println(songs.getNumber(18061).toString());
 
 	System.out.println(songs.artistMatches("Tom Jones").toString());
@@ -648,16 +639,23 @@ public class SongTable {
 	System.exit(0);
     }
 }
+	
+      
 ```
+
+
 You may need to adjust the constant values in the file-based 
       constructor for this to work properly for you.
+
 
 A Java program using Swing to allow display and searching of the song
       titles is
       SongTableSwing.java
+
 ```
 
-
+	
+      
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
@@ -880,7 +878,7 @@ public class SongTableSwing extends JPanel {
 			   "artist " + artist + artist.length() +
 			   " find start " + findIndex +
 			   " model size " + model.getSize());
-	if (title.length() == 0  artist.length() == 0) {
+	if (title.length() == 0 && artist.length() == 0) {
 	    System.err.println("no search terms");
 	    return;
 	}
@@ -891,8 +889,8 @@ public class SongTableSwing extends JPanel {
 	    SongInformation info = (SongInformation) model.getElementAt(n);
 	    //System.out.println(info.toString());
 
-	    if ((title.length() != 0)  (artist.length() != 0)) {
-		if (info.titleMatch(title)  info.artistMatch(artist)) {
+	    if ((title.length() != 0) && (artist.length() != 0)) {
+		if (info.titleMatch(title) && info.artistMatch(artist)) {
 		    // System.out.println("Found " + info.toString());
 			findIndex = n;
 			list.setSelectedIndex(n);
@@ -900,13 +898,13 @@ public class SongTableSwing extends JPanel {
 			break;
 		}
 	    } else {
-		if ((title.length() != 0)  info.titleMatch(title)) {
+		if ((title.length() != 0) && info.titleMatch(title)) {
 		    // System.out.println("Found " + info.toString());
 		    findIndex = n;
 		    list.setSelectedIndex(n);
 		    list.ensureIndexIsVisible(n);
 		    break;
-		} else if ((artist.length() != 0)  info.artistMatch(artist)) {
+		} else if ((artist.length() != 0) && info.artistMatch(artist)) {
 		    // System.out.println("Found " + info.toString());
 		    findIndex = n;
 		    list.setSelectedIndex(n);
@@ -986,8 +984,10 @@ public class SongTableSwing extends JPanel {
 	}
     }
 }
+	
+      
 ```
+
 
 When "play" is selected it will print the song id to standard output for use in
       a pipeline.
-

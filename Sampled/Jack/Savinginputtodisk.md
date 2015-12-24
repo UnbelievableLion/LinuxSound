@@ -1,4 +1,6 @@
-#  Saving input to disk 
+
+##  Saving input to disk 
+
 
 Disk I/O cannot be performed within the Jack processing
       loop: it is just too slow.
@@ -6,14 +8,15 @@ Disk I/O cannot be performed within the Jack processing
       to manage disk I/O and pass control between the
       Jack and disk threads.
 
-The program
- `capture_client.c`from the
+
+The program `capture_client.c`from the
       examples does this:
-```sh_cpp
+
+```
 
 /*
     Copyright (C) 2001 Paul Davis
-    Copyright (C) 2003 Jack OQuin
+    Copyright (C) 2003 Jack O'Quin
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,7 +80,7 @@ jack_client_t *client;
 static void signal_handler(int sig)
 {
 	jack_client_close(client);
-	fprintf(stderr, signal received, exiting ...\n);
+	fprintf(stderr, "signal received, exiting ...\n");
 	exit(0);
 }
 
@@ -91,7 +94,7 @@ disk_thread (void *arg)
 	void *framebuf = malloc (bytes_per_frame);
 
 	pthread_setcanceltype (PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-	pthread_mutex_lock (disk_thread_lock);
+	pthread_mutex_lock (&disk_thread_lock);
 
 	info->status = 0;
 
@@ -99,7 +102,7 @@ disk_thread (void *arg)
 
 		/* Write the data one frame at a time.  This is
 		 * inefficient, but makes things simpler. */
-		while (info->can_capture 
+		while (info->can_capture &&
 		       (jack_ringbuffer_read_space (rb) >= bytes_per_frame)) {
 
 			jack_ringbuffer_read (rb, framebuf, bytes_per_frame);
@@ -108,24 +111,24 @@ disk_thread (void *arg)
 				char errstr[256];
 				sf_error_str (0, errstr, sizeof (errstr) - 1);
 				fprintf (stderr,
-					 cannot write sndfile (%s)\n,
+					 "cannot write sndfile (%s)\n",
 					 errstr);
 				info->status = EIO; /* write failed */
 				goto done;
 			}
 
 			if (++total_captured >= info->duration) {
-				printf (disk thread finished\n);
+				printf ("disk thread finished\n");
 				goto done;
 			}
 		}
 
 		/* wait until process() signals more data */
-		pthread_cond_wait (data_ready, disk_thread_lock);
+		pthread_cond_wait (&data_ready, &disk_thread_lock);
 	}
 
  done:
-	pthread_mutex_unlock (disk_thread_lock);
+	pthread_mutex_unlock (&disk_thread_lock);
 	free (framebuf);
 	return 0;
 }
@@ -137,7 +140,7 @@ process (jack_nframes_t nframes, void *arg)
 	size_t i;
 	jack_thread_info_t *info = (jack_thread_info_t *) arg;
 
-	/* Do nothing until were ready to begin. */
+	/* Do nothing until we're ready to begin. */
 	if ((!info->can_process) || (!info->can_capture))
 		return 0;
 
@@ -156,13 +159,13 @@ process (jack_nframes_t nframes, void *arg)
 	}
 
 	/* Tell the disk thread there is work to do.  If it is already
-	 * running, the lock will not be available.  We cant wait
-	 * here in the process() thread, but we dont need to signal
+	 * running, the lock will not be available.  We can't wait
+	 * here in the process() thread, but we don't need to signal
 	 * in that case, because the disk thread will read all the
 	 * data queued before waiting again. */
-	if (pthread_mutex_trylock (disk_thread_lock) == 0) {
-	    pthread_cond_signal (data_ready);
-	    pthread_mutex_unlock (disk_thread_lock);
+	if (pthread_mutex_trylock (&disk_thread_lock) == 0) {
+	    pthread_cond_signal (&data_ready);
+	    pthread_mutex_unlock (&disk_thread_lock);
 	}
 
 	return 0;
@@ -171,7 +174,7 @@ process (jack_nframes_t nframes, void *arg)
 static void
 jack_shutdown (void *arg)
 {
-	fprintf(stderr, JACK shut down, exiting ...\n);
+	fprintf(stderr, "JACK shut down, exiting ...\n");
 	exit(1);
 }
 
@@ -198,10 +201,10 @@ setup_disk_thread (jack_thread_info_t *info)
 	}
 	sf_info.format = SF_FORMAT_WAV|short_mask;
 
-	if ((info->sf = sf_open (info->path, SFM_WRITE, sf_info)) == NULL) {
+	if ((info->sf = sf_open (info->path, SFM_WRITE, &sf_info)) == NULL) {
 		char errstr[256];
 		sf_error_str (0, errstr, sizeof (errstr) - 1);
-		fprintf (stderr, cannot open sndfile \%s\ for output (%s)\n, info->path, errstr);
+		fprintf (stderr, "cannot open sndfile \"%s\" for output (%s)\n", info->path, errstr);
 		jack_client_close (info->client);
 		exit (1);
 	}
@@ -209,7 +212,7 @@ setup_disk_thread (jack_thread_info_t *info)
 	info->duration *= sf_info.samplerate;
 	info->can_capture = 0;
 
-	pthread_create (info->thread_id, NULL, disk_thread, info);
+	pthread_create (&info->thread_id, NULL, disk_thread, info);
 }
 
 static void
@@ -220,9 +223,9 @@ run_disk_thread (jack_thread_info_t *info)
 	sf_close (info->sf);
 	if (overruns > 0) {
 		fprintf (stderr,
-			 jackrec failed with %ld overruns.\n, overruns);
-		fprintf (stderr,  try a bigger buffer than -B %
-			 PRIu32 .\n, info->rb_size);
+			 "jackrec failed with %ld overruns.\n", overruns);
+		fprintf (stderr, " try a bigger buffer than -B %"
+			 PRIu32 ".\n", info->rb_size);
 		info->status = EPIPE;
 	}
 }
@@ -251,10 +254,10 @@ setup_ports (int sources, char *source_names[], jack_thread_info_t *info)
 	for (i = 0; i < nports; i++) {
 		char name[64];
 
-		sprintf (name, input%d, i+1);
+		sprintf (name, "input%d", i+1);
 
 		if ((ports[i] = jack_port_register (info->client, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0)) == 0) {
-			fprintf (stderr, cannot register input port \%s\!\n, name);
+			fprintf (stderr, "cannot register input port \"%s\"!\n", name);
 			jack_client_close (info->client);
 			exit (1);
 		}
@@ -262,7 +265,7 @@ setup_ports (int sources, char *source_names[], jack_thread_info_t *info)
 
 	for (i = 0; i < nports; i++) {
 		if (jack_connect (info->client, source_names[i], jack_port_name (ports[i]))) {
-			fprintf (stderr, cannot connect input port %s to %s\n, jack_port_name (ports[i]), source_names[i]);
+			fprintf (stderr, "cannot connect input port %s to %s\n", jack_port_name (ports[i]), source_names[i]);
 			jack_client_close (info->client);
 			exit (1);
 		}
@@ -279,55 +282,55 @@ main (int argc, char *argv[])
 	int longopt_index = 0;
 	extern int optind, opterr;
 	int show_usage = 0;
-	char *optstring = d:f:b:B:h;
+	char *optstring = "d:f:b:B:h";
 	struct option long_options[] = {
-		{ help, 0, 0, h },
-		{ duration, 1, 0, d },
-		{ file, 1, 0, f },
-		{ bitdepth, 1, 0, b },
-		{ bufsize, 1, 0, B },
+		{ "help", 0, 0, 'h' },
+		{ "duration", 1, 0, 'd' },
+		{ "file", 1, 0, 'f' },
+		{ "bitdepth", 1, 0, 'b' },
+		{ "bufsize", 1, 0, 'B' },
 		{ 0, 0, 0, 0 }
 	};
 
-	memset (thread_info, 0, sizeof (thread_info));
+	memset (&thread_info, 0, sizeof (thread_info));
 	thread_info.rb_size = DEFAULT_RB_SIZE;
 	opterr = 0;
 
-	while ((c = getopt_long (argc, argv, optstring, long_options, longopt_index)) != -1) {
+	while ((c = getopt_long (argc, argv, optstring, long_options, &longopt_index)) != -1) {
 		switch (c) {
 		case 1:
-			/* getopt signals end of - options */
+			/* getopt signals end of '-' options */
 			break;
 
-		case h:
+		case 'h':
 			show_usage++;
 			break;
-		case d:
+		case 'd':
 			thread_info.duration = atoi (optarg);
 			break;
-		case f:
+		case 'f':
 			thread_info.path = optarg;
 			break;
-		case b:
+		case 'b':
 			thread_info.bitdepth = atoi (optarg);
 			break;
-		case B:
+		case 'B':
 			thread_info.rb_size = atoi (optarg);
 			break;
 		default:
-			fprintf (stderr, error\n);
+			fprintf (stderr, "error\n");
 			show_usage++;
 			break;
 		}
 	}
 
 	if (show_usage || thread_info.path == NULL || optind == argc) {
-		fprintf (stderr, usage: jackrec -f filename [ -d second ] [ -b bitdepth ] [ -B bufsize ] port1 [ port2 ... ]\n);
+		fprintf (stderr, "usage: jackrec -f filename [ -d second ] [ -b bitdepth ] [ -B bufsize ] port1 [ port2 ... ]\n");
 		exit (1);
 	}
 
-	if ((client = jack_client_open (jackrec, JackNullOption, NULL)) == 0) {
-		fprintf (stderr, JACK server not running?\n);
+	if ((client = jack_client_open ("jackrec", JackNullOption, NULL)) == 0) {
+		fprintf (stderr, "JACK server not running?\n");
 		exit (1);
 	}
 
@@ -335,16 +338,16 @@ main (int argc, char *argv[])
 	thread_info.channels = argc - optind;
 	thread_info.can_process = 0;
 
-	setup_disk_thread (thread_info);
+	setup_disk_thread (&thread_info);
 
-	jack_set_process_callback (client, process, thread_info);
-	jack_on_shutdown (client, jack_shutdown, thread_info);
+	jack_set_process_callback (client, process, &thread_info);
+	jack_on_shutdown (client, jack_shutdown, &thread_info);
 
 	if (jack_activate (client)) {
-		fprintf (stderr, cannot activate client);
+		fprintf (stderr, "cannot activate client");
 	}
 
-	setup_ports (argc - optind, argv[optind], thread_info);
+	setup_ports (argc - optind, &argv[optind], &thread_info);
 
      /* install a signal handler to properly quits jack client */
     signal(SIGQUIT, signal_handler);
@@ -352,7 +355,7 @@ main (int argc, char *argv[])
 	signal(SIGHUP, signal_handler);
 	signal(SIGINT, signal_handler);
 
-	run_disk_thread (thread_info);
+	run_disk_thread (&thread_info);
 
 	jack_client_close (client);
 
@@ -363,5 +366,3 @@ main (int argc, char *argv[])
 
       
 ```
-
-

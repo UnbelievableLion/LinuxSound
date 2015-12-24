@@ -1,4 +1,6 @@
-#  AttributedLyricPanel 
+
+##  AttributedLyricPanel 
+
 
 The panel to display a line of lyrics must be able
       to show text in two colours: the lyrics already played
@@ -6,6 +8,7 @@ The panel to display a line of lyrics must be able
       class is useful for this, as the text can be marked with
       different attributes such as colours. This is wrapped in
       an AttributedTextPanel, shown later.
+
 
 One minor wrinkle concerns language. Chinese has both the
       character form and a Romanised form called PinYin.
@@ -16,10 +19,13 @@ One minor wrinkle concerns language. Chinese has both the
       The language identity should be passed to the 
       AttributedLyricPanel as well.
 
+
 The AttributedLyricPanel is
+
 ```
 
-
+      
+      
 
 
 import javax.swing.*;
@@ -136,7 +142,7 @@ public class AttributedLyricPanel extends JPanel {
 	    System.err.println("Attr Str exception on " + text);
 	}
 	// Draw the Pinyin if it's not zero
-	if (pinyinTxt != null  pinyinTxt.length() != 0) {
+	if (pinyinTxt != null && pinyinTxt.length() != 0) {
 	    g.setFont(smallFont);
 	    metrics = g.getFontMetrics();
 	    strWidth = metrics.stringWidth(pinyinTxt);
@@ -147,6 +153,6 @@ public class AttributedLyricPanel extends JPanel {
 	}
     }
 }
+      
+    
 ```
-
-

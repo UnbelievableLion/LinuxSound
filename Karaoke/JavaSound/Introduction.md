@@ -1,4 +1,6 @@
-#  Introduction 
+
+##  Introduction 
+
 
 Java has no library support for Karaoke. That is too application specific.
       In this chapter we give code for a Karaoke player that can play KAR files.
@@ -10,11 +12,14 @@ Java has no library support for Karaoke. That is too application specific.
       In the middle it shows the melody line, with a vertical line in the middle
       to show the currently playing note.
 
+
 The player looks like
+
 
 ![alt text](KaraokePlayer.png)
 
+
 The UML diagram is basically
 
-![alt text](KaraokeUML.png)
 
+![alt text](KaraokeUML.png)

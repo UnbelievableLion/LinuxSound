@@ -1,19 +1,20 @@
-#  Decoding a JPEG image into RGB format 
 
-The OpenMAX component
- `image_resize`will decode a JPEG image, but only to YUV format.
-      Broadcom has an additional non-standard component
- `resize`which can not only resize
+##  Decoding a JPEG image into RGB format 
+
+
+The OpenMAX component `image_resize`will decode a JPEG image, but only to YUV format.
+      Broadcom has an additional non-standard component `resize`which can not only resize
       an uncompresssed image but also convert it
       to RGB format.
+
 
 Matt Ownby and Anthong Sale did a marvellous job
       of unravelling the sequence of steps required
       to set up tunnelling between a decoder and resizer.
-      Their logic is captured in the
- `portSettingsChanged`function. This adds tunnelling to the
+      Their logic is captured in the `portSettingsChanged`function. This adds tunnelling to the
       decoder program given earlier.
-```sh_cpp
+
+```
 
 	
 int
@@ -27,7 +28,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageDecoder->outPort;
     OMX_GetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     unsigned int    uWidth =
 	(unsigned int) portdef.format.image.nFrameWidth;
@@ -37,7 +38,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     // tell resizer input what the decoder output will be providing
     portdef.nPortIndex = decoder->imageResizer->inPort;
     OMX_SetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // establish tunnel between decoder output and resizer input
     OMX_SetupTunnel(decoder->imageDecoder->handle,
@@ -89,7 +90,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageResizer->outPort;
     OMX_GetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // change output color format and dimensions to match input
     portdef.format.image.eCompressionFormat = OMX_IMAGE_CodingUnused;
@@ -101,12 +102,12 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     portdef.format.image.bFlagErrorConcealment = OMX_FALSE;
 
     OMX_SetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // grab output requirements again to get actual buffer size
     // requirement (and buffer count requirement!)
     OMX_GetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // move resizer into executing state
     ilclient_change_component_state(decoder->imageResizer->component,
@@ -126,7 +127,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 		    decoder->imageResizer->outPort, NULL);
 
     int             ret = OMX_AllocateBuffer(decoder->imageResizer->handle,
-					     decoder->pOutputBufferHeader,
+					     &decoder->pOutputBufferHeader,
 					     decoder->imageResizer->
 					     outPort,
 					     NULL,
@@ -151,27 +152,22 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 
 The only change we make to their code is to add a function
       to dump the decoded and converted RGB image as a TGA file.
-      The function
- `save_image_as_TGA`is called
+      The function `save_image_as_TGA`is called
       when the output buffer of the resizer is non-empty.
       Just a few wrinkles in this. The image has a height and width.
       The resizer will have aligned those up to a 16-byte
       multiple, the Stride and the SliceHeight.
       We have asked for a 32-bit format 
-      (
- ` OMX_COLOR_Format32bitABGR8888`)
-      and so we have to specify this. The TGA format is specified
- [here] (http://www.fileformat.info/format/tga/egff.htm)
-.
+      ( ` OMX_COLOR_Format32bitABGR8888`)
+      and so we have to specify this. The TGA format is specified [here](http://www.fileformat.info/format/tga/egff.htm) .
+
 
 The co-ordinate system between TGA and the Broadcom is inverted.
       We are lazy here because it simplifies the code, and save the
       image upside down. The source is almost completely
-      from the RPi
- `/opt/vc/src/hello_pi/hello_jpeg/jpeg.c`program, here as
- [decodejpeg2rgb.c] (decodejpeg2rgb.c)
-:
-```sh_cpp
+      from the RPi `/opt/vc/src/hello_pi/hello_jpeg/jpeg.c`program, here as [decodejpeg2rgb.c](decodejpeg2rgb.c) :
+
+```
 
 	/*
 Copyright (c) 2012, Matt Ownby
@@ -191,7 +187,7 @@ modification, are permitted provided that the following conditions are met:
       names of its contributors may be used to endorse or promote products
       derived from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS AND
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
@@ -205,7 +201,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #include <assert.h>
-#include jpeg.h
+#include "jpeg.h"
 
 #define TIMEOUT_MS 2000
 
@@ -238,7 +234,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageDecoder->outPort;
     OMX_GetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     unsigned int    uWidth =
 	(unsigned int) portdef.format.image.nFrameWidth;
@@ -248,7 +244,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     // tell resizer input what the decoder output will be providing
     portdef.nPortIndex = decoder->imageResizer->inPort;
     OMX_SetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // establish tunnel between decoder output and resizer input
     OMX_SetupTunnel(decoder->imageDecoder->handle,
@@ -300,7 +296,7 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageResizer->outPort;
     OMX_GetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // change output color format and dimensions to match input
     portdef.format.image.eCompressionFormat = OMX_IMAGE_CodingUnused;
@@ -312,20 +308,20 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
     portdef.format.image.bFlagErrorConcealment = OMX_FALSE;
 
     OMX_SetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // grab output requirements again to get actual buffer size
     // requirement (and buffer count requirement!)
     OMX_GetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // move resizer into executing state
     ilclient_change_component_state(decoder->imageResizer->component,
 				    OMX_StateExecuting);
 
-    // show some logging so user knows its working
+    // show some logging so user knows it's working
     printf
-	(Width: %u Height: %u Output Color Format: 0x%x Buffer Size: %u\n,
+	("Width: %u Height: %u Output Color Format: 0x%x Buffer Size: %u\n",
 	 (unsigned int) portdef.format.image.nFrameWidth,
 	 (unsigned int) portdef.format.image.nFrameHeight,
 	 (unsigned int) portdef.format.image.eColorFormat,
@@ -338,13 +334,13 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 		    decoder->imageResizer->outPort, NULL);
 
     int             ret = OMX_AllocateBuffer(decoder->imageResizer->handle,
-					     decoder->pOutputBufferHeader,
+					     &decoder->pOutputBufferHeader,
 					     decoder->imageResizer->
 					     outPort,
 					     NULL,
 					     portdef.nBufferSize);
     if (ret != OMX_ErrorNone) {
-	perror(Eror allocating buffer);
+	perror("Eror allocating buffer");
 	return OMXJPEG_ERROR_MEMORY;
     }
 
@@ -373,12 +369,12 @@ portSettingsChangedAgain(OPENMAX_JPEG_DECODER * decoder)
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageDecoder->outPort;
     OMX_GetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // tell resizer input what the decoder output will be providing
     portdef.nPortIndex = decoder->imageResizer->inPort;
     OMX_SetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // enable output of decoder and input of resizer (ie enable tunnel)
     ilclient_enable_port(decoder->imageDecoder->component,
@@ -400,22 +396,22 @@ prepareResizer(OPENMAX_JPEG_DECODER * decoder)
 {
     decoder->imageResizer = malloc(sizeof(COMPONENT_DETAILS));
     if (decoder->imageResizer == NULL) {
-	perror(malloc image resizer);
+	perror("malloc image resizer");
 	return OMXJPEG_ERROR_MEMORY;
     }
 
     int             ret = ilclient_create_component(decoder->client,
-						    decoder->
+						    &decoder->
 						    imageResizer->
 						    component,
-						    resize,
+						    "resize",
 						    ILCLIENT_DISABLE_ALL_PORTS
 						    |
 						    ILCLIENT_ENABLE_INPUT_BUFFERS
 						    |
 						    ILCLIENT_ENABLE_OUTPUT_BUFFERS);
     if (ret != 0) {
-	perror(image resizer);
+	perror("image resizer");
 	return OMXJPEG_ERROR_CREATING_COMP;
     }
     // grab the handle for later use
@@ -428,7 +424,7 @@ prepareResizer(OPENMAX_JPEG_DECODER * decoder)
     port.nVersion.nVersion = OMX_VERSION;
 
     OMX_GetParameter(ILC_GET_HANDLE(decoder->imageResizer->component),
-		     OMX_IndexParamImageInit, port);
+		     OMX_IndexParamImageInit, &port);
     if (port.nPorts != 2) {
 	return OMXJPEG_ERROR_WRONG_NO_PORTS;
     }
@@ -445,21 +441,21 @@ prepareImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 {
     decoder->imageDecoder = malloc(sizeof(COMPONENT_DETAILS));
     if (decoder->imageDecoder == NULL) {
-	perror(malloc image decoder);
+	perror("malloc image decoder");
 	return OMXJPEG_ERROR_MEMORY;
     }
 
     int             ret = ilclient_create_component(decoder->client,
-						    decoder->
+						    &decoder->
 						    imageDecoder->
 						    component,
-						    image_decode,
+						    "image_decode",
 						    ILCLIENT_DISABLE_ALL_PORTS
 						    |
 						    ILCLIENT_ENABLE_INPUT_BUFFERS);
 
     if (ret != 0) {
-	perror(image decode);
+	perror("image decode");
 	return OMXJPEG_ERROR_CREATING_COMP;
     }
     // grab the handle for later use in OMX calls directly
@@ -472,7 +468,7 @@ prepareImageDecoder(OPENMAX_JPEG_DECODER * decoder)
     port.nVersion.nVersion = OMX_VERSION;
 
     OMX_GetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamImageInit, port);
+		     OMX_IndexParamImageInit, &port);
     if (port.nPorts != 2) {
 	return OMXJPEG_ERROR_WRONG_NO_PORTS;
     }
@@ -491,13 +487,13 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 
     // set input image format
     OMX_IMAGE_PARAM_PORTFORMATTYPE imagePortFormat;
-    memset(imagePortFormat, 0, sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE));
+    memset(&imagePortFormat, 0, sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE));
     imagePortFormat.nSize = sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE);
     imagePortFormat.nVersion.nVersion = OMX_VERSION;
     imagePortFormat.nPortIndex = decoder->imageDecoder->inPort;
     imagePortFormat.eCompressionFormat = OMX_IMAGE_CodingJPEG;
     OMX_SetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamImagePortFormat, imagePortFormat);
+		     OMX_IndexParamImagePortFormat, &imagePortFormat);
 
     // get buffer requirements
     OMX_PARAM_PORTDEFINITIONTYPE portdef;
@@ -505,7 +501,7 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageDecoder->inPort;
     OMX_GetParameter(decoder->imageDecoder->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     // enable the port and setup the buffers
     OMX_SendCommand(decoder->imageDecoder->handle,
@@ -520,11 +516,11 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
     int             i;
     for (i = 0; i < decoder->inputBufferHeaderCount; i++) {
 	if (OMX_AllocateBuffer(decoder->imageDecoder->handle,
-			       decoder->ppInputBufferHeader[i],
+			       &decoder->ppInputBufferHeader[i],
 			       decoder->imageDecoder->inPort,
 			       (void *) i,
 			       portdef.nBufferSize) != OMX_ErrorNone) {
-	    perror(Allocate decode buffer);
+	    perror("Allocate decode buffer");
 	    return OMXJPEG_ERROR_MEMORY;
 	}
     }
@@ -537,14 +533,14 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 				decoder->imageDecoder->inPort, 0,
 				0, TIMEOUT_MS);
     if (ret != 0) {
-	fprintf(stderr, Did not get port enable %d\n, ret);
+	fprintf(stderr, "Did not get port enable %d\n", ret);
 	return OMXJPEG_ERROR_EXECUTING;
     }
     // start executing the decoder 
     ret = OMX_SendCommand(decoder->imageDecoder->handle,
 			  OMX_CommandStateSet, OMX_StateExecuting, NULL);
     if (ret != 0) {
-	fprintf(stderr, Error starting image decoder %x\n, ret);
+	fprintf(stderr, "Error starting image decoder %x\n", ret);
 	return OMXJPEG_ERROR_EXECUTING;
     }
     ret = ilclient_wait_for_event(decoder->imageDecoder->component,
@@ -552,7 +548,7 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 				  OMX_StateExecuting, 0, 0, 1, 0,
 				  TIMEOUT_MS);
     if (ret != 0) {
-	fprintf(stderr, Did not receive executing stat %d\n, ret);
+	fprintf(stderr, "Did not receive executing stat %d\n", ret);
 	// return OMXJPEG_ERROR_EXECUTING;
     }
 
@@ -565,19 +561,19 @@ setupOpenMaxJpegDecoder(OPENMAX_JPEG_DECODER ** pDecoder)
 {
     *pDecoder = malloc(sizeof(OPENMAX_JPEG_DECODER));
     if (pDecoder[0] == NULL) {
-	perror(malloc decoder);
+	perror("malloc decoder");
 	return OMXJPEG_ERROR_MEMORY;
     }
     memset(*pDecoder, 0, sizeof(OPENMAX_JPEG_DECODER));
 
     if ((pDecoder[0]->client = ilclient_init()) == NULL) {
-	perror(ilclient_init);
+	perror("ilclient_init");
 	return OMXJPEG_ERROR_ILCLIENT_INIT;
     }
 
     if (OMX_Init() != OMX_ErrorNone) {
 	ilclient_destroy(pDecoder[0]->client);
-	perror(OMX_Init);
+	perror("OMX_Init");
 	return OMXJPEG_ERROR_OMX_INIT;
     }
     // prepare the image decoder
@@ -607,7 +603,7 @@ void save_image_as_TGA(OPENMAX_JPEG_DECODER * decoder) {
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageResizer->outPort;
     OMX_GetParameter(decoder->imageResizer->handle,
-		     OMX_IndexParamPortDefinition, portdef);
+		     OMX_IndexParamPortDefinition, &portdef);
 
     uWidth =     portdef.format.image.nFrameWidth;
     uHeight = portdef.format.image.nFrameHeight;
@@ -615,7 +611,7 @@ void save_image_as_TGA(OPENMAX_JPEG_DECODER * decoder) {
     nStride = portdef.format.image.nStride;
     nSize = portdef.nBufferSize;
     //nSize = portdef.nFilledLen;
-    printf(Width is %d stride %d height is %d slice height %d, size %d\n, 
+    printf("Width is %d stride %d height is %d slice height %d, size %d\n", 
 	   uWidth, nStride, uHeight, nSliceHeight, nSize);
     // image in decoder->pOutputBufferHeader
     
@@ -624,14 +620,14 @@ void save_image_as_TGA(OPENMAX_JPEG_DECODER * decoder) {
     // header[0] = nSize;
     header[0x2] = 2;
     header[0xD] = (nStride/4) >> 8;
-    header[0xC] = (nStride/4)  0xFF;
+    header[0xC] = (nStride/4) & 0xFF;
     //header[0xF] = uHeight >> 8;
-    //header[0xE] = uHeight  0xFF;
+    //header[0xE] = uHeight & 0xFF;
     header[0xF] = nSliceHeight >> 8;
-    header[0xE] = nSliceHeight  0xFF;
+    header[0xE] = nSliceHeight & 0xFF;
     header[0x10] = 32;
 
-    FILE *fout = fopen(out.tga, w);
+    FILE *fout = fopen("out.tga", "w");
     fwrite(header, sizeof(char), TGA_HEADER_SIZE, fout);
 
     // This writes the image upside down but is simple
@@ -639,7 +635,7 @@ void save_image_as_TGA(OPENMAX_JPEG_DECODER * decoder) {
     int nwrote;
     nwrote = fwrite(decoder->pOutputBufferHeader->pBuffer, sizeof(char),
 	   nSize, fout);
-    printf(Written %d\n, nwrote);
+    printf("Written %d\n", nwrote);
     fclose(fout);
 }
 
@@ -694,8 +690,8 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 				pBufHeader);
 
 	if (ret != OMX_ErrorNone) {
-	    perror(Empty input buffer);
-	    fprintf(stderr, return code %x\n, ret);
+	    perror("Empty input buffer");
+	    fprintf(stderr, "return code %x\n", ret);
 	    return OMXJPEG_ERROR_MEMORY;
 	}
 	// wait for buffer to empty or port changed event
@@ -739,8 +735,8 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 	    ret = OMX_FillThisBuffer(decoder->imageResizer->handle,
 				     decoder->pOutputBufferHeader);
 	    if (ret != OMX_ErrorNone) {
-		perror(Filling output buffer);
-		fprintf(stderr, Error code %x\n, ret);
+		perror("Filling output buffer");
+		fprintf(stderr, "Error code %x\n", ret);
 		return OMXJPEG_ERROR_MEMORY;
 	    }
 
@@ -750,7 +746,7 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 
     // wait for buffer to fill
     /*
-    while(pBufHeader->nFilledLen == 0) { printf(Sleeping\n); sleep(5); } 
+    while(pBufHeader->nFilledLen == 0) { printf("Sleeping\n"); sleep(5); } 
     */
 
     // wait for end of stream events
@@ -761,17 +757,17 @@ decodeImage(OPENMAX_JPEG_DECODER * decoder, char *sourceImage,
 				OMX_BUFFERFLAG_EOS, 1,
 				0, 2);
     if (ret != 0) {
-	fprintf(stderr, No EOS event on image decoder %d\n, ret);
+	fprintf(stderr, "No EOS event on image decoder %d\n", ret);
     }
     ret = ilclient_wait_for_event(decoder->imageResizer->component,
 				  OMX_EventBufferFlag,
 				  decoder->imageResizer->outPort, 1,
 				  OMX_BUFFERFLAG_EOS, 1, 0, 2);
     if (ret != 0) {
-	fprintf(stderr, No EOS event on image resizer %d\n, ret);
+	fprintf(stderr, "No EOS event on image resizer %d\n", ret);
     }
 
-    printf(Filled buffer len is %d\n, pBufHeader->nFilledLen);
+    printf("Filled buffer len is %d\n", pBufHeader->nFilledLen);
     save_image_as_TGA(decoder);
 
     return OMXJPEG_OK;
@@ -883,12 +879,12 @@ main(int argc, char *argv[])
     size_t          imageSize;
     int             s;
     if (argc < 2) {
-	printf(Usage: %s <filename>\n, argv[0]);
+	printf("Usage: %s <filename>\n", argv[0]);
 	return -1;
     }
-    FILE           *fp = fopen(argv[1], rb);
+    FILE           *fp = fopen(argv[1], "rb");
     if (!fp) {
-	printf(File %s not found.\n, argv[1]);
+	printf("File %s not found.\n", argv[1]);
     }
     fseek(fp, 0L, SEEK_END);
     imageSize = ftell(fp);
@@ -899,7 +895,7 @@ main(int argc, char *argv[])
     assert(s == imageSize);
     fclose(fp);
     bcm_host_init();
-    s = setupOpenMaxJpegDecoder(pDecoder);
+    s = setupOpenMaxJpegDecoder(&pDecoder);
     assert(s == 0);
     s = decodeImage(pDecoder, sourceImage, imageSize);
     assert(s == 0);
@@ -910,5 +906,3 @@ main(int argc, char *argv[])
 
       
 ```
-
-

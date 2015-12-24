@@ -1,13 +1,17 @@
-#  Swing song table UI 
+
+##  Swing song table UI 
+
 
 There is a principal song table containing all the songs.
       This may have filters applied to it to show, say, only the
       Beatles songs.
       In addition, the visitors to my house have built up a collection
       of "favourite" songs. Each of these is its own song table.
-      The UI for this is the Swing application
- `SongTableSwing.java`:
-```sh_cpp
+      The UI for this is the Swing application `SongTableSwing.java`:
+
+```
+
+	
 package newmarch.songtable;
 
 import java.awt.*;
@@ -34,49 +38,21 @@ public class SongTableSwing extends JPanel {
     // It should be in your distro.
     // Fonts displaying all Unicode are zysong.ttf and Cyberbit.ttf
     // See http://unicode.org/resources/fonts.html
-    private Font font = new Font(
-WenQuanYi Zen Hei
-, Font.PLAIN, 16);
-    // font = new Font(
-Bitstream Cyberbit
-, Font.PLAIN, 16);
+    private Font font = new Font("WenQuanYi Zen Hei", Font.PLAIN, 16);
+    // font = new Font("Bitstream Cyberbit", Font.PLAIN, 16);
     
     private int findIndex = -1;
 
     /**
-     * Describe
-<
-code
->
-main
-<
-/code
->
-method here.
+     * Describe <code>main</code> method here.
      *
-     * @param args a
-<
-code
->
-String
-<
-/code
->
-value
+     * @param args a <code>String</code> value
      */
     public static final void main(final String[] args) {
-	if (args.length
->
-= 1
-args[0].startsWith(
--h
-)) {
-	    System.err.println(
-Usage: java SongTableSwing [song songdir|songfile]
-);
-	    System.err.println(
--sSongStore
-);
+	if (args.length >= 1 && 
+	    args[0].startsWith("-h")) {
+	    System.err.println("Usage: java SongTableSwing [song songdir|songfile]");
+	    System.err.println("  -sSongStore");
 	    System.exit(0);
 	}
 
@@ -89,9 +65,7 @@ Usage: java SongTableSwing [song songdir|songfile]
 	}
 
 	JFrame frame = new JFrame();
-	frame.setTitle(
-Song Table
-);
+	frame.setTitle("Song Table");
 
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	frame.setSize(800, ((int)screenSize.getHeight())*5/6);
@@ -103,9 +77,7 @@ Song Table
 	frame.setVisible(true);
 
 	JFrame favourites = new JFrame();
-	favourites.setTitle(
-Favourites
-);
+	favourites.setTitle("Favourites");
 	favourites.setSize(600,  ((int)screenSize.getHeight())*3/4);
 	favourites.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
@@ -119,18 +91,11 @@ Favourites
     public SongTableSwing(SongTable songs) {
 
 	if (font == null) {
-	    System.err.println(
-Can
-t fnd font
-);
+	    System.err.println("Can't fnd font");
 	}
 		
 	int n = 0;
-	java.util.Iterator
-<
-SongInformation
->
-iter = songs.iterator();
+	java.util.Iterator<SongInformation> iter = songs.iterator();
 	while(iter.hasNext()) {
 	    model.add(n++, iter.next());
 	    // model.add(n++, iter.next().toString());
@@ -157,25 +122,17 @@ iter = songs.iterator();
 	bottomPanel.add(searchPanel);
 	searchPanel.setLayout(new FlowLayout());
 
-	JLabel numberLabel = new JLabel(
-Number
-);
+	JLabel numberLabel = new JLabel("Number");
 	numberField = new JTextField(5);
 
-	JLabel langLabel = new JLabel(
-Language
-);
+	JLabel langLabel = new JLabel("Language");
 	langField = new JTextField(8);
 
-	JLabel titleLabel = new JLabel(
-Title
-);
+	JLabel titleLabel = new JLabel("Title");
 	titleField = new JTextField(20);
 	titleField.setFont(font);
 
-	JLabel artistLabel = new JLabel(
-Artist
-);
+	JLabel artistLabel = new JLabel("Artist");
 	artistField = new JTextField(10);
 	artistField.setFont(font);
 
@@ -190,21 +147,15 @@ Artist
 		public void changedUpdate(DocumentEvent e) {
 		    // rest find to -1 to restart any find searches
 		    findIndex = -1;
-		    // System.out.println(
-reset find index
-);
+		    // System.out.println("reset find index");
 		}
 		public void insertUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(
-reset insert find index
-);
+		    // System.out.println("reset insert find index");
 		}
 		public void removeUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(
-reset remove find index
-);
+		    // System.out.println("reset remove find index");
 		}
 	    }
 	    );
@@ -212,21 +163,15 @@ reset remove find index
 		public void changedUpdate(DocumentEvent e) {
 		    // rest find to -1 to restart any find searches
 		    findIndex = -1;
-		    // System.out.println(
-reset insert find index
-);
+		    // System.out.println("reset insert find index");
 		}
 		public void insertUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(
-reset insert find index
-);
+		    // System.out.println("reset insert find index");
 		}
 		public void removeUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(
-reset insert find index
-);
+		    // System.out.println("reset insert find index");
 		}
 	    }
 	    );
@@ -248,18 +193,10 @@ reset insert find index
 	bottomPanel.add(buttonPanel);
 	buttonPanel.setLayout(new FlowLayout());
 
-	JButton find = new JButton(
-Find
-);
-	JButton filter = new JButton(
-Filter
-);
-	JButton reset = new JButton(
-Reset
-);
-	JButton play = new JButton(
-Play
-);
+	JButton find = new JButton("Find");
+	JButton filter = new JButton("Filter");
+	JButton reset = new JButton("Reset");
+	JButton play = new JButton("Play");
 	buttonPanel.add(find);
 	buttonPanel.add(filter);
 	buttonPanel.add(reset);
@@ -301,29 +238,23 @@ Play
 	    return;
 	}
 
-	for (int n = findIndex + 1; n
-<
-model.getSize(); n++) {
+	for (int n = findIndex + 1; n < model.getSize(); n++) {
 	    SongInformation info = (SongInformation) model.getElementAt(n);
 
-	    if ((title.length() != 0)
-(artist.length() != 0)) {
-		if (info.titleMatch(title)
-info.artistMatch(artist)) {
+	    if ((title.length() != 0) && (artist.length() != 0)) {
+		if (info.titleMatch(title) && info.artistMatch(artist)) {
 		    findIndex = n;
 		    list.setSelectedIndex(n);
 		    list.ensureIndexIsVisible(n);
 		    break;
 		}
 	    } else {
-		if ((title.length() != 0)
-info.titleMatch(title)) {
+		if ((title.length() != 0) && info.titleMatch(title)) {
 		    findIndex = n;
 		    list.setSelectedIndex(n);
 		    list.ensureIndexIsVisible(n);
 		    break;
-		} else if ((artist.length() != 0)
-info.artistMatch(artist)) {
+		} else if ((artist.length() != 0) && info.artistMatch(artist)) {
 		    findIndex = n;
 		    list.setSelectedIndex(n);
 		    list.ensureIndexIsVisible(n);
@@ -357,42 +288,28 @@ info.artistMatch(artist)) {
 
 	model.clear();
 	int n = 0;
-	java.util.Iterator
-<
-SongInformation
->
-iter = filteredSongs.iterator();
+	java.util.Iterator<SongInformation> iter = filteredSongs.iterator();
 	while(iter.hasNext()) {
 	    model.add(n++, iter.next());
 	}
     }
 
     public void resetSongs() {
-	artistField.setText(
-);
-	titleField.setText(
-);
+	artistField.setText("");
+	titleField.setText("");
 	model.clear();
 	int n = 0;
-	java.util.Iterator
-<
-SongInformation
->
-iter = allSongs.iterator();
+	java.util.Iterator<SongInformation> iter = allSongs.iterator();
 	while(iter.hasNext()) {
 	    model.add(n++, iter.next());
 	}
     }
     /**
-     *
-play
-a song by printing its file path to standard out.
+     * "play" a song by printing its file path to standard out.
      * Can be used in a pipeline this way
      */
     public void playSong() {
-	String SERVERIP =
-192.168.1.110
-; 
+	String SERVERIP = "192.168.1.110"; 
 	int SERVERPORT = 13000;
 	PrintWriter out;
 	
@@ -412,9 +329,7 @@ a song by printing its file path to standard out.
 						     new OutputStreamWriter(socket.getOutputStream())), 
 				  true);
 	    // Avoid println to socket for Windows
-	    out.print(song.path +
-\n
-);
+	    out.print(song.path + "\n");
 	    out.flush();
 	    socket.close();
 				
@@ -441,13 +356,18 @@ a song by printing its file path to standard out.
     }
 }
 
+      
 ```
 
 
-The favourites classes are
- `AllFavourites.java`:
-```sh_cpp
-package newmarch.songtable;
+
+
+
+The favourites classes are `AllFavourites.java`:
+
+```
+
+	package newmarch.songtable;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -458,20 +378,10 @@ import java.io.*;
 import java.net.URL;
 
 public class AllFavourites extends JTabbedPane {
-    public static String FAVOURITES_DIR =
-http://192.168.1.101:8000/KARAOKE/favourites/
-;
+    public static String FAVOURITES_DIR = "http://192.168.1.101:8000/KARAOKE/favourites/";
 
     private SongTableSwing songTable;
-    public Vector
-<
-FavouritesInfo
->
-favourites = new Vector
-<
-FavouritesInfo
->
-();
+    public Vector<FavouritesInfo> favourites = new Vector<FavouritesInfo>();
 
     public AllFavourites(SongTableSwing songTable) {
 	this.songTable = songTable;
@@ -479,21 +389,15 @@ FavouritesInfo
 	loadFavourites();
 
 	NewPanel newP = new NewPanel(this);
-	addTab(
-NEW
-, null, newP);
+	addTab("NEW", null, newP);
     }
 
     private void loadFavourites() {
-	//String userHome = System.getProperty(
-user.home
-);
+	//String userHome = System.getProperty("user.home");
 	/*
-	Path favouritesPath = FileSystems.getDefault().getPath(userHome,
-.karaoke
-,
-favourites
-);
+	Path favouritesPath = FileSystems.getDefault().getPath(userHome, 
+							    ".karaoke",
+							    "favourites");
 	*/
 
 	try {
@@ -503,9 +407,7 @@ favourites
 	    BufferedReader in = new BufferedReader(reader);
 	    String line = in.readLine();
 	    while (line != null) {
-		if (line.startsWith(
-.
-)) {
+		if (line.startsWith(".")) {
 		    // ignore .htacess etc
 		    continue;
 		}
@@ -517,11 +419,7 @@ favourites
 
 	    for (FavouritesInfo f: favourites) {
 		// TODO checkout the Songtable constructors - messy 
-		f.songTable = new SongTable(new Vector
-<
-SongInformation
->
-());
+		f.songTable = new SongTable(new Vector<SongInformation>());
 		f.songTable.loadTableFromStore(FAVOURITES_DIR +
 					   f.owner);
 
@@ -537,43 +435,25 @@ SongInformation
 	/*
 	Path favouritesPath = FileSystems.getDefault().getPath(FAVOURITES_DIR);
 	try {
-	    DirectoryStream
-<
-Path
->
-stream = 
+	    DirectoryStream<Path> stream = 
 		Files.newDirectoryStream(favouritesPath);
 	    for (Path entry: stream) {
 		int nelmts = entry.getNameCount();
 		Path last = entry.subpath(nelmts-1, nelmts);
-		if (last.toString().startsWith(
-.
-)) {
+		if (last.toString().startsWith(".")) {
 		    // ignore .htaccess etc
 		    continue;
 		}
-		System.err.println(
-Favourite:
-+ last.toString());
+		System.err.println("Favourite: " + last.toString());
 		File storeFile = entry.toFile();
 		
 		FileInputStream in = new FileInputStream(storeFile); 
 		ObjectInputStream is = new ObjectInputStream(in);
-		Vector
-<
-SongInformation
->
-favouriteSongs = 
-		    (Vector
-<
-SongInformation
->
-) is.readObject();
+		Vector<SongInformation> favouriteSongs = 
+		    (Vector<SongInformation>) is.readObject();
 		in.close();
 		for (SongInformation s: favouriteSongs) {
-		    System.err.println(
-Fav:
-+ s.toString());
+		    System.err.println("Fav: " + s.toString());
 		}
 
 		SongTable favouriteSongsTable = new SongTable(favouriteSongs);
@@ -581,9 +461,7 @@ Fav:
 					      favouriteSongsTable, 
 					      last.toString());
 		addTab(last.toString(), null, f, last.toString());
-		System.err.println(
-Loaded favs
-+ last.toString());
+		System.err.println("Loaded favs " + last.toString());
 	    }
 	} catch(Exception e) {
 	    System.err.println(e.toString());
@@ -598,9 +476,7 @@ Loaded favs
 	    this.pane = pane;
 
 	    setLayout(new FlowLayout());
-	    JLabel nameLabel = new JLabel(
-Name of new person
-);
+	    JLabel nameLabel = new JLabel("Name of new person");
 	    final JTextField nameField = new JTextField(10);
 	    add(nameLabel);
 	    add(nameField);
@@ -609,11 +485,7 @@ Name of new person
 		    public void actionPerformed(ActionEvent e){
 			String name = nameField.getText();
 
-			SongTable songs = new SongTable(new Vector
-<
-SongInformation
->
-());
+			SongTable songs = new SongTable(new Vector<SongInformation>());
 			Favourites favs = new Favourites(songTable, songs, name);
 			
 			pane.addTab(name, null, favs);
@@ -638,9 +510,15 @@ SongInformation
 
 }
 
+      
 ```
+
+
 and
-```sh_cpp
+
+```
+
+	
 package newmarch.songtable;
 
 import java.awt.*;
@@ -677,9 +555,7 @@ public class Favourites extends JPanel {
     // It should be in your distro.
     // Fonts displaying all Unicode are zysong.ttf and Cyberbit.ttf
     // See http://unicode.org/resources/fonts.html
-    private Font font = new Font(
-WenQuanYi Zen Hei
-, Font.PLAIN, 16);
+    private Font font = new Font("WenQuanYi Zen Hei", Font.PLAIN, 16);
     
     private int findIndex = -1;
 
@@ -691,44 +567,25 @@ WenQuanYi Zen Hei
 	this.user = user;
 
 	if (font == null) {
-	    System.err.println(
-Can
-t find font
-);
+	    System.err.println("Can't find font");
 	}
 
 
-	System.out.println(
-Favourites for user:
-+ user);
+	System.out.println("Favourites for user: " + user);
 	
-	tmodel.addColumn(
-ID
-);
-	tmodel.addColumn(
-Artist
-);
-	tmodel.addColumn(
-Title
-);
-	tmodel.addColumn(
-Path
-);
+	tmodel.addColumn("ID");
+	tmodel.addColumn("Artist");
+	tmodel.addColumn("Title");
+	tmodel.addColumn("Path");
 	
 	int n = 0;
-	java.util.Iterator
-<
-SongInformation
->
-iter = favouriteSongs.iterator();
+	java.util.Iterator<SongInformation> iter = favouriteSongs.iterator();
 	while(iter.hasNext()) {
 	    SongInformation info = iter.next();
 	    if (info == null)
 		continue;
 	    /*
-	    System.out.println(
-UID for SongInformation
-+ 
+	    System.out.println("UID for SongInformation " + 
 			       ObjectStreamClass.lookup(info.getClass()).getSerialVersionUID());
 	    */
 	    model.add(n++, info);
@@ -773,15 +630,9 @@ UID for SongInformation
 	bottomPanel.add(buttonPanel);
 	buttonPanel.setLayout(new FlowLayout());
 
-	JButton addSong = new JButton(
-Add song to list
-);
-	JButton deleteSong = new JButton(
-Delete song from list
-);
-	JButton play = new JButton(
-Play
-);
+	JButton addSong = new JButton("Add song to list");
+	JButton deleteSong = new JButton("Delete song from list");
+	JButton play = new JButton("Play");
 
 	buttonPanel.add(addSong);
 	buttonPanel.add(deleteSong);
@@ -822,27 +673,19 @@ Play
     private void saveToStore() {
 	try {
 	    /*
-	    String userHome = System.getProperty(
-user.home
-);
-	    Path storePath = FileSystems.getDefault().getPath(userHome,
-.karaoke
-,
-favourites
-,
+	    String userHome = System.getProperty("user.home");
+	    Path storePath = FileSystems.getDefault().getPath(userHome, 
+							      ".karaoke",
+							      "favourites",
 							      user);
 	    File storeFile = storePath.toFile();
 	    */
 
-	    //favouriteSongs.saveTableToStore(
-/server/KARAOKE/favourites/
-+ user);
+	    //favouriteSongs.saveTableToStore("/server/KARAOKE/favourites/" + user);
 	    favouriteSongs.saveTableToStore(AllFavourites.FAVOURITES_DIR + user);
 
 	    /*
-	    File storeFile = new File(
-/server/KARAOKE/favourites/
-+ user);
+	    File storeFile = new File("/server/KARAOKE/favourites/" + user);
 	    FileOutputStream out = new FileOutputStream(storeFile); 
 	    ObjectOutputStream os = new ObjectOutputStream(out);
 	    os.writeObject(favouriteSongs.songs); 
@@ -850,18 +693,13 @@ favourites
 	    out.close();
 	    */
 	} catch(Exception e) {
-	    System.err.println(
-Can
-t save favourites file
-+ e.toString());
+	    System.err.println("Can't save favourites file " + e.toString());
 	}
     }
 
 
     /**
-     *
-play
-a song by printing its file path to standard out.
+     * "play" a song by printing its file path to standard out.
      * Can be used in a pipeline this way
      */
     public void playSong() {
@@ -877,9 +715,7 @@ a song by printing its file path to standard out.
 							   table.getSelectedRow()), 3).toString();
 	System.out.println(path);
 
-	String SERVERIP =
-192.168.1.110
-; 
+	String SERVERIP = "192.168.1.110"; 
 	int SERVERPORT = 13000;
 	PrintWriter out;
 	
@@ -894,12 +730,8 @@ a song by printing its file path to standard out.
 				  true);
 	  
 	    // Avoid println - on Windows it is \r\n
-	    //out.print(song.path +
-\n
-);
-	    out.print(path +
-\n
-);
+	    //out.print(song.path + "\n");
+	    out.print(path + "\n");
 	    out.flush();
 	    socket.close();
 				
@@ -924,6 +756,8 @@ a song by printing its file path to standard out.
     }
 }
 
+      
 ```
+
 
 

@@ -1,8 +1,7 @@
-#  Introduction 
 
-The article
- [
+##  Introduction 
+
+
+The article [
 	Knowing Jack
-      ] (http://linux-sound.org/knowing-jack.html)
-gives a gentle introduction to Jack.
-
+      ](http://linux-sound.org/knowing-jack.html) gives a gentle introduction to Jack.

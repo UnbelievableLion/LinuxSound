@@ -1,6 +1,8 @@
-#  HTTP clients 
+
+##  HTTP clients 
 
 ###  HTTP Browsers 
+
 
 Point the browser to the URL of an audio file and it will pass
       the content to a helper which will attempt to play the file.
@@ -10,27 +12,34 @@ Point the browser to the URL of an audio file and it will pass
 
 ###  mplayer 
 
+
 MPlayer is HTTP-aware:
       just give the URL of the file
+
 ```
 
- `
+	
 mplayer http://localhost/audio/enigma/audio_01.ogg
-	`
-
+	
+      
 ```
+
+
 
 
 ###  VLC 
 
+
 VLC is also HTTP-aware:
       just give the URL of the file
+
 ```
 
- `
+	
 vlc http://localhost/audio/enigma/audio_01.ogg
-	`
-
+	
+      
 ```
+
 
 

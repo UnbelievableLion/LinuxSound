@@ -1,22 +1,25 @@
-#  Accessing the GPU 
+
+##  Accessing the GPU 
+
 
 Most drawing using RPi's GPU seems to be based around OpenGL ES.
       In order to use this we need to get an EGLSurface upon which
       OpenGL ES calls can be made.
 
+
 The EGLSurface is a generic type which has to be backed by
       a specific implementation for the device/hardware/etc which
       you want to draw into. 
-      The page
- [ 
-	    Raspberry Pi VideoCore APIs ] (http://elinux.org/Raspberry_Pi_VideoCore_APIs)
-gives a quick overview of the APIs involved.
+      The page [ 
+	    Raspberry Pi VideoCore APIs ](http://elinux.org/Raspberry_Pi_VideoCore_APIs) gives a quick overview of the APIs involved.
       Basically, to get to the EGLSurface you have to use the Dispmanx
       window system, which is reportedly being deprecated but is still
       used in all the demos and code that I have seen.
 
+
 The relevant Dispmanx calls are
-```sh_cpp
+
+```
 
 	
     DISPMANX_ELEMENT_HANDLE_T dispman_element;
@@ -26,7 +29,7 @@ The relevant Dispmanx calls are
     VC_RECT_T src_rect;
 
    success = graphics_get_display_size(0 /* LCD */, 
-             screen_width, screen_height);
+             &screen_width, &screen_height);
     assert( success >= 0 );
 
     dst_rect.x = 0;
@@ -43,39 +46,31 @@ The relevant Dispmanx calls are
     dispman_update = vc_dispmanx_update_start( 0 );
     dispman_element = 
         vc_dispmanx_element_add(dispman_update, dispman_display,
-                                0/*layer*/, dst_rect, 0/*src*/,
-                                src_rect, DISPMANX_PROTECTION_NONE, 
+                                0/*layer*/, &dst_rect, 0/*src*/,
+                                &src_rect, DISPMANX_PROTECTION_NONE, 
                                 0 /*alpha*/, 0/*clamp*/, 0/*transform*/);
 	
       
 ```
-At the end of this you have a window stored in
- `dispman_element`that can be used as a native window
+
+
+At the end of this you have a window stored in `dispman_element`that can be used as a native window
       object later.
+
 
 Initialising EGL is done in the standard way of
 
-+  Get an EGL display
-
-
-+  Initialise the display
-
-
-+  Choose a frame buffer
-
-
-+  Configure the frame buffer
-
-
-+  Create a rendering context
-
-
-+  Create an EGL window surface
-
++ Get an EGL display
++ Initialise the display
++ Choose a frame buffer
++ Configure the frame buffer
++ Create a rendering context
++ Create an EGL window surface
 
 Apart from the last step, this follows standard EGL
       programming:
-```sh_cpp
+
+```
 
 	
     static const EGLint attribute_list[] =
@@ -103,7 +98,7 @@ Apart from the last step, this follows standard EGL
     result = eglInitialize(display, NULL, NULL);
 
     // get an appropriate EGL frame buffer configuration
-    result = eglChooseConfig(display, attribute_list, , 1, _config);
+    result = eglChooseConfig(display, attribute_list, &config, 1, &num_config);
     assert(EGL_FALSE != result);
 
     // get an appropriate EGL frame buffer configuration
@@ -120,9 +115,9 @@ Apart from the last step, this follows standard EGL
 
 
 The next step is to link the Dispmanx window to the EGL window
-      surface. This uses a structure of type
- `EGL_DISPMANX_WINDOW_T`which is filled in from the Dispmanx information:
-```sh_cpp
+      surface. This uses a structure of type `EGL_DISPMANX_WINDOW_T`which is filled in from the Dispmanx information:
+
+```
 
 	
    EGL_DISPMANX_WINDOW_T nativewindow;
@@ -134,11 +129,14 @@ The next step is to link the Dispmanx window to the EGL window
 	
       
 ```
+
+
 The EGL surface is then created by
-```sh_cpp
+
+```
 
 	
-surface = eglCreateWindowSurface(display, config, nativewindow, NULL);
+surface = eglCreateWindowSurface(display, config, &nativewindow, NULL);
 
 // connect the context to the surface
 eglMakeCurrent(display, surface, surface, context);
@@ -151,7 +149,8 @@ In this section we do the absolute minimum: having got an
       EGL surface talking to the GPU, we just use OpenGL ES
       calls to set the background of the buffer to red
       and then display the buffer by swapping EGL buffers:
-```sh_cpp
+
+```
 
 	
     glClearColor(1.0, 0.0, 0.0, 1.0);
@@ -164,12 +163,11 @@ In this section we do the absolute minimum: having got an
 ```
 
 
-The complete program is
- [
-	rectangle.c] (rectangle.c)
-and just displays a large red
+The complete program is [
+	rectangle.c](rectangle.c) and just displays a large red
       square:
-```sh_cpp
+
+```
 
 	
 /*
@@ -195,7 +193,7 @@ typedef struct
 } CUBE_STATE_T;
 
 
-CUBE_STATE_T state, *p_state = state;
+CUBE_STATE_T state, *p_state = &state;
 
 void init_ogl(CUBE_STATE_T *state)
 {
@@ -238,7 +236,7 @@ void init_ogl(CUBE_STATE_T *state)
     result = eglInitialize(state->display, NULL, NULL);
 
     // get an appropriate EGL frame buffer configuration
-    result = eglChooseConfig(state->display, attribute_list, config, 1, num_config);
+    result = eglChooseConfig(state->display, attribute_list, &config, 1, &num_config);
     assert(EGL_FALSE != result);
 
     // get an appropriate EGL frame buffer configuration
@@ -251,7 +249,7 @@ void init_ogl(CUBE_STATE_T *state)
     assert(state->context!=EGL_NO_CONTEXT);
 
     // create an EGL window surface
-    success = graphics_get_display_size(0 /* LCD */, state->screen_width, state->screen_height);
+    success = graphics_get_display_size(0 /* LCD */, &state->screen_width, &state->screen_height);
     assert( success >= 0 );
 
     state->screen_width = 1024;
@@ -273,8 +271,8 @@ void init_ogl(CUBE_STATE_T *state)
 
     dispman_element = 
 	vc_dispmanx_element_add(dispman_update, dispman_display,
-				0/*layer*/, dst_rect, 0/*src*/,
-				src_rect, DISPMANX_PROTECTION_NONE, 
+				0/*layer*/, &dst_rect, 0/*src*/,
+				&src_rect, DISPMANX_PROTECTION_NONE, 
 				0 /*alpha*/, 0/*clamp*/, 0/*transform*/);
 
     nativewindow.element = dispman_element;
@@ -282,7 +280,7 @@ void init_ogl(CUBE_STATE_T *state)
     nativewindow.height = state->screen_height;
     vc_dispmanx_update_submit_sync( dispman_update );
 
-    state->surface = eglCreateWindowSurface( state->display, config, nativewindow, NULL );
+    state->surface = eglCreateWindowSurface( state->display, config, &nativewindow, NULL );
     assert(state->surface != EGL_NO_SURFACE);
 
     // connect the context to the surface
@@ -317,6 +315,7 @@ main(int argc, char *argv[])
 
 Compiling the program uses a horrendous mess of defines
       and libraries, probably not all of which are needed!
+
 ```
 
 	
@@ -326,7 +325,10 @@ cc -o rectangle -Wl,--whole-archive rectangle.o -L/opt/vc/lib/ -lGLESv2 -lEGL -l
 	
       
 ```
+
+
 However, it can then be run easily by
+
 ```
 
 	
@@ -334,5 +336,3 @@ However, it can then be run easily by
 	
       
 ```
-
-

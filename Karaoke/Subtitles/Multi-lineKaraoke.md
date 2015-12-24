@@ -1,9 +1,12 @@
-#  Multi-line Karaoke 
+
+##  Multi-line Karaoke 
+
 
 Ideally, a Karaoke system should have a "look ahead" mechanism whereby
       you can see the next line before having to sing it. This can be done by
       showing two lines of text with overlapping times at different heights.
       The algorithm is:
+
 ```
 
 	
@@ -18,7 +21,11 @@ When line N+1 is due to show,
 ```
 
 
+
+
+
 For the song Here Comes the Sun with lyrics
+
 ```
 
 	
@@ -29,7 +36,10 @@ I said it's alrigh
 	
       
 ```
+
+
 the resultant ASS file should look like
+
 ```
 
 	
@@ -42,7 +52,9 @@ Dialogue: 0,0:00:22.16,0:00:24.61,Default,,0000,0000,0000,,I said it's alright
 	
       
 ```
+
+
 with appearance
 
-![alt text](multiline.png)
 
+![alt text](multiline.png)

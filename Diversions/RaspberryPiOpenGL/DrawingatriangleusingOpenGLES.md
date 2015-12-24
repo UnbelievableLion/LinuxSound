@@ -1,38 +1,32 @@
-#  Drawing a triangle using OpenGL ES 
+
+##  Drawing a triangle using OpenGL ES 
+
 
 The previous example did the absolute minimum of OpenGL calls,
       just clearing the background. In this setion we do a bit more,
       by using OpenGL calls to clear the background and repeatedly
       draw a triangle (the same one!) multiple times a second.
-      The code is just adapted from Chapter 2 of the
- [
+      The code is just adapted from Chapter 2 of the [
 	OpenGL ES 2.0 Programming Guide
-      ] (http://opengles-book.com/es2/index.html)
+      ](http://opengles-book.com/es2/index.html) 
 
 
 The essential differences from the Programming Guide are
 
-+  We don't give any explanations of the OpenGL code -
++ We don't give any explanations of the OpenGL code -
 	  the Guide has an exhaustive description
-
-
-+  They hide the grubby details of building OpenGL programs
-	  in OS-specific modules such as
- `esUtils.c`,
++ They hide the grubby details of building OpenGL programs
+	  in OS-specific modules such as `esUtils.c`,
 	  while we explicitly show the RPi stuff here
 
+The program is [triangle.c](triangle.c) :
 
-
-
-The program is
- [triangle.c] (triangle.c)
-:
-```sh_cpp
+```
 
 	
 /*
  * code stolen from openGL-RPi-tutorial-master/encode_OGL/
- * and from OpenGL ES 2.0 Programming Guide
+ * and from OpenGLÂ® ES 2.0 Programming Guide
  */
 
 #include <stdio.h>
@@ -81,20 +75,20 @@ GLuint LoadShader(GLenum type, const char *shaderSrc)
     if(shader == 0)
 	return 0;
     // Load the shader source
-    glShaderSource(shader, 1, shaderSrc, NULL);
+    glShaderSource(shader, 1, &shaderSrc, NULL);
     // Compile the shader
     glCompileShader(shader);
     // Check the compile status
-    glGetShaderiv(shader, GL_COMPILE_STATUS, compiled);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if(!compiled)
 	{
 	    GLint infoLen = 0;
-	    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, infoLen);
+	    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
 	    if(infoLen > 1)
 		{
 		    char* infoLog = malloc(sizeof(char) * infoLen);
 		    glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
-		    fprintf(stderr, Error compiling shader:\n%s\n, infoLog);
+		    fprintf(stderr, "Error compiling shader:\n%s\n", infoLog);
 		    free(infoLog);
 		}
 	    glDeleteShader(shader);
@@ -109,17 +103,17 @@ int Init(CUBE_STATE_T *p_state)
 {
     UserData *user_data = p_state->user_data;
     GLbyte vShaderStr[] =
-	attribute vec4 vPosition;\n
-	void main()\n
-	{\n
-	gl_Position = vPosition; \n
-	}\n;
+	"attribute vec4 vPosition;\n"
+	"void main()\n"
+	"{\n"
+	"gl_Position = vPosition; \n"
+	"}\n";
     GLbyte fShaderStr[] =
-	precision mediump float;\n
-	void main()\n
-	{\n
-	 gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); \n
-	}\n;
+	"precision mediump float;\n"
+	"void main()\n"
+	"{\n"
+	" gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); \n"
+	"}\n";
     GLuint vertexShader;
     GLuint fragmentShader;
     GLuint programObject;
@@ -135,20 +129,20 @@ int Init(CUBE_STATE_T *p_state)
     glAttachShader(programObject, vertexShader);
     glAttachShader(programObject, fragmentShader);
     // Bind vPosition to attribute 0
-    glBindAttribLocation(programObject, 0, vPosition);
+    glBindAttribLocation(programObject, 0, "vPosition");
     // Link the program
     glLinkProgram(programObject);
     // Check the link status
-    glGetProgramiv(programObject, GL_LINK_STATUS, linked);
+    glGetProgramiv(programObject, GL_LINK_STATUS, &linked);
     if(!linked)
 	{
 	    GLint infoLen = 0;
-	    glGetProgramiv(programObject, GL_INFO_LOG_LENGTH, infoLen);
+	    glGetProgramiv(programObject, GL_INFO_LOG_LENGTH, &infoLen);
 	    if(infoLen > 1)
 		{
 		    char* infoLog = malloc(sizeof(char) * infoLen);
 		    glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
-		    fprintf(stderr, Error linking program:\n%s\n, infoLog);
+		    fprintf(stderr, "Error linking program:\n%s\n", infoLog);
 		    free(infoLog);
 		}
 	    glDeleteProgram(programObject);
@@ -183,7 +177,7 @@ void Draw(CUBE_STATE_T *p_state)
 }
 
 
-CUBE_STATE_T state, *p_state = state;
+CUBE_STATE_T state, *p_state = &state;
 
 void init_ogl(CUBE_STATE_T *state, int width, int height)
 {
@@ -224,7 +218,7 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
     result = eglInitialize(state->display, NULL, NULL);
 
     // get an appropriate EGL frame buffer configuration
-    result = eglChooseConfig(state->display, attribute_list, config, 1, num_config);
+    result = eglChooseConfig(state->display, attribute_list, &config, 1, &num_config);
     assert(EGL_FALSE != result);
 
     // get an appropriate EGL frame buffer configuration
@@ -237,7 +231,7 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
     assert(state->context!=EGL_NO_CONTEXT);
 
     // create an EGL window surface
-    success = graphics_get_display_size(0 /* LCD */, state->width, state->height);
+    success = graphics_get_display_size(0 /* LCD */, &state->width, &state->height);
     assert( success >= 0 );
 
     state->width = width;
@@ -258,8 +252,8 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
 
     dispman_element = 
 	vc_dispmanx_element_add(dispman_update, dispman_display,
-				0/*layer*/, dst_rect, 0/*src*/,
-				src_rect, DISPMANX_PROTECTION_NONE, 
+				0/*layer*/, &dst_rect, 0/*src*/,
+				&src_rect, DISPMANX_PROTECTION_NONE, 
 				0 /*alpha*/, 0/*clamp*/, 0/*transform*/);
 
     state->nativewindow.element = dispman_element;
@@ -267,7 +261,7 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
     state->nativewindow.height = state->height;
     vc_dispmanx_update_submit_sync( dispman_update );
 
-    state->surface = eglCreateWindowSurface( state->display, config, (state->nativewindow), NULL );
+    state->surface = eglCreateWindowSurface( state->display, config, &(state->nativewindow), NULL );
     assert(state->surface != EGL_NO_SURFACE);
 
     // connect the context to the surface
@@ -296,11 +290,11 @@ void  esMainLoop (CUBE_STATE_T *esContext )
     float totaltime = 0.0f;
     unsigned int frames = 0;
 
-    gettimeofday ( t1 , tz );
+    gettimeofday ( &t1 , &tz );
 
     while(1)
     {
-        gettimeofday(t2, tz);
+        gettimeofday(&t2, &tz);
         deltatime = (float)(t2.tv_sec - t1.tv_sec + (t2.tv_usec - t1.tv_usec) * 1e-6);
         t1 = t2;
 
@@ -313,7 +307,7 @@ void  esMainLoop (CUBE_STATE_T *esContext )
         frames++;
         if (totaltime >  2.0f)
         {
-            printf(%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n, frames, totaltime, frames/totaltime);
+            printf("%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n", frames, totaltime, frames/totaltime);
             totaltime -= 2.0f;
             frames = 0;
         }
@@ -328,7 +322,7 @@ int main(int argc, char *argv[])
     esInitContext(p_state);
     init_ogl(p_state, 320, 240);
 
-    p_state->user_data = user_data;
+    p_state->user_data = &user_data;
 
     if(!Init(p_state))
 	return 0;
@@ -340,5 +334,3 @@ int main(int argc, char *argv[])
 
       
 ```
-
-

@@ -1,4 +1,6 @@
-#  Compilation 
+
+##  Compilation 
+
 
 Just to add a wrinkle to OpenMAX's complexity, you have to be
       careful to get all the flags correct in compiling programs -
@@ -6,6 +8,7 @@ Just to add a wrinkle to OpenMAX's complexity, you have to be
       suspect it is things like word-alignment that are critical,
       but I've haven't checked
       OpenMAX in detail. Here are what seems to work:
+
 ```
 
 	
@@ -21,5 +24,6 @@ LDFLAGS = -Wl,--whole-archive -lilclient -L/opt/vc/lib/ -lopenmaxil -lbcm_host -
 	
       
 ```
-You are welcome to try reducing the number of flags - good luck!
 
+
+You are welcome to try reducing the number of flags - good luck!

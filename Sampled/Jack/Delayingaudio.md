@@ -1,4 +1,6 @@
-#  Delaying audio 
+
+##  Delaying audio 
+
 
 While this book is not about audio effects, we can easily
       introduce one effect - latency - by just delaying sounds.
@@ -6,15 +8,15 @@ While this book is not about audio effects, we can easily
       the spirit (and implementation!) of Jack, so it can only
       be done in co-operation with the Jack model.
 
-The simplest idea is just to throw in
- `sleep`commands at the right places. This would assume that
-      calls to the
- `process`callback happen
+
+The simplest idea is just to throw in `sleep`commands at the right places. This would assume that
+      calls to the `process`callback happen
       asynchronously but they don't - they happen 
       synchronously within the Jack processing thread.
       Activities which cost time aren't allowed.
       If you try it, you will will end up with lots
       of xruns at best, seizures of Jack at worst.
+
 
 In this case the solution is straightforward: keep a buffer
       in which previous inputs are kept, and read older entries
@@ -22,11 +24,12 @@ In this case the solution is straightforward: keep a buffer
       wrap-around array will do this, where old entries are read out
       and new entries read in.
 
-The following program
- `delay.c`will copy
+
+The following program `delay.c`will copy
       the left channel in real time, but delay the left channel
       by 4096 samples:
-```sh_cpp
+
+```
 
 /** @file delay.c
  *
@@ -56,7 +59,7 @@ int idx, delay_idx;
 static void signal_handler ( int sig )
 {
     jack_client_close ( client );
-    fprintf ( stderr, signal received, exiting ...\n );
+    fprintf ( stderr, "signal received, exiting ...\n" );
     exit ( 0 );
 }
 
@@ -149,7 +152,7 @@ main ( int argc, char *argv[] )
     }
     else              /* use basename of argv[0] */
     {
-        client_name = strrchr ( argv[0], / );
+        client_name = strrchr ( argv[0], '/' );
         if ( client_name == 0 )
         {
             client_name = argv[0];
@@ -162,34 +165,34 @@ main ( int argc, char *argv[] )
 
     /* open a client connection to the JACK server */
 
-    client = jack_client_open ( client_name, options, status, server_name );
+    client = jack_client_open ( client_name, options, &status, server_name );
     if ( client == NULL )
     {
-        fprintf ( stderr, jack_client_open() failed, 
-                  status = 0x%2.0x\n, status );
-        if ( status  JackServerFailed )
+        fprintf ( stderr, "jack_client_open() failed, "
+                  "status = 0x%2.0x\n", status );
+        if ( status & JackServerFailed )
         {
-            fprintf ( stderr, Unable to connect to JACK server\n );
+            fprintf ( stderr, "Unable to connect to JACK server\n" );
         }
         exit ( 1 );
     }
-    if ( status  JackServerStarted )
+    if ( status & JackServerStarted )
     {
-        fprintf ( stderr, JACK server started\n );
+        fprintf ( stderr, "JACK server started\n" );
     }
-    if ( status  JackNameNotUnique )
+    if ( status & JackNameNotUnique )
     {
         client_name = jack_get_client_name ( client );
-        fprintf ( stderr, unique name `%s assigned\n, client_name );
+        fprintf ( stderr, "unique name `%s' assigned\n", client_name );
     }
 
-    /* tell the JACK server to call `process() whenever
+    /* tell the JACK server to call `process()' whenever
        there is work to be done.
     */
 
     jack_set_process_callback ( client, process, 0 );
 
-    /* tell the JACK server to call `jack_shutdown() if
+    /* tell the JACK server to call `jack_shutdown()' if
        it ever shuts down, either entirely, or if it
        just decides to stop calling us.
     */
@@ -203,13 +206,13 @@ main ( int argc, char *argv[] )
     char port_name[16];
     for ( i = 0; i < 2; i++ )
     {
-        sprintf ( port_name, input_%d, i + 1 );
+        sprintf ( port_name, "input_%d", i + 1 );
         input_ports[i] = jack_port_register ( client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
-        sprintf ( port_name, output_%d, i + 1 );
+        sprintf ( port_name, "output_%d", i + 1 );
         output_ports[i] = jack_port_register ( client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
         if ( ( input_ports[i] == NULL ) || ( output_ports[i] == NULL ) )
         {
-            fprintf ( stderr, no more JACK ports available\n );
+            fprintf ( stderr, "no more JACK ports available\n" );
             exit ( 1 );
         }
     }
@@ -223,41 +226,41 @@ main ( int argc, char *argv[] )
 
     if ( jack_activate ( client ) )
     {
-        fprintf ( stderr, cannot activate client );
+        fprintf ( stderr, "cannot activate client" );
         exit ( 1 );
     }
 
-    /* Connect the ports.  You cant do this before the client is
-     * activated, because we cant make connections to clients
-     * that arent running.  Note the confusing (but necessary)
+    /* Connect the ports.  You can't do this before the client is
+     * activated, because we can't make connections to clients
+     * that aren't running.  Note the confusing (but necessary)
      * orientation of the driver backend ports: playback ports are
-     * input to the backend, and capture ports are output from
+     * "input" to the backend, and capture ports are "output" from
      * it.
      */
 
     ports = jack_get_ports ( client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput );
     if ( ports == NULL )
     {
-        fprintf ( stderr, no physical capture ports\n );
+        fprintf ( stderr, "no physical capture ports\n" );
         exit ( 1 );
     }
 
     for ( i = 0; i < 2; i++ )
         if ( jack_connect ( client, ports[i], jack_port_name ( input_ports[i] ) ) )
-            fprintf ( stderr, cannot connect input ports\n );
+            fprintf ( stderr, "cannot connect input ports\n" );
 
     free ( ports );
 
     ports = jack_get_ports ( client, NULL, NULL, JackPortIsPhysical|JackPortIsInput );
     if ( ports == NULL )
     {
-        fprintf ( stderr, no physical playback ports\n );
+        fprintf ( stderr, "no physical playback ports\n" );
         exit ( 1 );
     }
 
     for ( i = 0; i < 2; i++ )
         if ( jack_connect ( client, jack_port_name ( output_ports[i] ), ports[i] ) )
-            fprintf ( stderr, cannot connect input ports\n );
+            fprintf ( stderr, "cannot connect input ports\n" );
 
     free ( ports );
 
@@ -290,5 +293,3 @@ main ( int argc, char *argv[] )
 
       
 ```
-
-

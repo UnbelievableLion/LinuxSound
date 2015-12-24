@@ -1,4 +1,6 @@
-#  Android 
+
+##  Android 
+
 
 You write Android apps in Java. But like most Java systems,
       code written in C or C++ can be included as "native" methods.
@@ -6,11 +8,10 @@ You write Android apps in Java. But like most Java systems,
       (Java Native Interface). For the Android, Google have
       standardised a number of libraries in the NDK (Native
       Development Kit). This includes both OpenSL ES and OpenMAX AL.
-      Informaton about these is included in the
- [
+      Informaton about these is included in the [
 	Android NDK
-      ] (http://developer.android.com/tools/sdk/ndk/index.html)
-.
+      ](http://developer.android.com/tools/sdk/ndk/index.html) .
+
 
 Documents in the NDK such as android-ndk-r8d/docs/opensles/index.html
       give good overviews of using these, although using the JNI
@@ -23,6 +24,6 @@ Documents in the NDK such as android-ndk-r8d/docs/opensles/index.html
       See the Performance section in
       opensles/index.html
 
+
 See android-ndk-r8d/samples/native-audio for an example using
       Java + JNI + OpenSL ES.
-

@@ -1,16 +1,18 @@
-#  Playing a background video with Gtk 
 
-The chapter on
- [ Gtk ] (../../Diversions/Gtk/)
-showed how to play a background video with images (using Pixbufs),
+##  Playing a background video with Gtk 
+
+
+The chapter on [ Gtk ](../../Diversions/Gtk/) showed how to play a background video with images (using Pixbufs),
       text (using Cairo) and coloured text (using Pango).
       We can extend that by adding in the dynamic text display
       for playing Karaoke.
 
+
 We capture each lyric line in a structure which keeps the whole
       of the line, the part that has been sung already, the Pango
       markup for the line and the Pango attributes:
-```sh_cpp
+
+```
 
 typedef struct _coloured_line_t {
     gchar *line;
@@ -20,18 +22,21 @@ typedef struct _coloured_line_t {
 } coloured_line_t;
       
 ```
+
+
 This is updated each time a MIDI Lyric event occurs, in a
       thread listening to the FluidSynth sequencer.
 
+
 A separate thread plays the video, and on each frame overlays
       the frame image with the current and next lyric.
-      This is set into a
- `GdkImage`for display
+      This is set into a `GdkImage`for display
       by Gtk.
 
-The program is
- `gtkkaraoke_player_video_pango.c`
-```sh_cpp
+
+The program is `gtkkaraoke_player_video_pango.c`
+
+```
 
 #include <fluidsynth.h>
 #include <fluid_midi.h>
@@ -118,11 +123,11 @@ GString *front_of_lyric;  // part of lyric to be coloured red
 #define RED red
 #endif
 
-gchar *markup[] = {<span font=\28\ foreground=\RED\>,
-		   </span><span font=\28\ foreground=\white\>,
-		   </span>};
-gchar *markup_newline[] = {<span foreground=\black\>,
-			   </span>};
+gchar *markup[] = {"<span font=\"28\" foreground=\"RED\">",
+		   "</span><span font=\"28\" foreground=\"white\">",
+		   "</span>"};
+gchar *markup_newline[] = {"<span foreground=\"black\">",
+			   "</span>"};
 GString *marked_up_label;
 
 /* FFMpeg vbls */
@@ -138,12 +143,12 @@ void markup_line(coloured_line_t *line) {
     g_string_append(str, markup[1]);
     g_string_append(str, line->line + strlen(line->front_of_line));
     g_string_append(str, markup[2]);
-    printf(Marked up label \%s\\n, str->str);
+    printf("Marked up label \"%s\"\n", str->str);
 
     line->marked_up_line = str->str;
     // we have to free line->marked_up_line
 
-    pango_parse_markup(str->str, -1,0, (line->attrs), NULL, NULL, NULL);
+    pango_parse_markup(str->str, -1,0, &(line->attrs), NULL, NULL, NULL);
     g_string_free(str, FALSE);
 }
 
@@ -170,8 +175,8 @@ void update_line_pixbuf(coloured_line_t *line) {
     // centre the image in the surface
     int width, height;   
     pango_layout_get_pixel_size(layout,
-				width,
-				height);
+				&width,
+				&height);
     cairo_move_to(cr, (lyric_width-width)/2, 0);    
 
     pango_cairo_update_layout (cr, layout);
@@ -182,7 +187,7 @@ void update_line_pixbuf(coloured_line_t *line) {
     width = cairo_image_surface_get_width(surface);
     height = cairo_image_surface_get_height(surface);
     int stride = cairo_image_surface_get_stride(surface);
-    printf(Text surface width %d height %d stride %d\n, width, height, stride);
+    printf("Text surface width %d height %d stride %d\n", width, height, stride);
 
     GdkPixbuf *old_pixbuf = line->pixbuf;
     line->pixbuf = gdk_pixbuf_new_from_data(data, GDK_COLORSPACE_RGB, 1, 8, width, height, stride, NULL, NULL);
@@ -199,16 +204,16 @@ int event_callback(void *data, fluid_midi_event_t *event) {
     fluid_synth_t* synth = (fluid_synth_t*) data;
     int type = fluid_midi_event_get_type(event);
     int chan = fluid_midi_event_get_channel(event);
-    if (synth == NULL) printf(Synth is null\n);
+    if (synth == NULL) printf("Synth is null\n");
 
     //return 0;
 
     switch(type) {
     case MIDI_TEXT:
-	printf(Callback: Playing text event %s (length %d)\n, 
+	printf("Callback: Playing text event %s (length %d)\n", 
 	       (char *) event->paramptr, (int) event->param1);
 
-	if (((char *) event->paramptr)[0] == \\) {
+	if (((char *) event->paramptr)[0] == '\\') {
 	    int next_panel = current_panel; // really (current_panel+2)%2
 	    int next_line = current_line + 2;
 	    gchar *next_lyric;
@@ -223,7 +228,7 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 	    char *lyric =  event->paramptr;
 	    current_lyric = g_array_index(lyric_lines.lines, GString *, current_line)->str;
 	    front_of_lyric = g_string_new(lyric+1); // lose \
-	    printf(New line. Setting front to %s end to \%s\\n, lyric+1, current_lyric); 
+	    printf("New line. Setting front to %s end to \"%s\"\n", lyric+1, current_lyric); 
 
 	    coloured_lines[current_panel].line = current_lyric;
 	    coloured_lines[current_panel].front_of_line = lyric+1;
@@ -240,10 +245,10 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 	    g_string_append(marked_up_label, markup_newline[1]);
 	    PangoAttrList *attrs;
 	    gchar *text;
-	    pango_parse_markup (marked_up_label->str, -1,0, attrs, text, NULL, NULL);
+	    pango_parse_markup (marked_up_label->str, -1,0, &attrs, &text, NULL, NULL);
 	    
 	    coloured_lines[next_panel].line = next_lyric;
-	    coloured_lines[next_panel].front_of_line = ;
+	    coloured_lines[next_panel].front_of_line = "";
 	    markup_line(coloured_lines+next_panel);
 #ifdef USE_PIXBUF
 	    update_line_pixbuf(coloured_lines+next_panel);
@@ -251,7 +256,7 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 	} else {
 	    // change text colour as chars are played
 	    char *lyric =  event->paramptr;
-	    if ((front_of_lyric != NULL)  (lyric != NULL)) {
+	    if ((front_of_lyric != NULL) && (lyric != NULL)) {
 		g_string_append(front_of_lyric, lyric);
 		char *s = front_of_lyric->str;
 		coloured_lines[current_panel].front_of_line = s;
@@ -264,11 +269,11 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 	return  FLUID_OK;
 
     case MIDI_LYRIC:
-	printf(Callback: Playing lyric event %d %s\n, (int) event->param1, (char *) event->paramptr);
+	printf("Callback: Playing lyric event %d %s\n", (int) event->param1, (char *) event->paramptr);
 	return  FLUID_OK;
     
     case MIDI_EOT:
-	printf(End of track\n);
+	printf("End of track\n");
 	exit(0);
     }
     return fluid_synth_handle_midi_event( data, event);
@@ -277,7 +282,7 @@ int event_callback(void *data, fluid_midi_event_t *event) {
 void build_lyric_lines() {
     int n;
     lyric_t *plyric;
-    GString *line = g_string_new();
+    GString *line = g_string_new("");
     GArray *lines =  g_array_sized_new(FALSE, FALSE, sizeof(GString *), 64);
 
     lyric_lines.title = NULL;
@@ -287,12 +292,12 @@ void build_lyric_lines() {
 	gchar *lyric = plyric->lyric;
 	int tick = plyric->tick;
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == @)  (lyric[1] == L)) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'L')) {
 	    lyric_lines.language =  lyric + 2;
 	    continue;
 	}
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == @)  (lyric[1] == T)) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'T')) {
 	    if (lyric_lines.title == NULL) {
 		lyric_lines.title = lyric + 2;
 	    } else {
@@ -301,12 +306,12 @@ void build_lyric_lines() {
 	    continue;
 	}
 
-	if (lyric[0] == @) {
+	if (lyric[0] == '@') {
 	    // some other stuff like @KMIDI KARAOKE FILE
 	    continue;
 	}
 
-	if ((lyric[0] == /) || (lyric[0] == \\)) {
+	if ((lyric[0] == '/') || (lyric[0] == '\\')) {
 	    // start of a new line
 	    // add to lines
 	    g_array_append_val(lines, line);
@@ -317,10 +322,10 @@ void build_lyric_lines() {
     }
     lyric_lines.lines = lines;
     
-    printf(Title is %s, performer is %s, language is %s\n, 
+    printf("Title is %s, performer is %s, language is %s\n", 
 	   lyric_lines.title, lyric_lines.performer, lyric_lines.language);
     for (n = 0; n < lines->len; n++) {
-	printf(Line is %s\n, g_array_index(lines, GString *, n)->str);
+	printf("Line is %s\n", g_array_index(lines, GString *, n)->str);
     }
     
 }
@@ -336,22 +341,22 @@ int onload_callback(void *data, fluid_player_t *player) {
     long ticks = 0L;
     lyric_t *plyric;
 
-    printf(Load callback, tracks %d \n, player->ntracks);
+    printf("Load callback, tracks %d \n", player->ntracks);
     int n;
     for (n = 0; n < player->ntracks; n++) {
 	fluid_track_t *track = player->track[n];
-	printf(Track %d\n, n);
+	printf("Track %d\n", n);
 	fluid_midi_event_t *event = fluid_track_first_event(track);
 	while (event != NULL) {
 	    switch (fluid_midi_event_get_type (event)) {
 	    case MIDI_TEXT:
 	    case MIDI_LYRIC:
-		/* theres no fluid_midi_event_get_sysex()
+		/* there's no fluid_midi_event_get_sysex()
 		   or fluid_midi_event_get_time() so we 
 		   have to look inside the opaque struct
 		*/
 		ticks += event->dtime;
-		printf(Loaded event %s for time %ld\n, 
+		printf("Loaded event %s for time %ld\n", 
 		       (char *) event->paramptr,
 		       ticks);
 		plyric = g_new(lyric_t, 1);
@@ -363,10 +368,10 @@ int onload_callback(void *data, fluid_player_t *player) {
 	}
     }
 
-    printf(Saved %d lyric events\n, lyrics->len);
+    printf("Saved %d lyric events\n", lyrics->len);
     for (n = 0; n < lyrics->len; n++) {
 	plyric = g_array_index(lyrics, lyric_t *, n);
-	printf(Saved lyric %s at %ld\n, plyric->lyric, plyric->tick);
+	printf("Saved lyric %s at %ld\n", plyric->lyric, plyric->tick);
     }
 
     build_lyric_lines();
@@ -388,8 +393,8 @@ static void overlay_lyric(cairo_t *cr,
     pango_layout_set_text (layout, line->line, -1);
     pango_layout_set_attributes(layout, line->attrs);
     pango_layout_get_pixel_size(layout,
-				width,
-				height);
+				&width,
+				&height);
     cairo_move_to(cr, (720-width)/2, ht);
 
     pango_cairo_update_layout (cr, layout);
@@ -400,7 +405,7 @@ static void overlay_lyric(cairo_t *cr,
 
 static void pixmap_destroy_notify(guchar *pixels,
 				  gpointer data) {
-    printf(Ddestroy pixmap\n);
+    printf("Ddestroy pixmap\n");
 }
 
 static void *play_background(void *args) {
@@ -433,20 +438,20 @@ static void *play_background(void *args) {
     buffer = malloc (avpicture_get_size(PIX_FMT_RGB24, 720, 576));
     avpicture_fill((AVPicture *)picture_RGB, buffer, PIX_FMT_RGB24, 720, 576);
 
-    while(av_read_frame(pFormatCtx, packet)>=0) {
+    while(av_read_frame(pFormatCtx, &packet)>=0) {
 	if(packet.stream_index==videoStream) {
-	    //printf(Frame %d\n, i++);
+	    //printf("Frame %d\n", i++);
 	    usleep(33670);  // 29.7 frames per second
 	    // Decode video frame
-	    avcodec_decode_video2(pCodecCtx, pFrame, frameFinished,
-				  packet);
+	    avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished,
+				  &packet);
 	    int width = pCodecCtx->width;
 	    int height = pCodecCtx->height;
 	    
 	    sws_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height, PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
 
 	    if (frameFinished) {
-		printf(Frame %d\n, i++);
+		printf("Frame %d\n", i++);
 		
 		sws_scale(sws_ctx,  (uint8_t const * const *) pFrame->data, pFrame->linesize, 0, pCodecCtx->height, picture_RGB->data, picture_RGB->linesize);
 		
@@ -521,18 +526,18 @@ static void *play_background(void *args) {
 		gdk_threads_leave();
 	    }
 	}
-	av_free_packet(packet);
+	av_free_packet(&packet);
     }
     sws_freeContext(sws_ctx);
 
-    printf(Video over!\n);
+    printf("Video over!\n");
     exit(0);
 }
 
 static void *play_midi(void *args) {
     fluid_player_play(player);
 
-    printf(Audio finished\n);
+    printf("Audio finished\n");
     //exit(0);
 }
 
@@ -542,27 +547,27 @@ static void *play_midi(void *args) {
 static void realize_cb (GtkWidget *widget, gpointer data) {
     /* start the video playing in its own thread */
     pthread_t tid;
-    pthread_create(tid, NULL, play_background, NULL);
+    pthread_create(&tid, NULL, play_background, NULL);
 
     /* start the MIDI file playing in its own thread */
     pthread_t tid_midi;
-    pthread_create(tid_midi, NULL, play_midi, NULL);
+    pthread_create(&tid_midi, NULL, play_midi, NULL);
 }
 
 static gboolean delete_event( GtkWidget *widget,
                               GdkEvent  *event,
                               gpointer   data )
 {
-    /* If you return FALSE in the delete-event signal handler,
-     * GTK will emit the destroy signal. Returning TRUE means
-     * you dont want the window to be destroyed.
-     * This is useful for popping up are you sure you want to quit?
+    /* If you return FALSE in the "delete-event" signal handler,
+     * GTK will emit the "destroy" signal. Returning TRUE means
+     * you don't want the window to be destroyed.
+     * This is useful for popping up 'are you sure you want to quit?'
      * type dialogs. */
 
-    g_print (delete event occurred\n);
+    g_print ("delete event occurred\n");
 
     /* Change TRUE to FALSE and the main window will be destroyed with
-     * a delete-event. */
+     * a "delete-event". */
 
     return TRUE;
 }
@@ -584,11 +589,11 @@ int main(int argc, char** argv)
 
     fluid_audio_driver_t* adriver;
     settings = new_fluid_settings();
-    fluid_settings_setstr(settings, audio.driver, alsa);
-    //fluid_settings_setint(settings, lash.enable, 0);
-    fluid_settings_setint(settings, synth.polyphony, 64);
-    fluid_settings_setint(settings, synth.reverb.active, FALSE);
-    fluid_settings_setint(settings, synth.sample-rate, 22050);
+    fluid_settings_setstr(settings, "audio.driver", "alsa");
+    //fluid_settings_setint(settings, "lash.enable", 0);
+    fluid_settings_setint(settings, "synth.polyphony", 64);
+    fluid_settings_setint(settings, "synth.reverb.active", FALSE);
+    fluid_settings_setint(settings, "synth.sample-rate", 22050);
     synth = new_fluid_synth(settings);
     player = new_fluid_player(synth);
 
@@ -620,15 +625,15 @@ int main(int argc, char** argv)
 
     av_register_all();
 
-    if(avformat_open_input(pFormatCtx, short.mpg, NULL, NULL)!=0) {
-	printf(Couldnt open video file\n);
-	return -1; // Couldnt open file
+    if(avformat_open_input(&pFormatCtx, "short.mpg", NULL, NULL)!=0) {
+	printf("Couldn't open video file\n");
+	return -1; // Couldn't open file
     }
   
     // Retrieve stream information
     if(avformat_find_stream_info(pFormatCtx, NULL)<0) {
-	printf(Couldnt find stream information\n);
-	return -1; // Couldnt find stream information
+	printf("Couldn't find stream information\n");
+	return -1; // Couldn't find stream information
     }
 
     // Dump information about file onto standard error
@@ -642,11 +647,11 @@ int main(int argc, char** argv)
 	    break;
 	}
     if(videoStream==-1)
-	return -1; // Didnt find a video stream
+	return -1; // Didn't find a video stream
 
     for(i=0; i<pFormatCtx->nb_streams; i++)
 	if(pFormatCtx->streams[i]->codec->codec_type==AVMEDIA_TYPE_AUDIO) {
-	    printf(Found an audio stream too\n);
+	    printf("Found an audio stream too\n");
 	    break;
 	}
  
@@ -656,13 +661,13 @@ int main(int argc, char** argv)
     // Find the decoder for the video stream
     pCodec=avcodec_find_decoder(pCodecCtx->codec_id);
     if(pCodec==NULL) {
-	fprintf(stderr, Unsupported codec!\n);
+	fprintf(stderr, "Unsupported codec!\n");
 	return -1; // Codec not found
     }
   
     // Open codec
-    if(avcodec_open2(pCodecCtx, pCodec, optionsDict)<0) {
-	printf(Could not open codec\n);
+    if(avcodec_open2(pCodecCtx, pCodec, &optionsDict)<0) {
+	printf("Could not open codec\n");
 	return -1; // Could not open codec
     }
 
@@ -691,26 +696,26 @@ int main(int argc, char** argv)
     
     /* This is called in all GTK applications. Arguments are parsed
      * from the command line and are returned to the application. */
-    gtk_init (argc, argv);
+    gtk_init (&argc, &argv);
     
     /* create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    /* When the window is given the delete-event signal (this is given
-     * by the window manager, usually by the close option, or on the
+    /* When the window is given the "delete-event" signal (this is given
+     * by the window manager, usually by the "close" option, or on the
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
-    g_signal_connect (window, delete-event,
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (delete_event), NULL);
     
-    /* Here we connect the destroy event to a signal handler.  
+    /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
-     * or if we return FALSE in the delete-event callback. */
-    g_signal_connect (window, destroy,
+     * or if we return FALSE in the "delete-event" callback. */
+    g_signal_connect (window, "destroy",
 		      G_CALLBACK (destroy), NULL);
 
-    g_signal_connect (window, realize, G_CALLBACK (realize_cb), NULL);
+    g_signal_connect (window, "realize", G_CALLBACK (realize_cb), NULL);
     
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -719,9 +724,9 @@ int main(int argc, char** argv)
     gtk_widget_show(lyrics_box);
 
     /*
-    char *str =      ;
+    char *str = "     ";
     lyric_labels[0] = gtk_label_new(str);
-    str =  World;
+    str =  "World";
     lyric_labels[1] = gtk_label_new(str);
     */
 
@@ -770,7 +775,11 @@ int main(int argc, char** argv)
       
 ```
 
+
 The application looks like
 
+
 ![alt text](pango.png)
+
+
 

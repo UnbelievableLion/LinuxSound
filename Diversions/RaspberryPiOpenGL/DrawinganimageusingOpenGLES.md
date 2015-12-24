@@ -1,21 +1,23 @@
-#  Drawing an image using OpenGL ES
+
+##  Drawing an image using OpenGL ES
+
 
 The OpenGL ES Programming Guide includes an example of drawing
       a simple image using an array of pixels. Realistically, it notes
       that the image data is more likely to be read from a file.
       In this section we fill in the details.
 
+
 There are many, many different file formats, some lossy, some lossless,
       some compressed, some not, some with metadata, some without.
-      In this section we just use
- [TGA] (http://www.fileformat.info/format/tga/egff.htm)
-- an
+      In this section we just use [TGA](http://www.fileformat.info/format/tga/egff.htm) - an
       uncompressed format with enough useful metadata, simple to load.
 
-TGA files can be created from e.g. JPEG files by using the
- `convert`utility from the Gimp drawing system.
+
+TGA files can be created from e.g. JPEG files by using the `convert`utility from the Gimp drawing system.
       It is simple to convert a file: just give the appropriate
       file extensions:
+
 ```
 
 	
@@ -23,7 +25,10 @@ convert image.jpg image.tga
 	
       
 ```
+
+
 (Later sections look at decompressing files using the GPU itself.)
+
 
 A TGA file has a header section which gives the width and height of the
       image from which its size can be calculated. The default format will
@@ -31,32 +36,33 @@ A TGA file has a header section which gives the width and height of the
       of locating the dimensions, malloc'ing the right size buffer,
       skipping to the start of the image data and reading it all in.
 
+
 The default is for the origin of the image to be the bottom lefthand
       corner, with the y-axis growing up. OpenGL ES on the other hand
       has the origin in the top lefthand corner with the y-axis growing down.
       So the image will be upside down. This can be fixed by reading the data
       in differently, or by using an OpenGL ES reflection.
 
+
 Getting a native window is done as before. Using the OpenGL ES Programming
       Guide example, we also need to substitute our image array for their
       2x2 array, adjusting the image bounds. Apart from those, there is no real
       change.
-      The program is
- [image.c] (image.c)
+      The program is [image.c](image.c) 
 
-```sh_cpp
+```
 
 	
 /*
  * code stolen from openGL-RPi-tutorial-master/encode_OGL/
- * and from OpenGL ES 2.0 Programming Guide
+ * and from OpenGLÂ® ES 2.0 Programming Guide
  */
 
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
 #include <sys/time.h>
-//#include jpeg.h
+//#include "jpeg.h"
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
@@ -110,10 +116,10 @@ char* esLoadTGA ( char *fileName, int *width, int *height )
     unsigned char attributes[6];
     unsigned int imagesize;
 
-    f = fopen(fileName, rb);
+    f = fopen(fileName, "rb");
     if(f == NULL) return NULL;
 
-    if(fread(tgaheader, sizeof(tgaheader), 1, f) == 0)
+    if(fread(&tgaheader, sizeof(tgaheader), 1, f) == 0)
     {
         fclose(f);
         return NULL;
@@ -129,8 +135,8 @@ char* esLoadTGA ( char *fileName, int *width, int *height )
     *height = attributes[3] * 256 + attributes[2];
     imagesize = attributes[4] / 8 * *width * *height;
     //imagesize *= 4/3;
-    printf(Origin bits: %d\n, attributes[5]  030);
-    printf(Pixel depth %d\n, attributes[4]);
+    printf("Origin bits: %d\n", attributes[5] & 030);
+    printf("Pixel depth %d\n", attributes[4]);
     buffer = malloc(imagesize);
     if (buffer == NULL)
     {
@@ -142,7 +148,7 @@ char* esLoadTGA ( char *fileName, int *width, int *height )
     // invert - should be reflect, easier is 180 rotate
     int n = 1;
     while (n <= imagesize) {
-	fread(buffer[imagesize - n], 1, 1, f);
+	fread(&buffer[imagesize - n], 1, 1, f);
 	n++;
     }
 #else
@@ -169,7 +175,7 @@ GLuint CreateSimpleTexture2D(int width, int height )
    glPixelStorei ( GL_UNPACK_ALIGNMENT, 1 );
 
    // Generate a texture object
-   glGenTextures ( 1, textureId );
+   glGenTextures ( 1, &textureId );
 
    // Bind the texture object
    glBindTexture ( GL_TEXTURE_2D, textureId );
@@ -202,20 +208,20 @@ GLuint LoadShader(GLenum type, const char *shaderSrc)
     if(shader == 0)
 	return 0;
     // Load the shader source
-    glShaderSource(shader, 1, shaderSrc, NULL);
+    glShaderSource(shader, 1, &shaderSrc, NULL);
     // Compile the shader
     glCompileShader(shader);
     // Check the compile status
-    glGetShaderiv(shader, GL_COMPILE_STATUS, compiled);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if(!compiled)
 	{
 	    GLint infoLen = 0;
-	    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, infoLen);
+	    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
 	    if(infoLen > 1)
 		{
 		    char* infoLog = malloc(sizeof(char) * infoLen);
 		    glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
-		    fprintf(stderr, Error compiling shader:\n%s\n, infoLog);
+		    fprintf(stderr, "Error compiling shader:\n%s\n", infoLog);
 		    free(infoLog);
 		}
 	    glDeleteShader(shader);
@@ -256,19 +262,19 @@ GLuint LoadProgram ( const char *vertShaderSrc, const char *fragShaderSrc )
    glLinkProgram ( programObject );
 
    // Check the link status
-   glGetProgramiv ( programObject, GL_LINK_STATUS, linked );
+   glGetProgramiv ( programObject, GL_LINK_STATUS, &linked );
 
    if ( !linked ) 
    {
       GLint infoLen = 0;
-      glGetProgramiv ( programObject, GL_INFO_LOG_LENGTH, infoLen );
+      glGetProgramiv ( programObject, GL_INFO_LOG_LENGTH, &infoLen );
       
       if ( infoLen > 1 )
       {
          char* infoLog = malloc (sizeof(char) * infoLen );
 
          glGetProgramInfoLog ( programObject, infoLen, NULL, infoLog );
-         fprintf (stderr, Error linking program:\n%s\n, infoLog );            
+         fprintf (stderr, "Error linking program:\n%s\n", infoLog );            
          
          free ( infoLog );
       }
@@ -293,33 +299,33 @@ int Init(CUBE_STATE_T *p_state)
    p_state->user_data = malloc(sizeof(UserData));      
    UserData *userData = p_state->user_data;
    GLbyte vShaderStr[] =  
-      attribute vec4 a_position;   \n
-      attribute vec2 a_texCoord;   \n
-      varying vec2 v_texCoord;     \n
-      void main()                  \n
-      {                            \n
-         gl_Position = a_position; \n
-         v_texCoord = a_texCoord;  \n
-      }                            \n;
+      "attribute vec4 a_position;   \n"
+      "attribute vec2 a_texCoord;   \n"
+      "varying vec2 v_texCoord;     \n"
+      "void main()                  \n"
+      "{                            \n"
+      "   gl_Position = a_position; \n"
+      "   v_texCoord = a_texCoord;  \n"
+      "}                            \n";
    
    GLbyte fShaderStr[] =  
-      precision mediump float;                            \n
-      varying vec2 v_texCoord;                            \n
-      uniform sampler2D s_texture;                        \n
-      void main()                                         \n
-      {                                                   \n
-        gl_FragColor = texture2D( s_texture, v_texCoord );\n
-      }                                                   \n;
+      "precision mediump float;                            \n"
+      "varying vec2 v_texCoord;                            \n"
+      "uniform sampler2D s_texture;                        \n"
+      "void main()                                         \n"
+      "{                                                   \n"
+      "  gl_FragColor = texture2D( s_texture, v_texCoord );\n"
+      "}                                                   \n";
 
    // Load the shaders and get a linked program object
    userData->programObject = LoadProgram ( vShaderStr, fShaderStr );
 
    // Get the attribute locations
-   userData->positionLoc = glGetAttribLocation ( userData->programObject, a_position );
-   userData->texCoordLoc = glGetAttribLocation ( userData->programObject, a_texCoord );
+   userData->positionLoc = glGetAttribLocation ( userData->programObject, "a_position" );
+   userData->texCoordLoc = glGetAttribLocation ( userData->programObject, "a_texCoord" );
    
    // Get the sampler location
-   userData->samplerLoc = glGetUniformLocation ( userData->programObject, s_texture );
+   userData->samplerLoc = glGetUniformLocation ( userData->programObject, "s_texture" );
    // Load the texture
    userData->textureId = CreateSimpleTexture2D (p_state->width, p_state->height);
 
@@ -361,7 +367,7 @@ void Draw(CUBE_STATE_T *p_state)
                            GL_FALSE, 5 * sizeof(GLfloat), vVertices );
    // Load the texture coordinate
    glVertexAttribPointer ( userData->texCoordLoc, 2, GL_FLOAT,
-                           GL_FALSE, 5 * sizeof(GLfloat), vVertices[3] );
+                           GL_FALSE, 5 * sizeof(GLfloat), &vVertices[3] );
 
    glEnableVertexAttribArray ( userData->positionLoc );
    glEnableVertexAttribArray ( userData->texCoordLoc );
@@ -377,7 +383,7 @@ void Draw(CUBE_STATE_T *p_state)
    //glDrawElements ( GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_SHORT, indices );
 }
 
-CUBE_STATE_T state, *p_state = state;
+CUBE_STATE_T state, *p_state = &state;
 
 void init_ogl(CUBE_STATE_T *state, int width, int height)
 {
@@ -418,7 +424,7 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
     result = eglInitialize(state->display, NULL, NULL);
 
     // get an appropriate EGL frame buffer configuration
-    result = eglChooseConfig(state->display, attribute_list, config, 1, num_config);
+    result = eglChooseConfig(state->display, attribute_list, &config, 1, &num_config);
     assert(EGL_FALSE != result);
 
     // get an appropriate EGL frame buffer configuration
@@ -431,7 +437,7 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
     assert(state->context!=EGL_NO_CONTEXT);
 
     // create an EGL window surface
-    success = graphics_get_display_size(0 /* LCD */, state->width, state->height);
+    success = graphics_get_display_size(0 /* LCD */, &state->width, &state->height);
     assert( success >= 0 );
 
     state->width = width;
@@ -452,8 +458,8 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
 
     dispman_element = 
 	vc_dispmanx_element_add(dispman_update, dispman_display,
-				0/*layer*/, dst_rect, 0/*src*/,
-				src_rect, DISPMANX_PROTECTION_NONE, 
+				0/*layer*/, &dst_rect, 0/*src*/,
+				&src_rect, DISPMANX_PROTECTION_NONE, 
 				0 /*alpha*/, 0/*clamp*/, 0/*transform*/);
 
     state->nativewindow.element = dispman_element;
@@ -461,7 +467,7 @@ void init_ogl(CUBE_STATE_T *state, int width, int height)
     state->nativewindow.height = state->height;
     vc_dispmanx_update_submit_sync( dispman_update );
 
-    state->surface = eglCreateWindowSurface( state->display, config, (state->nativewindow), NULL );
+    state->surface = eglCreateWindowSurface( state->display, config, &(state->nativewindow), NULL );
     assert(state->surface != EGL_NO_SURFACE);
 
     // connect the context to the surface
@@ -490,11 +496,11 @@ void  esMainLoop (CUBE_STATE_T *esContext )
     float totaltime = 0.0f;
     unsigned int frames = 0;
 
-    gettimeofday ( t1 , tz );
+    gettimeofday ( &t1 , &tz );
 
     while(1)
     {
-        gettimeofday(t2, tz);
+        gettimeofday(&t2, &tz);
         deltatime = (float)(t2.tv_sec - t1.tv_sec + (t2.tv_usec - t1.tv_usec) * 1e-6);
         t1 = t2;
 
@@ -507,7 +513,7 @@ void  esMainLoop (CUBE_STATE_T *esContext )
         frames++;
         if (totaltime >  2.0f)
         {
-            printf(%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n, frames, totaltime, frames/totaltime);
+            printf("%4d frames rendered in %1.4f seconds -> FPS=%3.4f\n", frames, totaltime, frames/totaltime);
             totaltime -= 2.0f;
             frames = 0;
         }
@@ -519,19 +525,19 @@ int main(int argc, char *argv[])
     UserData user_data;
     int width, height;
 
-    image = esLoadTGA(jan.tga, width, height);
+    image = esLoadTGA("jan.tga", &width, &height);
     if (image == NULL) {
-	fprintf(stderr, No such image\n);
+	fprintf(stderr, "No such image\n");
 	exit(1);
     }
-    fprintf(stderr, Image is %d x %d\n, width, height);
+    fprintf(stderr, "Image is %d x %d\n", width, height);
 
     bcm_host_init();
     esInitContext(p_state);
 
     init_ogl(p_state, width, height);
 
-    p_state->user_data = user_data;
+    p_state->user_data = &user_data;
     p_state->width = width;
     p_state->height = height;
 
@@ -546,41 +552,25 @@ int main(int argc, char *argv[])
 
       
 ```
-The image used is of
- [me] (jan.tga)
-.
 
 
-```sh_cpp
-
-	
-      
-```
+The image used is of [me](jan.tga) .
 
 
-Copyright
-Jan Newmarch, jan@newmarch.name
+Copyright © Jan Newmarch, jan@newmarch.name
 
-![alt text](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)"Programming and Using Linux Sound - in depth"
-by
- [Jan Newmarch] (https://jan.newmarch.name)
-is licensed under a
- [Creative Commons Attribution-ShareAlike 4.0 International License] (http://creativecommons.org/licenses/by-sa/4.0/)
-.
-Based on a work at
- [https://jan.newmarch.name/LinuxSound/] (https://jan.newmarch.name/LinuxSound/)
-.
+
+
+
+
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
+
+
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
+
 
 If you like this book, please contribute using Flattr
 
+
 or donate using PayPal
-
-
-
-
 ![alt text](https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_AU/i/scr/pixel.gif)
-
-
-
-
-

@@ -1,12 +1,14 @@
-#  JavaSound 
+
+##  JavaSound 
+
 
 I installed OpenJDK version 6, the default Java install at present.
-      The program
- `DeviceInfo`was  given in the JavaSound Sampled chapter
+      The program `DeviceInfo`was  given in the JavaSound Sampled chapter
       The output from this on the RPi is
+
 ```
 
- `
+	
 Mixers:
    PulseAudio Mixer, version 0.02
     Mixer: org.classpath.icedtea.pulseaudio.PulseAudioMixer@1d05c81
@@ -32,15 +34,16 @@ Mixers:
       Source lines
       Target lines
         PCM target port
-	`
-
+	
+      
 ```
+
+
 Althjough this is using the PulseAudio mixer, pulse audio isn't actually running
       (at this stage)!
       So it can only use the ALSA interface.
 
-The program
- `PlayAudioFile`was  given in the JavaSound Sampled chapter.
+
+The program `PlayAudioFile`was  given in the JavaSound Sampled chapter.
       This can play .wav files okay. But it can't play Ogg-Vorbis or MP3 files and throws
       anUnsupportedAudioFileException.
-

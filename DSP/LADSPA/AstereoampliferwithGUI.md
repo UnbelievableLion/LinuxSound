@@ -1,7 +1,8 @@
-#  A stereo amplifer with GUI 
 
-The
- `amp`file contains a stereo amplifier
+##  A stereo amplifer with GUI 
+
+
+The `amp`file contains a stereo amplifier
       as well as a mono amplifier. This causes several differences
       to managing the plugin. there are now two input ports and
       two output ports, but still only one control port for the 
@@ -9,13 +10,12 @@ The
       and an array of output ports. This just adds a little
       complexity.
 
-The major difference is in handling the streams:
- `libsndfile`returns
-frames
-of sound, with the two channels of a stereo signal
+
+The major difference is in handling the streams: `libsndfile`returns _frames_ of sound, with the two channels of a stereo signal
       interleaved. These have to be split out into separate
       channels for each input port, and then the two
       output ports have to interleaved back together.
+
 
 Adding a GUI such as GTK is fairly straightforward.
       The following code just shows a slider to control
@@ -23,16 +23,16 @@ Adding a GUI such as GTK is fairly straightforward.
       obviously run in different (POSIX) threads.
       There is really only one tricky point: the control
       value is not supposed to change during execution
-      of the
- `run`function.
+      of the `run`function.
       This could be protected by locks, but in this case
       that is too heavyweight: just keep a copy of the
       control as modified by the slider, and bring that
-      across before each call to
- `run`.
+      across before each call to `run`.
+
 
 The code is written to use GTK v3 and is:
-```sh_cpp
+
+```
 
 #include <gtk/gtk.h>
 
@@ -42,7 +42,7 @@ The code is written to use GTK v3 and is:
 #include <dlfcn.h>
 #include <sndfile.h>
 
-#include utils.h
+#include "utils.h"
 
 gint count = 0;
 char buf[5];
@@ -54,8 +54,8 @@ LADSPA_Descriptor_Function pfDescriptorFunction;
 LADSPA_Handle handle;
 
 // choose the mono plugin from the amp file
-char *pcPluginFilename = amp.so;
-char *pcPluginLabel = amp_stereo;
+char *pcPluginFilename = "amp.so";
+char *pcPluginLabel = "amp_stereo";
 
 long lInputPortIndex = -1;
 long lOutputPortIndex = -1;
@@ -66,10 +66,10 @@ int outBufferIndex = 0;
 SNDFILE* pInFile;
 SNDFILE* pOutFile;
 
-// for the amplifier, the sample rate doesnt really matter
+// for the amplifier, the sample rate doesn't really matter
 #define SAMPLE_RATE 44100
 
-// the buffer size isnt really important either
+// the buffer size isn't really important either
 #define BUF_SIZE 2048
 LADSPA_Data pInStereoBuffer[2*BUF_SIZE];
 LADSPA_Data pOutStereoBuffer[2*BUF_SIZE];
@@ -77,30 +77,30 @@ LADSPA_Data pInBuffer[2][BUF_SIZE];
 LADSPA_Data pOutBuffer[2][BUF_SIZE];
 
 // How much we are amplifying the sound by
-// We arent allowed to change the control values
+// We aren't allowed to change the control values
 // during execution of run(). We could put a lock
 // around run() or simpler, change the value of
 // control only outside of run()
 LADSPA_Data control;
 LADSPA_Data pre_control = 0.2f;
 
-char *pInFilePath = /home/newmarch/Music/karaoke/nights/nightsinwhite-0.wav;
-char *pOutFilePath = tmp.wav;
+char *pInFilePath = "/home/newmarch/Music/karaoke/nights/nightsinwhite-0.wav";
+char *pOutFilePath = "tmp.wav";
 
 void open_files() {
     // using libsndfile functions for easy read/write
     SF_INFO sfinfo;
 
     sfinfo.format = 0;
-    pInFile = sf_open(pInFilePath, SFM_READ, sfinfo);
+    pInFile = sf_open(pInFilePath, SFM_READ, &sfinfo);
     if (pInFile == NULL) {
-	perror(cant open input file);
+	perror("can't open input file");
 	exit(1);
     }
 
-    pOutFile = sf_open(pOutFilePath, SFM_WRITE, sfinfo);
+    pOutFile = sf_open(pOutFilePath, SFM_WRITE, &sfinfo);
     if (pOutFile == NULL) {
-	perror(cant open output file);
+	perror("can't open output file");
 	exit(1);
     }
 }
@@ -131,7 +131,7 @@ void empty_output_buffer(sf_count_t numread) {
 gpointer run_plugin(gpointer args) {
     sf_count_t numread;
 
-    // its NULL for the amp plugin
+    // it's NULL for the amp plugin
     if (psDescriptor->activate != NULL)
 	psDescriptor->activate(handle);
 
@@ -143,7 +143,7 @@ gpointer run_plugin(gpointer args) {
 	empty_output_buffer(numread);
 	usleep(1000);
     }
-    printf(Plugin finished!\n);
+    printf("Plugin finished!\n");
 }
 
 void setup_ladspa() {
@@ -153,14 +153,14 @@ void setup_ladspa() {
     dlerror();
 
     pfDescriptorFunction 
-	= (LADSPA_Descriptor_Function)dlsym(pvPluginHandle, ladspa_descriptor);
+	= (LADSPA_Descriptor_Function)dlsym(pvPluginHandle, "ladspa_descriptor");
     if (!pfDescriptorFunction) {
 	const char * pcError = dlerror();
 	if (pcError) 
 	    fprintf(stderr,
-		    Unable to find ladspa_descriptor() function in plugin file 
-		    \%s\: %s.\n
-		    Are you sure this is a LADSPA plugin file?\n, 
+		    "Unable to find ladspa_descriptor() function in plugin file "
+		    "\"%s\": %s.\n"
+		    "Are you sure this is a LADSPA plugin file?\n", 
 		    pcPluginFilename,
 		    pcError);
 	exit(1);
@@ -178,13 +178,13 @@ void setup_ladspa() {
 
 	handle = psDescriptor->instantiate(psDescriptor, SAMPLE_RATE);
 	if (handle == NULL) {
-	    fprintf(stderr, Cant instantiate plugin %s\n, pcPluginLabel);
+	    fprintf(stderr, "Can't instantiate plugin %s\n", pcPluginLabel);
 	    exit(1);
 	}
 
 	// get ports
 	int lPortIndex;
-	printf(Num ports %lu\n, psDescriptor->PortCount);
+	printf("Num ports %lu\n", psDescriptor->PortCount);
 	for (lPortIndex = 0; 
 	     lPortIndex < psDescriptor->PortCount; 
 	     lPortIndex++) {
@@ -192,14 +192,14 @@ void setup_ladspa() {
 		(psDescriptor->PortDescriptors[lPortIndex])) {
 		if (LADSPA_IS_PORT_INPUT
 		    (psDescriptor->PortDescriptors[lPortIndex])) {
-		    printf(input %d\n, lPortIndex);
+		    printf("input %d\n", lPortIndex);
 		    lInputPortIndex = lPortIndex;
 		    
 		    psDescriptor->connect_port(handle,
 					       lInputPortIndex, pInBuffer[inBufferIndex++]);
 		} else if (LADSPA_IS_PORT_OUTPUT
 			   (psDescriptor->PortDescriptors[lPortIndex])) {
-		    printf(output %d\n, lPortIndex);
+		    printf("output %d\n", lPortIndex);
 		    lOutputPortIndex = lPortIndex;
 		    
 		    psDescriptor->connect_port(handle,
@@ -209,25 +209,25 @@ void setup_ladspa() {
 
 	    if (LADSPA_IS_PORT_CONTROL
 		(psDescriptor->PortDescriptors[lPortIndex])) {
-		printf(control %d\n, lPortIndex);
+		printf("control %d\n", lPortIndex);
 		psDescriptor->connect_port(handle,			    
-					   lPortIndex, control);
+					   lPortIndex, &control);
 	    }
 	}
-	// weve got what we wanted, get out of this loop
+	// we've got what we wanted, get out of this loop
 	break;
     }
 
     if ((psDescriptor == NULL) ||
 	(lInputPortIndex == -1) ||
 	(lOutputPortIndex == -1)) {
-	fprintf(stderr, Cant find plugin information\n);
+	fprintf(stderr, "Can't find plugin information\n");
 	exit(1);
     }
 
     open_files();
 
-    pthread_create(ladspa_thread, NULL, run_plugin, NULL);
+    pthread_create(&ladspa_thread, NULL, run_plugin, NULL);
 }
 
 void slider_change(GtkAdjustment *adj,  gpointer data)
@@ -248,12 +248,12 @@ int main(int argc, char** argv) {
 
     setup_ladspa();
 
-    gtk_init(argc, argv);
+    gtk_init(&argc, &argv);
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(window), 250, 80);
-    gtk_window_set_title(GTK_WINDOW(window), Volume);
+    gtk_window_set_title(GTK_WINDOW(window), "Volume");
 
     frame = gtk_fixed_new();
     gtk_container_add(GTK_CONTAINER(window), frame);
@@ -271,15 +271,15 @@ int main(int argc, char** argv) {
 
 
     
-    //label = gtk_label_new(0);
+    //label = gtk_label_new("0");
     //gtk_fixed_put(GTK_FIXED(frame), label, 190, 58); 
 
     gtk_widget_show_all(window);
 
-    g_signal_connect(window, destroy,
+    g_signal_connect(window, "destroy",
 		     G_CALLBACK (gtk_main_quit), NULL);
 
-    g_signal_connect(adjustment, value-changed, 
+    g_signal_connect(adjustment, "value-changed", 
 		     G_CALLBACK(slider_change), NULL);
 
     gtk_main();
@@ -290,7 +290,7 @@ int main(int argc, char** argv) {
 
       
 ```
-It is run just by calling
- `stereo_amp`, 
-      no arguments.
 
+
+It is run just by calling `stereo_amp`, 
+      no arguments.

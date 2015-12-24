@@ -1,11 +1,12 @@
-#  libavformat or libavdecode 
 
-This example is taken from
- [
+##  libavformat or libavdecode 
+
+
+This example is taken from [
 	blinking bill
-      ] ( http://blinkingblip.wordpress.com/2011/10/08/decoding-and-playing-an-audio-stream-using-libavcodec-libavformat-and-libao/)
-and plays almost any file (Ogg Vorbis, AVI, MP3, etc).
-```sh_cpp
+      ]( http://blinkingblip.wordpress.com/2011/10/08/decoding-and-playing-an-audio-stream-using-libavcodec-libavformat-and-libao/) and plays almost any file (Ogg Vorbis, AVI, MP3, etc).
+
+```
 
 /**
  * Program copyright blinking blip, 2011
@@ -20,13 +21,13 @@ and plays almost any file (Ogg Vorbis, AVI, MP3, etc).
 #include <ao/ao.h>
  
 void die(const char* message) {
-    fprintf(stderr, %s\n, message);
+    fprintf(stderr, "%s\n", message);
     exit(1);
 }
  
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        die(Usage: play file);
+        die("Usage: play file");
     }
  
     const char* input_filename = argv[1];
@@ -38,12 +39,12 @@ int main(int argc, char* argv[]) {
     // A media container
     AVFormatContext* container = 0;
  
-    if (avformat_open_input(container, input_filename, NULL, NULL) < 0) {
-        die(Could not open file);
+    if (avformat_open_input(&container, input_filename, NULL, NULL) < 0) {
+        die("Could not open file");
     }
  
     if (av_find_stream_info(container) < 0) {
-        die(Could not find file info);
+        die("Could not find file info");
     }
  
     int stream_id = -1;
@@ -60,17 +61,17 @@ int main(int argc, char* argv[]) {
     }
  
     if (stream_id == -1) {
-        die(Could not find an audio stream);
+        die("Could not find an audio stream");
     }
 
     /* 
     // Extract some metadata
     AVDictionary* metadata = container->metadata;
  
-    const char* artist = av_dict_get(metadata, artist, NULL, 0)->value;
-    const char* title = av_dict_get(metadata, title, NULL, 0)->value;
+    const char* artist = av_dict_get(metadata, "artist", NULL, 0)->value;
+    const char* title = av_dict_get(metadata, "title", NULL, 0)->value;
  
-    fprintf(stdout, Playing: %s - %s\n, artist, title);
+    fprintf(stdout, "Playing: %s - %s\n", artist, title);
     */
 
     // Find the apropriate codec and open it
@@ -79,7 +80,7 @@ int main(int argc, char* argv[]) {
     AVCodec* codec = avcodec_find_decoder(codec_context->codec_id);
  
     if (!avcodec_open(codec_context, codec) < 0) {
-        die(Could not find open the needed codec);
+        die("Could not find open the needed codec");
     }
  
     // To initalize libao for playback
@@ -95,7 +96,7 @@ int main(int argc, char* argv[]) {
     sample_format.byte_format = AO_FMT_NATIVE;
     sample_format.matrix = 0;
  
-    ao_device* device = ao_open_live(driver, sample_format, NULL);
+    ao_device* device = ao_open_live(driver, &sample_format, NULL);
  
     AVPacket packet;
     int buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
@@ -106,12 +107,12 @@ int main(int argc, char* argv[]) {
         buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
  
         // Read one packet into `packet`
-        if (av_read_frame(container, packet) < 0) {
+        if (av_read_frame(container, &packet) < 0) {
             break;  // End of stream. Done decoding.
         }
  
         // Decodes from `packet` into the buffer
-        if (avcodec_decode_audio3(codec_context, (int16_t*)buffer, buffer_size, packet) < 1) {
+        if (avcodec_decode_audio3(codec_context, (int16_t*)buffer, &buffer_size, &packet) < 1) {
             break;  // Error in decoding
         }
  
@@ -123,7 +124,7 @@ int main(int argc, char* argv[]) {
  
     ao_shutdown();
  
-    fprintf(stdout, Done playing. Exiting...);
+    fprintf(stdout, "Done playing. Exiting...");
  
     return 0;
 }
@@ -133,33 +134,23 @@ int main(int argc, char* argv[]) {
 
 
 The example reads frames from a container file,
-      decodes them and then passes the PCM data to
- `libao`for playing. It could hardly be simpler!
+      decodes them and then passes the PCM data to `libao`for playing. It could hardly be simpler!
 
 
-Copyright
-Jan Newmarch, jan@newmarch.name
+Copyright © Jan Newmarch, jan@newmarch.name
 
-![alt text](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)"Programming and Using Linux Sound - in depth"
-by
- [Jan Newmarch] (https://jan.newmarch.name)
-is licensed under a
- [Creative Commons Attribution-ShareAlike 4.0 International License] (http://creativecommons.org/licenses/by-sa/4.0/)
-.
-Based on a work at
- [https://jan.newmarch.name/LinuxSound/] (https://jan.newmarch.name/LinuxSound/)
-.
+
+
+
+
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
+
+
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
+
 
 If you like this book, please contribute using Flattr
 
+
 or donate using PayPal
-
-
-
-
 ![alt text](https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_AU/i/scr/pixel.gif)
-
-
-
-
-

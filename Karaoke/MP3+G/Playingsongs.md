@@ -1,8 +1,11 @@
-#  Playing songs 
+
+##  Playing songs 
+
 
 Whenever a song is "played" its file path is written to standard output.
       This makes it suitable for use in a pipeline such as
-```sh_cpp
+
+```
 
 VLC_OPTS="--play-and-exit --fullscreen"
 
@@ -21,5 +24,3 @@ do
 done
       
 ```
-
-

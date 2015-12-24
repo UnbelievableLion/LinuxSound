@@ -1,10 +1,10 @@
-#  Gnome subtitles 
 
-See
- [
+##  Gnome subtitles 
+
+
+See [
 	Gnome Subtitles 1.3 is out!
-      ] (http://gnome-subtitles.sourceforge.net/)
-supports
+      ](http://gnome-subtitles.sourceforge.net/) supports
     Adobe Encore DVD
     Advanced Sub Station Alpha
     AQ Title
@@ -27,4 +27,3 @@ supports
     SubViewer 1.0
     SubViewer 2.0
     ViPlay Subtitle File
-

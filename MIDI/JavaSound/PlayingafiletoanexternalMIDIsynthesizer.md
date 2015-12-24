@@ -1,8 +1,11 @@
-#  Playing a file to an external MIDI synthesizer 
+
+##  Playing a file to an external MIDI synthesizer 
+
 
 I have an Edirol Studio Canvas SD-20 synthesizer which I bought
       for a few hundred Australian dollars. This plugs into a PC
       through a USB port. Alsa recognises this by
+
 ```
 
 	
@@ -16,23 +19,18 @@ I   hw:2,0,2  SD-20 MIDI
 ```
 
 
-The list of
- `MidiDevice.Info`device information 
-      lists
- `hw:2,0,0`twice, once for input
+The list of `MidiDevice.Info`device information 
+      lists `hw:2,0,0`twice, once for input
       and once for output, and similarly for the other values.
-      The device information can be identified by the
- `toString`method, which returns values such as
- `"SD20 [hw:2,0,0]"`.
+      The device information can be identified by the `toString`method, which returns values such as `"SD20 [hw:2,0,0]"`.
       From the device information the device can be found as before
-      using
- `MidiSystem.getMidiDevice(info)`.
+      using `MidiSystem.getMidiDevice(info)`.
       The input and output devices can be distinguished by the number
-      of
- `maxOutputReceivers`it supports: zero means none,
+      of `maxOutputReceivers`it supports: zero means none,
       while any other value (including minus one!) means it has
-      a MIDI receiver. Selecting an extrnal receiver is done 
+      a MIDI receiver. Selecting an external receiver is done 
       by code like
+
 ```
 
 	
@@ -65,9 +63,11 @@ The list of
 
 
 Playing an audio file to my SD-20 is done by
+
 ```
 
-/*
+      
+      /*
  *	ExternalMidiPlayer.java
  *
  *	This file adapted from SimpleMidiPlayer of jsresources.org
@@ -396,6 +396,6 @@ public class ExternalMidiPlayer
 
 /*** SimpleMidiPlayer.java ***/
 
+      
+    
 ```
-
-

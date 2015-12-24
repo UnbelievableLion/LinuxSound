@@ -1,9 +1,13 @@
-#  Simple API 
+
+##  Simple API 
+
 
 Pulse has a "simple" API and a far more complex asynchronous API.
       The simple API may be good enough for your needs.
 
+
 The simple API has a small set of functions
+
 ```
 
 
@@ -25,37 +29,26 @@ int 	pa_simple_flush (pa_simple *s, int *error)
 
 ```
 
-
 ###  Play a file 
+
 
 A program to play from a file to the default output device is
       from the PulseAudio site.
       The basic structure is
 
-+  Create a new playback stream (pa_simple_new)
++ Create a new playback stream (pa_simple_new)
++ Read blocks from the file (read)...
++ ...and write them to the stream (pa_simple_write)
++ Finish by flushing the stream (pa_simple_drain)
 
-
-+  Read blocks from the file (read)...
-
-
-+  ...and write them to the stream (pa_simple_write)
-
-
-+  Finish by flushing the stream (pa_simple_drain)
-
-
-The program is
- [
+The program is [
 	pacat-simple.c
-      ] (http://freedesktop.org/software/pulseaudio/doxygen/examples.html)
-.
-      Rather weirdly, it does a
- `dup2`to map the opnen file descriptor
-      onto
- `stdin`and then reads from
- `stdin`. This isn't
+      ](http://freedesktop.org/software/pulseaudio/doxygen/examples.html) .
+      Rather weirdly, it does a `dup2`to map the open file descriptor
+      onto `stdin`and then reads from `stdin`. This isn't
       necessary - what not just read from the original file descriptor?
-```sh_cpp
+
+```
 
       /***
  *   This file is part of PulseAudio.
@@ -94,7 +87,7 @@ The program is
 int main(int argc, char*argv[]) {
 
     // set to NULL for default output device
-    char *device = alsa_output.pci-0000_00_1b.0.analog-stereo;
+    char *device = "alsa_output.pci-0000_00_1b.0.analog-stereo";
 
     /* The Sample format to use */
     static const pa_sample_spec ss = {
@@ -112,12 +105,12 @@ int main(int argc, char*argv[]) {
         int fd;
 
         if ((fd = open(argv[1], O_RDONLY)) < 0) {
-            fprintf(stderr, __FILE__: open() failed: %s\n, strerror(errno));
+            fprintf(stderr, __FILE__": open() failed: %s\n", strerror(errno));
             goto finish;
         }
 
         if (dup2(fd, STDIN_FILENO) < 0) {
-            fprintf(stderr, __FILE__: dup2() failed: %s\n, strerror(errno));
+            fprintf(stderr, __FILE__": dup2() failed: %s\n", strerror(errno));
             goto finish;
         }
 
@@ -125,8 +118,8 @@ int main(int argc, char*argv[]) {
     }
 
     /* Create a new playback stream */
-    if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, device, playback, ss, NULL, NULL, error))) {
-        fprintf(stderr, __FILE__: pa_simple_new() failed: %s\n, pa_strerror(error));
+    if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, device, "playback", &ss, NULL, NULL, &error))) {
+        fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
         goto finish;
     }
 
@@ -137,12 +130,12 @@ int main(int argc, char*argv[]) {
 #if 1
         pa_usec_t latency;
 
-        if ((latency = pa_simple_get_latency(s, error)) == (pa_usec_t) -1) {
-            fprintf(stderr, __FILE__: pa_simple_get_latency() failed: %s\n, pa_strerror(error));
+        if ((latency = pa_simple_get_latency(s, &error)) == (pa_usec_t) -1) {
+            fprintf(stderr, __FILE__": pa_simple_get_latency() failed: %s\n", pa_strerror(error));
             goto finish;
         }
 
-        fprintf(stderr, %0.0f usec    \r, (float)latency);
+        fprintf(stderr, "%0.0f usec    \r", (float)latency);
 #endif
 
         /* Read some data ... */
@@ -150,20 +143,20 @@ int main(int argc, char*argv[]) {
             if (r == 0) /* EOF */
                 break;
 
-            fprintf(stderr, __FILE__: read() failed: %s\n, strerror(errno));
+            fprintf(stderr, __FILE__": read() failed: %s\n", strerror(errno));
             goto finish;
         }
 
         /* ... and play it */
-        if (pa_simple_write(s, buf, (size_t) r, error) < 0) {
-            fprintf(stderr, __FILE__: pa_simple_write() failed: %s\n, pa_strerror(error));
+        if (pa_simple_write(s, buf, (size_t) r, &error) < 0) {
+            fprintf(stderr, __FILE__": pa_simple_write() failed: %s\n", pa_strerror(error));
             goto finish;
         }
     }
 
     /* Make sure that every single sample was played */
-    if (pa_simple_drain(s, error) < 0) {
-        fprintf(stderr, __FILE__: pa_simple_drain() failed: %s\n, pa_strerror(error));
+    if (pa_simple_drain(s, &error) < 0) {
+        fprintf(stderr, __FILE__": pa_simple_drain() failed: %s\n", pa_strerror(error));
         goto finish;
     }
 
@@ -182,32 +175,24 @@ finish:
       
 ```
 
-
 ###  Record to a file 
 
+
 A program to record to a file from the default input device is
-      from the Pulse Audio site
- [
+      from the Pulse Audio site [
 	parec-simple.c
-      ] (http://freedesktop.org/software/pulseaudio/doxygen/examples.html)
-The basic structure is
+      ](http://freedesktop.org/software/pulseaudio/doxygen/examples.html) The basic structure is
 
-+  Create a new recording stream (pa_simple_new)
-
-
-+  Read blocks from the stream (pa_simple_read)...
-
-
-+  ...and write them to the output (write)
-
-
-+  Finish by releasing the stream (pa_simple_free)
-
++ Create a new recording stream (pa_simple_new)
++ Read blocks from the stream (pa_simple_read)...
++ ...and write them to the output (write)
++ Finish by releasing the stream (pa_simple_free)
 
 Note that you need to tell PulseAudio the format to write
       the data, using a pa_sample_spec. Two channel, 44100hz and
       PCM 16 bit little-endian is chosen.
-```sh_cpp
+
+```
 
       /***
   This file is part of PulseAudio.
@@ -275,8 +260,8 @@ int main(int argc, char*argv[]) {
     int error;
 
     /* Create the recording stream */
-    if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_RECORD, NULL, record, ss, NULL, NULL, error))) {
-        fprintf(stderr, __FILE__: pa_simple_new() failed: %s\n, pa_strerror(error));
+    if (!(s = pa_simple_new(NULL, argv[0], PA_STREAM_RECORD, NULL, "record", &ss, NULL, NULL, &error))) {
+        fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
         goto finish;
     }
 
@@ -284,14 +269,14 @@ int main(int argc, char*argv[]) {
         uint8_t buf[BUFSIZE];
 
         /* Record some data ... */
-        if (pa_simple_read(s, buf, sizeof(buf), error) < 0) {
-            fprintf(stderr, __FILE__: pa_simple_read() failed: %s\n, pa_strerror(error));
+        if (pa_simple_read(s, buf, sizeof(buf), &error) < 0) {
+            fprintf(stderr, __FILE__": pa_simple_read() failed: %s\n", pa_strerror(error));
             goto finish;
         }
 
         /* And write it to STDOUT */
         if (loop_write(STDOUT_FILENO, buf, sizeof(buf)) != sizeof(buf)) {
-            fprintf(stderr, __FILE__: write() failed: %s\n, strerror(errno));
+            fprintf(stderr, __FILE__": write() failed: %s\n", strerror(errno));
             goto finish;
         }
     }
@@ -316,30 +301,25 @@ The output from this is a PCM s16 file. You can convert it to
       or import it as raw data into
       Audacity and play it directly.
 
+
 How good are these for real-time audio? The first program 
       can show
       the latency (turn the "#if 0" to "#if 1").
       This code can also be copied into the second one.
       The results are not good:
 
-+  recording has a latency of 11 msecs on my laptop
-
-
-+  playback has a latency of 130 msecs!
-
-
-
-
++ recording has a latency of 11 msecs on my laptop
++ playback has a latency of 130 msecs!
 ###  Play from source to sink 
+
 
 You can combine the two programs to copy from the
       microphone to the speaker using a record and a playback stream.
-      The program is
- [
+      The program is [
 	 pa-mic-2-speaker-simple.c
-      ] (pa-mic-2-speaker-simple.c)
-:
-```sh_cpp
+      ](pa-mic-2-speaker-simple.c) :
+
+```
 
       
 #ifdef HAVE_CONFIG_H
@@ -372,13 +352,13 @@ int main(int argc, char*argv[]) {
 
 
     /* Create a new playback stream */
-    if (!(s_out = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, NULL, playback, ss, NULL, NULL, error))) {
-        fprintf(stderr, __FILE__: pa_simple_new() failed: %s\n, pa_strerror(error));
+    if (!(s_out = pa_simple_new(NULL, argv[0], PA_STREAM_PLAYBACK, NULL, "playback", &ss, NULL, NULL, &error))) {
+        fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
         goto finish;
     }
 
-      if (!(s_in = pa_simple_new(NULL, argv[0], PA_STREAM_RECORD, NULL, record, ss, NULL, NULL, error))) {
-        fprintf(stderr, __FILE__: pa_simple_new() failed: %s\n, pa_strerror(error));
+      if (!(s_in = pa_simple_new(NULL, argv[0], PA_STREAM_RECORD, NULL, "record", &ss, NULL, NULL, &error))) {
+        fprintf(stderr, __FILE__": pa_simple_new() failed: %s\n", pa_strerror(error));
         goto finish;
     }
 
@@ -389,37 +369,37 @@ int main(int argc, char*argv[]) {
 #if 1
         pa_usec_t latency;
 
-        if ((latency = pa_simple_get_latency(s_in, error)) == (pa_usec_t) -1) {
-            fprintf(stderr, __FILE__: pa_simple_get_latency() failed: %s\n, pa_strerror(error));
+        if ((latency = pa_simple_get_latency(s_in, &error)) == (pa_usec_t) -1) {
+            fprintf(stderr, __FILE__": pa_simple_get_latency() failed: %s\n", pa_strerror(error));
             goto finish;
         }
 
-        fprintf(stderr, In:  %0.0f usec    \r\n, (float)latency);
+        fprintf(stderr, "In:  %0.0f usec    \r\n", (float)latency);
 
-        if ((latency = pa_simple_get_latency(s_out, error)) == (pa_usec_t) -1) {
-            fprintf(stderr, __FILE__: pa_simple_get_latency() failed: %s\n, pa_strerror(error));
+        if ((latency = pa_simple_get_latency(s_out, &error)) == (pa_usec_t) -1) {
+            fprintf(stderr, __FILE__": pa_simple_get_latency() failed: %s\n", pa_strerror(error));
             goto finish;
         }
 
-        fprintf(stderr, Out: %0.0f usec    \r\n, (float)latency);
+        fprintf(stderr, "Out: %0.0f usec    \r\n", (float)latency);
 #endif
 
-        if (pa_simple_read(s_in, buf, sizeof(buf), error) < 0) {
+        if (pa_simple_read(s_in, buf, sizeof(buf), &error) < 0) {
 
-            fprintf(stderr, __FILE__: read() failed: %s\n, strerror(errno));
+            fprintf(stderr, __FILE__": read() failed: %s\n", strerror(errno));
             goto finish;
         }
 
         /* ... and play it */
-        if (pa_simple_write(s_out, buf, sizeof(buf), error) < 0) {
-            fprintf(stderr, __FILE__: pa_simple_write() failed: %s\n, pa_strerror(error));
+        if (pa_simple_write(s_out, buf, sizeof(buf), &error) < 0) {
+            fprintf(stderr, __FILE__": pa_simple_write() failed: %s\n", pa_strerror(error));
             goto finish;
         }
     }
 
     /* Make sure that every single sample was played */
-    if (pa_simple_drain(s_out, error) < 0) {
-        fprintf(stderr, __FILE__: pa_simple_drain() failed: %s\n, pa_strerror(error));
+    if (pa_simple_drain(s_out, &error) < 0) {
+        fprintf(stderr, __FILE__": pa_simple_drain() failed: %s\n", pa_strerror(error));
         goto finish;
     }
 
@@ -439,6 +419,7 @@ finish:
 
       
 ```
+
+
 Try running this and you will discover that the
       the latency is noticeable and unsatisfactory.
-

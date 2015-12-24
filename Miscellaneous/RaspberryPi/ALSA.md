@@ -1,15 +1,17 @@
-#  ALSA 
+
+##  ALSA 
+
 
 The Raspberry Pi uses the ALSA driver snd_bcm2835, and this can manage
-      HDMI output. The command
- `alsa-info`is not present, but as this is a shell
+      HDMI output. The command `alsa-info`is not present, but as this is a shell
       script it can be copied from elsewhere  and will run on the RPi. 
       Some of the usual configuration files and
       commands on a larger distro are missing, but it shows on the soft float Debian distro
+
 ```
 
- `
-upload=true` `script=true` `cardinfo=
+	
+upload=true&script=true&cardinfo=
 !!################################
 !!ALSA Information Script v 0.4.61
 !!################################
@@ -218,8 +220,9 @@ evdev
 [   16.853728] bcm2835 ALSA CARD CREATED!
 [   16.883259] ### BCM2835 ALSA driver init OK ### 
 [   23.608360] smsc95xx 1-1.1:1.0: eth0: link up, 100Mbps, full-duplex, lpa 0x45E1
-	`
-
+	
+      
 ```
+
 
 

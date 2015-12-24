@@ -1,14 +1,19 @@
-#  MelodyPanel 
+
+##  MelodyPanel 
+
 
 The MelodyPanel is a scrolling panel showing all the notes of the melody.
       The currently playing note is centred in the display. This is done by
       drawing all of the notes into a BufferedImage and then copying across
       the relevant part every 50 milliseconds.
 
+
 The MelodyPanel is
+
 ```
 
-
+      
+      
 import java.util.Vector;
 import javax.swing.*;
 import java.awt.*;
@@ -219,6 +224,6 @@ public class MelodyPanel extends JPanel {
 
 }
 
+      
+    
 ```
-
-

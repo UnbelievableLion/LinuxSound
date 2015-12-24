@@ -1,88 +1,70 @@
-#  OpenSL ES examples 
+
+##  OpenSL ES examples 
+
 
 These examples are taken from the appendices of the OpenSL ES specification.
 They have not been tested.
 
-
-The programming model for OpenSL ES is that of
-interfaces
-and
-objects
-.
-      The programming
-language
-is C, so one of the common mechanisms for writing O/O style code
-      in C is used (see e.g.
- [
+The programming model for OpenSL ES is that of _interfaces_ and _objects_ .
+      The programming _language_ is C, so one of the common mechanisms for writing O/O style code
+      in C is used (see e.g. [
 	Object-Oriented Programming In C
-      ] (http://www.drdobbs.com/object-oriented-programming-in-c/184402190?pgno=1)
-). Interfaces are represented by structures containing function pointers for
+      ](http://www.drdobbs.com/object-oriented-programming-in-c/184402190?pgno=1) ). Interfaces are represented by structures containing function pointers for
       methods. An object which implements the interface is of the interface type, with the
       methods as particular functions. Calling a method involves calling the
       appropriate function in the structure. The "this" object is always passed in as the
       first parameter of the function as in
-```sh_cpp
+
+```
 
 	
 (*object) -> method(object, ...)
 	
       
 ```
+
+
 Every object has to be "realised" before it can be used.
 
+
 There does not seem to be any inheritance model, but then that isn't necessary here.
+
 
 Note that every function returns a value that can be tested for sucess or fail.
       Objects that are created are passed as address parameters for filling.
       The application is responsible for freeing any memory allocated during this
-      by calling
- `Destroy()`on the object.
-An OpenSL (or OpenMAX AL) application is started by creating an "engine" using
- `slCreateEngine()`. This is the only global function in the library.
+      by calling `Destroy()`on the object.
+
+
+An OpenSL (or OpenMAX AL) application is started by creating an "engine" using `slCreateEngine()`. This is the only global function in the library.
       From then on, objects are obtained from the engine or other objects by a call
-      to
- `GetInterface()`or
- `CreateXYZ`on the engine or object. 
+      to `GetInterface()`or `CreateXYZ`on the engine or object. 
       For example,
-```sh_cpp
+
+```
 
 	
-(*engine) -> CreateOutputMix(engine, output_mix...);
-(*output_mix) -> GetInterface(output_mix, SL_IID_VOLUME, volume, ...);
+(*engine) -> CreateOutputMix(engine, &output_mix...);
+(*output_mix) -> GetInterface(output_mix, SL_IID_VOLUME, &volume, ...);
 	
       
 ```
 
-
 ###  Play audio from a buffer 
+
 
 The model for playing audio is not very complex, just verbose.
       It consists of
 
-+  Initialise the system
-
-
-+  Prepare a data source
-
-
-+  Prepare an output sink
-
-
-+  Set up a callback function to be called when the player needs more data
-
-
-+  Create and start a playback engine
-
-
-+  Clean up
-
-
-
-
++ Initialise the system
++ Prepare a data source
++ Prepare an output sink
++ Set up a callback function to be called when the player needs more data
++ Create and start a playback engine
++ Clean up
 ####  Initialise the system 
 
-
-```sh_cpp
+```
 
 	
     SLresult res;
@@ -90,7 +72,7 @@ The model for playing audio is not very complex, just verbose.
     SLEngineOption EngineOption[] = {
 	(SLuint32) SL_ENGINEOPTION_THREADSAFE,
 	(SLuint32) SL_BOOLEAN_TRUE};
-    res = slCreateEngine( , 1, EngineOption, 0, NULL, NULL);
+    res = slCreateEngine( &sl, 1, EngineOption, 0, NULL, NULL);
     CheckErr(res);
     /* Realizing the SL Engine in synchronous mode. */
     res = (*sl)->Realize(sl, SL_BOOLEAN_FALSE); CheckErr(res);
@@ -98,11 +80,9 @@ The model for playing audio is not very complex, just verbose.
       
 ```
 
-
 ####  Prepare a data source 
 
-
-```sh_cpp
+```
 
 	
     /* Local storage for Audio data */
@@ -120,17 +100,15 @@ The model for playing audio is not very complex, just verbose.
     pcm.containerSize = 16;
     pcm.channelMask = SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;
     pcm.endianness = SL_BYTEORDER_LITTLEENDIAN;
-    audioSource.pFormat	= (void *)
-    audioSource.pLocator    = (void *)
+    audioSource.pFormat	= (void *)&pcm;
+    audioSource.pLocator    = (void *)&bufferQueue;
 	
       
 ```
 
-
 ####  Prepare an output sink 
 
-
-```sh_cpp
+```
 
 	
     for (i=0;i<MAX_NUMBER_INTERFACES;i++)
@@ -139,7 +117,7 @@ The model for playing audio is not very complex, just verbose.
 	    iidArray[i] = SL_IID_NULL;
 	}
     // Create Output Mix object to be used by player
-    res = (*EngineItf)->CreateOutputMix(EngineItf, , 1,
+    res = (*EngineItf)->CreateOutputMix(EngineItf, &OutputMix, 1,
 					iidArray, required); CheckErr(res);
     // Realizing the Output Mix object in synchronous mode.
     res = (*OutputMix)->Realize(OutputMix, SL_BOOLEAN_FALSE);
@@ -150,10 +128,12 @@ The model for playing audio is not very complex, just verbose.
 
 ####  Set up a callback function to be called when the player needs more data 
 
+
 The callback in this case uses a data structure to hold all of the data and pointers
       to the start and current position of the data. This is for this application,
       and is not a part of OpenSL
-```sh_cpp
+
+```
 
 	
 /* Structure for passing information to callback function */
@@ -171,27 +151,26 @@ typedef struct CallbackCntxt_ {
 
 
 Then we can set up the output sink and callback data
-```sh_cpp
+
+```
 
 	
     /* Setup the data sink structure */
     locator_outputmix.locatorType = SL_DATALOCATOR_OUTPUTMIX;
     locator_outputmix.outputMix = OutputMix;
-    audioSink.pLocator = (void *)_outputmix;
+    audioSink.pLocator = (void *)&locator_outputmix;
     audioSink.pFormat = NULL;
     /* Initialize the context for Buffer queue callbacks */
-    cntxt.pDataBase = (void*)
+    cntxt.pDataBase = (void*)&pcmData;
     cntxt.pData = cntxt.pDataBase;
     cntxt.size = sizeof(pcmData);
 	
       
 ```
 
-
 ####  Create and start a playback engine 
 
-
-```sh_cpp
+```
 
 	
     /* Set arrays required[] and iidArray[] for SEEK interface
@@ -199,15 +178,15 @@ Then we can set up the output sink and callback data
     required[0] =    SL_BOOLEAN_TRUE;
     iidArray[0] =    SL_IID_BUFFERQUEUE;
     /* Create the music player */
-    res = (*EngineItf)->CreateAudioPlayer(EngineItf, ,
-					  , , 1, iidArray, required); CheckErr(res);
+    res = (*EngineItf)->CreateAudioPlayer(EngineItf, &player,
+					  &audioSource, &audioSink, 1, iidArray, required); CheckErr(res);
     /* Realizing the player in synchronous mode. */
     res = (*player)->Realize(player, SL_BOOLEAN_FALSE); CheckErr(res);
     /* Get seek and play interfaces */
-    res = (*player)->GetInterface(player, SL_IID_PLAY, (void*));
+    res = (*player)->GetInterface(player, SL_IID_PLAY, (void*)&playItf);
     CheckErr(res);
     res = (*player)->GetInterface(player, SL_IID_BUFFERQUEUE,
-				  (void*)); CheckErr(res);
+				  (void*)&bufferQueueItf); CheckErr(res);
     /* Setup to receive buffer queue event callbacks */
     res = (*bufferQueueItf)->RegisterCallback(bufferQueueItf,
 					      BufferQueueCallback, NULL); CheckErr(res);
@@ -232,22 +211,20 @@ Then we can set up the output sink and callback data
        played. This is indicated by waiting for the count member of the
        SLBufferQueueState to go to zero.
     */
-    res = (*bufferQueueItf)->GetState(bufferQueueItf, );
+    res = (*bufferQueueItf)->GetState(bufferQueueItf, &state);
     CheckErr(res);
     while(state.count)
 	{
-	    (*bufferQueueItf)->GetState(bufferQueueItf, );
+	    (*bufferQueueItf)->GetState(bufferQueueItf, &state);
 	}
 
 	
       
 ```
 
-
 ####  Clean up 
 
-
-```sh_cpp
+```
 
 	
     /* Make sure player is stopped */
@@ -261,15 +238,17 @@ Then we can set up the output sink and callback data
       
 ```
 
-
 ####  Full program 
 
-The full code is
-```sh_cpp
 
+The full code is
+
+```
+
+      
 #include <stdio.h>
 #include <stdlib.h>
-#include OpenSLES.h
+#include "OpenSLES.h"
 #define SLEEP(x) /* Client system sleep function to sleep x milliseconds
 		    would replace SLEEP macro */
 #define MAX_NUMBER_INTERFACES 3
@@ -339,7 +318,7 @@ void TestPlayMusicBufferQueue( SLObjectItf sl )
     /* Callback context for the buffer queue callback function */
     CallbackCntxt cntxt;
     /* Get the SL Engine Interface which is implicit */
-    res = (*sl)->GetInterface(sl, SL_IID_ENGINE, (void*)EngineItf);
+    res = (*sl)->GetInterface(sl, SL_IID_ENGINE, (void*)&EngineItf);
     CheckErr(res);
     /* Initialize arrays required[] and iidArray[] */
     for (i=0;i<MAX_NUMBER_INTERFACES;i++)
@@ -351,13 +330,13 @@ void TestPlayMusicBufferQueue( SLObjectItf sl )
     required[0] = SL_BOOLEAN_TRUE;
     iidArray[0] = SL_IID_VOLUME;
     // Create Output Mix object to be used by player
-    res = (*EngineItf)->CreateOutputMix(EngineItf, OutputMix, 1,
+    res = (*EngineItf)->CreateOutputMix(EngineItf, &OutputMix, 1,
 					iidArray, required); CheckErr(res);
     // Realizing the Output Mix object in synchronous mode.
     res = (*OutputMix)->Realize(OutputMix, SL_BOOLEAN_FALSE);
     CheckErr(res);
     res = (*OutputMix)->GetInterface(OutputMix, SL_IID_VOLUME,
-				     (void*)volumeItf); CheckErr(res);
+				     (void*)&volumeItf); CheckErr(res);
     /* Setup the data source structure for the buffer queue */
     bufferQueue.locatorType = SL_DATALOCATOR_BUFFERQUEUE;
     bufferQueue.numBuffers = 4; /* Four buffers in our buffer queue */
@@ -369,15 +348,15 @@ void TestPlayMusicBufferQueue( SLObjectItf sl )
     pcm.containerSize = 16;
     pcm.channelMask = SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;
     pcm.endianness = SL_BYTEORDER_LITTLEENDIAN;
-    audioSource.pFormat	= (void *)pcm;
-    audioSource.pLocator    = (void *)bufferQueue;
+    audioSource.pFormat	= (void *)&pcm;
+    audioSource.pLocator    = (void *)&bufferQueue;
     /* Setup the data sink structure */
     locator_outputmix.locatorType = SL_DATALOCATOR_OUTPUTMIX;
     locator_outputmix.outputMix = OutputMix;
-    audioSink.pLocator = (void *)locator_outputmix;
+    audioSink.pLocator = (void *)&locator_outputmix;
     audioSink.pFormat = NULL;
     /* Initialize the context for Buffer queue callbacks */
-    cntxt.pDataBase = (void*)pcmData;
+    cntxt.pDataBase = (void*)&pcmData;
     cntxt.pData = cntxt.pDataBase;
     cntxt.size = sizeof(pcmData);
     /* Set arrays required[] and iidArray[] for SEEK interface
@@ -385,15 +364,15 @@ void TestPlayMusicBufferQueue( SLObjectItf sl )
     required[0] =    SL_BOOLEAN_TRUE;
     iidArray[0] =    SL_IID_BUFFERQUEUE;
     /* Create the music player */
-    res = (*EngineItf)->CreateAudioPlayer(EngineItf, player,
-					  audioSource, audioSink, 1, iidArray, required); CheckErr(res);
+    res = (*EngineItf)->CreateAudioPlayer(EngineItf, &player,
+					  &audioSource, &audioSink, 1, iidArray, required); CheckErr(res);
     /* Realizing the player in synchronous mode. */
     res = (*player)->Realize(player, SL_BOOLEAN_FALSE); CheckErr(res);
     /* Get seek and play interfaces */
-    res = (*player)->GetInterface(player, SL_IID_PLAY, (void*)playItf);
+    res = (*player)->GetInterface(player, SL_IID_PLAY, (void*)&playItf);
     CheckErr(res);
     res = (*player)->GetInterface(player, SL_IID_BUFFERQUEUE,
-				  (void*)bufferQueueItf); CheckErr(res);
+				  (void*)&bufferQueueItf); CheckErr(res);
     /* Setup to receive buffer queue event callbacks */
     res = (*bufferQueueItf)->RegisterCallback(bufferQueueItf,
 					      BufferQueueCallback, NULL); CheckErr(res);
@@ -420,11 +399,11 @@ void TestPlayMusicBufferQueue( SLObjectItf sl )
        played. This is indicated by waiting for the count member of the
        SLBufferQueueState to go to zero.
     */
-    res = (*bufferQueueItf)->GetState(bufferQueueItf, state);
+    res = (*bufferQueueItf)->GetState(bufferQueueItf, &state);
     CheckErr(res);
     while(state.count)
 	{
-	    (*bufferQueueItf)->GetState(bufferQueueItf, state);
+	    (*bufferQueueItf)->GetState(bufferQueueItf, &state);
 	    /* should sleep be called here? */
 	}
     /* Make sure player is stopped */
@@ -442,7 +421,7 @@ int sl_main( void )
     SLEngineOption EngineOption[] = {
 	(SLuint32) SL_ENGINEOPTION_THREADSAFE,
 	(SLuint32) SL_BOOLEAN_TRUE};
-    res = slCreateEngine( sl, 1, EngineOption, 0, NULL, NULL);
+    res = slCreateEngine( &sl, 1, EngineOption, 0, NULL, NULL);
     CheckErr(res);
     /* Realizing the SL Engine in synchronous mode. */
     res = (*sl)->Realize(sl, SL_BOOLEAN_FALSE); CheckErr(res);
@@ -452,28 +431,33 @@ int sl_main( void )
     exit(0);
 }
 
-
+      
+  
 ```
 
-
 ###  Record audio 
+
 
 The ability to record audio in OpenSL ES is an option for the implementation.
       Consequently, we cannot guarantee that there is any microphone or
       similar device. The main difference in this program from the previous one
       is that checks need to be performed first on the input devices:
-```sh_cpp
+
+```
 
 	
     res = (*sl)->GetInterface(sl, SL_IID_AUDIOIODEVICECAPABILITIES,
-			      (void*)); CheckErr(res);
+			      (void*)&AudioIODeviceCapabilitiesItf); CheckErr(res);
     numInputs = MAX_NUMBER_INPUT_DEVICES;
     res = (*AudioIODeviceCapabilitiesItf)->GetAvailableAudioInputs(
-								   AudioIODeviceCapabilitiesItf, , InputDeviceIDs); CheckErr(res);
+								   AudioIODeviceCapabilitiesItf, &numInputs, InputDeviceIDs); CheckErr(res);
     /* Search for either earpiece microphone or headset microphone input
        device - with a preference for the latter */
-    for (i=0;iQueryAudioInputCapabilities(AudioIODeviceCapabilitiesItf,
-					     InputDeviceIDs[i], ); CheckErr(res);
+    for (i=0;i < numInputs; i++)
+	{
+	    res = (*AudioIODeviceCapabilitiesItf)-
+		>QueryAudioInputCapabilities(AudioIODeviceCapabilitiesItf,
+					     InputDeviceIDs[i], &AudioInputDescriptor); CheckErr(res);
 	    if((AudioInputDescriptor.deviceConnection ==
 		SL_DEVCONNECTION_ATTACHED_WIRED)&&
 	       (AudioInputDescriptor.deviceScope == SL_DEVSCOPE_USER)&&
@@ -510,11 +494,13 @@ The ability to record audio in OpenSL ES is an option for the implementation.
 The other major differences are that the engine is used to create
       an audio recorder rather than a player, and that the recorded
       sounds are saved to a file.
-```sh_cpp
 
+```
+
+	
 #include <stdio.h>
 #include <stdlib.h>
-#include OpenSLES.h
+#include "OpenSLES.h"
 #define MAX_NUMBER_INTERFACES 5
 #define MAX_NUMBER_INPUT_DEVICES 3
 #define POSITION_UPDATE_PERIOD 1000 /* 1 sec */
@@ -565,25 +551,25 @@ void TestAudioRecording(SLObjectItf sl)
     SLboolean mic_available = SL_BOOLEAN_FALSE;
     SLuint32 mic_deviceID = 0;
     /* Get the SL Engine Interface which is implicit */
-    res = (*sl)->GetInterface(sl, SL_IID_ENGINE, (void*)EngineItf);
+    res = (*sl)->GetInterface(sl, SL_IID_ENGINE, (void*)&EngineItf);
     CheckErr(res);
     /* Get the Audio IO DEVICE CAPABILITIES interface, which is also
        implicit */
     res = (*sl)->GetInterface(sl, SL_IID_AUDIOIODEVICECAPABILITIES,
-			      (void*)AudioIODeviceCapabilitiesItf); CheckErr(res);
+			      (void*)&AudioIODeviceCapabilitiesItf); CheckErr(res);
     numInputs = MAX_NUMBER_INPUT_DEVICES;
     res = (*AudioIODeviceCapabilitiesItf)->GetAvailableAudioInputs(
-								   AudioIODeviceCapabilitiesItf, numInputs, InputDeviceIDs); CheckErr(res);
+								   AudioIODeviceCapabilitiesItf, &numInputs, InputDeviceIDs); CheckErr(res);
     /* Search for either earpiece microphone or headset microphone input
        device - with a preference for the latter */
     for (i=0;i<numInputs; i++)
 	{
 	    res = (*AudioIODeviceCapabilitiesItf)-
 		>QueryAudioInputCapabilities(AudioIODeviceCapabilitiesItf,
-					     InputDeviceIDs[i], AudioInputDescriptor); CheckErr(res);
+					     InputDeviceIDs[i], &AudioInputDescriptor); CheckErr(res);
 	    if((AudioInputDescriptor.deviceConnection ==
-		SL_DEVCONNECTION_ATTACHED_WIRED)
-	       (AudioInputDescriptor.deviceScope == SL_DEVSCOPE_USER)
+		SL_DEVCONNECTION_ATTACHED_WIRED)&&
+	       (AudioInputDescriptor.deviceScope == SL_DEVSCOPE_USER)&&
 	       (AudioInputDescriptor.deviceLocation ==
 		SL_DEVLOCATION_HEADSET))
 		{
@@ -592,9 +578,9 @@ void TestAudioRecording(SLObjectItf sl)
 		    break;
 		}
 	    else if((AudioInputDescriptor.deviceConnection ==
-		     SL_DEVCONNECTION_INTEGRATED)
+		     SL_DEVCONNECTION_INTEGRATED)&&
 		    (AudioInputDescriptor.deviceScope ==
-		     SL_DEVSCOPE_USER)
+		     SL_DEVSCOPE_USER)&&
 		    (AudioInputDescriptor.deviceLocation ==
 		     SL_DEVLOCATION_HANDSET))
 		{
@@ -617,7 +603,7 @@ void TestAudioRecording(SLObjectItf sl)
 	}
     /* Get the optional DEVICE VOLUME interface from the engine */
     res = (*sl)->GetInterface(sl, SL_IID_DEVICEVOLUME,
-			      (void*)devicevolumeItf); CheckErr(res);
+			      (void*)&devicevolumeItf); CheckErr(res);
     /* Set recording volume of the microphone to -3 dB */
     res = (*devicevolumeItf)->SetVolume(devicevolumeItf, mic_deviceID, -
 					300); CheckErr(res);
@@ -626,24 +612,24 @@ void TestAudioRecording(SLObjectItf sl)
     locator_mic.deviceType	= SL_IODEVICE_AUDIOINPUT;
     locator_mic.deviceID	= mic_deviceID;
     locator_mic.device	        = NULL;
-    audioSource.pLocator 	= (void *)locator_mic;
+    audioSource.pLocator 	= (void *)&locator_mic;
     audioSource.pFormat         = NULL;
     /* Setup the data sink structure */
     uri.locatorType	= SL_DATALOCATOR_URI;
-    uri.URI	= (SLchar *) file:///recordsample.wav;
+    uri.URI	= (SLchar *) "file:///recordsample.wav";
     mime.formatType	= SL_DATAFORMAT_MIME;
-    mime.mimeType	= (SLchar *) audio/x-wav;
+    mime.mimeType	= (SLchar *) "audio/x-wav";
     mime.containerType	= SL_CONTAINERTYPE_WAV;
-    audioSink.pLocator	= (void *)uri;
-    audioSink.pFormat	= (void *)mime;
+    audioSink.pLocator	= (void *)&uri;
+    audioSink.pFormat	= (void *)&mime;
     /* Create audio recorder */
-    res = (*EngineItf)->CreateAudioRecorder(EngineItf, recorder,
-					    audioSource, audioSink, 0, iidArray, required); CheckErr(res);
+    res = (*EngineItf)->CreateAudioRecorder(EngineItf, &recorder,
+					    &audioSource, &audioSink, 0, iidArray, required); CheckErr(res);
     /* Realizing the recorder in synchronous mode. */
     res = (*recorder)->Realize(recorder, SL_BOOLEAN_FALSE); CheckErr(res);
     /* Get the RECORD interface - it is an implicit interface */
     res = (*recorder)->GetInterface(recorder, SL_IID_RECORD,
-				    (void*)recordItf); CheckErr(res);
+				    (void*)&recordItf); CheckErr(res);
     /* Setup to receive position event callbacks */
     res = (*recordItf)->RegisterCallback(recordItf, RecordEventCallback,
 					 NULL);
@@ -670,7 +656,7 @@ int sl_main( void )
     /* Create OpenSL ES engine in thread-safe mode */
     SLEngineOption EngineOption[] = {(SLuint32)
 				     SL_ENGINEOPTION_THREADSAFE, (SLuint32) SL_BOOLEAN_TRUE};
-    res = slCreateEngine( sl, 1, EngineOption, 0, NULL, NULL);
+    res = slCreateEngine( &sl, 1, EngineOption, 0, NULL, NULL);
     CheckErr(res);
     /* Realizing the SL Engine in synchronous mode. */
     res = (*sl)->Realize(sl, SL_BOOLEAN_FALSE); CheckErr(res);
@@ -680,7 +666,6 @@ int sl_main( void )
     exit(0);
 }
 
+	
     
 ```
-
-

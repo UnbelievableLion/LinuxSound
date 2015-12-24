@@ -1,6 +1,8 @@
-#  The data files 
+
+##  The data files 
 
 ###  General 
+
 
 The files DTSMUS00.DKD - DTSMUS07.DKD contain the music files.
       There are two formats for the music: Microsoft WMA files and 
@@ -8,11 +10,14 @@ The files DTSMUS00.DKD - DTSMUS07.DKD contain the music files.
       a singer. These turn out to be the WMA files. Those without
       a singer are MIDI files.
 
+
 The WMA files are just that. The MIDI files are slightly
       compressed and have to be decoded before they can be played.
 
+
 Each song block has at the beginning a section containing the lyrics.
       These are compressed and have to be decoded.
+
 
 The data for one song forms a record of contiguous bytes.
       These records are collected into blocks, also contiguous.
@@ -23,17 +28,19 @@ The data for one song forms a record of contiguous bytes.
 
 ###  My route into this 
 
+
 I came backwards into this and only arrived at understanding
       what others had accomplished after some time. So in case it
       helps any others, here is my route.
 
-I used the Unix command
- `strings`to discover the
+
+I used the Unix command `strings`to discover the
       songs information in DTSMUS10.DKD. On the other files it
       didn't seem to produce much. But there were ASCII strings
       in these files and
       some were repeated. So I wrote a shell pipeline to sort these
       strings and count them. The pipeline for one file was
+
 ```
 
 	
@@ -41,7 +48,10 @@ I used the Unix command
 	
       
 ```
+
+
 This produced results
+
 ```
 
 	
@@ -60,6 +70,7 @@ This produced results
 
 The results weren't inspiring. But when I looked inside the files
       to see where "Ser" was occurring, I also saw:
+
 ```
 
 	
@@ -76,13 +87,14 @@ The results weren't inspiring. But when I looked inside the files
 	
       
 ```
-Wow!
-two byte
-characters!
 
-The
- `strings`command has options to look at e.g. 2-byte 
+
+Wow! _two byte_ characters!
+
+
+The `strings`command has options to look at e.g. 2-byte 
       big-endian character strings. The command
+
 ```
 
 	
@@ -90,7 +102,10 @@ The
 	
       
 ```
+
+
 turned up
+
 ```
 
 	
@@ -105,14 +120,16 @@ turned up
 	
       
 ```
+
+
 These are all part of the WMA format.
 
-According to Gary Kessler's
- [
+
+According to Gary Kessler's [
 	FILE SIGNATURES TABLE
-      ] (http://www.garykessler.net/library/file_sigs.html)
-, 
+      ](http://www.garykessler.net/library/file_sigs.html) , 
       the signature of a WMA file is given by the header
+
 ```
 
 	
@@ -121,27 +138,27 @@ According to Gary Kessler's
 	
       
 ```
+
+
 and that pattern does occur, with the above strings appearing some time later.
 
-The spec for the ASF/WMA file format is at
- [
+
+The spec for the ASF/WMA file format is at [
 	Advanced Systems Format (ASF) Specification
-      ] (http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=14995)
-although you are advised not to read it in case you want to do anything
+      ](http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=14995) although you are advised not to read it in case you want to do anything
       open source with such files.
+
 
 So on that basis I could indentify the start of WMA files.
       The 4 bytes preceding each WMA file are the length of the
-      file. From that I could find the
-end
-of the file,
-      which turned out to be the start of a record for the
-next
-record containing some stuff and
+      file. From that I could find the _end_ of the file,
+      which turned out to be the start of a record for the _next_ record containing some stuff and
       then the next WMA file.
+
 
 In these records I could see patterns I couldn't understand,
       but also from byte 36 on I could see strings like
+
 ```
 
 	
@@ -158,26 +175,24 @@ In these records I could see patterns I couldn't understand,
 	
       
 ```
+
+
 Can you see "A.I.N.'.T" ( as ".PA.PI.PN.P'.PT")?
+
 
 But I couldn't figure out what the encoding was or how to
       find the table of song starts. That's when I was ready to look at
       the earlier stuff and understand how it applied to me.
-      (
- [
+      ( [
 	Understanding the HOTDOG files on DVD of California electronics
-      ] (http://old.nabble.com/Understanding-the-HOTDOG-files-on-DVD-of-California-electronics-td11359745.html)
-,
- [
+      ](http://old.nabble.com/Understanding-the-HOTDOG-files-on-DVD-of-California-electronics-td11359745.html) , [
 	Decoding JBK 6628 DVD Karaoke Disc
-      ] (http://old.nabble.com/Decoding-JBK-6628-DVD-Karaoke-Disc-td12261269.html)
-and
- [
+      ](http://old.nabble.com/Decoding-JBK-6628-DVD-Karaoke-Disc-td12261269.html) and [
 	Karaoke Huyndai 99
-      ] (http://board.midibuddy.net/showpost.php?p=533722&postcount=31)
-).
+      ](http://board.midibuddy.net/showpost.php?p=533722&postcount=31) ).
 
 ###  The super block 
+
 
 The file DTSMUS00.DKD starts with a bunch of nulls. At 0x200 it starts
       to kick in with data. This was identified as the start of a "table
@@ -187,12 +202,15 @@ The file DTSMUS00.DKD starts with a bunch of nulls. At 0x200 it starts
       sequence of nulls (for me at 0x5F4) and there are  less than 256 indexes 
       in the table.
 
+
 The value of these superblock entries seems to have changed in
       different versions. In the JBK disk and also on mine, the
       values have to be multiplied by 0x800 to give a "virtual offset"
       in the data files.
 
+
 To give meaning to this: on my disk at 0x200 is
+
 ```
 
 	
@@ -201,11 +219,14 @@ To give meaning to this: on my disk at 0x200 is
 	
       
 ```
+
+
 So the table values are 0x1, 0x86C, 0xFC1, 0x177A, ...
       The "virtual addresses" are  0x800, 
       0x436000 (0x86C * 0x800) and so on.
       If you go to these addresses, then before the address is a bunch of nulls,
       and at that address is data.
+
 
 Why I call them virtual addresses is because there are 8 data files
       on my DVD and most addresses are larger than any of the files.
@@ -217,6 +238,7 @@ Why I call them virtual addresses is because there are 8 data files
 
 ###  Song start tables 
 
+
 Each of the tables indexed from the super block is a table
       of song indexes. Each  table contains 4-byte indexes.
       Each table has at most 0x100 entries, or is terminated by a
@@ -225,19 +247,22 @@ Each of the tables indexed from the super block is a table
 
 ###  Locating song entry from song number 
 
+
 Given a song number such as 54154 "Here Comes The Sun" we can now find
       the song entry. Reduce the song number by one to 54153. It is a 16-bit
       number. The top 8 bits are the index of the song index table
       in the superblock.
       The bottom 8 bits are the index of the song entry in the song index table.
 
+
 Pseudocode:
+
 ```
 
 	
 	  songNumber = get number for song from DTSMUS20.DKD
 	  superBlockIdx = songNumber >>
-	  indexTableIdx = songNumber  0xFF
+	  indexTableIdx = songNumber & 0xFF
 
 	  seek(DTSMUS00.DKD, superBlockIdx) 
 	  superBlockValue = read 4-byte int from DTSMUS00.DKD
@@ -253,8 +278,8 @@ Pseudocode:
       
 ```
 
-
 ###  Song entries 
+
 
 Each song entry has a header and is followed by two blocks that I
       call the information block and the song data block.
@@ -263,24 +288,28 @@ Each song entry has a header and is followed by two blocks that I
       of the song data: 0x0800 is a WMA file while 0x0000 is a MIDI
       file.
 
+
 If the type code is 0x0 such as the Beatles "Help!" (song number 51765)
       then the information block has the length in the header block and starts
       12 bytes further in.
       The song data block immediately follows this.
 
+
 If the type code is 0x8000 then the information block starts 4 bytes in
       for the length given in the header. The song block starts on the next
       16-byte boundary from the end of the information block.
+
 
 The song block starts with a 4-byte header which is the length of the
       song data for all types.
 
 ###  Song data 
 
+
 If the song type is 0x8000 then the song data is a WMA file.
       All songs looked at have a singer included in this file.
+
 
 If the song type is 0x0 then (from the book) there is no singer
       in the songs looked at.
       The file is encoded, and decodes to a MIDI file.
-

@@ -1,19 +1,19 @@
-#  Port information 
+
+##  Port information 
+
 
 Jack uses ports which carry mono 32-bit data. Each port has a name as a string,
       and poperties such as input and output.
       Once a connection to a Jack server has been made, queries for ports known
-      to the server can be made using
- `jack_get_ports`.
-      If the arguments are
- `NULL`or zero then al ports are
+      to the server can be made using `jack_get_ports`.
+      If the arguments are `NULL`or zero then al ports are
       returned, or patterns can be used to restrict the port names returned.
-      Once a port name is found it can be turned into a
- `jack_port_t`and its properties can be queried.
+      Once a port name is found it can be turned into a `jack_port_t`and its properties can be queried.
 
-A program to do this is
- `listports.c`:
-```sh_cpp
+
+A program to do this is `listports.c`:
+
+```
 
 /** @file delay.c
  *
@@ -34,24 +34,24 @@ A program to do this is
 jack_client_t *client;
 
 void print_port_info(char *name) {
-    printf(Port name is %s\n, name);
+    printf("Port name is %s\n", name);
     jack_port_t *port =	jack_port_by_name (client, name);
     if (port == NULL) {
-	printf(No port by name %s\n, name);
+	printf("No port by name %s\n", name);
 	return;
     }
-    printf(  Type is %s\n, jack_port_type(port));
+    printf("  Type is %s\n", jack_port_type(port));
 
     int flags = jack_port_flags(port);
-    if (flags  JackPortIsInput) 
-	printf(  Is an input port\n);
+    if (flags & JackPortIsInput) 
+	printf("  Is an input port\n");
     else
-	printf(  Is an output port\n);
+	printf("  Is an output port\n");
     char **connections = jack_port_get_connections(port);
     char **c = connections;
-    printf(  Connected to:\n);
-    while ((c != NULL)  (*c != NULL)) {
-	printf(    %s\n, *c++);
+    printf("  Connected to:\n");
+    while ((c != NULL) && (*c != NULL)) {
+	printf("    %s\n", *c++);
     }
     if (connections != NULL)
 	jack_free(connections);
@@ -78,7 +78,7 @@ main ( int argc, char *argv[] )
     }
     else              /* use basename of argv[0] */
     {
-        client_name = strrchr ( argv[0], / );
+        client_name = strrchr ( argv[0], '/' );
         if ( client_name == 0 )
         {
             client_name = argv[0];
@@ -91,37 +91,37 @@ main ( int argc, char *argv[] )
 
     /* open a client connection to the JACK server */
 
-    client = jack_client_open ( client_name, options, status, server_name );
+    client = jack_client_open ( client_name, options, &status, server_name );
     if ( client == NULL )
     {
-        fprintf ( stderr, jack_client_open() failed, 
-                  status = 0x%2.0x\n, status );
-        if ( status  JackServerFailed )
+        fprintf ( stderr, "jack_client_open() failed, "
+                  "status = 0x%2.0x\n", status );
+        if ( status & JackServerFailed )
         {
-            fprintf ( stderr, Unable to connect to JACK server\n );
+            fprintf ( stderr, "Unable to connect to JACK server\n" );
         }
         exit ( 1 );
     }
-    if ( status  JackServerStarted )
+    if ( status & JackServerStarted )
     {
-        fprintf ( stderr, JACK server started\n );
+        fprintf ( stderr, "JACK server started\n" );
     }
-    if ( status  JackNameNotUnique )
+    if ( status & JackNameNotUnique )
     {
         client_name = jack_get_client_name ( client );
-        fprintf ( stderr, unique name `%s assigned\n, client_name );
+        fprintf ( stderr, "unique name `%s' assigned\n", client_name );
     }
 
     if ( jack_activate ( client ) )
     {
-        fprintf ( stderr, cannot activate client );
+        fprintf ( stderr, "cannot activate client" );
         exit ( 1 );
     }
 
      ports = jack_get_ports ( client, NULL, NULL, 0 );
     if ( ports == NULL )
     {
-        fprintf ( stderr, no ports\n );
+        fprintf ( stderr, "no ports\n" );
         exit ( 1 );
     }
     char **p = ports;
@@ -135,5 +135,3 @@ main ( int argc, char *argv[] )
 
       
 ```
-
-

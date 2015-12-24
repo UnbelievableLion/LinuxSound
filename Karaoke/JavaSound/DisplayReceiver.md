@@ -1,15 +1,20 @@
-#  DisplayReceiver 
+
+##  DisplayReceiver 
+
 
 The DisplayReceiver collects both ShortMessages as a Receiver
       and MetaMessages as a MetaEventListener. These are needed
       to see both the notes and the lyrics.
 
+
 The DisplayReceiver decodes the notes and text sent to it.
       In turn, it passes these to a MidiGUI to show them.
       This class is
+
 ```
 
-/**
+      
+      /**
  * DisplayReceiver
  *
  * Acts as a Midi receiver to the default Java Midi sequencer.
@@ -102,6 +107,6 @@ public class DisplayReceiver implements Receiver,
 
 }
 
+      
+    
 ```
-
-

@@ -1,32 +1,30 @@
-#  OpenMAX IL 
+
+##  OpenMAX IL 
 
 ###  Implementations 
 
+
 There are three implementations that I have been able to access.
+
 ####  Raspberry Pi 
+
 
 The Raspberry Pi has a Broadcom GPU (graphics processing unit) and
       Broadcom support OpenMAX IL. The include files needed to build applications
-      are in
- `/opt/vc/include/IL`,
- `/opt/vc/include`and
- `/opt/vc/include/interface/vcos/pthreads `.
-      The libraries that need to be linked are in the
- `/opt/vc/lib`directory and are
- `openmaxil`and
- `bcm_host`.
+      are in `/opt/vc/include/IL`, `/opt/vc/include`and `/opt/vc/include/interface/vcos/pthreads `.
+      The libraries that need to be linked are in the `/opt/vc/lib`directory and are `openmaxil`and `bcm_host`.
+
 
 The Broadcom libraries need additional code to be called as well as
       standard OpenMAX IL functions. In addition, there are a number of
       (legal) extensions to OpenMAX IL that are not found in the specification
-      or in other implementations. These are described in
- `/opt/vc/include/IL/OMX_Broadcom.h`.
-      For these reasons I define
- `RASPBERRY_PI`to allow
+      or in other implementations. These are described in `/opt/vc/include/IL/OMX_Broadcom.h`.
+      For these reasons I define `RASPBERRY_PI`to allow
       these to be dealt with.
 
-The compile line for e.g.
- `listcomponents.c`is
+
+The compile line for e.g. `listcomponents.c`is
+
 ```
 
 	
@@ -39,15 +37,11 @@ cc -g -DRASPBERRY_PI -I /opt/vc/include/IL -I /opt/vc/include \
 ```
 
 
-The Broadcom implementation is closed source. It appears to be a
- [
+The Broadcom implementation is closed source. It appears to be a [
 	thin wrapper
-      ] (http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590)
-around their GPU API, and they
- [
+      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590) around their GPU API, and they [
 	will not
-      ] (http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=276235#p276235)
-release any details of that API. This means that you cannot extend the set of
+      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=276235#p276235) release any details of that API. This means that you cannot extend the set of
       components, or the codecs supported, since there are no details of how to build new components.
       While the set of components is reasonable, at present there is no support for codecs
       other than PCM, and there is no support of non-GPU hardware such as USB soundcards.
@@ -55,17 +49,17 @@ release any details of that API. This means that you cannot extend the set of
 
  [
 	OtherCrashOverride
-      ] (http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590)
-says he has managed to get the Broadcom components running under the LIM
+      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590) says he has managed to get the Broadcom components running under the LIM
       implementation, but I haven't confirmed that yet.
 
 ####  Bellagio 
 
+
 The Bellagio library does not require additional code or have any extensions.
-      There are a few minor bugs, so I define
- `BELLAGIO`to handle them.
+      There are a few minor bugs, so I define `BELLAGIO`to handle them.
       I built from source, but didn't install, so the includes and libraries
       are in a funny place. My compile line is
+
 ```
 
 	
@@ -75,7 +69,10 @@ cc  -g -DBELLAGIO -I ../libomxil-bellagio-0.9.3/include/ \
 	
       
 ```
+
+
 and at run time
+
 ```
 
 	
@@ -90,8 +87,10 @@ The Bellagio code is open source.
 
 ####  LIM 
 
+
 Downloading the 1.1 version was a hassle  because the 1.1 download uses a Git repo that has
       disappeared (as of Feb, 2013). Instead you have to run
+
 ```
 
 	
@@ -103,22 +102,23 @@ Downloading the 1.1 version was a hassle  because the 1.1 download uses a Git re
 	
       
 ```
+
+
 "You have to copy the root.mk in build to a top level folder containing all 
       the code and rename it Makefile. The root.readme file has build instructions."
-      Thanks to
- [
+      Thanks to [
 	OtherCrashOverride
-      ] (http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=286516#p286516)
-for these instructions.
+      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=286516#p286516) for these instructions.
+
 
 Building the library had some minor hiccups. I had to comment out a couple
       of lines from one video file as it referred to non-existent structure fields,
-      and had to remove
- `-Werrors`from one
- `Makefile.am`as otherwise a warning about an unused variable would abort the compile.
+      and had to remove `-Werrors`from one `Makefile.am`as otherwise a warning about an unused variable would abort the compile.
+
 
 The library build puts files in a new directory in my HOME. I have found some
       minor bugs in the implementation so far. My compile line is
+
 ```
 
 	
@@ -128,7 +128,10 @@ cc -g -DLIM -I ../../lim-omx-1.1/LIM/limoi-core/include/ \
 	
       
 ```
+
+
 and at runtime,
+
 ```
 
 	
@@ -143,43 +146,36 @@ The LIM code is open source.
 
 ####  Hardware supported versions 
 
-A list of hardware supported versions is at
- [
+
+A list of hardware supported versions is at [
 	OpenMAX IL Conformant Products
-      ] (http://www.khronos.org/conformance/adopters/conformant-products#openmaxil)
-.
+      ](http://www.khronos.org/conformance/adopters/conformant-products#openmaxil) .
 
 ###  OpenMAX IL concepts 
 
+
 The OpenMAX IL API is quite distinct from that of OpenMAX AL.
-      The basic concept is of a
-Component
-, which is an audio/video
+      The basic concept is of a _Component_ , which is an audio/video
       (or other) processing unit of some type, such as a volume control, a mixer,
       an output device. Each Component has zero or more input and
-      output
-ports
-, and each port can have one or more
-buffers
-that carry data.
+      output _ports_ , and each port can have one or more _buffers_ that carry data.
+
 
 OpenMAX IL is typically meant for use by an A/V framework of some kind,
       such as OpenMAX AL. In addition to OpenMAX AL, there is curently
       a GStreamer plugin that uses OpenMAX IL underneath.
       But one can also build standalone applications where direct calls
       are made into the OpenMAX IL API. Collectively, these are all
-      known as
-IL clients
-.
+      known as _IL clients_ .
+
 
 The OpenMAX IL API is difficult to work with directly. Error messages are
       frequently quite useless and threads will block without explanation
-      until everything is
-exactly
-right - and silently blocking
+      until everything is _exactly_ right - and silently blocking
       doesn't give you any clues about what isn't right. In addition,
       the examples I have to work with don't follow the specification
       exactly correctly which can lead to much wasted time.
+
 
 OpenMAX IL components use buffers to carry data. A component will
       usually process data from an input buffer and place it on an
@@ -190,6 +186,7 @@ OpenMAX IL components use buffers to carry data. A component will
       for calling standard functions on the components, or for
       getting data in and out of components.
 
+
 While some of the OpenMAX IL calls are synchronous,
       those that require possibly substantial amounts of processing
       are asynchronous, communicating the results through
@@ -198,61 +195,53 @@ While some of the OpenMAX IL calls are synchronous,
       thread libraries and should be agnostic to how an IL client
       uses threads. The Bellagio examples use pthreads
       while the Broadcom examples for the Raspberry Pi use
-      Broadcom's
- [
+      Broadcom's [
 	VideoCore O/S (vcos) 
-      ] (https://github.com/raspberrypi/userland/blob/master/interface/vcos/vcos_semaphore.h)
-threads.
+      ](https://github.com/raspberrypi/userland/blob/master/interface/vcos/vcos_semaphore.h) threads.
+
 
 There are two mechanisms for getting data into and out of components.
       The first is where the IL client makes calls on the component.
       All components are required to support this mechanism.
-      The second is where a
-tunnel
-is set up between
+      The second is where a _tunnel_ is set up between
       two components for data to flow along a shared buffer.
       A component is not required to support this mechanism.
 
 ###  OpenMAX IL components 
 
+
 OpenMAX IL in 1.1.2 lists a number of standard components, including (for audio)
       a decoder, an encoder, a mixer, a reader, a renderer, a writer,
       a capturer and a processor.
-      An IL client gets such a component by calling
- `OMX_GetHandle()`,
+      An IL client gets such a component by calling `OMX_GetHandle()`,
       passing in the name of the component. This is a problem: the components
       do not have a standard name. The 1.1.2 specification says:
-Since components are requested by name, a naming convention is defined. OpenMAX IL
+
+
+   > Since components are requested by name, a naming convention is defined. OpenMAX IL
 	component names are zero terminated strings with the following format:
-	“OMX.
-<
-vendor_name
->
-.
-<
-vendor_specified_convention
->
-”.
+	“OMX.<vendor_name>.<vendor_specified_convention>”.
 	For example:
+
+
 OMX.CompanyABC.MP3Decoder.productXYZ
+
+
 No standardization among component names is dictated across different vendors.
+
 
 
 The Bellagio library (you need the source package to see these files) lists in
       its README only two audio components:
 
-+  OMX audio volume control
-
-
-+  OMX audio mixer component
-
++ OMX audio volume control
++ OMX audio mixer component
 
 and their names (from the example test files) are "OMX.st.volume.component" and 
-      "OMX.st.audio.mixer" respectively. The company behind Bellagio is
- [
+      "OMX.st.audio.mixer" respectively. The company behind Bellagio is [
 	STMicroelectronics
-      ] (http://www.st.com/internet/com/home/home.jsp)
-which explains the "st".
+      ](http://www.st.com/internet/com/home/home.jsp) which explains the "st".
+
 
 The Broadcom OpenMAX IL implementation used on the Raspberry Pi is much better
       documented. If you download the firmware-master file for the Raspberry Pi
@@ -266,43 +255,44 @@ The Broadcom OpenMAX IL implementation used on the Raspberry Pi is much better
       audio_render and
       audio_splitter.
 
+
 Many of the openMAX IL function calls in the Broadcom examples are 
       buried in Broadcom convenience functions
       such as
-```sh_cpp
+
+```
 
 	
-ilclient_create_component(st->client, st->audio_render, 
+ilclient_create_component(st->client, &st->audio_render, 
                          "audio_render", 
                          ILCLIENT_ENABLE_INPUT_BUFFERS | ILCLIENT_DISABLE_ALL_PORTS);
 	
       
 ```
-which wraps around
- `OMX_GetHandle()`. But at least the
- `ilclient.h`states "Component names as provided are automatically prefixed with
+
+
+which wraps around `OMX_GetHandle()`. But at least the `ilclient.h`states "Component names as provided are automatically prefixed with
       'OMX.broadcom.' before passing to the IL core.". So we can conclude that the real names
       are e.g. "OMX.broadcom.audio_render" etc.
 
-There is a simple way of programmatically getting the supported components.
-      First initialise the OpenMAX system by
- `OMX_init()`and then make calls to
- `OMX_ComponentNameEnum()`.
-      For successive index values it returns a unique name each time,
-      until it finally returns an error value of
- `OMX_ErrorNoMore`.
 
-Each component may support a number of
-roles
-. These are given by
- `OMX_GetRolesOfComponent`. The 1.1 specification lists classes
+There is a simple way of programmatically getting the supported components.
+      First initialise the OpenMAX system by `OMX_init()`and then make calls to `OMX_ComponentNameEnum()`.
+      For successive index values it returns a unique name each time,
+      until it finally returns an error value of `OMX_ErrorNoMore`.
+
+
+Each component may support a number of _roles_ . These are given by `OMX_GetRolesOfComponent`. The 1.1 specification lists classes
       of audio components and associated roles in section 8.6 "Standard Audio 
       Components". The LIM library matches these, while Bellagio and Broadcom
       do not.
 
-The program is listcomponents.c:
-```sh_cpp
 
+The program is listcomponents.c:
+
+```
+
+	
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -323,14 +313,14 @@ void listroles(char *name) {
     OMX_U8 *roles[32];
 
     /* get the number of roles by passing in a NULL roles param */
-    err = OMX_GetRolesOfComponent(name, numRoles, NULL);
+    err = OMX_GetRolesOfComponent(name, &numRoles, NULL);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, Getting roles failed\n, 0);
+	fprintf(stderr, "Getting roles failed\n", 0);
 	exit(1);
     }
-    printf(  Num roles is %d\n, numRoles);
+    printf("  Num roles is %d\n", numRoles);
     if (numRoles > 32) {
-	printf(Too many roles to list\n);
+	printf("Too many roles to list\n");
 	return;
     }
 
@@ -338,13 +328,13 @@ void listroles(char *name) {
     for (n = 0; n < numRoles; n++) {
 	roles[n] = malloc(OMX_MAX_STRINGNAME_SIZE);
     }
-    err = OMX_GetRolesOfComponent(name, numRoles, roles);
+    err = OMX_GetRolesOfComponent(name, &numRoles, roles);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, Getting roles failed\n, 0);
+	fprintf(stderr, "Getting roles failed\n", 0);
 	exit(1);
     }
     for (n = 0; n < numRoles; n++) {
-	printf(    role: %s\n, roles[n]);
+	printf("    role: %s\n", roles[n]);
 	free(roles[n]);
     }
 
@@ -352,7 +342,7 @@ void listroles(char *name) {
     for (i = 0; OMX_ErrorNoMore != err; i++) {
 	err = OMX_RoleOfComponentEnum(role, name, i);
 	if (OMX_ErrorNone == err) {
-	    printf(   Role of omponent is %s\n, role);
+	    printf("   Role of omponent is %s\n", role);
 	}
     } 
     */   
@@ -369,7 +359,7 @@ int main(int argc, char** argv) {
 
     err = OMX_Init();
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, OMX_Init() failed\n, 0);
+	fprintf(stderr, "OMX_Init() failed\n", 0);
 	exit(1);
     }
 
@@ -377,26 +367,28 @@ int main(int argc, char** argv) {
     for (i = 0; OMX_ErrorNoMore != err; i++) {
 	err = OMX_ComponentNameEnum(name, OMX_MAX_STRINGNAME_SIZE, i);
 	if (OMX_ErrorNone == err) {
-	    printf(Component is %s\n, name);
+	    printf("Component is %s\n", name);
 	    listroles(name);
 	}
     }
-    printf(No more components\n);
+    printf("No more components\n");
 
     /*
     i= 0 ;
     while (1) {
-	printf(Component %s\n, OMX_ComponentRegistered[i++]);
+	printf("Component %s\n", OMX_ComponentRegistered[i++]);
     }
     */
     exit(0);
 }
 
+	
       
 ```
 
 
 The output from the Bellagio library is
+
 ```
 
 	
@@ -452,11 +444,15 @@ No more components
 	
       
 ```
+
+
 which is not quite correct: the OpenMAX IL specification says that each somponent
       must appear once only, not repeated.
 
+
 The Raspberry Pi reports a large number of components but does not define a
       role for any of them:
+
 ```
 
 	
@@ -525,6 +521,7 @@ No more components
 
 
 The output from LIM is
+
 ```
 
 	
@@ -583,12 +580,13 @@ No more components
 
 ###  Getting information about an IL component 
 
+
 We will next look at how to get information about the OpenMAX IL
       system and any component that we use.
-      All IL clients must initialise OpenMAX IL by calling
- `OMX_Init()`.
+      All IL clients must initialise OpenMAX IL by calling `OMX_Init()`.
       Nearly all functions return error values, and the style used by Bellagio is
-```sh_cpp
+
+```
 
 	
   err = OMX_Init();
@@ -599,28 +597,26 @@ We will next look at how to get information about the OpenMAX IL
 	
       
 ```
+
+
 This looks like a reasonable style to me, so I follow it in the sequel.
 
-The next requirement is to get a
-handle
-to a component.
+
+The next requirement is to get a _handle_ to a component.
       This requires the vendor's name for the component,
-      which can be found using the
- `listcomponents.c`program above. The function
- `OMX_GetHandle`takes some parameters
-      including a set of
-callback
-functions. These are needed to
+      which can be found using the `listcomponents.c`program above. The function `OMX_GetHandle`takes some parameters
+      including a set of _callback_ functions. These are needed to
       track behaviour of the application, but are not needed for the example
       in this section. This code shows how to get a handle to the Bellagio Volume component:
-```sh_cpp
+
+```
 
 	
   OMX_HANDLETYPE handle;
   OMX_CALLBACKTYPE callbacks;
   OMX_ERRORTYPE err;
 
-  err = OMX_GetHandle(handle, "OMX.st.volume.component", NULL /*appPriv */, callbacks);
+  err = OMX_GetHandle(&handle, "OMX.st.volume.component", NULL /*appPriv */, &callbacks);
   if(err != OMX_ErrorNone) {
       fprintf(stderr, "OMX_GetHandle failed\n", 0);
       exit(1);
@@ -631,17 +627,13 @@ functions. These are needed to
 
 
 The component has ports and the ports have channels. Getting and setting
-      information about these is done by the functions
- `OMX_GetParameter()`,
- `OMX_SetParameter()`,
- `OMX_GetConfig()`and
- `OMX_GetConfig()`. The ...Parameter calls are made before the
+      information about these is done by the functions `OMX_GetParameter()`, `OMX_SetParameter()`, `OMX_GetConfig()`and `OMX_GetConfig()`. The ...Parameter calls are made before the
       component is "loaded", ...Config calls are made after it is loaded.
+
 
 C is not an O/O language and this is an ordinary function call (well, actually
       it's a macro). In an O/O language it would be a method of an object taking another
-      object as parameter as in
- `component.method(object)`.
+      object as parameter as in `component.method(object)`.
       In OpenMAX IL the Get/Set function takes the calling "object" as first parameter
       - the component,
       an indicator of what type of "object" the method's parameter is - 
@@ -650,24 +642,25 @@ C is not an O/O language and this is an ordinary function call (well, actually
       The index values are related to structures in Table 4-2
       "Audio Coding Types by Index" of the 1.1 specification.
 
+
 The calls take a (pointer to a) structure for filling in or extracting values.
       The structures are all normalised so that they share common fields such as the
-      size of the structure. In Bellagio examples, this is done by a macro
- `setHeader()`.
+      size of the structure. In Bellagio examples, this is done by a macro `setHeader()`.
       The structure passed in to get port information is usually a generic structure
-      of type
- `OMX_PORT_PARAM_TYPE`.
+      of type `OMX_PORT_PARAM_TYPE`.
       Some fields can be accessed directly; some need a typecast to a more specialised
       type; and some buried down in unions and have to be extracted.
+
 
 Ports are labelled by integer indices. There are different ports for different functions,
       such as audio, image, video and other.
       To get information about the starting value for audio ports, use:
-```sh_cpp
+
+```
 
 	
-  setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
-  err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, param);
+  setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
+  err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, &param);
   if(err != OMX_ErrorNone){
       fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
     exit(1);
@@ -679,22 +672,25 @@ Ports are labelled by integer indices. There are different ports for different f
 	
       
 ```
-The macro
- `setHeader`justs fills in header information such as version numbers,
+
+
+The macro `setHeader`justs fills in header information such as version numbers,
       and the size of the data structure.
+
 
 Particular ports may now be queried about their capablilies.
       We can query for the type of the port (audio or otherwise),
       the direction (input or output) and information
       about the MIME type supported.
-```sh_cpp
+
+```
 
 	
   OMX_PARAM_PORTDEFINITIONTYPE sPortDef;
 
-  setHeader(sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
+  setHeader(&sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
   sPortDef.nPortIndex = 0;
-  err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, sPortDef);
+  err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
   if(err != OMX_ErrorNone){
       fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
     exit(1);
@@ -723,55 +719,46 @@ Particular ports may now be queried about their capablilies.
 
 The Bellagio library returns "raw/audio" for the MIME type supported by
       its volume control component.
-      This is not a valid MIME type as listed by
- [
+      This is not a valid MIME type as listed by [
 	IANA MIME Media Types 
-      ] (http://www.iana.org/assignments/media-types)
-, though. The value returned from the encoding is zero,
-      corresponding to
- `OMX_AUDIO_CodingUnused`which also
+      ](http://www.iana.org/assignments/media-types) , though. The value returned from the encoding is zero,
+      corresponding to `OMX_AUDIO_CodingUnused`which also
       does not seem to be correct.
 
-If we try the same program on the Raspberry Pi component
- `audio_render`and on the LIM component
- `OMX.limoi.alsa_sink`we get NULL for the MIME type
-      but an encoding value of 2 which is
- `OMX_AUDIO_CodingPCM`.
-      PCM has a MIME type of
- `audio/L16`so NULL seems inappropriate.
+
+If we try the same program on the Raspberry Pi component `audio_render`and on the LIM component `OMX.limoi.alsa_sink`we get NULL for the MIME type
+      but an encoding value of 2 which is `OMX_AUDIO_CodingPCM`.
+      PCM has a MIME type of `audio/L16`so NULL seems inappropriate.
+
 
 An OpenMAX IL library allows a port to be queried for the data types it supports.
-      This is done by querying for a
- `OMX_AUDIO_PARAM_PORTFORMATTYPE`object using the index
- ` OMX_IndexParamAudioPortFormat`.
+      This is done by querying for a `OMX_AUDIO_PARAM_PORTFORMATTYPE`object using the index ` OMX_IndexParamAudioPortFormat`.
       According to the specification, for each index from zero upwards
-      a call to
- `GetParameter()`should return an encoding such as
- `OMX_AUDIO_CodingPCM`or
- `OMX_AUDIO_CodingMp3`until
-      there are no more supported formats, on which it returns
- `OMX_ErrorNoMore`.
+      a call to `GetParameter()`should return an encoding such as `OMX_AUDIO_CodingPCM`or `OMX_AUDIO_CodingMp3`until
+      there are no more supported formats, on which it returns `OMX_ErrorNoMore`.
 
-The Bellagio code returns a value of
- `OMX_AUDIO_CodingUnused`which is not correct. The LIM code does not set a value at all,
+
+The Bellagio code returns a value of `OMX_AUDIO_CodingUnused`which is not correct. The LIM code does not set a value at all,
       so you just get garbage. The Broadcom implementation works okay,
       but as discussed below returns values that are not actually supported.
       So there is limited value in this call...
 
+
 This code tests this:
-```sh_cpp
+
+```
 
 	
 void getSupportedAudioFormats(int indentLevel, int portNumber) {
     OMX_AUDIO_PARAM_PORTFORMATTYPE sAudioPortFormat;
 
-    setHeader(sAudioPortFormat, sizeof(OMX_AUDIO_PARAM_PORTFORMATTYPE));
+    setHeader(&sAudioPortFormat, sizeof(OMX_AUDIO_PARAM_PORTFORMATTYPE));
     sAudioPortFormat.nIndex = 0;
     sAudioPortFormat.nPortIndex = portNumber;
 
     printf("Supported audio formats are:\n");
     for(;;) {
-        err = OMX_GetParameter(handle, OMX_IndexParamAudioPortFormat, sAudioPortFormat);
+        err = OMX_GetParameter(handle, OMX_IndexParamAudioPortFormat, &sAudioPortFormat);
         if (err == OMX_ErrorNoMore) {
 	    printf("No more formats supported\n");
 	    return;
@@ -852,15 +839,17 @@ void getSupportedAudioFormats(int indentLevel, int portNumber) {
 	
       
 ```
-Note that the code contains enum values such as
- `OMX_AUDIO_CodingATRAC3`which are specific to the Broadcom library. These are legal values according to an
+
+
+Note that the code contains enum values such as `OMX_AUDIO_CodingATRAC3`which are specific to the Broadcom library. These are legal values according to an
       OpenMAX IL extension mechanism, but of course are not portable values.
 
-The Bellagio library incorrectly returns
- `OMX_AUDIO_CodingUnused`for every index value.
 
-The Broadcom library can return lots of values. For example, for the
- `audio_decode`component it returns
+The Bellagio library incorrectly returns `OMX_AUDIO_CodingUnused`for every index value.
+
+
+The Broadcom library can return lots of values. For example, for the `audio_decode`component it returns
+
 ```
 
 	
@@ -886,26 +875,32 @@ The Broadcom library can return lots of values. For example, for the
 	
       
 ```
+
+
 Regrettably, none of these are actually supported except for PCM.
-      According to
- [
-	jamesh] (http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=272804#p272804)
-in "OMX_AllocateBuffer fails for audio decoder component":
-The way it works is that the component passes back success for all the codecs it 
-	can
-potentially
-support. (i.e. all the codecs we've ever had going). 
+      According to [
+	jamesh](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=272804#p272804) in "OMX_AllocateBuffer fails for audio decoder component":
+
+
+   > The way it works is that the component passes back success for all the codecs it 
+	can _potentially_ support. (i.e. all the codecs we've ever had going). 
 	That is then constrained by what codecs are actually installed. 
 	It would be better to run time detect which codecs are present, 
 	but that code has never been written since its never been required.
 	It's also unlikely ever to be done as Broadcom no longer support 
 	audio codecs in this way - they have moved off the Videocore to 
 	the host CPU since they are now powerful enough to handle any audio decoding task
+
+
+
 That's kind of sad, really.
 
-Putting all the bits together gives the program info.c:
-```sh_cpp
 
+Putting all the bits together gives the program info.c:
+
+```
+
+	
 /**
    Based on code
    Copyright (C) 2007-2009 STMicroelectronics
@@ -936,7 +931,7 @@ OMX_VERSIONTYPE specVersion, compVersion;
 
 OMX_CALLBACKTYPE callbacks;
 
-#define indent {int n = 0; while (n++ < indentLevel*2) putchar( );}
+#define indent {int n = 0; while (n++ < indentLevel*2) putchar(' ');}
 
 static void setHeader(OMX_PTR header, OMX_U32 size) {
     /* header->nVersion */
@@ -958,30 +953,30 @@ static void setHeader(OMX_PTR header, OMX_U32 size) {
 
 void printState() {
     OMX_STATETYPE state;
-    err = OMX_GetState(handle, state);
+    err = OMX_GetState(handle, &state);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, Error on getting state\n);
+	fprintf(stderr, "Error on getting state\n");
 	exit(1);
     }
     switch (state) {
-    case OMX_StateLoaded: fprintf(stderr, StateLoaded\n); break;
-    case OMX_StateIdle: fprintf(stderr, StateIdle\n); break;
-    case OMX_StateExecuting: fprintf(stderr, StateExecuting\n); break;
-    case OMX_StatePause: fprintf(stderr, StatePause\n); break;
-    case OMX_StateWaitForResources: fprintf(stderr, StateWiat\n); break;
-    default:  fprintf(stderr, State unknown\n); break;
+    case OMX_StateLoaded: fprintf(stderr, "StateLoaded\n"); break;
+    case OMX_StateIdle: fprintf(stderr, "StateIdle\n"); break;
+    case OMX_StateExecuting: fprintf(stderr, "StateExecuting\n"); break;
+    case OMX_StatePause: fprintf(stderr, "StatePause\n"); break;
+    case OMX_StateWaitForResources: fprintf(stderr, "StateWiat\n"); break;
+    default:  fprintf(stderr, "State unknown\n"); break;
     }
 }
 
 OMX_ERRORTYPE setEncoding(int portNumber, OMX_AUDIO_CODINGTYPE encoding) {
     OMX_PARAM_PORTDEFINITIONTYPE sPortDef;
 
-    setHeader(sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
+    setHeader(&sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
     sPortDef.nPortIndex = portNumber;
     sPortDef.nPortIndex = portNumber;
-    err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, sPortDef);
+    err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
     if(err != OMX_ErrorNone){
-        fprintf(stderr, Error in getting OMX_PORT_DEFINITION_TYPE parameter\n,
+        fprintf(stderr, "Error in getting OMX_PORT_DEFINITION_TYPE parameter\n",
  0);
         exit(1);
     }
@@ -989,7 +984,7 @@ OMX_ERRORTYPE setEncoding(int portNumber, OMX_AUDIO_CODINGTYPE encoding) {
     sPortDef.format.audio.eEncoding = encoding;
     sPortDef.nBufferCountActual = sPortDef.nBufferCountMin;
 
-    err = OMX_SetParameter(handle, OMX_IndexParamPortDefinition, sPortDef);
+    err = OMX_SetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
     return err;
 }
 
@@ -999,23 +994,23 @@ void getPCMInformation(int indentLevel, int portNumber) {
 
     /* set it into PCM format before asking for PCM info */
     if (setEncoding(portNumber, OMX_AUDIO_CodingPCM) != OMX_ErrorNone) {
-	fprintf(stderr, Error in setting coding to PCM\n);
+	fprintf(stderr, "Error in setting coding to PCM\n");
 	return;
     }
        
-    setHeader(sPCMMode, sizeof(OMX_AUDIO_PARAM_PCMMODETYPE));
+    setHeader(&sPCMMode, sizeof(OMX_AUDIO_PARAM_PCMMODETYPE));
     sPCMMode.nPortIndex = portNumber;
-    err = OMX_GetParameter(handle, OMX_IndexParamAudioPcm, sPCMMode);
+    err = OMX_GetParameter(handle, OMX_IndexParamAudioPcm, &sPCMMode);
     if(err != OMX_ErrorNone){
-	indent printf(PCM mode unsupported\n);
+	indent printf("PCM mode unsupported\n");
     } else {
-	indent printf(  PCM default sampling rate %d\n, sPCMMode.nSamplingRate);
-	indent printf(  PCM default bits per sample %d\n, sPCMMode.nBitPerSample);
-	indent printf(  PCM default number of channels %d\n, sPCMMode.nChannels);
+	indent printf("  PCM default sampling rate %d\n", sPCMMode.nSamplingRate);
+	indent printf("  PCM default bits per sample %d\n", sPCMMode.nBitPerSample);
+	indent printf("  PCM default number of channels %d\n", sPCMMode.nChannels);
     }      
 
     /*
-    setHeader(sAudioPortFormat, sizeof(OMX_AUDIO_PARAM_PORTFORMATTYPE));
+    setHeader(&sAudioPortFormat, sizeof(OMX_AUDIO_PARAM_PORTFORMATTYPE));
     sAudioPortFormat.nIndex = 0;
     sAudioPortFormat.nPortIndex = portNumber;
     */
@@ -1028,19 +1023,19 @@ void getMP3Information(int indentLevel, int portNumber) {
 
     /* set it into MP3 format before asking for MP3 info */
     if (setEncoding(portNumber, OMX_AUDIO_CodingMP3) != OMX_ErrorNone) {
-	fprintf(stderr, Error in setting coding to MP3\n);
+	fprintf(stderr, "Error in setting coding to MP3\n");
 	return;
     }
     
-    setHeader(sMP3Mode, sizeof(OMX_AUDIO_PARAM_MP3TYPE));
+    setHeader(&sMP3Mode, sizeof(OMX_AUDIO_PARAM_MP3TYPE));
     sMP3Mode.nPortIndex = portNumber;
-    err = OMX_GetParameter(handle, OMX_IndexParamAudioMp3, sMP3Mode);
+    err = OMX_GetParameter(handle, OMX_IndexParamAudioMp3, &sMP3Mode);
     if(err != OMX_ErrorNone){
-	indent printf(MP3 mode unsupported\n);
+	indent printf("MP3 mode unsupported\n");
     } else {
-	indent printf(  MP3 default sampling rate %d\n, sMP3Mode.nSampleRate);
-	indent printf(  MP3 default bits per sample %d\n, sMP3Mode.nBitRate);
-	indent printf(  MP3 default number of channels %d\n, sMP3Mode.nChannels);
+	indent printf("  MP3 default sampling rate %d\n", sMP3Mode.nSampleRate);
+	indent printf("  MP3 default bits per sample %d\n", sMP3Mode.nBitRate);
+	indent printf("  MP3 default number of channels %d\n", sMP3Mode.nChannels);
     }   
 }
 
@@ -1048,93 +1043,93 @@ void getMP3Information(int indentLevel, int portNumber) {
 void getSupportedAudioFormats(int indentLevel, int portNumber) {
     OMX_AUDIO_PARAM_PORTFORMATTYPE sAudioPortFormat;
 
-    setHeader(sAudioPortFormat, sizeof(OMX_AUDIO_PARAM_PORTFORMATTYPE));
+    setHeader(&sAudioPortFormat, sizeof(OMX_AUDIO_PARAM_PORTFORMATTYPE));
     sAudioPortFormat.nIndex = 0;
     sAudioPortFormat.nPortIndex = portNumber;
 
 #ifdef LIM
-    printf(LIM doesnt set audio formats properly\n);
+    printf("LIM doesn't set audio formats properly\n");
     return;
 #endif
 
-    indent printf(Supported audio formats are:\n);
+    indent printf("Supported audio formats are:\n");
     for(;;) {
-        err = OMX_GetParameter(handle, OMX_IndexParamAudioPortFormat, sAudioPortFormat);
+        err = OMX_GetParameter(handle, OMX_IndexParamAudioPortFormat, &sAudioPortFormat);
         if (err == OMX_ErrorNoMore) {
-	    indent printf(No more formats supported\n);
+	    indent printf("No more formats supported\n");
 	    return;
         }
 
-	/* This shouldnt occur, but does with Broadcom library */
+	/* This shouldn't occur, but does with Broadcom library */
 	if (sAudioPortFormat.eEncoding == OMX_AUDIO_CodingUnused) {
-	     indent printf(No coding format returned\n);
+	     indent printf("No coding format returned\n");
 	     return;
 	}
 
 	switch (sAudioPortFormat.eEncoding) {
 	case OMX_AUDIO_CodingPCM:
-	    indent printf(Supported encoding is PCM\n);
+	    indent printf("Supported encoding is PCM\n");
 	    getPCMInformation(indentLevel+1, portNumber);
 	    break; 
 	case OMX_AUDIO_CodingVORBIS:
-	    indent printf(Supported encoding is Ogg Vorbis\n);
+	    indent printf("Supported encoding is Ogg Vorbis\n");
 	    break; 
 	case OMX_AUDIO_CodingMP3:
-	    indent printf(Supported encoding is MP3\n);
+	    indent printf("Supported encoding is MP3\n");
 	    getMP3Information(indentLevel+1, portNumber);
 	    break;
 #ifdef RASPBERRY_PI
 	case OMX_AUDIO_CodingFLAC:
-	    indent printf(Supported encoding is FLAC\n);
+	    indent printf("Supported encoding is FLAC\n");
 	    break; 
 	case OMX_AUDIO_CodingDDP:
-	    indent printf(Supported encoding is DDP\n);
+	    indent printf("Supported encoding is DDP\n");
 	    break; 
 	case OMX_AUDIO_CodingDTS:
-	    indent printf(Supported encoding is DTS\n);
+	    indent printf("Supported encoding is DTS\n");
 	    break; 
 	case OMX_AUDIO_CodingWMAPRO:
-	    indent printf(Supported encoding is WMAPRO\n);
+	    indent printf("Supported encoding is WMAPRO\n");
 	    break; 
 	case OMX_AUDIO_CodingATRAC3:
-	    indent printf(Supported encoding is ATRAC3\n);
+	    indent printf("Supported encoding is ATRAC3\n");
 	    break;
 	case OMX_AUDIO_CodingATRACX:
-	    indent printf(Supported encoding is ATRACX\n);
+	    indent printf("Supported encoding is ATRACX\n");
 	    break;
 	case OMX_AUDIO_CodingATRACAAL:
-	    indent printf(Supported encoding is ATRACAAL\n);
+	    indent printf("Supported encoding is ATRACAAL\n");
 	    break;
 #endif
 	case OMX_AUDIO_CodingAAC:
-	    indent printf(Supported encoding is AAC\n);
+	    indent printf("Supported encoding is AAC\n");
 	    break; 
 	case OMX_AUDIO_CodingWMA:
-	    indent printf(Supported encoding is WMA\n);
+	    indent printf("Supported encoding is WMA\n");
 	    break;
 	case OMX_AUDIO_CodingRA:
-	    indent printf(Supported encoding is RA\n);
+	    indent printf("Supported encoding is RA\n");
 	    break; 
 	case OMX_AUDIO_CodingAMR:
-	    indent printf(Supported encoding is AMR\n);
+	    indent printf("Supported encoding is AMR\n");
 	    break; 
 	case OMX_AUDIO_CodingEVRC:
-	    indent printf(Supported encoding is EVRC\n);
+	    indent printf("Supported encoding is EVRC\n");
 	    break;
 	case OMX_AUDIO_CodingG726:
-	    indent printf(Supported encoding is G726\n);
+	    indent printf("Supported encoding is G726\n");
 	    break;
 	case OMX_AUDIO_CodingMIDI:
-	    indent printf(Supported encoding is MIDI\n);
+	    indent printf("Supported encoding is MIDI\n");
 	    break;
 
 	    /*
 	case OMX_AUDIO_Coding:
-	    indent printf(Supported encoding is \n);
+	    indent printf("Supported encoding is \n");
 	    break;
 	    */
 	default:
-	    indent printf(Supported encoding is not PCM or MP3 or Vorbis, is 0x%X\n,
+	    indent printf("Supported encoding is not PCM or MP3 or Vorbis, is 0x%X\n",
 		  sAudioPortFormat.eEncoding);
 	}
         sAudioPortFormat.nIndex++;
@@ -1144,32 +1139,32 @@ void getSupportedAudioFormats(int indentLevel, int portNumber) {
 
 
 void getAudioPortInformation(int indentLevel, int nPort, OMX_PARAM_PORTDEFINITIONTYPE sPortDef) {
-    indent printf(Port %d requires %d buffers\n, nPort, sPortDef.nBufferCountMin); 
-    indent printf(Port %d has min buffer size %d bytes\n, nPort, sPortDef.nBufferSize); 
+    indent printf("Port %d requires %d buffers\n", nPort, sPortDef.nBufferCountMin); 
+    indent printf("Port %d has min buffer size %d bytes\n", nPort, sPortDef.nBufferSize); 
     
     if (sPortDef.eDir == OMX_DirInput) {
-	indent printf(Port %d is an input port\n, nPort);
+	indent printf("Port %d is an input port\n", nPort);
     } else {
-	indent printf(Port %d is an output port\n,  nPort);
+	indent printf("Port %d is an output port\n",  nPort);
     }
     switch (sPortDef.eDomain) {
     case OMX_PortDomainAudio:
-	indent printf(Port %d is an audio port\n, nPort);
-	indent printf(Port mimetype %s\n,
+	indent printf("Port %d is an audio port\n", nPort);
+	indent printf("Port mimetype %s\n",
 	       sPortDef.format.audio.cMIMEType);
 
 	switch (sPortDef.format.audio.eEncoding) {
 	case OMX_AUDIO_CodingPCM:
-	    indent printf(Port encoding is PCM\n);
+	    indent printf("Port encoding is PCM\n");
 	    break; 
 	case OMX_AUDIO_CodingVORBIS:
-	    indent printf(Port encoding is Ogg Vorbis\n);
+	    indent printf("Port encoding is Ogg Vorbis\n");
 	    break; 
 	case OMX_AUDIO_CodingMP3:
-	    indent printf(Port encoding is MP3\n);
+	    indent printf("Port encoding is MP3\n");
 	    break; 
 	default:
-	    indent printf(Port encoding is not PCM or MP3 or Vorbis, is %d\n,
+	    indent printf("Port encoding is not PCM or MP3 or Vorbis, is %d\n",
 		   sPortDef.format.audio.eEncoding);
 	}
 	getSupportedAudioFormats(indentLevel+1, nPort);
@@ -1177,7 +1172,7 @@ void getAudioPortInformation(int indentLevel, int nPort, OMX_PARAM_PORTDEFINITIO
 	break;
 	/* could put other port types here */
     default:
-	indent printf(Port %d is not an audio port\n,  nPort);
+	indent printf("Port %d is not an audio port\n",  nPort);
     }    
 }
 
@@ -1189,32 +1184,32 @@ void getAllAudioPortsInformation(int indentLevel) {
     int nPorts;
     int n;
 
-    setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
 
-    err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, param);
+    err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, &param);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in getting audio OMX_PORT_PARAM_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in getting audio OMX_PORT_PARAM_TYPE parameter\n", 0);
 	return;
     }
-    indent printf(Audio ports:\n);
+    indent printf("Audio ports:\n");
     indentLevel++;
 
     startPortNumber = param.nStartPortNumber;
     nPorts = param.nPorts;
     if (nPorts == 0) {
-	indent printf(No ports of this type\n);
+	indent printf("No ports of this type\n");
 	return;
     }
 
-    indent printf(Ports start on %d\n, startPortNumber);
-    indent printf(There are %d open ports\n, nPorts);
+    indent printf("Ports start on %d\n", startPortNumber);
+    indent printf("There are %d open ports\n", nPorts);
 
     for (n = 0; n < nPorts; n++) {
-	setHeader(sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
+	setHeader(&sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
 	sPortDef.nPortIndex = startPortNumber + n;
-	err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, sPortDef);
+	err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
 	if(err != OMX_ErrorNone){
-	    fprintf(stderr, Error in getting OMX_PORT_DEFINITION_TYPE parameter\n, 0);
+	    fprintf(stderr, "Error in getting OMX_PORT_DEFINITION_TYPE parameter\n", 0);
 	    exit(1);
 	}
 	getAudioPortInformation(indentLevel+1, startPortNumber + n, sPortDef);
@@ -1227,25 +1222,25 @@ void getAllVideoPortsInformation(int indentLevel) {
     int nPorts;
     int n;
 
-    setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
 
-    err = OMX_GetParameter(handle, OMX_IndexParamVideoInit, param);
+    err = OMX_GetParameter(handle, OMX_IndexParamVideoInit, &param);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in getting video OMX_PORT_PARAM_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in getting video OMX_PORT_PARAM_TYPE parameter\n", 0);
 	return;
     }
-    printf(Video ports:\n);
+    printf("Video ports:\n");
     indentLevel++;
 
     startPortNumber = param.nStartPortNumber;
     nPorts = param.nPorts;
     if (nPorts == 0) {
-	indent printf(No ports of this type\n);
+	indent printf("No ports of this type\n");
 	return;
     }
 
-    indent printf(Ports start on %d\n, startPortNumber);
-    indent printf(There are %d open ports\n, nPorts);
+    indent printf("Ports start on %d\n", startPortNumber);
+    indent printf("There are %d open ports\n", nPorts);
 }
 
 void getAllImagePortsInformation(int indentLevel) {
@@ -1254,25 +1249,25 @@ void getAllImagePortsInformation(int indentLevel) {
     int nPorts;
     int n;
 
-    setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
 
-    err = OMX_GetParameter(handle, OMX_IndexParamVideoInit, param);
+    err = OMX_GetParameter(handle, OMX_IndexParamVideoInit, &param);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in getting image OMX_PORT_PARAM_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in getting image OMX_PORT_PARAM_TYPE parameter\n", 0);
 	return;
     }
-    printf(Image ports:\n);
+    printf("Image ports:\n");
     indentLevel++;
 
     startPortNumber = param.nStartPortNumber;
     nPorts = param.nPorts;
     if (nPorts == 0) {
-	indent printf(No ports of this type\n);
+	indent printf("No ports of this type\n");
 	return;
     }
 
-    indent printf(Ports start on %d\n, startPortNumber);
-    indent printf(There are %d open ports\n, nPorts);
+    indent printf("Ports start on %d\n", startPortNumber);
+    indent printf("There are %d open ports\n", nPorts);
 }
 
 void getAllOtherPortsInformation(int indentLevel) {
@@ -1281,25 +1276,25 @@ void getAllOtherPortsInformation(int indentLevel) {
     int nPorts;
     int n;
 
-    setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
 
-    err = OMX_GetParameter(handle, OMX_IndexParamVideoInit, param);
+    err = OMX_GetParameter(handle, OMX_IndexParamVideoInit, &param);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in getting other OMX_PORT_PARAM_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in getting other OMX_PORT_PARAM_TYPE parameter\n", 0);
 	exit(1);
     }
-    printf(Other ports:\n);
+    printf("Other ports:\n");
     indentLevel++;
 
     startPortNumber = param.nStartPortNumber;
     nPorts = param.nPorts;
     if (nPorts == 0) {
-	indent printf(No ports of this type\n);
+	indent printf("No ports of this type\n");
 	return;
     }
 
-    indent printf(Ports start on %d\n, startPortNumber);
-    indent printf(There are %d open ports\n, nPorts);
+    indent printf("Ports start on %d\n", startPortNumber);
+    indent printf("There are %d open ports\n", nPorts);
 }
 
 int main(int argc, char** argv) {
@@ -1311,12 +1306,12 @@ int main(int argc, char** argv) {
     OMX_AUDIO_PARAM_PCMMODETYPE sPCMMode;
 
 #ifdef RASPBERRY_PI
-    char *componentName = OMX.broadcom.audio_mixer;
+    char *componentName = "OMX.broadcom.audio_mixer";
 #endif
 #ifdef LIM
-    char *componentName = OMX.limoi.alsa_sink;
+    char *componentName = "OMX.limoi.alsa_sink";
 #else
-    char *componentName = OMX.st.volume.component;
+    char *componentName = "OMX.st.volume.component";
 #endif
     unsigned char name[128]; /* spec says 128 is max name length */
     OMX_UUIDTYPE uid;
@@ -1335,22 +1330,22 @@ int main(int argc, char** argv) {
 
     err = OMX_Init();
     if(err != OMX_ErrorNone) {
-	fprintf(stderr, OMX_Init() failed\n, 0);
+	fprintf(stderr, "OMX_Init() failed\n", 0);
 	exit(1);
     }
     /** Ask the core for a handle to the volume control component
      */
-    err = OMX_GetHandle(handle, componentName, NULL /*app private data */, callbacks);
+    err = OMX_GetHandle(&handle, componentName, NULL /*app private data */, &callbacks);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, OMX_GetHandle failed\n, 0);
+	fprintf(stderr, "OMX_GetHandle failed\n", 0);
 	exit(1);
     }
-    err = OMX_GetComponentVersion(handle, name, compVersion, specVersion, uid);
+    err = OMX_GetComponentVersion(handle, name, &compVersion, &specVersion, &uid);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, OMX_GetComponentVersion failed\n, 0);
+	fprintf(stderr, "OMX_GetComponentVersion failed\n", 0);
 	exit(1);
     }
-    printf(Component name: %s version %d.%d, Spec version %d.%d\n,
+    printf("Component name: %s version %d.%d, Spec version %d.%d\n",
 	   name, compVersion.s.nVersionMajor,
 	   compVersion.s.nVersionMinor,
 	   specVersion.s.nVersionMajor,
@@ -1365,12 +1360,14 @@ int main(int argc, char** argv) {
     exit(0);
 }
 
+	
     
 ```
 
 
 The Makefile for the Bellagio version is
-```sh_cpp
+
+```
 
 	
 INCLUDES=-I ../libomxil-bellagio-0.9.3/include/
@@ -1385,6 +1382,7 @@ info: info.c
 
 
 The output using the Bellagio implementation is
+
 ```
 
 	
@@ -1418,7 +1416,8 @@ Other ports:
 
 
 The Makefile for the Raspberry Pi is
-```sh_cpp
+
+```
 
 	
 INCLUDES=-I /opt/vc/include/IL -I /opt/vc/include -I /opt/vc/include/interface/vcos/pthreads
@@ -1433,6 +1432,7 @@ info: info.c
 
 
 The output on the Raspberry Pi for the audio_render component is
+
 ```
 
 	
@@ -1463,7 +1463,8 @@ Other ports:
 
 
 The Makefile for LIM is
-```sh_cpp
+
+```
 
 	
 INCLUDES=-I ../../lim-omx-1.1/LIM/limoi-core/include/
@@ -1479,6 +1480,7 @@ info: info.c
 
 
 The output on LIM for the alsa_sink component is
+
 ```
 
 	
@@ -1503,6 +1505,7 @@ Error in getting other OMX_PORT_PARAM_TYPE parameter
 The LIM implementation throws errors when the component does not support
       a mode (here an audio component does not support video, image or other).
       This is against the 1.1 specification which says
+
 ```
 
 	
@@ -1516,11 +1519,13 @@ The LIM implementation throws errors when the component does not support
 	
       
 ```
-I suppose you could argue that an
- `alsa_sink`component isn't
+
+
+I suppose you could argue that an `alsa_sink`component isn't
       a standard one, so it is allowed. Well, okay...
 
 ###  Playing PCM audio files 
+
 
 Playing audio to an output device requires use of an "audio_render"
       device. This is one of the standard devices in the 1.1 specification,
@@ -1528,48 +1533,36 @@ Playing audio to an output device requires use of an "audio_render"
       Bellagio library. 
       LIM has a component "alsa_sink" which plays the same role.
 
+
 The structure of a program to play audio is
 
-+  initialise the library and audio render component
-
-
-+  Continually fill input buffers and ask the component
++ initialise the library and audio render component
++ Continually fill input buffers and ask the component
 	  to empty the buffers
-
-
-+  Capture events from the component saying that a buffer
++ Capture events from the component saying that a buffer
 	  has been emptied in order to schedule re-filling
 	  the buffer and requesting it to be emptied
++ Clean up on completion
 
-
-+  Clean up on completion
-
-
-
-
-Note that the Raspberry Pi audio render component will
-only
-play PCM data
+Note that the Raspberry Pi audio render component will _only_ play PCM data
       and that the LIM alsa_sink component only plays back at 44,100hz.
 
 ####  State 
 
+
 Initialising the component is a multi-step process that depends on 
-      the state of the component. Components are created in the
- `Loaded`state. They transition from one state to another
-      through an
- `OMX_SendCommand(handle, OMX_CommandStateSet, ` `<` `next state` `>` `, ` `<` `param` `>` `)`.
-      The next state from
- `Loaded`should be
- `Idle`and from there to
- `Executing`.  There are other states
+      the state of the component. Components are created in the `Loaded`state. They transition from one state to another
+      through an `OMX_SendCommand(handle, OMX_CommandStateSet, <next state>, <param>)`.
+      The next state from `Loaded`should be `Idle`and from there to `Executing`.  There are other states
       which we need not be concerned about.
+
 
 Requests to change state are asynchronous. The send command returns
       immediately (well, within 5 milliseconds). When the actual change
       of state occurs an event handler callback function is called.
 
 ####  Threads 
+
 
 Some commands require a component to be in a particular state.
       Requests to put a component into a state are asynchronous.
@@ -1578,23 +1571,23 @@ Some commands require a component to be in a particular state.
       by the client suspending operation of its thread until woken
       up by the state change occurring in the event handler.
 
+
+
+
+
 Linux/Unix has standardised on the Posix pthreads library for
       managing multiple threads. For our purposes we use two parts
-      from this library: the ability to place a
-mutex
-around critical sections, and the ability to suspend/wake up
-      threads based on
-conditions
-.
+      from this library: the ability to place a _mutex_ around critical sections, and the ability to suspend/wake up
+      threads based on _conditions_ .
       Pthreads are covered in many places, with a short and good
-      tutorial by Blaise Barney at
- [
+      tutorial by Blaise Barney at [
 	POSIX Threads Programming
-      ] (https://computing.llnl.gov/tutorials/pthreads/#Misc)
-.
+      ](https://computing.llnl.gov/tutorials/pthreads/#Misc) .
+
 
 The functions and data we use are
-```sh_cpp
+
+```
 
 	
 pthread_mutex_t mutex;
@@ -1602,18 +1595,18 @@ OMX_STATETYPE currentState = OMX_StateLoaded;
 pthread_cond_t stateCond;
 
 void waitFor(OMX_STATETYPE state) {
-    pthread_mutex_lock();
+    pthread_mutex_lock(&mutex);
     while (currentState != state)
-	pthread_cond_wait(, );
+	pthread_cond_wait(&stateCond, &mutex);
     fprintf(stderr, "Wait successfully completed\n");
-    pthread_mutex_unlock();
+    pthread_mutex_unlock(&mutex);
 }
 
 void wakeUp(OMX_STATETYPE newState) {
-    pthread_mutex_lock();
+    pthread_mutex_lock(&mutex);
     currentState = newState;
-    pthread_cond_signal();
-    pthread_mutex_unlock();
+    pthread_cond_signal(&stateCond);
+    pthread_mutex_unlock(&mutex);
 }
 pthread_mutex_t empty_mutex;
 int emptyState = 0;
@@ -1621,27 +1614,27 @@ OMX_BUFFERHEADERTYPE* pEmptyBuffer;
 pthread_cond_t emptyStateCond;
 
 void waitForEmpty() {
-    pthread_mutex_lock(_mutex);
+    pthread_mutex_lock(&empty_mutex);
     while (emptyState == 1)
-	pthread_cond_wait(, _mutex);
+	pthread_cond_wait(&emptyStateCond, &empty_mutex);
     emptyState = 1;
-    pthread_mutex_unlock(_mutex);
+    pthread_mutex_unlock(&empty_mutex);
 }
 
 void wakeUpEmpty(OMX_BUFFERHEADERTYPE* pBuffer) {
-    pthread_mutex_lock(_mutex);
+    pthread_mutex_lock(&empty_mutex);
     emptyState = 0;
     pEmptyBuffer = pBuffer;
-    pthread_cond_signal();
-    pthread_mutex_unlock(_mutex);
+    pthread_cond_signal(&emptyStateCond);
+    pthread_mutex_unlock(&empty_mutex);
 }
 
 void mutex_init() {
-    int n = pthread_mutex_init(, NULL);
+    int n = pthread_mutex_init(&mutex, NULL);
     if ( n != 0) {
 	fprintf(stderr, "Can't init state mutex\n");
     }
-    n = pthread_mutex_init(_mutex, NULL);
+    n = pthread_mutex_init(&empty_mutex, NULL);
     if ( n != 0) {
 	fprintf(stderr, "Can't init empty mutex\n");
     }
@@ -1650,8 +1643,8 @@ void mutex_init() {
       
 ```
 
-
 ####  Hungarian notation 
+
 
 Hungarian notation was invented by Charles Simonyi to add
       type or functional information to variable, structure and field
@@ -1659,91 +1652,69 @@ Hungarian notation was invented by Charles Simonyi to add
       A simplified form is used in OpenMAX IL by prefixing variables,
       fields, etc including the following:
 
-+  'n' prefixes a number of some kind
++ 'n' prefixes a number of some kind
++ 'p' prefixes a pointer
++ 's' prefixes a structure or a string
++ 'c' prefixes a callback function
 
-
-+  'p' prefixes a pointer
-
-
-+  's' prefixes a structure or a string
-
-
-+  'c' prefixes a callback function
-
-
-The value of such conventions is highly
- [
+The value of such conventions is highly [
 	debatable...
-      ] (http://en.wikipedia.org/wiki/Hungarian_notation)
-
+      ](http://en.wikipedia.org/wiki/Hungarian_notation) 
 
 ####  Callbacks 
+
 
 There are two types of callback functions relevant to this example:
       event callbacks which occur on changes of state and some other events,
       and empty buffer callbacks which occur when a component has emptied an input
       buffer. These are registered by
-```sh_cpp
+
+```
 
 	
 OMX_CALLBACKTYPE callbacks  = { .EventHandler = cEventHandler,
                                 .EmptyBufferDone = cEmptyBufferDone,
 };
-err = OMX_GetHandle(handle, componentName, NULL /*app private data */, callbacks);
+err = OMX_GetHandle(&handle, componentName, NULL /*app private data */, &callbacks);
 	
       
 ```
 
-
 ####  Component resources 
 
-Each component has a number of ports that have to be configured.
-      The ports are some of the component's
-resources
-.
-      Each port starts off as
-enabled
-, but may be set to
-disabled
-by
- `OMX_SendCommand(handle, OMX_CommandPortDisable, ` `<` `port number` `>` `, NULL)`.
 
-Enabled ports can have
-buffers
-allocated for transfer of data
-      into and out of the component. This can be done in two ways:
- `OMX_AllocateBuffer`asks the component to perform the
-      allocation for the client, while with
- `OMX_UseBuffer`the client hands a buffer to the component. As there may be buffer
+Each component has a number of ports that have to be configured.
+      The ports are some of the component's _resources_ .
+      Each port starts off as _enabled_ , but may be set to _disabled_ by `OMX_SendCommand(handle, OMX_CommandPortDisable, <port number>, NULL)`.
+
+
+Enabled ports can have _buffers_ allocated for transfer of data
+      into and out of the component. This can be done in two ways: `OMX_AllocateBuffer`asks the component to perform the
+      allocation for the client, while with `OMX_UseBuffer`the client hands a buffer to the component. As there may be buffer
       memory alignment issues, I prefer to let the component do the allocation.
 
+
 Here is a tricky part. In order to allocate or use buffers on a component,
-      a request must be made to transition from
- `Loaded`state
-      to
- `Idle`. So a call to
- `OMX_SendCommand(handle, OMX_CommandStateSet, OMX_StateIdle, ` `<` `param` `>` `)`.
-      must be made before buffers are allocated.
-But
-the transition
-      to
- `Idle`will not take place 
+      a request must be made to transition from `Loaded`state
+      to `Idle`. So a call to `OMX_SendCommand(handle, OMX_CommandStateSet, OMX_StateIdle, <param>)`.
+      must be made before buffers are allocated. _But_ the transition
+      to `Idle`will not take place 
       until each port is either disabled or all buffers
       for it are allocated.
 
+
 This last step cost me nearly a week of head scratching.
-      The
- `audio_render`component has two ports: an input audio
+      The `audio_render`component has two ports: an input audio
       port and a time update port. While I had configured the audio port
       correctly, I had not disabled the time port because I hadn't realised it had one. 
-      Consequently the transition to
- `Idle`never took place... Code to handle this
+      Consequently the transition to `Idle`never took place... Code to handle this
       is
-```sh_cpp
+
+```
 
 	
-    setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
-    err = OMX_GetParameter(handle, OMX_IndexParamOtherInit, param);
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
+    err = OMX_GetParameter(handle, OMX_IndexParamOtherInit, &param);
     if(err != OMX_ErrorNone){
 	fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
 	exit(1);
@@ -1763,12 +1734,13 @@ This last step cost me nearly a week of head scratching.
 
 
 Setting parameters for the audio port is
-```sh_cpp
+
+```
 
 	
     /** Get audio port information */
-    setHeader(, sizeof(OMX_PORT_PARAM_TYPE));
-    err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, );
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
+    err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, &param);
     if(err != OMX_ErrorNone){
 	fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
 	exit(1);
@@ -1780,9 +1752,9 @@ Setting parameters for the audio port is
 	exit(1);
     }
 
-    setHeader(, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
+    setHeader(&sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
     sPortDef.nPortIndex = startPortNumber;
-    err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, );
+    err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
     if(err != OMX_ErrorNone){
 	fprintf(stderr, "Error in getting OMX_PORT_DEFINITION_TYPE parameter\n", 0);
 	exit(1);
@@ -1805,7 +1777,7 @@ Setting parameters for the audio port is
     /* create minimum number of buffers for the port */
     nBuffers = sPortDef.nBufferCountActual = sPortDef.nBufferCountMin;
     printf("Number of bufers is %d\n", nBuffers);
-    err = OMX_SetParameter(handle, OMX_IndexParamPortDefinition, );
+    err = OMX_SetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
     if(err != OMX_ErrorNone){
 	fprintf(stderr, "Error in setting OMX_PORT_PARAM_TYPE parameter\n", 0);
 	exit(1);
@@ -1844,9 +1816,9 @@ Setting parameters for the audio port is
 
     waitFor(OMX_StateIdle);    
     /* try setting the encoding to PCM mode */
-    setHeader(, sizeof(OMX_AUDIO_PARAM_PCMMODETYPE));
+    setHeader(&sPCMMode, sizeof(OMX_AUDIO_PARAM_PCMMODETYPE));
     sPCMMode.nPortIndex = startPortNumber;
-    err = OMX_GetParameter(handle, OMX_IndexParamAudioPcm, );
+    err = OMX_GetParameter(handle, OMX_IndexParamAudioPcm, &sPCMMode);
     if(err != OMX_ErrorNone){
 	printf("PCM mode unsupported\n");
 	exit(1);
@@ -1859,21 +1831,21 @@ Setting parameters for the audio port is
       
 ```
 
-
 ####  Setting the output device 
+
 
 OpenMAX has a standard audio render component. But what device does it
       render to? The inbuilt sound card? A USB sound card? That is not
       a part of OpenMAX IL - there isn't even a way to list the audio
       devices - only the audio components.
 
+
 OpenMAX has an extension mechanism which can be used by an OpenMAX
       implementor to answer questions like this. The Broadcom core implementation
-      has extension types
- `OMX_CONFIG_BRCMAUDIODESTINATIONTYPE`(and
- `OMX_CONFIG_BRCMAUDIOSOURCETYPE`) which can be used
+      has extension types `OMX_CONFIG_BRCMAUDIODESTINATIONTYPE`(and `OMX_CONFIG_BRCMAUDIOSOURCETYPE`) which can be used
       to set the audio destination (source) device. Code to do this is
-```sh_cpp
+
+```
 
 	
 void setOutputDevice(const char *name) {
@@ -1881,10 +1853,10 @@ void setOutputDevice(const char *name) {
    OMX_CONFIG_BRCMAUDIODESTINATIONTYPE arDest;
 
    if (name && strlen(name) < sizeof(arDest.sName)) {
-       setHeader(, sizeof(OMX_CONFIG_BRCMAUDIODESTINATIONTYPE));
+       setHeader(&arDest, sizeof(OMX_CONFIG_BRCMAUDIODESTINATIONTYPE));
        strcpy((char *)arDest.sName, name);
        
-       err = OMX_SetParameter(handle, OMX_IndexConfigBrcmAudioDestination, );
+       err = OMX_SetParameter(handle, OMX_IndexConfigBrcmAudioDestination, &arDest);
        if (err != OMX_ErrorNone) {
 	   fprintf(stderr, "Error on setting audio destination\n");
 	   exit(1);
@@ -1897,11 +1869,7 @@ void setOutputDevice(const char *name) {
 
 
 Here is where it descends into murkiness again: the header file
-<
-IL/OMX_Broadcom.h
->
-states that the default value of
- `sName`is "local" but doesn't give any other values.
+      <IL/OMX_Broadcom.h> states that the default value of `sName`is "local" but doesn't give any other values.
       The Raspberry Pi forums say that this refers to the 3.5mm analog
       audio out, and that HDMI is chosen by using the value "hdmi".
       No other values are documented, and it seems that the Broadcom OpenMAX IL
@@ -1913,19 +1881,15 @@ states that the default value of
 
 ####  Main loop 
 
+
 Playing the audio file once all the ports are set up consists of
       filling buffers, waiting for them to empty and then re-filling them until 
       the data is finished. There are two possible styles:
 
-+  fill the buffers once in the main loop and then continue to
++ fill the buffers once in the main loop and then continue to
 	  fill and empty them in the empty buffer callbacks
-
-
-+  in the main loop, fill and empty the buffers continually,
++ in the main loop, fill and empty the buffers continually,
 	  waiting between each fill for the buffer to empty
-
-
-
 
 The Bellagio example use the first technique. However, the 1.2 specification says that
       "...the IL client shall not
@@ -1934,8 +1898,10 @@ The Bellagio example use the first technique. However, the 1.2 specification say
       but use a non-standard call to find the latency and delay for that time.
       It is better to just set up more pthreads conditions and block on those.
 
+
 This leads to a main loop of
-```sh_cpp
+
+```
 
 	
     emptyState = 1;
@@ -1967,12 +1933,14 @@ This leads to a main loop of
       
 ```
 
-
 ####  Complete program 
 
-The complete program is
-```sh_cpp
 
+The complete program is
+
+```
+
+	
 /**
    Based on code
    Copyright (C) 2007-2009 STMicroelectronics
@@ -2015,17 +1983,17 @@ OMX_STATETYPE currentState = OMX_StateLoaded;
 pthread_cond_t stateCond;
 
 void waitFor(OMX_STATETYPE state) {
-    pthread_mutex_lock(mutex);
+    pthread_mutex_lock(&mutex);
     while (currentState != state)
-	pthread_cond_wait(stateCond, mutex);
-    pthread_mutex_unlock(mutex);
+	pthread_cond_wait(&stateCond, &mutex);
+    pthread_mutex_unlock(&mutex);
 }
 
 void wakeUp(OMX_STATETYPE newState) {
-    pthread_mutex_lock(mutex);
+    pthread_mutex_lock(&mutex);
     currentState = newState;
-    pthread_cond_signal(stateCond);
-    pthread_mutex_unlock(mutex);
+    pthread_cond_signal(&stateCond);
+    pthread_mutex_unlock(&mutex);
 }
 
 pthread_mutex_t empty_mutex;
@@ -2034,38 +2002,38 @@ OMX_BUFFERHEADERTYPE* pEmptyBuffer;
 pthread_cond_t emptyStateCond;
 
 void waitForEmpty() {
-    pthread_mutex_lock(empty_mutex);
+    pthread_mutex_lock(&empty_mutex);
     while (emptyState == 1)
-	pthread_cond_wait(emptyStateCond, empty_mutex);
+	pthread_cond_wait(&emptyStateCond, &empty_mutex);
     emptyState = 1;
-    pthread_mutex_unlock(empty_mutex);
+    pthread_mutex_unlock(&empty_mutex);
 }
 
 void wakeUpEmpty(OMX_BUFFERHEADERTYPE* pBuffer) {
-    pthread_mutex_lock(empty_mutex);
+    pthread_mutex_lock(&empty_mutex);
     emptyState = 0;
     pEmptyBuffer = pBuffer;
-    pthread_cond_signal(emptyStateCond);
-    pthread_mutex_unlock(empty_mutex);
+    pthread_cond_signal(&emptyStateCond);
+    pthread_mutex_unlock(&empty_mutex);
 }
 
 void mutex_init() {
-    int n = pthread_mutex_init(mutex, NULL);
+    int n = pthread_mutex_init(&mutex, NULL);
     if ( n != 0) {
-	fprintf(stderr, Cant init state mutex\n);
+	fprintf(stderr, "Can't init state mutex\n");
     }
-    n = pthread_mutex_init(empty_mutex, NULL);
+    n = pthread_mutex_init(&empty_mutex, NULL);
     if ( n != 0) {
-	fprintf(stderr, Cant init empty mutex\n);
+	fprintf(stderr, "Can't init empty mutex\n");
     }
 }
 
 static void display_help() {
-    fprintf(stderr, Usage: render input_file);
+    fprintf(stderr, "Usage: render input_file");
 }
 
 
-/** Gets the file descriptors size
+/** Gets the file descriptor's size
  * @return the size of the file. If size cannot be computed
  * (i.e. stdin, zero is returned)
  */
@@ -2075,9 +2043,9 @@ static int getFileSize(int fd) {
     int err;
 
     /* Obtain input file length */
-    err = fstat(fd, input_file_stat);
+    err = fstat(fd, &input_file_stat);
     if(err){
-	fprintf(stderr, fstat failed,0);
+	fprintf(stderr, "fstat failed",0);
 	exit(-1);
     }
     return input_file_stat.st_size;
@@ -2091,28 +2059,28 @@ OMX_ERRORTYPE cEventHandler(
 			    OMX_U32 Data2,
 			    OMX_PTR pEventData) {
 
-    fprintf(stderr, Hi there, I am in the %s callback\n, __func__);
+    fprintf(stderr, "Hi there, I am in the %s callback\n", __func__);
     if(eEvent == OMX_EventCmdComplete) {
 	if (Data1 == OMX_CommandStateSet) {
-	    fprintf(stderr, Component State changed in , 0);
+	    fprintf(stderr, "Component State changed in ", 0);
 	    switch ((int)Data2) {
 	    case OMX_StateInvalid:
-		fprintf(stderr, OMX_StateInvalid\n, 0);
+		fprintf(stderr, "OMX_StateInvalid\n", 0);
 		break;
 	    case OMX_StateLoaded:
-		fprintf(stderr, OMX_StateLoaded\n, 0);
+		fprintf(stderr, "OMX_StateLoaded\n", 0);
 		break;
 	    case OMX_StateIdle:
-		fprintf(stderr, OMX_StateIdle\n,0);
+		fprintf(stderr, "OMX_StateIdle\n",0);
 		break;
 	    case OMX_StateExecuting:
-		fprintf(stderr, OMX_StateExecuting\n,0);
+		fprintf(stderr, "OMX_StateExecuting\n",0);
 		break;
 	    case OMX_StatePause:
-		fprintf(stderr, OMX_StatePause\n,0);
+		fprintf(stderr, "OMX_StatePause\n",0);
 		break;
 	    case OMX_StateWaitForResources:
-		fprintf(stderr, OMX_StateWaitForResources\n,0);
+		fprintf(stderr, "OMX_StateWaitForResources\n",0);
 		break;
 	    }
 	    wakeUp((int) Data2);
@@ -2126,8 +2094,8 @@ OMX_ERRORTYPE cEventHandler(
      
 	}
     } else {
-	fprintf(stderr, Param1 is %i\n, (int)Data1);
-	fprintf(stderr, Param2 is %i\n, (int)Data2);
+	fprintf(stderr, "Param1 is %i\n", (int)Data1);
+	fprintf(stderr, "Param2 is %i\n", (int)Data2);
     }
 
     return OMX_ErrorNone;
@@ -2138,12 +2106,12 @@ OMX_ERRORTYPE cEmptyBufferDone(
 			       OMX_PTR pAppData,
 			       OMX_BUFFERHEADERTYPE* pBuffer) {
 
-    fprintf(stderr, Hi there, I am in the %s callback.\n, __func__);
+    fprintf(stderr, "Hi there, I am in the %s callback.\n", __func__);
     if (bEOS) {
-	fprintf(stderr, Buffers emptied, exiting\n);
+	fprintf(stderr, "Buffers emptied, exiting\n");
     }
     wakeUpEmpty(pBuffer);
-    fprintf(stderr, Exiting callback\n);
+    fprintf(stderr, "Exiting callback\n");
 
     return OMX_ErrorNone;
 }
@@ -2154,18 +2122,18 @@ OMX_CALLBACKTYPE callbacks  = { .EventHandler = cEventHandler,
 
 void printState() {
     OMX_STATETYPE state;
-    err = OMX_GetState(handle, state);
+    err = OMX_GetState(handle, &state);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, Error on getting state\n);
+	fprintf(stderr, "Error on getting state\n");
 	exit(1);
     }
     switch (state) {
-    case OMX_StateLoaded: fprintf(stderr, StateLoaded\n); break;
-    case OMX_StateIdle: fprintf(stderr, StateIdle\n); break;
-    case OMX_StateExecuting: fprintf(stderr, StateExecuting\n); break;
-    case OMX_StatePause: fprintf(stderr, StatePause\n); break;
-    case OMX_StateWaitForResources: fprintf(stderr, StateWiat\n); break;
-    default:  fprintf(stderr, State unknown\n); break;
+    case OMX_StateLoaded: fprintf(stderr, "StateLoaded\n"); break;
+    case OMX_StateIdle: fprintf(stderr, "StateIdle\n"); break;
+    case OMX_StateExecuting: fprintf(stderr, "StateExecuting\n"); break;
+    case OMX_StatePause: fprintf(stderr, "StatePause\n"); break;
+    case OMX_StateWaitForResources: fprintf(stderr, "StateWiat\n"); break;
+    default:  fprintf(stderr, "State unknown\n"); break;
     }
 }
 
@@ -2189,7 +2157,7 @@ static void setHeader(OMX_PTR header, OMX_U32 size) {
 }
 
 /**
- * Disable unwanted ports, or we cant transition to Idle state
+ * Disable unwanted ports, or we can't transition to Idle state
  */
 void disablePort(OMX_INDEXTYPE paramType) {
     OMX_PORT_PARAM_TYPE param;
@@ -2197,21 +2165,21 @@ void disablePort(OMX_INDEXTYPE paramType) {
     int startPortNumber;
     int n;
 
-    setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
-    err = OMX_GetParameter(handle, paramType, param);
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
+    err = OMX_GetParameter(handle, paramType, &param);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in getting OMX_PORT_PARAM_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
 	exit(1);
     }
     startPortNumber = ((OMX_PORT_PARAM_TYPE)param).nStartPortNumber;
     nPorts = ((OMX_PORT_PARAM_TYPE)param).nPorts;
     if (nPorts > 0) {
-	fprintf(stderr, Other has %d ports\n, nPorts);
+	fprintf(stderr, "Other has %d ports\n", nPorts);
 	/* and disable it */
 	for (n = 0; n < nPorts; n++) {
 	    err = OMX_SendCommand(handle, OMX_CommandPortDisable, n + startPortNumber, NULL);
 	    if (err != OMX_ErrorNone) {
-		fprintf(stderr, Error on setting port to disabled\n);
+		fprintf(stderr, "Error on setting port to disabled\n");
 		exit(1);
 	    }
 	}
@@ -2219,18 +2187,18 @@ void disablePort(OMX_INDEXTYPE paramType) {
 }
 
 #ifdef RASPBERRY_PI
-/* For the RPi name can be hdmi or local */
+/* For the RPi name can be "hdmi" or "local" */
 void setOutputDevice(const char *name) {
    int32_t success = -1;
    OMX_CONFIG_BRCMAUDIODESTINATIONTYPE arDest;
 
-   if (name  strlen(name) < sizeof(arDest.sName)) {
-       setHeader(arDest, sizeof(OMX_CONFIG_BRCMAUDIODESTINATIONTYPE));
+   if (name && strlen(name) < sizeof(arDest.sName)) {
+       setHeader(&arDest, sizeof(OMX_CONFIG_BRCMAUDIODESTINATIONTYPE));
        strcpy((char *)arDest.sName, name);
        
-       err = OMX_SetParameter(handle, OMX_IndexConfigBrcmAudioDestination, arDest);
+       err = OMX_SetParameter(handle, OMX_IndexConfigBrcmAudioDestination, &arDest);
        if (err != OMX_ErrorNone) {
-	   fprintf(stderr, Error on setting audio destination\n);
+	   fprintf(stderr, "Error on setting audio destination\n");
 	   exit(1);
        }
    }
@@ -2240,19 +2208,19 @@ void setOutputDevice(const char *name) {
 void setPCMMode(int startPortNumber) {
     OMX_AUDIO_PARAM_PCMMODETYPE sPCMMode;
  
-    setHeader(sPCMMode, sizeof(OMX_AUDIO_PARAM_PCMMODETYPE));
+    setHeader(&sPCMMode, sizeof(OMX_AUDIO_PARAM_PCMMODETYPE));
     sPCMMode.nPortIndex = startPortNumber;
     sPCMMode.nSamplingRate = 48000;
     sPCMMode.nChannels;
 
-    err = OMX_SetParameter(handle, OMX_IndexParamAudioPcm, sPCMMode);
+    err = OMX_SetParameter(handle, OMX_IndexParamAudioPcm, &sPCMMode);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, PCM mode unsupported\n);
+	fprintf(stderr, "PCM mode unsupported\n");
 	return;
     } else {
-	fprintf(stderr, PCM mode supported\n);
-	fprintf(stderr, PCM sampling rate %d\n, sPCMMode.nSamplingRate);
-	fprintf(stderr, PCM nChannels %d\n, sPCMMode.nChannels);
+	fprintf(stderr, "PCM mode supported\n");
+	fprintf(stderr, "PCM sampling rate %d\n", sPCMMode.nSamplingRate);
+	fprintf(stderr, "PCM nChannels %d\n", sPCMMode.nChannels);
     } 
 }
 
@@ -2266,10 +2234,10 @@ int main(int argc, char** argv) {
     OMX_BUFFERHEADERTYPE **inBuffers;
 
 #ifdef RASPBERRY_PI
-    char *componentName = OMX.broadcom.audio_render;
+    char *componentName = "OMX.broadcom.audio_render";
 #endif
 #ifdef LIM
-    char *componentName = OMX.limoi.alsa_sink;
+    char *componentName = "OMX.limoi.alsa_sink";
 #endif
     unsigned char name[OMX_MAX_STRINGNAME_SIZE];
     OMX_UUIDTYPE uid;
@@ -2281,7 +2249,7 @@ int main(int argc, char** argv) {
     bcm_host_init();
 # endif
 
-    fprintf(stderr, Thread id is %p\n, pthread_self());
+    fprintf(stderr, "Thread id is %p\n", pthread_self());
     if(argc < 2){
 	display_help();
 	exit(1);
@@ -2289,7 +2257,7 @@ int main(int argc, char** argv) {
 
     fd = open(argv[1], O_RDONLY);
     if(fd < 0){
-	perror(Error opening input file\n);
+	perror("Error opening input file\n");
 	exit(1);
     }
     filesize = getFileSize(fd);
@@ -2297,19 +2265,19 @@ int main(int argc, char** argv) {
 
     err = OMX_Init();
     if(err != OMX_ErrorNone) {
-	fprintf(stderr, OMX_Init() failed\n, 0);
+	fprintf(stderr, "OMX_Init() failed\n", 0);
 	exit(1);
     }
     /** Ask the core for a handle to the audio render component
      */
-    err = OMX_GetHandle(handle, componentName, NULL /*app private data */, callbacks);
+    err = OMX_GetHandle(&handle, componentName, NULL /*app private data */, &callbacks);
     if(err != OMX_ErrorNone) {
-	fprintf(stderr, OMX_GetHandle failed\n, 0);
+	fprintf(stderr, "OMX_GetHandle failed\n", 0);
 	exit(1);
     }
-    err = OMX_GetComponentVersion(handle, name, compVersion, specVersion, uid);
+    err = OMX_GetComponentVersion(handle, name, &compVersion, &specVersion, &uid);
     if(err != OMX_ErrorNone) {
-	fprintf(stderr, OMX_GetComponentVersion failed\n, 0);
+	fprintf(stderr, "OMX_GetComponentVersion failed\n", 0);
 	exit(1);
     }
 
@@ -2317,76 +2285,76 @@ int main(int argc, char** argv) {
     disablePort(OMX_IndexParamOtherInit);
 
     /** Get audio port information */
-    setHeader(param, sizeof(OMX_PORT_PARAM_TYPE));
-    err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, param);
+    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
+    err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, &param);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in getting OMX_PORT_PARAM_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
 	exit(1);
     }
     startPortNumber = ((OMX_PORT_PARAM_TYPE)param).nStartPortNumber;
     nPorts = ((OMX_PORT_PARAM_TYPE)param).nPorts;
     if (nPorts > 1) {
-	fprintf(stderr, Render device has more than one port\n);
+	fprintf(stderr, "Render device has more than one port\n");
 	exit(1);
     }
 
     /* Get and check port information */
-    setHeader(sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
+    setHeader(&sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
     sPortDef.nPortIndex = startPortNumber;
-    err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, sPortDef);
+    err = OMX_GetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in getting OMX_PORT_DEFINITION_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in getting OMX_PORT_DEFINITION_TYPE parameter\n", 0);
 	exit(1);
     }
     if (sPortDef.eDomain != OMX_PortDomainAudio) {
-	fprintf(stderr, Port %d is not an audio port\n, startPortNumber);
+	fprintf(stderr, "Port %d is not an audio port\n", startPortNumber);
 	exit(1);
     } 
       
     if (sPortDef.eDir != OMX_DirInput) {
-	fprintf(stderr, Port is not an input port\n);
+	fprintf(stderr, "Port is not an input port\n");
 	exit(1);
     }
     if (sPortDef.format.audio.eEncoding == OMX_AUDIO_CodingPCM) {
-	fprintf(stderr, Port encoding is PCM\n); 
+	fprintf(stderr, "Port encoding is PCM\n"); 
     }    else {
-	fprintf(stderr, Port has unknown encoding\n);
+	fprintf(stderr, "Port has unknown encoding\n");
     }
 
     /* Create minimum number of buffers for the port */
     nBuffers = sPortDef.nBufferCountActual = sPortDef.nBufferCountMin;
-    fprintf(stderr, Number of bufers is %d\n, nBuffers);
-    err = OMX_SetParameter(handle, OMX_IndexParamPortDefinition, sPortDef);
+    fprintf(stderr, "Number of bufers is %d\n", nBuffers);
+    err = OMX_SetParameter(handle, OMX_IndexParamPortDefinition, &sPortDef);
     if(err != OMX_ErrorNone){
-	fprintf(stderr, Error in setting OMX_PORT_PARAM_TYPE parameter\n, 0);
+	fprintf(stderr, "Error in setting OMX_PORT_PARAM_TYPE parameter\n", 0);
 	exit(1);
     }
     if (sPortDef.bEnabled) {
-	fprintf(stderr, Port is enabled\n);
+	fprintf(stderr, "Port is enabled\n");
     } else {
-	fprintf(stderr, Port is not enabled\n);
+	fprintf(stderr, "Port is not enabled\n");
     }
 
     /* call to put state into idle before allocating buffers */
     err = OMX_SendCommand(handle, OMX_CommandStateSet, OMX_StateIdle, NULL);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, Error on setting state to idle\n);
+	fprintf(stderr, "Error on setting state to idle\n");
 	exit(1);
     }
  
     err = OMX_SendCommand(handle, OMX_CommandPortEnable, startPortNumber, NULL);
     if (err != OMX_ErrorNone) {
-	fprintf(stderr, Error on setting port to enabled\n);
+	fprintf(stderr, "Error on setting port to enabled\n");
 	exit(1);
     }
 
     /* Configure buffers for the port */
     nBufferSize = sPortDef.nBufferSize;
-    fprintf(stderr, %d buffers of size is %d\n, nBuffers, nBufferSize);
+    fprintf(stderr, "%d buffers of size is %d\n", nBuffers, nBufferSize);
 
     inBuffers = malloc(nBuffers * sizeof(OMX_BUFFERHEADERTYPE *));
     if (inBuffers == NULL) {
-	fprintf(stderr, Cant allocate buffers\n);
+	fprintf(stderr, "Can't allocate buffers\n");
 	exit(1);
     }
 
@@ -2394,11 +2362,11 @@ int main(int argc, char** argv) {
 	err = OMX_AllocateBuffer(handle, inBuffers+n, startPortNumber, NULL,
 				 nBufferSize);
 	if (err != OMX_ErrorNone) {
-	    fprintf(stderr, Error on AllocateBuffer in 1%i\n, err);
+	    fprintf(stderr, "Error on AllocateBuffer in 1%i\n", err);
 	    exit(1);
 	}
     }
-    /* Make sure weve reached Idle state */
+    /* Make sure we've reached Idle state */
     waitFor(OMX_StateIdle);
     
     /* Now try to switch to Executing state */
@@ -2417,25 +2385,24 @@ int main(int argc, char** argv) {
 	pEmptyBuffer->nOffset = 0;
 	filesize -= data_read;
 	if (data_read <= 0) {
-	    fprintf(stderr, In the %s no more input data available\n, __func__);
+	    fprintf(stderr, "In the %s no more input data available\n", __func__);
 	    pEmptyBuffer->nFilledLen=0;
 	    pEmptyBuffer->nFlags = OMX_BUFFERFLAG_EOS;
 	    bEOS=OMX_TRUE;
 	}
-	fprintf(stderr, Emptying again buffer %p %d bytes, %d to go\n, pEmptyBuffer, data_read, filesize);
+	fprintf(stderr, "Emptying again buffer %p %d bytes, %d to go\n", pEmptyBuffer, data_read, filesize);
 	err = OMX_EmptyThisBuffer(handle, pEmptyBuffer);
 	waitForEmpty();
-	fprintf(stderr, Waited for empty\n);
+	fprintf(stderr, "Waited for empty\n");
 	if (bEOS) {
-	    fprintf(stderr, Exiting loop\n);
+	    fprintf(stderr, "Exiting loop\n");
 	    break;
 	}
     }
-    fprintf(stderr, Buffers emptied\n);
+    fprintf(stderr, "Buffers emptied\n");
     exit(0);
 }
 
+	
     
 ```
-
-

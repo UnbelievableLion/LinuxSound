@@ -1,5 +1,4 @@
 
-
 import urllib;
 import os
 import string
@@ -13,6 +12,7 @@ class ChapterParser(HTMLParser):
     section_file = None
     tag_counter = collections.Counter()
     indent = 0
+    block_indent = ""
 
     def __init__(self, dirname):
         HTMLParser.__init__(self)
@@ -30,7 +30,7 @@ class ChapterParser(HTMLParser):
                 self.section_file.close()
 
         elif tag == "li":
-            self.section_file.write("+  ".rjust(self.indent-1))
+            self.section_file.write(self.block_indent + "+  ".rjust(self.indent-1))
 
         elif tag == "a":
             for attr in attrs:
@@ -47,8 +47,10 @@ class ChapterParser(HTMLParser):
             if self.in_section:
                 self.section_file.write("```" + lang + "\n")
 
-        elif tag == "bockquote":
-            self.section.write("> ")
+        elif tag == "blockquote":
+            print "GOT A BLOCKQUOTE"
+            self.section_file.write("> ")
+            self.block_indent = "> "
 
         elif tag == "img" and self.in_section:
             for attr in attrs:
@@ -75,6 +77,10 @@ class ChapterParser(HTMLParser):
                 # we didn't print a newline at end of program
                 # so put one in before closing program
                 self.section_file.write("\n```\n")
+
+        elif tag == "blockquote":
+            #self.section_file.write("> ")
+            self.block_indent = ""
 
         elif tag == "ul" or tag == "ol" or tag == "dl":
             self.indent -= 1
@@ -107,7 +113,7 @@ class ChapterParser(HTMLParser):
             elif self.tag_counter["a"] > 0:
                 #print "url is ", self.a_url
                 #print "data is ", data
-                self.section_file.write(" [" + data + "] (" + self.a_url + ")\n")
+                self.section_file.write(" [" + data + "](" + self.a_url + ")\n")
 
             elif self.tag_counter["code"] > 0:
                 if self.tag_counter["pre"] > 0:
@@ -204,7 +210,7 @@ class TableOfContentsParser(HTMLParser):
             sock.close()
             chapter_parser = ChapterParser(self.url)
             chapter_parser.feed(chapterSource)
-            #print "+ [", data, "] (", self.url, ")"
+            #print "+ [", data, "](", self.url, ")"
 
 
 sock = urllib.urlopen("http://localhost/LinuxSound")

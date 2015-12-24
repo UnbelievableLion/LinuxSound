@@ -1,37 +1,28 @@
-#  Jack session API 
 
-See
- [
+##  Jack session API 
+
+
+See [
 	the session API
-      ] (http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession)
-at trac.
+      ](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) at trac.
+
 
 Applications that can be managed by Jack Sessions (JS) may be JS aware at Level 1
       or JS unaware. For the unaware ones, the best that can be done is for the session
       manager to maybe start and stop them. For the JS aware applications, they must
       be set up to
 
-+  Register with a JS manager
-
-
-+  Respond to messages from the JS manager
-
-
-+  Be startable with session information
-
++ Register with a JS manager
++ Respond to messages from the JS manager
++ Be startable with session information
 
 Response to a JS message will generally
 
-+  Save the application's state into a file,
++ Save the application's state into a file,
 	  where the directory is given by the session manager
-
-
-+  Reply to the session manager with a command that can be used to restart
++ Reply to the session manager with a command that can be used to restart
 	  the application, with enough information that it can restore its state
 	  (typically the name of the file in which it stored its state information)
-
-
-
 
 JS aware clients identify themselves to the session manager by a UUID 
       (unique universal identifier). It doesn't seem to matter what this is
@@ -43,12 +34,11 @@ JS aware clients identify themselves to the session manager by a UUID
       to the application, and the format of the command line is also
       up to the client.
 
-A simple case might be two options
- `-u`for UUID and
- `-f`for saved state file. This would be parsed 
-      using
- `getopt`by
-```sh_cpp
+
+A simple case might be two options `-u`for UUID and `-f`for saved state file. This would be parsed 
+      using `getopt`by
+
+```
 
 int main(int argc, char **argv) {
   int c;
@@ -74,7 +64,8 @@ int main(int argc, char **argv) {
 The application could then restore its state using the information
       it has previously stored in the state file, and then
       register again with a session manager by
-```sh_cpp
+
+```
 
 jack_client *client;
 client = jack_client_open("myapp", JackSessionID, NULL, uuid);
@@ -83,21 +74,18 @@ jack_set_session_callback(client, session_callback, NULL);
 ```
 
 
-The callback function
- `session_callback`is invoked whenever
+The callback function `session_callback`is invoked whenever
       the session manager needs to communicate with the application. It takes
-      a
- `jack_session_event`and whatever was passed as the
-      last argument to
- `jack_set_session_callback`.
+      a `jack_session_event`and whatever was passed as the
+      last argument to `jack_set_session_callback`.
+
 
 The job of the callback is then to save state information,
       pass information back to the session manager and perhaps exit
-      (from
- [
-	trac - the session API] (http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession)
-):
-```sh_cpp
+      (from [
+	trac - the session API](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) ):
+
+```
 
 int session_callback(jack_session_event_t *ev) {
   char filename[256];
@@ -117,20 +105,18 @@ int session_callback(jack_session_event_t *ev) {
      
 ```
 
- [
-	trac] (http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession)
-suggests that if this is run in a
-      multi-threaded environment such as GTK, it should be run when other
-      threads are idle e.g. by
- `g_idel_add`.
 
-WE can illustrate this with the
- `delay`program from the
-      Jack chapter. Adding in the extra code gives a revised
- `delay.c`.
-      I have enclosed the extra code with
- `#ifdef JACK_SESSION`for ease in seeing the changes.
-```sh_cpp
+ [
+	trac](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) suggests that if this is run in a
+      multi-threaded environment such as GTK, it should be run when other
+      threads are idle e.g. by `g_idel_add`.
+
+
+WE can illustrate this with the `delay`program from the
+      Jack chapter. Adding in the extra code gives a revised `delay.c`.
+      I have enclosed the extra code with `#ifdef JACK_SESSION`for ease in seeing the changes.
+
+```
 
 	/** @file delay.c
  *
@@ -166,7 +152,7 @@ int idx, delay_idx;
 static void signal_handler ( int sig )
 {
     jack_client_close ( client );
-    fprintf ( stderr, signal received, exiting ...\n );
+    fprintf ( stderr, "signal received, exiting ...\n" );
     exit ( 0 );
 }
 
@@ -245,7 +231,7 @@ void session_callback(jack_session_event_t *ev, void *args) {
     char command[256];
 
     snprintf(command,  sizeof(command),  
-             /home/httpd/html/LinuxSound/Sampled/SessionManagement/delay -u %s, 
+             "/home/httpd/html/LinuxSound/Sampled/SessionManagement/delay -u %s", 
 	     ev->client_uuid);
     ev->flags = JackSessionNeedTerminal;
     ev->command_line = strdup(command);
@@ -270,17 +256,17 @@ int main ( int argc, char *argv[] ) {
      * Extra code for JS
      */
     int c;
-    char *uuid = 13;
-    while ((c = getopt (argc, argv, u:)) != -1)
+    char *uuid = "13";
+    while ((c = getopt (argc, argv, "u:")) != -1)
 	switch (c) {
-	case u:
+	case 'u':
 	    uuid = optarg;
 	    break;
 	}
-    printf(UUID is %s\n, uuid);
+    printf("UUID is %s\n", uuid);
 #endif
 
-    client_name = strrchr ( argv[0], / );
+    client_name = strrchr ( argv[0], '/' );
     if ( client_name == 0 ) {
 	client_name = argv[0];
     }
@@ -292,28 +278,28 @@ int main ( int argc, char *argv[] ) {
     /* Changed args for JS */
 
 #ifdef JACK_SESSION
-    client = jack_client_open ( client_name, JackSessionID, status, uuid);
+    client = jack_client_open ( client_name, JackSessionID, &status, uuid);
 #else
-    client = jack_client_open ( client_name, JackNullOption, status);
+    client = jack_client_open ( client_name, JackNullOption, &status);
 #endif
     if ( client == NULL )
 	{
-	    fprintf ( stderr, jack_client_open() failed, 
-		      status = 0x%2.0x\n, status );
-	    if ( status  JackServerFailed )
+	    fprintf ( stderr, "jack_client_open() failed, "
+		      "status = 0x%2.0x\n", status );
+	    if ( status & JackServerFailed )
 		{
-		    fprintf ( stderr, Unable to connect to JACK server\n );
+		    fprintf ( stderr, "Unable to connect to JACK server\n" );
 		}
 	    exit ( 1 );
 	}
-    if ( status  JackServerStarted )
+    if ( status & JackServerStarted )
 	{
-	    fprintf ( stderr, JACK server started\n );
+	    fprintf ( stderr, "JACK server started\n" );
 	}
-    if ( status  JackNameNotUnique )
+    if ( status & JackNameNotUnique )
 	{
 	    client_name = jack_get_client_name ( client );
-	    fprintf ( stderr, unique name `%s assigned\n, client_name );
+	    fprintf ( stderr, "unique name `%s' assigned\n", client_name );
 	}
 
 #ifdef JACK_SESSION
@@ -322,12 +308,12 @@ int main ( int argc, char *argv[] ) {
     jack_set_session_callback(client, session_callback, NULL);
 #endif
 
-    /* tell the JACK server to call `process() whenever
+    /* tell the JACK server to call `process()' whenever
        there is work to be done.
     */
     jack_set_process_callback ( client, process, 0 );
 
-    /* tell the JACK server to call `jack_shutdown() if
+    /* tell the JACK server to call `jack_shutdown()' if
        it ever shuts down, either entirely, or if it
        just decides to stop calling us.
     */
@@ -341,13 +327,13 @@ int main ( int argc, char *argv[] ) {
     char port_name[16];
     for ( i = 0; i < 2; i++ )
 	{
-	    sprintf ( port_name, input_%d, i + 1 );
+	    sprintf ( port_name, "input_%d", i + 1 );
 	    input_ports[i] = jack_port_register ( client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
-	    sprintf ( port_name, output_%d, i + 1 );
+	    sprintf ( port_name, "output_%d", i + 1 );
 	    output_ports[i] = jack_port_register ( client, port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 	    if ( ( input_ports[i] == NULL ) || ( output_ports[i] == NULL ) )
 		{
-		    fprintf ( stderr, no more JACK ports available\n );
+		    fprintf ( stderr, "no more JACK ports available\n" );
 		    exit ( 1 );
 		}
 	}
@@ -361,41 +347,41 @@ int main ( int argc, char *argv[] ) {
 
     if ( jack_activate ( client ) )
 	{
-	    fprintf ( stderr, cannot activate client );
+	    fprintf ( stderr, "cannot activate client" );
 	    exit ( 1 );
 	}
 
-    /* Connect the ports.  You cant do this before the client is
-     * activated, because we cant make connections to clients
-     * that arent running.  Note the confusing (but necessary)
+    /* Connect the ports.  You can't do this before the client is
+     * activated, because we can't make connections to clients
+     * that aren't running.  Note the confusing (but necessary)
      * orientation of the driver backend ports: playback ports are
-     * input to the backend, and capture ports are output from
+     * "input" to the backend, and capture ports are "output" from
      * it.
      */
 
     ports = jack_get_ports ( client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput );
     if ( ports == NULL )
 	{
-	    fprintf ( stderr, no physical capture ports\n );
+	    fprintf ( stderr, "no physical capture ports\n" );
 	    exit ( 1 );
 	}
 
     for ( i = 0; i < 2; i++ )
 	if ( jack_connect ( client, ports[i], jack_port_name ( input_ports[i] ) ) )
-	    fprintf ( stderr, cannot connect input ports\n );
+	    fprintf ( stderr, "cannot connect input ports\n" );
 
     free ( ports );
 
     ports = jack_get_ports ( client, NULL, NULL, JackPortIsPhysical|JackPortIsInput );
     if ( ports == NULL )
 	{
-	    fprintf ( stderr, no physical playback ports\n );
+	    fprintf ( stderr, "no physical playback ports\n" );
 	    exit ( 1 );
 	}
 
     for ( i = 0; i < 2; i++ )
 	if ( jack_connect ( client, jack_port_name ( output_ports[i] ), ports[i] ) )
-	    fprintf ( stderr, cannot connect input ports\n );
+	    fprintf ( stderr, "cannot connect input ports\n" );
 
     free ( ports );
 
@@ -428,5 +414,3 @@ int main ( int argc, char *argv[] ) {
 
       
 ```
-
-

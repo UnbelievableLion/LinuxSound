@@ -1,9 +1,13 @@
-#  seqdemo 
+
+##  seqdemo 
+
 
 The code for seqdemo.c is
+
 ```
 
-/* seqdemo.c by Matthias Nagorni */
+      
+      /* seqdemo.c by Matthias Nagorni */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +22,7 @@ snd_seq_t *open_seq() {
   snd_seq_t *seq_handle;
   int portid;
 
-  if (snd_seq_open(seq_handle, "default", SND_SEQ_OPEN_INPUT, 0) < 0) {
+  if (snd_seq_open(&seq_handle, "default", SND_SEQ_OPEN_INPUT, 0) < 0) {
     fprintf(stderr, "Error opening ALSA sequencer.\n");
     exit(1);
   }
@@ -37,7 +41,7 @@ void midi_action(snd_seq_t *seq_handle) {
   snd_seq_event_t *ev;
 
   do {
-    snd_seq_event_input(seq_handle, ev);
+    snd_seq_event_input(seq_handle, &ev);
     switch (ev->type) {
       case SND_SEQ_EVENT_CONTROLLER: 
         fprintf(stderr, "Control event on Channel %2d: %5d       \r",
@@ -77,6 +81,6 @@ int main(int argc, char *argv[]) {
   }
 }
 
+      
+    
 ```
-
-

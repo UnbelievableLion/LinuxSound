@@ -1,8 +1,11 @@
-#  Karaoke player with sampling 
+
+##  Karaoke player with sampling 
+
 
 The Karaoke player described so far is functionally equivalent to kmidi and pykar.
       It plays KAR files, shows the notes and scrolls through the lyrics. To sing along
       with it, you need to use an ALSA or PulseAudio player.
+
 
 But Java can also play sampled sounds, as discussed in an earlier chapter.
       So that code can be brought into the Karaoke player to give a more complete solution.
@@ -13,9 +16,11 @@ But Java can also play sampled sounds, as discussed in an earlier chapter.
       the underlying PulseAudio output device. But for sampled media, the input devices
       can be controlled. So in the following code a selection box allows choice of sampled
       input device, and leaves the output device to the default.
+
 ```
 
-/*
+      
+     /*
  * KaraokePlayer.java
  *
  */
@@ -68,13 +73,20 @@ public class KaraokePlayerSampled {
 
 
 
+      
+    
 ```
 
 
 The code to play the sampled media is pretty much the same as we have seen before:
+
+
+
+
 ```
 
-
+      
+      
 
 
 import java.io.IOException;
@@ -323,6 +335,6 @@ public class SampledPlayer {
 	}
     }
 }
+      
+    
 ```
-
-

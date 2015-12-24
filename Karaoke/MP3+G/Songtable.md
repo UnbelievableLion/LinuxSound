@@ -1,29 +1,24 @@
-#  Song table 
 
-The
- `SongTable`builds up a vector of
- `SongInformation`objects by traversing the file
+##  Song table 
+
+
+The `SongTable`builds up a vector of `SongInformation`objects by traversing the file
       tree.
+
 
 If there are many songs (say, in the thousands)
       this can lead to a slow startup time. To reduce this,
       once a table is loaded, it is saved to disk as a persistent
-      object by writing it to an
- `ObjectOutputStream`.
+      object by writing it to an `ObjectOutputStream`.
       The next time the program is started, an attempt is made to
-      read it back from this using an
- `ObjectInputStream`.
-      Note that we do
-not
-use the
- [
+      read it back from this using an `ObjectInputStream`.
+      Note that we do _not_ use the [
 	Java Persistence API
-      ] (http://en.wikibooks.org/wiki/Java_Persistence/What_is_Java_persistence%3F)
--
+      ](http://en.wikibooks.org/wiki/Java_Persistence/What_is_Java_persistence%3F) -
       designed for J2EE, it is too heavyweight for our purpose here.
 
-The
- `SongTable`also includes code to build 
+
+The `SongTable`also includes code to build 
       smaller song tables based on matches between patterns
       and the title (or artist or number). It can search
       for matches between a pattern and a song and build a new
@@ -32,9 +27,10 @@ The
       This allows searches for patterns to use the same
       data structure.
 
-The code for
- `SongTable`is
-```sh_cpp
+
+The code for `SongTable`is
+
+```
 
 
 import java.util.Vector;
@@ -64,13 +60,13 @@ class Visitor
                                    BasicFileAttributes attr) {
 	if (attr.isRegularFile()) {
 	    String fname = file.getFileName().toString();
-	    //System.out.println(Regular file  + fname);
-	    if (fname.endsWith(.zip) || 
-		fname.endsWith(.mp3) || 
-		fname.endsWith(.kar)) {
+	    //System.out.println("Regular file " + fname);
+	    if (fname.endsWith(".zip") || 
+		fname.endsWith(".mp3") || 
+		fname.endsWith(".kar")) {
 		String root = fname.substring(0, fname.length()-4);
-		//System.err.println( root  + root);
-		String parts[] = root.split( - , 3);
+		//System.err.println(" root " + root);
+		String parts[] = root.split(" - ", 3);
 		if (parts.length != 3)
 		    return java.nio.file.FileVisitResult.CONTINUE;
 
@@ -92,7 +88,7 @@ class Visitor
 
 public class SongTable {
 
-    private static final String SONG_INFO_ROOT = /server/KARAOKE/KARAOKE/;
+    private static final String SONG_INFO_ROOT = "/server/KARAOKE/KARAOKE/";
 
     private static Vector<SongInformation> allSongs;
 
@@ -108,7 +104,7 @@ public class SongTable {
     public SongTable(String[] args) throws java.io.IOException, 
 					   java.io.FileNotFoundException {
 	if (args.length >= 1) {
-	    System.err.println(Loading from  + args[0]);
+	    System.err.println("Loading from " + args[0]);
 	    loadTableFromSource(args[0]);
 	    saveTableToStore();
 	} else {
@@ -119,21 +115,21 @@ public class SongTable {
     private boolean loadTableFromStore() {
 	try {
 	    /*
-	    String userHome = System.getProperty(user.home);
+	    String userHome = System.getProperty("user.home");
 	    Path storePath = FileSystems.getDefault().getPath(userHome, 
-							      .karaoke,
-							      SongStore);
+							      ".karaoke",
+							      "SongStore");
 	    
 	    File storeFile = storePath.toFile();
 	    */
-	    File storeFile = new File(/server/KARAOKE/SongStore); 
+	    File storeFile = new File("/server/KARAOKE/SongStore"); 
 	    
 	    FileInputStream in = new FileInputStream(storeFile); 
 	    ObjectInputStream is = new ObjectInputStream(in);
 	    songs = (Vector<SongInformation>) is.readObject();
 	    in.close();
 	} catch(Exception e) {
-	    System.err.println(Cant load store file  + e.toString());
+	    System.err.println("Can't load store file " + e.toString());
 	    return false;
 	}
 	return true;
@@ -142,20 +138,20 @@ public class SongTable {
     private void saveTableToStore() {
 	try {
 	    /*
-	    String userHome = System.getProperty(user.home);
+	    String userHome = System.getProperty("user.home");
 	    Path storePath = FileSystems.getDefault().getPath(userHome, 
-							      .karaoke,
-							      SongStore);
+							      ".karaoke",
+							      "SongStore");
 	    File storeFile = storePath.toFile();
 	    */
-	    File storeFile = new File(/server/KARAOKE/SongStore);
+	    File storeFile = new File("/server/KARAOKE/SongStore");
 	    FileOutputStream out = new FileOutputStream(storeFile); 
 	    ObjectOutputStream os = new ObjectOutputStream(out);
 	    os.writeObject(songs); 
 	    os.flush(); 
 	    out.close();
 	} catch(Exception e) {
-	    System.err.println(Cant save store file  + e.toString());
+	    System.err.println("Can't save store file " + e.toString());
 	}
     }
 
@@ -210,7 +206,7 @@ public class SongTable {
     public String toString() {
 	StringBuffer buf = new StringBuffer();
 	for (SongInformation song: songs) {
-	    buf.append(song.toString() + \n);
+	    buf.append(song.toString() + "\n");
 	}
 	return buf.toString();
     }
@@ -225,7 +221,7 @@ public class SongTable {
 	    System.exit(1);
 	}
 
-	System.out.println(songs.artistMatches(Tom Jones).toString());
+	System.out.println(songs.artistMatches("Tom Jones").toString());
 
 	System.exit(0);
     }
@@ -233,5 +229,3 @@ public class SongTable {
 
       
 ```
-
-

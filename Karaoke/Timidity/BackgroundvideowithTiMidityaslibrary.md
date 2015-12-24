@@ -1,18 +1,18 @@
-#  Background video with TiMidity as library 
+
+##  Background video with TiMidity as library 
+
 
 The code for this follows the same structure as the code
-      in the
- [ MIDI TiMidity] (../..MIDI/Timidity/)
-chapter. It is is in the file
- `gtkkaraoke_player_video_pango.`:
-```sh_cpp
+      in the [ MIDI TiMidity](../..MIDI/Timidity/) chapter. It is is in the file `gtkkaraoke_player_video_pango.`:
+
+```
 
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include sysdep.h
-#include controls.h
+#include "sysdep.h"
+#include "controls.h"
 
 
 extern ControlMode  *video_ctl;
@@ -24,14 +24,14 @@ static void init_timidity() {
     timidity_start_initialize();
 
     if ((err = timidity_pre_load_configuration()) != 0) {
-	printf(couldnt pre-load configuration file\n);
+	printf("couldn't pre-load configuration file\n");
 	exit(1);
     }
 
     err += timidity_post_load_configuration();
 
     if (err) {
-	printf(couldnt post-load configuration file\n);
+	printf("couldn't post-load configuration file\n");
 	exit(1);
     }
 
@@ -41,14 +41,14 @@ static void init_timidity() {
     extern int opt_trace_text_meta_event;
     opt_trace_text_meta_event = 1;
 
-    ctl = video_ctl;
+    ctl = &video_ctl;
     //ctl->trace_playing = 1;
     //opt_trace_text_meta_event = 1;
     
 }
 
 
-#define MIDI_FILE 54154.kar
+#define MIDI_FILE "54154.kar"
 
 static void *play_midi(void *args) {
     char *argv[1];
@@ -57,7 +57,7 @@ static void *play_midi(void *args) {
 
     timidity_play_main(argc, argv);
 
-    printf(Audio finished\n);
+    printf("Audio finished\n");
     exit(0);
 }
 
@@ -79,5 +79,6 @@ int main(int argc, char** argv)
 
       
 ```
+
 
 

@@ -1,4 +1,6 @@
-#  MidiGUI 
+
+##  MidiGUI 
+
 
 The MidiGUI is called by two methods: setLyric() and
       setNote(). The GUI consists of three main areas: 
@@ -9,11 +11,13 @@ The MidiGUI is called by two methods: setLyric() and
       in that it just calls drawNote() in the pianoPanel.
       setLyric() is considerably more complex.
 
+
 Most Karaoke players show a couple of lines of text for the
       lyrics. As lyrics are played, typically the text will
       change colour to match. When the end of a line is reached,
       focus will switch to the next line, and the previous
       line will be replaced with another line of lyrics.
+
 
 Each line must hold a line of lyrics. 
       The line must be able to react to lyrics as they are played.
@@ -21,6 +25,7 @@ Each line must hold a line of lyrics.
       The main task is to feed changes
       in lyrics through to the selected panel so that it can display
       them in the correct colours.
+
 
 The other principal task for the MidiGUI here is to switch focus
       between AttributedTextPanel's when end of line is detected
@@ -36,7 +41,8 @@ The other principal task for the MidiGUI here is to switch focus
 
 ```
 
-
+      
+      
 
 import javax.swing.*;
 import java.awt.*;
@@ -182,7 +188,7 @@ public class MidiGUI extends JFrame {
 	    }
 	}
 	
-	if ((lyricLine == -1)  (txt.charAt(0) == '\\')) {
+	if ((lyricLine == -1) && (txt.charAt(0) == '\\')) {
 	    lyricLine = 0;
 	    colourLyric(lyricLinePanels[whichLyricPanel], txt.substring(1));
 	    // lyricLinePanels[whichLyricPanel].colourLyric(txt.substring(1));
@@ -296,6 +302,6 @@ public class MidiGUI extends JFrame {
 
 
 
+      
+    
 ```
-
-

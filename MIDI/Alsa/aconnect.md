@@ -1,9 +1,11 @@
-#  aconnect 
 
-the program
- `aconnect.c`can be used to test for sequencer servers
+##  aconnect 
+
+
+the program `aconnect.c`can be used to test for sequencer servers
       and clients such as sequencers. I have set two clients running: Timidity and
       seqdemo (discussed later). The command
+
 ```
 
 	
@@ -11,7 +13,10 @@ aconnect -o
 	
       
 ```
+
+
 shows
+
 ```
 
 	
@@ -30,14 +35,14 @@ client 129: 'ALSA Sequencer Demo' [type=user]
 
 
 The code for aconnect.c is
-      from
- [
+      from [
 	SourceArchive
-      ] (http://alsa-utils.sourcearchive.com/documentation/1.0.8-4/aconnect_8c-source.html)
+      ](http://alsa-utils.sourcearchive.com/documentation/1.0.8-4/aconnect_8c-source.html) 
 
 ```
 
-/*
+      
+      /*
  ** connect / disconnect two subscriber ports
  **   ver.0.1.3
  **
@@ -108,23 +113,23 @@ static void usage(void)
 #define LIST_INPUT      1
 #define LIST_OUTPUT     2
 
-#define perm_ok(pinfo,bits) ((snd_seq_port_info_get_capability(pinfo)  (bits)) == (bits))
+#define perm_ok(pinfo,bits) ((snd_seq_port_info_get_capability(pinfo) & (bits)) == (bits))
 
 static int check_permission(snd_seq_port_info_t *pinfo, int perm)
 {
       if (perm) {
-            if (perm  LIST_INPUT) {
+            if (perm & LIST_INPUT) {
                   if (perm_ok(pinfo, SND_SEQ_PORT_CAP_READ|SND_SEQ_PORT_CAP_SUBS_READ))
                         goto __ok;
             }
-            if (perm  LIST_OUTPUT) {
+            if (perm & LIST_OUTPUT) {
                   if (perm_ok(pinfo, SND_SEQ_PORT_CAP_WRITE|SND_SEQ_PORT_CAP_SUBS_WRITE))
                         goto __ok;
             }
             return 0;
       }
  __ok:
-      if (snd_seq_port_info_get_capability(pinfo)  SND_SEQ_PORT_CAP_NO_EXPORT)
+      if (snd_seq_port_info_get_capability(pinfo) & SND_SEQ_PORT_CAP_NO_EXPORT)
             return 0;
       return 1;
 }
@@ -163,7 +168,7 @@ static void list_each_subs(snd_seq_t *seq, snd_seq_query_subscribe_t *subs, int 
 static void list_subscribers(snd_seq_t *seq, const snd_seq_addr_t *addr)
 {
       snd_seq_query_subscribe_t *subs;
-      snd_seq_query_subscribe_alloca(subs);
+      snd_seq_query_subscribe_alloca(&subs);
       snd_seq_query_subscribe_set_root(subs, addr);
       list_each_subs(seq, subs, SND_SEQ_QUERY_SUBS_READ, "Connecting To");
       list_each_subs(seq, subs, SND_SEQ_QUERY_SUBS_WRITE, "Connected From");
@@ -180,8 +185,8 @@ static void do_search_port(snd_seq_t *seq, int perm, action_func_t do_action)
       snd_seq_port_info_t *pinfo;
       int count;
 
-      snd_seq_client_info_alloca(cinfo);
-      snd_seq_port_info_alloca(pinfo);
+      snd_seq_client_info_alloca(&cinfo);
+      snd_seq_port_info_alloca(&pinfo);
       snd_seq_client_info_set_client(cinfo, -1);
       while (snd_seq_query_next_client(seq, cinfo) >= 0) {
             /* reset query info */
@@ -228,7 +233,7 @@ static void remove_connection(snd_seq_t *seq, snd_seq_client_info_t *cinfo,
 {
       snd_seq_query_subscribe_t *query;
 
-      snd_seq_query_subscribe_alloca(query);
+      snd_seq_query_subscribe_alloca(&query);
       snd_seq_query_subscribe_set_root(query, snd_seq_port_info_get_addr(pinfo));
 
       snd_seq_query_subscribe_set_type(query, SND_SEQ_QUERY_SUBS_READ);
@@ -239,14 +244,14 @@ static void remove_connection(snd_seq_t *seq, snd_seq_client_info_t *cinfo,
             snd_seq_port_subscribe_t *subs;
             const snd_seq_addr_t *sender = snd_seq_query_subscribe_get_root(query);
             const snd_seq_addr_t *dest = snd_seq_query_subscribe_get_addr(query);
-            snd_seq_port_info_alloca(port);
+            snd_seq_port_info_alloca(&port);
             if (snd_seq_get_any_port_info(seq, dest->client, dest->port, port) < 0)
                   continue;
-            if (!(snd_seq_port_info_get_capability(port)  SND_SEQ_PORT_CAP_SUBS_WRITE))
+            if (!(snd_seq_port_info_get_capability(port) & SND_SEQ_PORT_CAP_SUBS_WRITE))
                   continue;
-            if (snd_seq_port_info_get_capability(port)  SND_SEQ_PORT_CAP_NO_EXPORT)
+            if (snd_seq_port_info_get_capability(port) & SND_SEQ_PORT_CAP_NO_EXPORT)
                   continue;
-            snd_seq_port_subscribe_alloca(subs);
+            snd_seq_port_subscribe_alloca(&subs);
             snd_seq_port_subscribe_set_queue(subs, snd_seq_query_subscribe_get_queue(query));
             snd_seq_port_subscribe_set_sender(subs, sender);
             snd_seq_port_subscribe_set_dest(subs, dest);
@@ -261,14 +266,14 @@ static void remove_connection(snd_seq_t *seq, snd_seq_client_info_t *cinfo,
             snd_seq_port_subscribe_t *subs;
             const snd_seq_addr_t *dest = snd_seq_query_subscribe_get_root(query);
             const snd_seq_addr_t *sender = snd_seq_query_subscribe_get_addr(query);
-            snd_seq_port_info_alloca(port);
+            snd_seq_port_info_alloca(&port);
             if (snd_seq_get_any_port_info(seq, sender->client, sender->port, port) < 0)
                   continue;
-            if (!(snd_seq_port_info_get_capability(port)  SND_SEQ_PORT_CAP_SUBS_READ))
+            if (!(snd_seq_port_info_get_capability(port) & SND_SEQ_PORT_CAP_SUBS_READ))
                   continue;
-            if (snd_seq_port_info_get_capability(port)  SND_SEQ_PORT_CAP_NO_EXPORT)
+            if (snd_seq_port_info_get_capability(port) & SND_SEQ_PORT_CAP_NO_EXPORT)
                   continue;
-            snd_seq_port_subscribe_alloca(subs);
+            snd_seq_port_subscribe_alloca(&subs);
             snd_seq_port_subscribe_set_queue(subs, snd_seq_query_subscribe_get_queue(query));
             snd_seq_port_subscribe_set_sender(subs, sender);
             snd_seq_port_subscribe_set_dest(subs, dest);
@@ -352,7 +357,7 @@ int main(int argc, char **argv)
             }
       }
 
-      if (snd_seq_open(seq, "default", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
+      if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
             fprintf(stderr, "can't open sequencer\n");
             return 1;
       }
@@ -393,19 +398,19 @@ int main(int argc, char **argv)
       }
 
       /* set subscription */
-      if (snd_seq_parse_address(seq, sender, argv[optind]) < 0) {
+      if (snd_seq_parse_address(seq, &sender, argv[optind]) < 0) {
             snd_seq_close(seq);
             fprintf(stderr, "invalid sender address %s\n", argv[optind]);
             return 1;
       }
-      if (snd_seq_parse_address(seq, dest, argv[optind + 1]) < 0) {
+      if (snd_seq_parse_address(seq, &dest, argv[optind + 1]) < 0) {
             snd_seq_close(seq);
             fprintf(stderr, "invalid destination address %s\n", argv[optind + 1]);
             return 1;
       }
-      snd_seq_port_subscribe_alloca(subs);
-      snd_seq_port_subscribe_set_sender(subs, sender);
-      snd_seq_port_subscribe_set_dest(subs, dest);
+      snd_seq_port_subscribe_alloca(&subs);
+      snd_seq_port_subscribe_set_sender(subs, &sender);
+      snd_seq_port_subscribe_set_dest(subs, &dest);
       snd_seq_port_subscribe_set_queue(subs, queue);
       snd_seq_port_subscribe_set_exclusive(subs, exclusive);
       snd_seq_port_subscribe_set_time_update(subs, convert_time);
@@ -441,6 +446,6 @@ int main(int argc, char **argv)
 }
 
 
+      
+    
 ```
-
-

@@ -1,14 +1,16 @@
-#  Information about devices 
 
-Each device is represented by a
- `Mixer`object.
-      Ask the
- `AudioSystem`for a list of these.
+##  Information about devices 
+
+
+Each device is represented by a `Mixer`object.
+      Ask the `AudioSystem`for a list of these.
       Each mixer has a set of target (output) lines and source
       (input lines). Query each mixer about these separately.
-      The program is:
+      The program is DeviceInfo.java:
+
 ```
 
+      
 
 
 import javax.sound.sampled.*;
@@ -38,10 +40,13 @@ public class DeviceInfo {
 	}
     }
 }
+      
+    
 ```
 
 
 A part of the output on my system is
+
 ```
 
 	
@@ -82,6 +87,7 @@ Mixers:
 	
       
 ```
+
+
 This shows both PulseAudio and ALSA mixers.
       Further queries could show what the supported formats are, for example.
-

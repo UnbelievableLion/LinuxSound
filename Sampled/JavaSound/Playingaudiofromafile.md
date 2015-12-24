@@ -1,55 +1,35 @@
-#  Playing audio from a file 
+
+##  Playing audio from a file 
+
 
 To play from a file, appropriate objects must be created for reading
       from the file and for writing to the output device. These are
 
-+  An
- `AudioInputStream`is requested from the
- `AudioSystem`. It is created with the filename as
++ An `AudioInputStream`is requested from the `AudioSystem`. It is created with the filename as
 	  parameter.
-
-
-+  A source data line is created for the output. The nomenclature
-	  may be confusing: the program produces
-output
-, but this
-	  is
-input
-to the dataline. So the dataline must be a source
++ A source data line is created for the output. The nomenclature
+	  may be confusing: the program produces _output_ , but this
+	  is _input_ to the dataline. So the dataline must be a source
 	  for the output device. The creation of a dataline is a multi-step
 	  process:
-
-+  First create a
- `AudioFormat`object to specify
++ First create a `AudioFormat`object to specify
 	      parameters for the dataline
-
-
-+  Create a
- `DataLine.Info`for a source dataline with
++ Create a `DataLine.Info`for a source dataline with
 	      the audion format
-
-
-+  Request a source dataline from the
- `AudioSystem`which
-	      will handle the
- `DataLine.Info`
-
-
-
-
-
-
++ Request a source dataline from the `AudioSystem`which
+	      will handle the `DataLine.Info`
 
 Following these steps, data can then be read from the input stream and written
       to the dataline.
       The UML class diagram for the relevant classes is
 
-![alt text](PlayAudioFile.png)
 
+![alt text](PlayAudioFile.png)
 
 ```
 
-import java.io.File;
+      
+      import java.io.File;
 import java.io.IOException;
      
 import javax.sound.sampled.AudioFormat;
@@ -157,6 +137,6 @@ public class PlayAudioFile {
 } // PlayAudioFile
 
 
+      
+    
 ```
-
-

@@ -1,14 +1,17 @@
-#  Timidity 
+
+##  Timidity 
+
 
 Timidity is a "Software sound renderer (MIDI sequencer, MOD player)"
 
-Its home page is
- [
+
+Its home page is [
 	Maemo.org
-      ] (http://maemo.org/packages/view/timidity/)
+      ](http://maemo.org/packages/view/timidity/) 
 
 
 Timidity can be used to play MIDI files by giving them on the command line
+
 ```
 
 	
@@ -19,19 +22,17 @@ Timidity can be used to play MIDI files by giving them on the command line
 
 
 The default soundfonts used by Timidity are Gravis UltraSound patches,
-      from the
- `/usr/share/midi/freepats/`directory.
+      from the `/usr/share/midi/freepats/`directory.
       These soundfonts are missing many instruments, so should be
       replaced by another such as the FluidSynth fonts. 
-      The settings are made in the configurations file
- `/etc/timidity/timidity.cfg`
+      The settings are made in the configurations file `/etc/timidity/timidity.cfg`
 
 ###  TiMidity as a server 
 
+
 It can also be run as an ALSA server listening on a port
-      (
- [Using MIDI with UNIX] (http://wiki.winehq.org/MIDI)
-):
+      ( [Using MIDI with UNIX](http://wiki.winehq.org/MIDI) ):
+
 ```
 
 	
@@ -39,16 +40,18 @@ It can also be run as an ALSA server listening on a port
 	
       
 ```
+
+
 The "-iAD" option runs it as a Daemon process in the background as an 
       ALSA sequencer client. The "-B2,8" option selects the number of buffer
       fragments. The "-Os1l" option selects ALSA output as PCM. The "-s"
       option is the sample size.
-      (For the Raspberry Pi, I found that
- `-B0,12`worked better than
- `-B2,8`).
+      (For the Raspberry Pi, I found that `-B0,12`worked better than `-B2,8`).
+
 
 In this mode, ALSA can send messages to it.
       The command
+
 ```
 
 	
@@ -56,7 +59,10 @@ In this mode, ALSA can send messages to it.
 	
       
 ```
+
+
 will show output such as
+
 ```
 
 	
@@ -73,8 +79,11 @@ will show output such as
 	
       
 ```
+
+
 The "Midi Through" port is not useful but the Timidity ports are.
       MIDI files can then be played by an ALSA sequencer such as
+
 ```
 
 	
@@ -83,13 +92,12 @@ The "Midi Through" port is not useful but the Timidity ports are.
       
 ```
 
-
 ###  Setting Timidity output device 
 
-The default output for TiMidity can be changed using the
- `-O`option. TiMidity help (
- `timidity -h`)
+
+The default output for TiMidity can be changed using the `-O`option. TiMidity help ( `timidity -h`)
       shows, for example,
+
 ```
 
 	
@@ -108,10 +116,9 @@ The default output for TiMidity can be changed using the
 
 
 For some of these modes the device name can also be set, using
-      the
- `-o`option. For example, to play a file using
-      the
- `hw:2`ALSA device, use
+      the `-o`option. For example, to play a file using
+      the `hw:2`ALSA device, use
+
 ```
 
 	
@@ -120,13 +127,13 @@ For some of these modes the device name can also be set, using
       
 ```
 
-
 ###  TiMidity and Jack 
 
-TiMidity can be run with Jack output using the
- `-Oj`option. In a user-based environment such as Ubuntu you may need
+
+TiMidity can be run with Jack output using the `-Oj`option. In a user-based environment such as Ubuntu you may need
       to stop or pause PulseAudio, start the Jack server and then run TiMidity.
       PulseAudion may be paused by e.g.
+
 ```
 
 	
@@ -134,8 +141,11 @@ pasuspender cat
 	
       
 ```
+
+
 in one terminal. In another, start the Jack daemon
       using ALSA input and output
+
 ```
 
 	
@@ -143,7 +153,10 @@ jackd -dalsa
 	
       
 ```
+
+
 In a third terminal, run TiMidity
+
 ```
 
 	
@@ -153,6 +166,4 @@ timidity -Oj 54154.mid
 ```
 
 
-The links may be shown graphically by also running
- `qjackctl`.
-
+The links may be shown graphically by also running `qjackctl`.

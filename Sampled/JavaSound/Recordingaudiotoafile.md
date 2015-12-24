@@ -1,49 +1,36 @@
-#  Recording audio to a file 
+
+##  Recording audio to a file 
+
 
 Most of the work to do this is in preparation of an audio input stream.
-      Once that is done the method
- `write`of
- `AudioSystem`will copy input from the audio input stream to the output file.
+      Once that is done the method `write`of `AudioSystem`will copy input from the audio input stream to the output file.
+
 
 To prepare the audio input stream:
 
-+  Create an
- `AudioFormat`object describing the parameters
++ Create an `AudioFormat`object describing the parameters
 	  of the input
++ The microphone _produces_ audio. So it needs a `TargetDataLine`.
+	  So create a `DataLine.Info`for a target dataline.
++ Ask the `AudioSystem`for a line satisfying the information
++ Wrap the line in an `AudioInputStream`
+
+The output is just a Java `File`.
 
 
-+  The microphone
-produces
-audio. So it needs a
- `TargetDataLine`.
-	  So create a
- `DataLine.Info`for a target dataline.
-
-
-+  Ask the
- `AudioSystem`for a line satisfying the information
-
-
-+  Wrap the line in an
- `AudioInputStream`
-
-
-
-
-The output is just a Java
- `File`.
-
-Then use the
- `AudioSystem`function
- `write()`to copy the stream to the file.
+Then use the `AudioSystem`function `write()`to copy the stream to the file.
       The UML class diagram is
+
 
 ![alt text](Recorder.png)
 
+
 The program is:
+
 ```
 
-
+      
+      
 import javax.sound.sampled.*;
 import java.io.File;
 
@@ -53,22 +40,22 @@ import java.io.File;
 public class Recorder extends Thread
 {
     /**
-     * The TargetDataLine that we’ll use to read data from
+     * The TargetDataLine that weâll use to read data from
      */
     private TargetDataLine line;
 
     /**
-     * The audio format type that we’ll encode the audio data with
+     * The audio format type that weâll encode the audio data with
      */
     private AudioFileFormat.Type targetType = AudioFileFormat.Type.WAVE;
 
     /**
-     * The AudioInputStream that we’ll read the audio data from
+     * The AudioInputStream that weâll read the audio data from
      */
     private AudioInputStream inputStream;
 
     /**
-     * The file that we’re going to write data out to
+     * The file that weâre going to write data out to
      */
     private File file;
 
@@ -79,7 +66,7 @@ public class Recorder extends Thread
     {
 	try {
 	    // Create an AudioFormat that specifies how the recording will be performed
-	    // In this example we’ll 44.1Khz, 16-bit, stereo
+	    // In this example weâll 44.1Khz, 16-bit, stereo
 	    AudioFormat audioFormat = new AudioFormat(
 						      AudioFormat.Encoding.PCM_SIGNED,    // Encoding technique
 						      44100.0F,                           // Sample Rate
@@ -166,6 +153,6 @@ public class Recorder extends Thread
     }
 
 }
+      
+    
 ```
-
-

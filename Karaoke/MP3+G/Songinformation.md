@@ -1,10 +1,13 @@
-#  Song information 
+
+##  Song information 
+
 
 The information about each song should include its path
       in the file system, the name of the artist(s), the title
       of the song and any other useful information. This information
       has to be pulled out of the the file path of the song.
       In my current setup, files look like
+
 ```
 
 	
@@ -12,11 +15,14 @@ The information about each song should include its path
 	
       
 ```
+
+
 Each song has a reasonably unique identifier ("SK-50154"),
       a unique path and an artist and title. 
       Reasonably straight-forward pattern matching code can
       extract these parts:
-```sh_cpp
+
+```
 
 Path file = ...
 String fname = file.getFileName().toString();
@@ -37,32 +43,35 @@ if (fname.endsWith(".zip") ||
 						   artist);
       
 ```
-(The patterns produced by
- `cdrip.py`are not quite the same, but the code is easily changed.)
 
-The
- `SongInformation`class captures this
+
+(The patterns produced by `cdrip.py`are not quite the same, but the code is easily changed.)
+
+
+The `SongInformation`class captures this
       information and also includes methods for pattern matching
       of a string against the various fields. For example,
       to check if a title matches,
-```sh_cpp
+
+```
 
 public boolean titleMatch(String pattern) {
     return title.matches("(?i).*" + pattern + ".*");
 }
       
 ```
+
+
 This gives a case-independent match using 
       Java regular expression support.
-      See
- [
+      See [
 	Java Regex Tutorial
-      ] (http://www.vogella.com/articles/JavaRegularExpressions/article.html)
-by Lars Vogel for more details.
+      ](http://www.vogella.com/articles/JavaRegularExpressions/article.html) by Lars Vogel for more details.
 
-The complete
- `SongInformation`file is
-```sh_cpp
+
+The complete `SongInformation`file is
+
+```
 
 
 import java.nio.file.Path;
@@ -100,15 +109,15 @@ public class SongInformation implements Serializable {
     }
 
     public String toString() {
-	return ( + index + )  + artist + :  + title;
+	return "(" + index + ") " + artist + ": " + title;
     }
 
     public boolean titleMatch(String pattern) {
-	return title.matches((?i).* + pattern + .*);
+	return title.matches("(?i).*" + pattern + ".*");
     }
 
     public boolean artistMatch(String pattern) {
-	return artist.matches((?i).* + pattern + .*);
+	return artist.matches("(?i).*" + pattern + ".*");
     }
 
     public boolean numberMatch(String pattern) {
@@ -118,5 +127,3 @@ public class SongInformation implements Serializable {
 
       
 ```
-
-

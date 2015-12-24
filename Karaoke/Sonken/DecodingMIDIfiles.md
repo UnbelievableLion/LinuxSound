@@ -1,4 +1,6 @@
-#  Decoding MIDI files 
+
+##  Decoding MIDI files 
+
 
 All files have a lyric block followed by a music block. The lyric block is compressed
       and it has been discovered that this is LZW compression. This decompresses to a set
@@ -7,9 +9,11 @@ All files have a lyric block followed by a music block. The lyric block is compr
       and the second is either zero or another character (two byts such as "\r\n").
       For two byte encodings such as GB-2312, the two bytes form one character.
 
+
 The next two bytes are the length of time the character string plays for.
 
 ###  Lyric block 
+
 
 Each lyric block starts with strings such as "#0001
       @@00@12
@@ -20,15 +24,19 @@ Each lyric block starts with strings such as "#0001
       The language code is in there as NN in "@00@NN". The song title, writer, singer are clear.
       (Note: these characters are all 4 bytes apart!). For English it is "12" and so on.
 
+
 Bytes 0 and 1 of each block are a character in the lyric. Bytes 2 and 3 are the duration
       of each character. To turn them into MIDI data, the durations have to be turned into
       start/stop of each character.
 
+
 My Java program to do this is
       SongExtracter.java
+
 ```
 
-
+	
+      
 import java.io.*;
 import javax.sound.midi.*;
 import java.nio.charset.Charset;
@@ -103,7 +111,7 @@ public class SongExtracter {
 	throws java.io.IOException, 
 	       java.io.FileNotFoundException {
 	// index of song into table of song ofsets
-	int indexTableIdx = songNumber  0xFF;
+	int indexTableIdx = songNumber & 0xFF;
 	debug("Index into index table %X\n", indexTableIdx);
 
 	// translate virtual address to physical address
@@ -311,7 +319,7 @@ public class SongExtracter {
 		if (lyric[n] == '\r') {
 		    System.out.println();
 		} else {
-		    System.out.printf("%c", lyric[n]  0xFF);
+		    System.out.printf("%c", lyric[n] & 0xFF);
 		}
 	    }
 	    System.out.println();
@@ -326,9 +334,9 @@ public class SongExtracter {
 
 	    // Look for @00@NN and return NN
 	    for (int n = 0; n < lyric.length-20; n += 4) {
-		if (lyric[n] == (byte) '@' 
-		    lyric[n+4] == (byte) '0' 
-		    lyric[n+8] == (byte) '0' 
+		if (lyric[n] == (byte) '@' &&
+		    lyric[n+4] == (byte) '0' &&
+		    lyric[n+8] == (byte) '0' &&
 		    lyric[n+12] == (byte) '@') {
 		    lang = ((lyric[n+16]-'0') << 4) + lyric[n+20]-'0';
 		    break;
@@ -538,7 +546,7 @@ public class SongExtracter {
 	    int offset = 0;
 	    int midiChannelNumber = 1;
 
-	    /* From http://board.midibuddy.net/showpost.php?p=533722postcount=31
+	    /* From http://board.midibuddy.net/showpost.php?p=533722&postcount=31
 	       Block of 5 bytes :
 	       xx xx xx xx xx
 	       1st byte = Delay Time
@@ -561,14 +569,14 @@ public class SongExtracter {
 
 
 		int tick = timeLine + startDelayTime;
-		System.out.printf("Offset %X event %X timeline %d\n", offset, event  0xFF, tick);
+		System.out.printf("Offset %X event %X timeline %d\n", offset, event & 0xFF, tick);
 
 		ShortMessage msg = new ShortMessage();
 		ShortMessage msg2 = null;
 
 		try {
 		    // For Midi event types see http://www.midi.org/techspecs/midimessages.php
-		    switch (event  0xF0) {
+		    switch (event & 0xF0) {
 		    case ShortMessage.CONTROL_CHANGE:  // Control Change 0xB0
 		    case ShortMessage.PITCH_BEND:  // Pitch Wheel Change 0xE0
 			msg.setMessage(event, data1, data2);
@@ -599,14 +607,14 @@ public class SongExtracter {
 			*/
 			System.out.printf("Note on %s at %d, off at %d at offset %X channel %d\n", 
 					  getKeyName(note),
-					  tick, tick + endDelayTime, offset, (event 0xF)+1);
+					  tick, tick + endDelayTime, offset, (event &0xF)+1);
 			// ON
-			msg.setMessage(ShortMessage.NOTE_ON | (event  0xF),
+			msg.setMessage(ShortMessage.NOTE_ON | (event & 0xF),
 				       note, velocity);
 
 			// OFF
 			msg2 = new ShortMessage();
-			msg2.setMessage(ShortMessage.NOTE_OFF  | (event  0xF), 
+			msg2.setMessage(ShortMessage.NOTE_OFF  | (event & 0xF), 
 					note, velocity);
 
 			break;
@@ -654,11 +662,17 @@ public class SongExtracter {
     }
 }
 
+	
+      
 ```
+
+
 with support classes LZW.java
+
 ```
 
-
+	
+      
 /**
  * Based on code by Mark Nelson
  * http://marknelson.us/1989/10/01/lzw-data-compression/
@@ -731,11 +745,11 @@ public class LZW {
 		input_bit_buffer = 0;
 	    }
 
-	while (input_bit_count <= 24  offset < inputLength)
+	while (input_bit_count <= 24 && offset < inputLength)
 	    {
 		/*
 		input_bit_buffer |= (long) inputBuffer[offset++] << (24 - input_bit_count);
-		input_bit_buffer = 0xFFFFFFFFL;
+		input_bit_buffer &= 0xFFFFFFFFL;
 		System.out.printf("input buffer %d\n", (long) inputBuffer[offset]);
 		*/
 		// Java doesn't have unsigned types. Have to play stupid games when mixing
@@ -746,8 +760,8 @@ public class LZW {
 		}
 		// System.out.printf("input buffer: %d\n", val);
 		//		if ( ((long) inpu) < 0) System.out.println("Byte is -ve???");
-		input_bit_buffer |= (((long) val) << (24 - input_bit_count))  0xFFFFFFFFL;
-		//input_bit_buffer = 0xFFFFFFFFL;
+		input_bit_buffer |= (((long) val) << (24 - input_bit_count)) & 0xFFFFFFFFL;
+		//input_bit_buffer &= 0xFFFFFFFFL;
 		// System.out.printf("input bit buffer %d\n", input_bit_buffer);
 
 		/*
@@ -759,12 +773,12 @@ public class LZW {
 		input_bit_count  += 8;
 	    }
 
-	if (offset >= inputLength  input_bit_count < 12)
+	if (offset >= inputLength && input_bit_count < 12)
 	    return MAX_VALUE;
 
 	return_value       = input_bit_buffer >>> (32 - BITS);
 	input_bit_buffer <<= BITS;
-	input_bit_buffer = 0xFFFFFFFFL;
+	input_bit_buffer &= 0xFFFFFFFFL;
 	input_bit_count   -= BITS;
 
 	return return_value;
@@ -878,11 +892,17 @@ public class LZW {
 	return offsetOut;
     }
 }
+	
+      
 ```
+
+
 SongInformation.java
+
 ```
 
-
+	
+      
 
 
 public class SongInformation {
@@ -975,11 +995,17 @@ public class SongInformation {
     }
 }
 
+	
+      
 ```
+
+
 and Debug.java
+
 ```
 
-
+	
+      
 
 public class Debug {
 
@@ -999,10 +1025,13 @@ public class Debug {
 }
 	    
 	    
+	
+      
 ```
 
 
 To compile these, run
+
 ```
 
 	
@@ -1010,7 +1039,10 @@ To compile these, run
 	
       
 ```
+
+
 and run by
+
 ```
 
 	
@@ -1022,9 +1054,11 @@ java SongExtracter <song number >
 
 The program to convert these MIDI files to Karaoke KAR files is
       KARConverter.java
+
 ```
 
-/*
+	
+      /*
  * KARConverter.java
  *
  * The output from decodnig the Sonken data is not in
@@ -1254,7 +1288,8 @@ public class KARConverter {
 		} else {
 		    newMsgData = msg.getData();
 		    if ((new String(newMsgData)).equals("\r\n")) {
-			newMsgData = 		    }
+			newMsgData = "\\".getBytes();
+		    }
 		}
 		try {
 		    /*
@@ -1375,5 +1410,6 @@ public class KARConverter {
 /*** KARConverter.java ***/
 
 
+	
+      
 ```
-

@@ -1,18 +1,22 @@
-#  Play microphone to speaker 
 
-This is a combination of the previous two programs. An
- `AudioInputStream`is preapred for reading from the microphone. A
- `SourceDataLine`is
+##  Play microphone to speaker 
+
+
+This is a combination of the previous two programs. An `AudioInputStream`is prepared for reading from the microphone. A `SourceDataLine`is
       prepared for writing to the speaker. The data is copied from the first to the second
       by reading from the audio input stream and writing to the source data line.
       The UML class diagram is
 
+
 ![alt text](PlayMicrophone.png)
 
+
 The program is:
+
 ```
 
-
+      
+      
 import java.io.File;
 import java.io.IOException;
 
@@ -191,6 +195,6 @@ public class PlayMicrophone {
 
 
 
+      
+    
 ```
-
-

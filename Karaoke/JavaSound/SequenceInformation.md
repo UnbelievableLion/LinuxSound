@@ -1,9 +1,13 @@
-#  SequenceInformation 
+
+##  SequenceInformation 
+
 
 SequenceInformation is given by
+
 ```
 
-
+      
+      
 
 import javax.sound.midi.*;
 import java.util.Vector;
@@ -313,6 +317,6 @@ public class SequenceInformation {
     }
 }
 
+      
+    
 ```
-
-

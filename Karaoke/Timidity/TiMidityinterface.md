@@ -1,21 +1,18 @@
-#  TiMidity interface 
+
+##  TiMidity interface 
+
 
 You will need to have the TiMidity source downloaded
-      from
- [
+      from [
 	SourceForge TiMidity++
-      ] (http://sourceforge.net/projects/timidity/?source=dlp)
-.
+      ](http://sourceforge.net/projects/timidity/?source=dlp) .
 
-In the earlier chapter on
- [MIDI and TiMidity] (../../MIDI/Timidity/)
-we discussed two alternative ways of building applications
+
+In the earlier chapter on [MIDI and TiMidity](../../MIDI/Timidity/) we discussed two alternative ways of building applications
       using TiMidity:
 
-+  Build a front-end with TiMidity as a library back-end
-
-
-+  Use standard TiMidity with a custom-built interface
++ Build a front-end with TiMidity as a library back-end
++ Use standard TiMidity with a custom-built interface
 	  as back-end to TiMidity
 
 
@@ -25,15 +22,13 @@ Both options are possible here, with one wrinkle: if we want to
       capture MIDI events then we have to do so as a back-end to TiMidity, which
       requires that we build a TiMidity interface.
 
+
 To recap on this,
       the different interface files for TiMidity are stored in the
-      directory
- `interface`and include files such as
- `dumb_c.c`for the dumb interface. They all revolve
-      around a data structure
- `ControlMode`defined in
- `timidity/controls.h`:
-```sh_cpp
+      directory `interface`and include files such as `dumb_c.c`for the dumb interface. They all revolve
+      around a data structure `ControlMode`defined in `timidity/controls.h`:
+
+```
 
 	
 typedef struct {
@@ -54,20 +49,21 @@ typedef struct {
 	
       
 ```
+
+
 .
 
+
 For the simplest values of the functions in this structure,
-      see the code for the dumb interface in
- `interface/dumb_c.c`.
+      see the code for the dumb interface in `interface/dumb_c.c`.
+
 
 For dealing with lyrics, the main field to set is the 
-      function
- `event()`. This will be passed a
-      pointer to a
- `CtlEvent`which is
-      defined in
- `timidity/controls.h`:
-```sh_cpp
+      function `event()`. This will be passed a
+      pointer to a `CtlEvent`which is
+      defined in `timidity/controls.h`:
+
+```
 
 	
 typedef struct _CtlEvent {
@@ -79,15 +75,14 @@ typedef struct _CtlEvent {
 ```
 
 
+
+
+
 The type field distinguishes a large number of event types
-      such as
- `CTLE_NOW_LOADING`and
- `CTLE_PITCH_BEND`.
-      The type of interest to us is
- `CTLE_LYRIC`.
-      Typical code to handle this is in
- `interface/dumb_c.c`which prints event information to output:
-```sh_cpp
+      such as `CTLE_NOW_LOADING`and `CTLE_PITCH_BEND`.
+      The type of interest to us is `CTLE_LYRIC`.
+ `interface/dumb_c.c`
+```
 
 	
 static void ctl_event(CtlEvent *e)

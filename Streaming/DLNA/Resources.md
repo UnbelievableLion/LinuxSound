@@ -1,13 +1,6 @@
-#  Resources 
 
+##  Resources 
 
-
-+  
- [
++  [
 	    DLNA Home page
-	  ] (/LinuxSound/index.html)
-
-
-
-
-
+	  ](http://www.dlna.org/) 

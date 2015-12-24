@@ -1,4 +1,6 @@
-#  Favourites 
+
+##  Favourites 
+
 
 I've built this system for my home environment where I have
       a regular group of friends visiting. We each have our
@@ -6,14 +8,12 @@ I've built this system for my home environment where I have
       on scraps of paper which get lost, have wine spilt on them, etc.
       So this system includes favourite lists of songs.
 
-Each favourites list is essentially just another
- `SongTable`. But I have put a
- `JList`around the table to display it. The
- `JList`uses a
- `DefaultListModel`, and
+
+Each favourites list is essentially just another `SongTable`. But I have put a `JList`around the table to display it. The `JList`uses a `DefaultListModel`, and
       the constructor loads a song table into this list
       by iterating through the table and adding elements
-```sh_cpp
+
+```
 
 	int n = 0;
 	java.util.Iterator<SongInformation> iter = favouriteSongs.iterator();
@@ -26,29 +26,22 @@ Each favourites list is essentially just another
 
 Other Swing code adds three buttons along the bottom:
 
-+  Add song to list
-
-
-+  Delete song from list
-
-
-+  Play song
-
-
-
++ Add song to list
++ Delete song from list
++ Play song
 
 Adding a song to the list means taking the selected item
       from the main song table and adding it to this table.
       The main table is passed into the constructor and just
       kept for the purpose of getting its selection. The
-      selected object is added to both the Swing
- `JList`and to the favourites
- `SongTable`.
+      selected object is added to both the Swing `JList`and to the favourites `SongTable`.
+
 
 "Playing a song" is done in a simple way: the full path
       to the song is written to standard output, newline
       terminated. Another program in a pipeline can then pick
       this up - see later.
+
 
 Favourites aren't much good if they don't persist from one
       day to the next! So the same object storage method as before is used 
@@ -57,9 +50,10 @@ Favourites aren't much good if they don't persist from one
       application information is stored in a subdirectory
       beginning with a "." in the user's home directory.
 
-The code for
- `Favourites`is
-```sh_cpp
+
+The code for `Favourites`is
+
+```
 
 
 import java.awt.*;
@@ -89,7 +83,7 @@ public class Favourites extends JPanel {
     // It should be in your distro.
     // Fonts displaying all Unicode are zysong.ttf and Cyberbit.ttf
     // See http://unicode.org/resources/fonts.html
-    private Font font = new Font(WenQuanYi Zen Hei, Font.PLAIN, 16);
+    private Font font = new Font("WenQuanYi Zen Hei", Font.PLAIN, 16);
     
     private int findIndex = -1;
 
@@ -101,7 +95,7 @@ public class Favourites extends JPanel {
 	this.user = user;
 
 	if (font == null) {
-	    System.err.println(Cant find font);
+	    System.err.println("Can't find font");
 	}
 		
 	int n = 0;
@@ -131,9 +125,9 @@ public class Favourites extends JPanel {
 	bottomPanel.add(buttonPanel);
 	buttonPanel.setLayout(new FlowLayout());
 
-	JButton addSong = new JButton(Add song to list);
-	JButton deleteSong = new JButton(Delete song from list);
-	JButton play = new JButton(Play);
+	JButton addSong = new JButton("Add song to list");
+	JButton deleteSong = new JButton("Delete song from list");
+	JButton play = new JButton("Play");
 
 	buttonPanel.add(addSong);
 	buttonPanel.add(deleteSong);
@@ -167,27 +161,27 @@ public class Favourites extends JPanel {
     private void saveToStore() {
 	try {
 	    /*
-	    String userHome = System.getProperty(user.home);
+	    String userHome = System.getProperty("user.home");
 	    Path storePath = FileSystems.getDefault().getPath(userHome, 
-							      .karaoke,
-							      favourites,
+							      ".karaoke",
+							      "favourites",
 							      user);
 	    File storeFile = storePath.toFile();
 	    */
-	    File storeFile = new File(/server/KARAOKE/favourites/ + user);
+	    File storeFile = new File("/server/KARAOKE/favourites/" + user);
 	    FileOutputStream out = new FileOutputStream(storeFile); 
 	    ObjectOutputStream os = new ObjectOutputStream(out);
 	    os.writeObject(favouriteSongs.songs); 
 	    os.flush(); 
 	    out.close();
 	} catch(Exception e) {
-	    System.err.println(Cant save favourites file  + e.toString());
+	    System.err.println("Can't save favourites file " + e.toString());
 	}
     }
 
 
     /**
-     * play a song by printing its file path to standard out.
+     * "play" a song by printing its file path to standard out.
      * Can be used in a pipeline this way
      */
     public void playSong() {
@@ -215,5 +209,3 @@ public class Favourites extends JPanel {
 
       
 ```
-
-

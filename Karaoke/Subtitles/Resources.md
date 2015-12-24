@@ -1,13 +1,11 @@
-#  Resources 
+
+##  Resources 
 
 
 
-+  
- [
+
++  [
 	    Subtitling with Linux Tutorial
-	  ] (http://sub.wordnerd.de/linux-subs.html)
-
-
-
+	  ](http://sub.wordnerd.de/linux-subs.html) 
 
 

@@ -1,31 +1,30 @@
-#  Play a sine wave 
+
+##  Play a sine wave 
+
 
 The copy example does not show the detail of what is
-      in the buffers: the contents are
- `jack_default_audio_sample_t`'s.
-      What these are is described in the macro
- `JACK_DEFAULT_AUDIO_TYPE`with
+      in the buffers: the contents are `jack_default_audio_sample_t`'s.
+      What these are is described in the macro `JACK_DEFAULT_AUDIO_TYPE`with
       default value "32 bit float mono audio"
+
 
 To do anything more than simply pass audio through,
       you need to handle the data in this format.
-      The example program
- `simple_client.c`fills an array with 32-bit floating point sine
-      curve values. On each call to
- `process`it copies data from the sine curve array into
+      The example program `simple_client.c`fills an array with 32-bit floating point sine
+      curve values. On each call to `process`it copies data from the sine curve array into
       the output buffers. The increment into the sine
       curve array is different for left and right channels
       to give a different note on each channel.
 
+
 Note that the calculation of the sine curve array
-      is
-not
-done within the
- `process`function - that would be too slow and would cause
+      is _not_ done within the `process`function - that would be too slow and would cause
       latency.
 
+
 The program is
-```sh_cpp
+
+```
 
 /** @file simple_client.c
  *
@@ -63,7 +62,7 @@ paTestData;
 static void signal_handler(int sig)
 {
 	jack_client_close(client);
-	fprintf(stderr, signal received, exiting ...\n);
+	fprintf(stderr, "signal received, exiting ...\n");
 	exit(0);
 }
 
@@ -127,7 +126,7 @@ main (int argc, char *argv[])
 			options = (jack_options_t)my_option;
 		}
 	} else {			/* use basename of argv[0] */
-		client_name = strrchr(argv[0], /);
+		client_name = strrchr(argv[0], '/');
 		if (client_name == 0) {
 			client_name = argv[0];
 		} else {
@@ -144,30 +143,30 @@ main (int argc, char *argv[])
 
 	/* open a client connection to the JACK server */
 
-	client = jack_client_open (client_name, options, status, server_name);
+	client = jack_client_open (client_name, options, &status, server_name);
 	if (client == NULL) {
-		fprintf (stderr, jack_client_open() failed, 
-			 status = 0x%2.0x\n, status);
-		if (status  JackServerFailed) {
-			fprintf (stderr, Unable to connect to JACK server\n);
+		fprintf (stderr, "jack_client_open() failed, "
+			 "status = 0x%2.0x\n", status);
+		if (status & JackServerFailed) {
+			fprintf (stderr, "Unable to connect to JACK server\n");
 		}
 		exit (1);
 	}
-	if (status  JackServerStarted) {
-		fprintf (stderr, JACK server started\n);
+	if (status & JackServerStarted) {
+		fprintf (stderr, "JACK server started\n");
 	}
-	if (status  JackNameNotUnique) {
+	if (status & JackNameNotUnique) {
 		client_name = jack_get_client_name(client);
-		fprintf (stderr, unique name `%s assigned\n, client_name);
+		fprintf (stderr, "unique name `%s' assigned\n", client_name);
 	}
 
-	/* tell the JACK server to call `process() whenever
+	/* tell the JACK server to call `process()' whenever
 	   there is work to be done.
 	*/
 
-	jack_set_process_callback (client, process, data);
+	jack_set_process_callback (client, process, &data);
 
-	/* tell the JACK server to call `jack_shutdown() if
+	/* tell the JACK server to call `jack_shutdown()' if
 	   it ever shuts down, either entirely, or if it
 	   just decides to stop calling us.
 	*/
@@ -176,16 +175,16 @@ main (int argc, char *argv[])
 
 	/* create two ports */
 
-	output_port1 = jack_port_register (client, output1,
+	output_port1 = jack_port_register (client, "output1",
 					  JACK_DEFAULT_AUDIO_TYPE,
 					  JackPortIsOutput, 0);
 
-	output_port2 = jack_port_register (client, output2,
+	output_port2 = jack_port_register (client, "output2",
 					  JACK_DEFAULT_AUDIO_TYPE,
 					  JackPortIsOutput, 0);
 
 	if ((output_port1 == NULL) || (output_port2 == NULL)) {
-		fprintf(stderr, no more JACK ports available\n);
+		fprintf(stderr, "no more JACK ports available\n");
 		exit (1);
 	}
 
@@ -193,31 +192,31 @@ main (int argc, char *argv[])
 	 * process() callback will start running now. */
 
 	if (jack_activate (client)) {
-		fprintf (stderr, cannot activate client);
+		fprintf (stderr, "cannot activate client");
 		exit (1);
 	}
 
-	/* Connect the ports.  You cant do this before the client is
-	 * activated, because we cant make connections to clients
-	 * that arent running.  Note the confusing (but necessary)
+	/* Connect the ports.  You can't do this before the client is
+	 * activated, because we can't make connections to clients
+	 * that aren't running.  Note the confusing (but necessary)
 	 * orientation of the driver backend ports: playback ports are
-	 * input to the backend, and capture ports are output from
+	 * "input" to the backend, and capture ports are "output" from
 	 * it.
 	 */
  	
 	ports = jack_get_ports (client, NULL, NULL,
 				JackPortIsPhysical|JackPortIsInput);
 	if (ports == NULL) {
-		fprintf(stderr, no physical playback ports\n);
+		fprintf(stderr, "no physical playback ports\n");
 		exit (1);
 	}
 
 	if (jack_connect (client, jack_port_name (output_port1), ports[0])) {
-		fprintf (stderr, cannot connect output ports\n);
+		fprintf (stderr, "cannot connect output ports\n");
 	}
 
 	if (jack_connect (client, jack_port_name (output_port2), ports[1])) {
-		fprintf (stderr, cannot connect output ports\n);
+		fprintf (stderr, "cannot connect output ports\n");
 	}
 
 	free (ports);
@@ -250,5 +249,3 @@ main (int argc, char *argv[])
 
       
 ```
-
-

@@ -1,13 +1,15 @@
-#  Swing song table 
+
+##  Swing song table 
+
 
 This is mainly code to get the different song tables loaded
       and to buld the Swing interface. It also filters the
       showing table based on patterns matched.
       The originally loaded table is kept for restoration and
       patching matching.
-      The code for
- `SongTableSwing`is
-```sh_cpp
+      The code for `SongTableSwing`is
+
+```
 
 
 import java.awt.*;
@@ -32,8 +34,8 @@ public class SongTableSwing extends JPanel {
     // It should be in your distro.
     // Fonts displaying all Unicode are zysong.ttf and Cyberbit.ttf
     // See http://unicode.org/resources/fonts.html
-    private Font font = new Font(WenQuanYi Zen Hei, Font.PLAIN, 16);
-    // font = new Font(Bitstream Cyberbit, Font.PLAIN, 16);
+    private Font font = new Font("WenQuanYi Zen Hei", Font.PLAIN, 16);
+    // font = new Font("Bitstream Cyberbit", Font.PLAIN, 16);
     
     private int findIndex = -1;
 
@@ -43,9 +45,9 @@ public class SongTableSwing extends JPanel {
      * @param args a <code>String</code> value
      */
     public static final void main(final String[] args) {
-	if (args.length >= 1  
-	    args[0].startsWith(-h)) {
-	    System.err.println(Usage: java SongTableSwing [song directory]);
+	if (args.length >= 1 && 
+	    args[0].startsWith("-h")) {
+	    System.err.println("Usage: java SongTableSwing [song directory]");
 	    System.exit(0);
 	}
 
@@ -58,7 +60,7 @@ public class SongTableSwing extends JPanel {
 	}
 
 	JFrame frame = new JFrame();
-	frame.setTitle(Song Table);
+	frame.setTitle("Song Table");
 	frame.setSize(700, 800);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
@@ -68,7 +70,7 @@ public class SongTableSwing extends JPanel {
 	frame.setVisible(true);
 
 	JFrame favourites = new JFrame();
-	favourites.setTitle(Favourites);
+	favourites.setTitle("Favourites");
 	favourites.setSize(600, 800);
 	favourites.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
@@ -82,7 +84,7 @@ public class SongTableSwing extends JPanel {
     public SongTableSwing(SongTable songs) {
 
 	if (font == null) {
-	    System.err.println(Cant fnd font);
+	    System.err.println("Can't fnd font");
 	}
 		
 	int n = 0;
@@ -113,17 +115,17 @@ public class SongTableSwing extends JPanel {
 	bottomPanel.add(searchPanel);
 	searchPanel.setLayout(new FlowLayout());
 
-	JLabel numberLabel = new JLabel(Number);
+	JLabel numberLabel = new JLabel("Number");
 	numberField = new JTextField(5);
 
-	JLabel langLabel = new JLabel(Language);
+	JLabel langLabel = new JLabel("Language");
 	langField = new JTextField(8);
 
-	JLabel titleLabel = new JLabel(Title);
+	JLabel titleLabel = new JLabel("Title");
 	titleField = new JTextField(20);
 	titleField.setFont(font);
 
-	JLabel artistLabel = new JLabel(Artist);
+	JLabel artistLabel = new JLabel("Artist");
 	artistField = new JTextField(10);
 	artistField.setFont(font);
 
@@ -138,15 +140,15 @@ public class SongTableSwing extends JPanel {
 		public void changedUpdate(DocumentEvent e) {
 		    // rest find to -1 to restart any find searches
 		    findIndex = -1;
-		    // System.out.println(reset find index);
+		    // System.out.println("reset find index");
 		}
 		public void insertUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(reset insert find index);
+		    // System.out.println("reset insert find index");
 		}
 		public void removeUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(reset remove find index);
+		    // System.out.println("reset remove find index");
 		}
 	    }
 	    );
@@ -154,15 +156,15 @@ public class SongTableSwing extends JPanel {
 		public void changedUpdate(DocumentEvent e) {
 		    // rest find to -1 to restart any find searches
 		    findIndex = -1;
-		    // System.out.println(reset insert find index);
+		    // System.out.println("reset insert find index");
 		}
 		public void insertUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(reset insert find index);
+		    // System.out.println("reset insert find index");
 		}
 		public void removeUpdate(DocumentEvent e) {
 		    findIndex = -1;
-		    // System.out.println(reset insert find index);
+		    // System.out.println("reset insert find index");
 		}
 	    }
 	    );
@@ -180,10 +182,10 @@ public class SongTableSwing extends JPanel {
 	bottomPanel.add(buttonPanel);
 	buttonPanel.setLayout(new FlowLayout());
 
-	JButton find = new JButton(Find);
-	JButton filter = new JButton(Filter);
-	JButton reset = new JButton(Reset);
-	JButton play = new JButton(Play);
+	JButton find = new JButton("Find");
+	JButton filter = new JButton("Filter");
+	JButton reset = new JButton("Reset");
+	JButton play = new JButton("Play");
 	buttonPanel.add(find);
 	buttonPanel.add(filter);
 	buttonPanel.add(reset);
@@ -228,20 +230,20 @@ public class SongTableSwing extends JPanel {
 	for (int n = findIndex + 1; n < model.getSize(); n++) {
 	    SongInformation info = (SongInformation) model.getElementAt(n);
 
-	    if ((title.length() != 0)  (artist.length() != 0)) {
-		if (info.titleMatch(title)  info.artistMatch(artist)) {
+	    if ((title.length() != 0) && (artist.length() != 0)) {
+		if (info.titleMatch(title) && info.artistMatch(artist)) {
 			findIndex = n;
 			list.setSelectedIndex(n);
 			list.ensureIndexIsVisible(n);
 			break;
 		}
 	    } else {
-		if ((title.length() != 0)  info.titleMatch(title)) {
+		if ((title.length() != 0) && info.titleMatch(title)) {
 		    findIndex = n;
 		    list.setSelectedIndex(n);
 		    list.ensureIndexIsVisible(n);
 		    break;
-		} else if ((artist.length() != 0)  info.artistMatch(artist)) {
+		} else if ((artist.length() != 0) && info.artistMatch(artist)) {
 		    findIndex = n;
 		    list.setSelectedIndex(n);
 		    list.ensureIndexIsVisible(n);
@@ -282,8 +284,8 @@ public class SongTableSwing extends JPanel {
     }
 
     public void resetSongs() {
-	artistField.setText();
-	titleField.setText();
+	artistField.setText("");
+	titleField.setText("");
 	model.clear();
 	int n = 0;
 	java.util.Iterator<SongInformation> iter = allSongs.iterator();
@@ -292,7 +294,7 @@ public class SongTableSwing extends JPanel {
 	}
     }
     /**
-     * play a song by printing its file path to standard out.
+     * "play" a song by printing its file path to standard out.
      * Can be used in a pipeline this way
      */
     public void playSong() {
@@ -322,5 +324,3 @@ public class SongTableSwing extends JPanel {
 }
       
 ```
-
-

@@ -1,48 +1,41 @@
-#  User space tools 
 
+##  User space tools 
 
 ###  alsamixer 
 
 
  `alsamixer`runs within a terminal window and allows
       you to select sound cards and controls interfaces on those cards.
-      It looks like
-![alt text](alsamixer.png)
+      It looks like![alt text](alsamixer.png)
 
 
  `amixer`is a command line applications with similar functions.
 
-Compared to the general mixer functions described in
- [
+
+Compared to the general mixer functions described in [
 	 the Basic chapter
-      ] (../Basic/)
-, the mixer functions are quite limited:
+      ](../Basic/) , the mixer functions are quite limited:
 
-+  Setting the playback and capture volumes on output and input channels
++ Setting the playback and capture volumes on output and input channels
++ Muting or unmuting a card
 
-
-+  Muting or unmuting a card
-
-
-+  
-
-
-The document
- [
+The document [
 	Sound configuration on Raspberry Pi with ALSA
-      ] (http://blog.scphillips.com/2013/01/sound-configuration-on-raspberry-pi-with-alsa/)
-by Stephen C Phillips
+      ](http://blog.scphillips.com/2013/01/sound-configuration-on-raspberry-pi-with-alsa/) by Stephen C Phillips
       is applicable
       to all other ALSA systems and not just the Raspberry Pi.
 
 ###  alsactl 
 
+
 Simple control programs for ALSA configurations.
 
 ###  speaker-test 
 
+
 This command allows you to test which outputs go where. 
       For e.g. 5 channel sound, running
+
 ```
 
 	
@@ -50,7 +43,10 @@ speaker-test -t wav -c 5
 	
       
 ```
+
+
 will produce on my default sound card the text and audio of
+
 ```
 
 	
@@ -75,11 +71,15 @@ Time per period = 12.948378
 	
       
 ```
+
+
 It will also play the phrases "Front Left" etc to the relevant spekaer.
 
 ###  aplay/arecord 
 
+
 Play a file or record to a file. To play the microphone to the speaker,
+
 ```
 
 	
@@ -87,7 +87,10 @@ arecord -r 44100 --buffer-size=128 | aplay --buffer-size=128
 	
       
 ```
+
+
 or to record it to file
+
 ```
 
 
@@ -95,16 +98,16 @@ or to record it to file
 
 
 ```
+
+
 will record a 20-second WAV file at DAT quality on your first available soundcard (hw:0,0). DAT quality is defined as stereo digital audio recorded with a 48 kHz samping rate and 16-bit resolution.
 
 ###  Identifying ALSA cards 
 
-The simplest ways are to run
- `aplay`and
- `arecord`with the '-l' option:
 
-+  
- `arecord -l`
+The simplest ways are to run `aplay`and `arecord`with the '-l' option:
+
++  `arecord -l`
 ```
 
 	    
@@ -119,10 +122,7 @@ card 2: Pro [SB X-Fi Surround 5.1 Pro], device 0: USB Audio [USB Audio]
 	  
 ```
 
-
-
-+  
- `aplay -l`
++  `aplay -l`
 ```
 
 	    
@@ -152,28 +152,21 @@ card 2: Pro [SB X-Fi Surround 5.1 Pro], device 1: USB Audio [USB Audio #1]
 
 
 
-
 ###  Device names 
 
+
 The cards are often given names such as "hw:0" or "hw:2.2"
-      in programs such as
- `qjackctl`(see the chapter on Jack).
+      in programs such as `qjackctl`(see the chapter on Jack).
       The term "hw" refers to hardware devices. The major number refers to the
       card number, the minor number to the device number.
-      The
-name
-of the device is in [...] brackets.
+      The _name_ of the device is in [...] brackets.
 
-Devices may also be known by
-aliases
-.
-      The command
- `aplay -L`lists
-device aliases
-.
+
+Devices may also be known by _aliases_ .
+      The command `aplay -L`lists _device aliases_ .
       For example, the "hdmi" alias is defined on my system in
-      the configuration file
- ` /etc/asound.conf`
+      the configuration file ` /etc/asound.conf`
+
 ```
 
 	
@@ -194,11 +187,14 @@ pcm.hdmi2 {
 	
       
 ```
+
+
 so that "hdmi:0" is really "hw:1,3": card 1, device 3.
 
+
 Other aliases may be defined to cover a range of devices, parameterised by
-      card and device. For example,
- `/usr/share/alsa/pcm/surround40.conf`defines
+      card and device. For example, `/usr/share/alsa/pcm/surround40.conf`defines
+
 ```
 
 	
@@ -237,15 +233,18 @@ pcm.!surround40 {
 	
       
 ```
-defines for example "surround40:CARD=PCH,DEV=0" as an alias for hw:0,0
+
+
+This defines for example "surround40:CARD=PCH,DEV=0" as an alias for hw:0,0
       on my system (PCH is card 0).
+
 
 I don't know an easy programmatic way to go from "card 1, device 3" to "hdmi:0".
 
 
+The set of aliases can be shown using `aplay`and `arecord`:
 
-+  The output from
- `aplay -L`on my system is
++ The output from `aplay -L`on my system is
 ```
 
 	
@@ -309,10 +308,7 @@ iec958:CARD=Pro,DEV=0
       
 ```
 
-
-
-+  The output from
- `arecord -L`is
++ The output from `arecord -L`is
 ```
 
 	    
@@ -370,14 +366,13 @@ iec958:CARD=Pro,DEV=0
 
 
 
-
 ###  ALSA configuration files 
 
+
 This tutorial by Volker Schatz explains what is going on in ALSA
-      configuration files and looks really good:
- [
+      configuration files and looks really good: [
 	A close look at ALSA
-      ] (http://www.volkerschatz.com/noise/alsa.html)
+      ](http://www.volkerschatz.com/noise/alsa.html) 
 
 
 We just note one thing: the default ALSA device is "hw:0". This is
@@ -386,13 +381,15 @@ We just note one thing: the default ALSA device is "hw:0". This is
 
 ###  alsa-info 
 
+
 This will collect information about your system and save it in a file.
       It is a shell script that gives an enormous amount of information.
       Here is a heavily elided subset of the information:
+
 ```
 
 	
-upload=truescript=truecardinfo=
+upload=true&script=true&cardinfo=
 !!################################
 !!ALSA Information Script v 0.4.60
 !!################################
@@ -663,16 +660,20 @@ state.PCH {
 ```
 
 
+
+
 ###  Applications using ALSA 
+
 
 Many applications can directly use ALSA
       by appropriate commandline arguments.
 
 ####  MPlayer 
 
-To play a file to an ALSA device using
- `mplayer`,
+
+To play a file to an ALSA device using `mplayer`,
       use code such as
+
 ```
 
 	
@@ -682,11 +683,14 @@ mplayer -ao alsa:device=hw=1.0 -srate 48000  bryan.mp3
 ```
 
 
+
+
 ####  VLC 
 
-To play a file to an ALSA device using
- `vlc`,
+
+To play a file to an ALSA device using `vlc`,
       use code such as
+
 ```
 
 	
@@ -696,11 +700,14 @@ vlc --aout alsa ...
 ```
 
 
+
+
 ####  TiMidity 
 
-To play a file to an ALSA device using
- `timidity`,
+
+To play a file to an ALSA device using `timidity`,
       use code such as
+
 ```
 
 	
@@ -708,5 +715,6 @@ timidity -Os ...
 	
       
 ```
+
 
 

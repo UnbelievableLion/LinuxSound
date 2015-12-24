@@ -1,8 +1,12 @@
-#  The Java controller 
 
-Information about each song is stored in a file
- `SongInformation.java`:
-```sh_cpp
+##  The Java controller 
+
+
+Information about each song is stored in a file `SongInformation.java`:
+
+```
+
+
 package newmarch.songtable;
 
 import java.nio.file.Path;
@@ -42,29 +46,11 @@ public class SongInformation implements Serializable {
     }
 
     public String toString() {
-	return
-(
-+ index +
-)
-+ artist +
-:
-+ title;
+	return "(" + index + ") " + artist + ": " + title;
     }
 
-    public Vector
-<
-String
->
-toVector() {
-	Vector
-<
-String
->
-v = new Vector
-<
-String
->
-();
+    public Vector<String> toVector() {
+	Vector<String> v = new Vector<String>();
 	v.add(index);
 	v.add(artist);
 	v.add(title);
@@ -75,44 +61,32 @@ String
     }
 
     public boolean titleMatch(String pattern) {
-	return title.matches(
-(?i).*
-+ pattern +
-.*
-);
+	return title.matches("(?i).*" + pattern + ".*");
     }
 
     public boolean artistMatch(String pattern) {
-	return artist.matches(
-(?i).*
-+ pattern +
-.*
-);
+	return artist.matches("(?i).*" + pattern + ".*");
     }
 
     public boolean numberMatch(String pattern) {
-	if (pattern.length()
->
-0
-Character.isDigit(pattern.charAt(0))) {
+	if (pattern.length() > 0 && Character.isDigit(pattern.charAt(0))) {
 	    // user typed a number only, assume it is
 	    // from the Karaoke songs
-	    pattern =
-SK-
-+ pattern;
+	    pattern = "SK-" + pattern;
 	}
 	return index.equalsIgnoreCase(pattern);
     }
 }
 
+      
 ```
+
+
 This includes methods to perform Boolean pattern matches on the object.
 
-Multiple songs are stored in a
- `SongTable`which is basically
-      a
- `Vector`of
- `SongInformation`objects.
+
+Multiple songs are stored in a `SongTable`which is basically
+      a `Vector`of `SongInformation`objects.
       This table is serialisable so that it can be stored and then loaded
       quickly from the HTTP server. 
       The class contains some messy code to initialise the table if it is
@@ -121,9 +95,12 @@ Multiple songs are stored in a
       of pattern matches. This is useful from returning tables that meet
       a pattern such as the artist being the Beatles.
 
-The table is given by
- `SongTable.java`:
-```sh_cpp
+
+The table is given by `SongTable.java`:
+
+```
+
+
 package newmarch.songtable;
 
 import java.util.Vector;
@@ -142,23 +119,11 @@ import java.net.URLConnection;
 import java.net.HttpURLConnection;
 
 class Visitor
-    extends SimpleFileVisitor
-<
-Path
->
-{
+    extends SimpleFileVisitor<Path> {
 
-    private Vector
-<
-SongInformation
->
-songs;
+    private Vector<SongInformation> songs;
 
-    public Visitor(Vector
-<
-SongInformation
->
-songs) {
+    public Visitor(Vector<SongInformation> songs) {
 	this.songs = songs;
     }
 
@@ -167,25 +132,13 @@ songs) {
                                    BasicFileAttributes attr) {
 	if (attr.isRegularFile()) {
 	    String fname = file.getFileName().toString();
-	    //System.out.println(
-Regular file
-+ fname);
-	    if (fname.endsWith(
-.zip
-) || 
-		fname.endsWith(
-.mp3
-) || 
-		fname.endsWith(
-.kar
-)) {
+	    //System.out.println("Regular file " + fname);
+	    if (fname.endsWith(".zip") || 
+		fname.endsWith(".mp3") || 
+		fname.endsWith(".kar")) {
 		String root = fname.substring(0, fname.length()-4);
-		//System.err.println(
-root
-+ root);
-		String parts[] = root.split(
--
-, 3);
+		//System.err.println(" root " + root);
+		String parts[] = root.split(" - ", 3);
 		if (parts.length != 3)
 		    return java.nio.file.FileVisitResult.CONTINUE;
 
@@ -207,56 +160,28 @@ root
 
 public class SongTable {
 
-    private static final String SONG_INFO_ROOT =
-/server/KARAOKE/KARAOKE/
-;
-    private static final String SONG_STORE_DEFAULT =
-http://192.168.1.101/KARAOKE/SongStore
-;
-    private static final String SONG_STORE_ROOT =
-http://192.168.1.101/KARAOKE/
-;
+    private static final String SONG_INFO_ROOT = "/server/KARAOKE/KARAOKE/";
+    private static final String SONG_STORE_DEFAULT = "http://192.168.1.101/KARAOKE/SongStore";
+    private static final String SONG_STORE_ROOT = "http://192.168.1.101/KARAOKE/";
 
-    private static Vector
-<
-SongInformation
->
-allSongs;
+    private static Vector<SongInformation> allSongs;
 
-    public Vector
-<
-SongInformation
->
-songs = 
-	new Vector
-<
-SongInformation
->
-();
+    public Vector<SongInformation> songs = 
+	new Vector<SongInformation>  ();
 
     public static long[] langCount = new long[0x23];
 
-    public SongTable(Vector
-<
-SongInformation
->
-songs) {
+    public SongTable(Vector<SongInformation> songs) {
 	this.songs = songs;
     }
 
     public SongTable(String[] args) throws java.io.IOException, 
 					   java.io.FileNotFoundException {
-	if (args.length
->
-= 1) {
-	    if (args[0].startsWith(
--s
-)) {
+	if (args.length >= 1) {
+	    if (args[0].startsWith("-s")) {
 		loadTableFromStore(SONG_STORE_ROOT + args[0].substring(2));
 	    } else {	    
-		System.err.println(
-Loading from
-+ args[0]);
+		System.err.println("Loading from " + args[0]);
 		loadTableFromSource(args[0]);
 		saveTableToStore(args[1]);
 	    }
@@ -268,14 +193,10 @@ Loading from
     public boolean loadTableFromStore(String urlStr) {
 	try {
 	    /*
-	    String userHome = System.getProperty(
-user.home
-);
-	    Path storePath = FileSystems.getDefault().getPath(userHome,
-.karaoke
-,
-SongStore
-);
+	    String userHome = System.getProperty("user.home");
+	    Path storePath = FileSystems.getDefault().getPath(userHome, 
+							      ".karaoke",
+							      "SongStore");
 	    
 	    File storeFile = storePath.toFile();
 	    */
@@ -285,17 +206,10 @@ SongStore
 	    BufferedInputStream reader = new BufferedInputStream(url
 								 .openConnection().getInputStream());
 	    ObjectInputStream is = new ObjectInputStream(reader);
-	    songs = (Vector
-<
-SongInformation
->
-) is.readObject();
+	    songs = (Vector<SongInformation>) is.readObject();
 	    reader.close();
 	} catch(Exception e) {
-	    System.err.println(
-Can
-t load store file
-+ e.toString());
+	    System.err.println("Can't load store file " + e.toString());
 	    return false;
 	}
 	return true;
@@ -307,9 +221,7 @@ t load store file
 	    URLConnection connection = url.openConnection();
 	    HttpURLConnection httpConnection = (HttpURLConnection) connection;
 	    httpConnection.setDoOutput(true);
-	    httpConnection.setRequestMethod(
-PUT
-);
+	    httpConnection.setRequestMethod("PUT");
 
 	    BufferedOutputStream writer = new BufferedOutputStream(connection.getOutputStream());
 	    ObjectOutputStream os = new ObjectOutputStream(writer);
@@ -318,20 +230,11 @@ PUT
 	    writer.close();
 	    int responseCode = httpConnection.getResponseCode();
 	    String responseMsg = httpConnection.getResponseMessage();
-	    System.out.println(
-Saved table to
-+ urlStr +
-with code
-+ responseCode +
-			       responseMsg +
-size
-+ songs.size());
+	    System.out.println("Saved table to " + urlStr + " with code " + responseCode +
+			       responseMsg + " size " + songs.size());
 	   
 	} catch(Exception e) {
-	    System.err.println(
-Can
-t save store file
-+ e.toString());
+	    System.err.println("Can't save store file " + e.toString());
 	}
     }
 
@@ -354,27 +257,15 @@ t save store file
 
 	while ((fname = in.readLine()) != null) {
 	    // System.out.println(fname);
-	    if (fname.endsWith(
-.zip
-) || 
-		fname.endsWith(
-.mp3
-) || 
-		fname.endsWith(
-.kar
-)) {
+	    if (fname.endsWith(".zip") || 
+		fname.endsWith(".mp3") || 
+		fname.endsWith(".kar")) {
 		// lose extension
 		String root = fname.substring(0, fname.length()-4);
 		// lose /.../
-		root = root.substring(root.lastIndexOf(
-/
-)+1);
-		//System.err.println(
-root
-+ root);
-		String parts[] = root.split(
--
-, 3);
+		root = root.substring(root.lastIndexOf('/')+1);
+		//System.err.println(" root " + root);
+		String parts[] = root.split(" - ", 3);
 		if (parts.length != 3)
 		    continue;
 
@@ -391,36 +282,20 @@ root
 	}
     }
 
-    public java.util.Iterator
-<
-SongInformation
->
-iterator() {
+    public java.util.Iterator<SongInformation> iterator() {
 	return songs.iterator();
     }
 
     public SongInformation getSongAt(int index) {
-	if (index
-<
-0 || index
->
-= songs .size()) {
+	if (index < 0 || index >= songs .size()) {
 	    return null;
 	}
 	return songs.elementAt(index);
     }
  
     public SongTable titleMatches( String pattern) {
-	Vector
-<
-SongInformation
->
-matchSongs = 
-	    new Vector
-<
-SongInformation
->
-();
+	Vector<SongInformation> matchSongs = 
+	    new Vector<SongInformation>  ();
 
 	for (SongInformation song: songs) {
 	    if (song.titleMatch(pattern)) {
@@ -431,16 +306,8 @@ SongInformation
     }
 
      public SongTable artistMatches( String pattern) {
-	Vector
-<
-SongInformation
->
-matchSongs = 
-	    new Vector
-<
-SongInformation
->
-();
+	Vector<SongInformation> matchSongs = 
+	    new Vector<SongInformation>  ();
 
 	for (SongInformation song: songs) {
 	    if (song.artistMatch(pattern)) {
@@ -451,16 +318,8 @@ SongInformation
     }
 
     public SongTable numberMatches( String pattern) {
-	Vector
-<
-SongInformation
->
-matchSongs = 
-	    new Vector
-<
-SongInformation
->
-();
+	Vector<SongInformation> matchSongs = 
+	    new Vector<SongInformation>  ();
 
 	for (SongInformation song: songs) {
 	    if (song.numberMatch(pattern)) {
@@ -473,9 +332,7 @@ SongInformation
     public String toString() {
 	StringBuffer buf = new StringBuffer();
 	for (SongInformation song: songs) {
-	    buf.append(song.toString() +
-\n
-);
+	    buf.append(song.toString() + "\n");
 	}
 	return buf.toString();
     }
@@ -490,14 +347,14 @@ SongInformation
 	    System.exit(1);
 	}
 
-	System.out.println(songs.artistMatches(
-Tom Jones
-).toString());
+	System.out.println(songs.artistMatches("Tom Jones").toString());
 
 	System.exit(0);
     }
 }
 
+      
 ```
+
 
 

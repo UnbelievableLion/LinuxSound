@@ -1,4 +1,6 @@
-#  Conclusion 
+
+##  Conclusion 
+
 
 The Khronos group has produced specifications for audio and video in low capability
       systems. These are currently used by Android and by the Raspberry Pi.
@@ -6,14 +8,14 @@ The Khronos group has produced specifications for audio and video in low capabil
       and some example programs
       and will be expanded later.
 
-```sh_cpp
+```
 
 /*
  * OpenMAX AL - Audio/Video Playback Example
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include OpenMAXAL.h
+#include "OpenMAXAL.h"
 #define MAX_NUMBER_INTERFACES
 5
 #define MAX_NUMBER_OUTPUT_DEVICES 3
@@ -96,27 +98,27 @@ void TestAudioVideoPlayback (XAObjectItf engine)
     XANativeHandle nativeDisplayHandle = NULL;
     /* Get the XA Engine Interface, which is implicit */
     res = (*engine)->GetInterface(engine,
-				  XA_IID_ENGINE, (void*) EngineItf); CheckErr(res);
+				  XA_IID_ENGINE, (void*) &EngineItf); CheckErr(res);
     /* Get the Audio IO DEVICE CAPABILITIES interface, which is also
      * implicit */
     res = (*engine)->GetInterface(engine,
 				  XA_IID_AUDIOIODEVICECAPABILITIES,
-				  (void*) AudioIODeviceCapabilitiesItf); CheckErr(res);
+				  (void*) &AudioIODeviceCapabilitiesItf); CheckErr(res);
     numOutputs = MAX_NUMBER_OUTPUT_DEVICES;
     res = (*AudioIODeviceCapabilitiesItf)->
 	GetAvailableAudioOutputs(AudioIODeviceCapabilitiesItf,
-				 numOutputs, OutputDeviceIDs); CheckErr(res);
+				 &numOutputs, OutputDeviceIDs); CheckErr(res);
     /* Search for integrated handsfree loudspeaker */
     for (i = 0; i < numOutputs; i++)
 	{
 	    res = (*AudioIODeviceCapabilitiesItf)->
 		QueryAudioOutputCapabilities(AudioIODeviceCapabilitiesItf,
-					     OutputDeviceIDs[i], AudioOutputDescriptor);
+					     OutputDeviceIDs[i], &AudioOutputDescriptor);
 	    CheckErr(res);
 	    if ((AudioOutputDescriptor.deviceConnection ==
-		 XA_DEVCONNECTION_INTEGRATED) 
+		 XA_DEVCONNECTION_INTEGRATED) &&
 		(AudioOutputDescriptor.deviceScope ==
-		 XA_DEVSCOPE_ENVIRONMENT) 
+		 XA_DEVSCOPE_ENVIRONMENT) &&
 		(AudioOutputDescriptor.deviceLocation ==
 		 XA_DEVLOCATION_HANDSET))
 		{
@@ -135,7 +137,7 @@ void TestAudioVideoPlayback (XAObjectItf engine)
     numOutputs = MAX_NUMBER_OUTPUT_DEVICES;
     res = (*AudioIODeviceCapabilitiesItf)->
 	GetDefaultAudioDevices(AudioIODeviceCapabilitiesItf,
-			       XA_DEFAULTDEVICEID_AUDIOOUTPUT, numOutputs,
+			       XA_DEFAULTDEVICEID_AUDIOOUTPUT, &numOutputs,
 			       OutputDeviceIDs);
     CheckErr(res);
     /* Check whether Default Output devices include the handsfree
@@ -166,33 +168,33 @@ void TestAudioVideoPlayback (XAObjectItf engine)
     iidArray[0] = XA_IID_VOLUME;
     /* Create Output Mix object to be used by player */
     res = (*EngineItf)->CreateOutputMix(EngineItf,
-					OutputMix, 1, iidArray, required); CheckErr(res);
+					&OutputMix, 1, iidArray, required); CheckErr(res);
     /* Realizing the Output Mix object in synchronous mode
        res = (*OutputMix)->Realize(OutputMix,
        XA_BOOLEAN_FALSE); CheckErr(res);
     */
     /* Get the volume interface on the output mix */
     res = (*OutputMix)->GetInterface(OutputMix,
-				     XA_IID_VOLUME, (void*)volumeItf); CheckErr(res);
+				     XA_IID_VOLUME, (void*)&volumeItf); CheckErr(res);
     /* Setup the audio/video data source structure */
     uri.locatorType
 	= XA_DATALOCATOR_URI;
     uri.URI
-	= (XAchar *) file:///avmedia.3gp;
+	= (XAchar *) "file:///avmedia.3gp";
     mime.formatType
 	= XA_DATAFORMAT_MIME;
     mime.mimeType
-	= (XAchar *) video/3gpp;
+	= (XAchar *) "video/3gpp";
     mime.containerType = XA_CONTAINERTYPE_3GPP; /* provided as a hint to
 						 * the player */
-    avSource.pLocator = (void*) uri;
-    avSource.pFormat = (void*) mime;
+    avSource.pLocator = (void*) &uri;
+    avSource.pFormat = (void*) &mime;
     /* Setup the audio data sink structure */
     locator_outputmix.locatorType = XA_DATALOCATOR_OUTPUTMIX;
     locator_outputmix.outputMix
 	= OutputMix;
     audioSink.pLocator
-	= (void*) locator_outputmix;
+	= (void*) &locator_outputmix;
     audioSink.pFormat
 	= NULL;
     /* Set nativeWindowHandle and nativeDisplayHandle to
@@ -206,19 +208,19 @@ void TestAudioVideoPlayback (XAObjectItf engine)
     locator_displayregion.hDisplay
 	= nativeDisplayHandle;
     videoSink.pLocator
-	= (void*) locator_displayregion;
+	= (void*) &locator_displayregion;
     videoSink.pFormat
 	= NULL;
     /* Create the media player. pBankSrc is NULL as we have a non-MIDI
      * data source */
     res = (*EngineItf)->CreateMediaPlayer(EngineItf,
-					  player, avSource, NULL, audioSink, videoSink, NULL, NULL,
+					  &player, &avSource, NULL, &audioSink, &videoSink, NULL, NULL,
 					  1, iidArray, required); CheckErr(res);
     /* Realizing the player in synchronous mode */
     res = (*player)->Realize(player, XA_BOOLEAN_FALSE); CheckErr(res);
     /* Get play interface */
     res = (*player)->GetInterface(player,
-				  XA_IID_PLAY, (void*) playItf); CheckErr(res);
+				  XA_IID_PLAY, (void*) &playItf); CheckErr(res);
     /* Setup to receive position event callbacks */
     res = (*playItf)->RegisterCallback(playItf,
 				       PlayEventCallback, NULL); CheckErr(res);
@@ -233,15 +235,15 @@ void TestAudioVideoPlayback (XAObjectItf engine)
     /* Play the media */
     res = (*playItf)->SetPlayState(playItf,
 				   XA_PLAYSTATE_PLAYING); CheckErr(res);
-    while ((c = getchar()) != q)
+    while ((c = getchar()) != 'q')
 	{
 	    XAuint32 playState;
 	    switch(c)
 		{
-		case 1:
+		case '1':
 		    /* Play the media - if it is not already playing */
 		    res = (*playItf)->GetPlayState(playItf,
-						   playState); CheckErr(res);
+						   &playState); CheckErr(res);
 		    if (playState != XA_PLAYSTATE_PLAYING)
 			{
 			    res = (*playItf)->SetPlayState(playItf,
@@ -249,10 +251,10 @@ void TestAudioVideoPlayback (XAObjectItf engine)
 			    455
 				}
 		    break;
-		case 2:
+		case '2':
 		    /* Pause the media - if it is playing */
 		    res = (*playItf)->GetPlayState(playItf,
-						   playState); CheckErr(res);
+						   &playState); CheckErr(res);
 		    if (playState == XA_PLAYSTATE_PLAYING)
 			{
 			    res = (*playItf)->SetPlayState(playItf,
@@ -280,7 +282,7 @@ int xa_main (void)
     XAEngineOption EngineOption[] = {
 	(XAuint32) XA_ENGINEOPTION_THREADSAFE,
 	(XAuint32) XA_BOOLEAN_TRUE};
-    res = xaCreateEngine(engine,
+    res = xaCreateEngine(&engine,
 			 1, EngineOption, 0, NULL, NULL); CheckErr(res);
     /* Realizing the AL Engine in synchronous mode */
     res = (*engine)->Realize(engine, XA_BOOLEAN_FALSE); CheckErr(res);
@@ -294,29 +296,20 @@ int xa_main (void)
 ```
 
 
-Copyright
-Jan Newmarch, jan@newmarch.name
+Copyright © Jan Newmarch, jan@newmarch.name
 
-![alt text](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)"Programming and Using Linux Sound - in depth"
-by
- [Jan Newmarch] (https://jan.newmarch.name)
-is licensed under a
- [Creative Commons Attribution-ShareAlike 4.0 International License] (http://creativecommons.org/licenses/by-sa/4.0/)
-.
-Based on a work at
- [https://jan.newmarch.name/LinuxSound/] (https://jan.newmarch.name/LinuxSound/)
-.
+
+
+
+
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
+
+
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
+
 
 If you like this book, please contribute using Flattr
 
+
 or donate using PayPal
-
-
-
-
 ![alt text](https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_AU/i/scr/pixel.gif)
-
-
-
-
-

@@ -1,26 +1,30 @@
-#  Song data 
 
-Most of this section was discovered by
- [
-	thanth] (http://karaoke-engineering.996290.n3.nabble.com/Arirang-MIDI-Karaoke-DVD-storage-file-struct-and-MP3-Extraction-td467.html)
-.
+##  Song data 
+
+
+Most of this section was discovered by [
+	thanth](http://karaoke-engineering.996290.n3.nabble.com/Arirang-MIDI-Karaoke-DVD-storage-file-struct-and-MP3-Extraction-td467.html) .
       However, he only deals with a single data file, and as the Malata has
       more, it becomes more complex.
+
 
 There are four data files: MULTAK.DAT, MULTAK.DA1, MULTAK.DA2
       and MULTAK.DA3. The primary data file is MULTAK.DAT, and this contains
       tables of pointers to song data. The other files seem to just contain
       the song data.
 
+
 The number of songs (minus one) is in byte-swapped order at 0x14E in
       MULTAK.DAT. In my files, this is "FB 3D" which when swapped to
       "3D FB" is one less than the number of songs, 0x3DFC (15868).
       This was identified by thanth.
 
+
 Starting at 0xD20 is a table of 4 byte numbers (prefixed by
       "FF 00 FF FF" which are indexes into the table of song data.
       If the bytes are "b0 b1 b2 b3" then thanth discovered that
       the song data starts at
+
 ```
 
 (((b0 * 0x3C) + b1) * 0x48 +b2) * 0x800 + 0x10000
@@ -28,24 +32,29 @@ Starting at 0xD20 is a table of 4 byte numbers (prefixed by
 ```
 
 
+
+
+
 Actually, it is more complex than that: for the songs with data
       on the first disk MULTAK.DAT this is the case. The table also
       contains pointers to data in the other files, and for these
       the formula is
+
 ```
 
 (((b0 * 0x3C) + b1) * 0x48 +b2) * 0x800
       
 ```
+
+
 That is, the data in these later files starts immediately
       with no offset.
 
+
 The file for each song is given in the top half of the fourth byte
-      of the song index: (b3
->
->
-4), where zero is MULTAK.DAT,
+      of the song index: (b3 >> 4), where zero is MULTAK.DAT,
       one is MULTAK.DA1, etc.
+
 
 At the locations of the song data pointers is either 
       the phrase "OK" which means a
@@ -55,12 +64,13 @@ At the locations of the song data pointers is either
       MP3 data. I haven't yet found any information about the
       size of the data for each song.
 
-The program
- `SongData.java`splits the MULTAK
+
+The program `SongData.java`splits the MULTAK
       files into individual song data files. It only saves a
       part of the data for each song, since I don't know where the 
       data finishes.
-```sh_cpp
+
+```
 
 
 
@@ -118,17 +128,17 @@ class SongData {
 
 	SongStart songStarts[] = new SongStart[MAX_SONGS];
 
- 	FileInputStream fstream = new FileInputStream(MULTAK.DAT);
+ 	FileInputStream fstream = new FileInputStream("MULTAK.DAT");
 	fstream.skip(INDEX_BASE);
 	bytes = read4(fstream);
 	long lval = 0;
 	int currentFileNumber = 0;
 
 	while (numSongs < MAX_SONGS) {
-	    // System.out.printf(%X\n, index);
+	    // System.out.printf("%X\n", index);
 	    bytes = read4(fstream);
 	    if (isNull(bytes)) {
-		System.out.printf(Read %d songs\n, numSongs);
+		System.out.printf("Read %d songs\n", numSongs);
 		break;
 	    }
 
@@ -140,7 +150,7 @@ class SongData {
 	    songStarts[numSongs] = new SongStart();
 	    songStarts[numSongs].songNumber = numSongs;
 	    songStarts[numSongs].fileNumber = bytes[3] >> 4;
-	    if ((bytes[3]  0xF) == 0xA) {
+	    if ((bytes[3] & 0xF) == 0xA) {
 		songStarts[numSongs].type = SongType.COMPLEX;
 	    } else {
 		songStarts[numSongs].type = SongType.SIMPLE;
@@ -149,7 +159,7 @@ class SongData {
 
 	    /*
 	    // update fileNumber number?
-	    if (numSongs > 0  
+	    if (numSongs > 0 && 
 		songStarts[numSongs-1].start > songStarts[numSongs].start) {
 
 		offset = 0;
@@ -160,19 +170,19 @@ class SongData {
 	    */
 
 	    // songStarts[numSongs].fileNumber = currentFileNumber;
-	    System.out.printf(Song %d starts %X fileNumber %X (, 
+	    System.out.printf("Song %d starts %X fileNumber %X (", 
 			      numSongs, 
 			      songStarts[numSongs].start,
 			      songStarts[numSongs].fileNumber);
 	    printBytes(bytes);
-	    System.out.println());
+	    System.out.println(')');
 
 	    numSongs++;
 	}
 	fstream.close();
 
 	for (int n = 0; n < numSongs; n++) {
-	    System.out.printf(Number %d start %X bytes ,
+	    System.out.printf("Number %d start %X bytes ",
 			      n, songStarts[n].start);
 	    getSongFromStart(songStarts[n]);
 	    System.out.println();
@@ -181,18 +191,18 @@ class SongData {
 	}
 	    
 	/*
-	fstream =  new FileInputStream(MULTAK.DAT);
+	fstream =  new FileInputStream("MULTAK.DAT");
 	long totalRead = 0;
 	for (int n = 0; n < MAX_SONGS; n++) {
 	    fstream.skip(songStarts[n] - totalRead);
 	    totalRead = songStarts[n];
-	    System.out.printf(Skipped to %X %X\n, songStarts[n], totalRead);
+	    System.out.printf("Skipped to %X %X\n", songStarts[n], totalRead);
 	    // check next song
 	    bytes = read4(fstream);
 	    totalRead += 4;
 
 	    for (n = 0; n < 4; n++) {
-		System.out.printf(   %X\n, bytes[n]);
+		System.out.printf("   %X\n", bytes[n]);
 		ibytes[n] = (bytes[n] >= 0 ? bytes[n] : 256 + bytes[n]);
 	    }
 
@@ -200,7 +210,7 @@ class SongData {
 	    for (n = 0; n < 4; n++) {
 		lval = (lval << 8) + bytes[n];
 	    }
-	    System.out.printf(  next bytes %X\n, lval);
+	    System.out.printf("  next bytes %X\n", lval);
 	}  
 	*/
 
@@ -238,15 +248,15 @@ class SongData {
 	String fname;
 	
 	if (songInfo.fileNumber == 0) {
-	    fname = MULTAK.DAT;
+	    fname = "MULTAK.DAT";
 	} else {
-	    fname = MULTAK.DA + songInfo.fileNumber;
+	    fname = "MULTAK.DA" + songInfo.fileNumber;
 	}
 
  	FileInputStream fstream = new FileInputStream(fname);
 	fstream.skip(songInfo.start);
 	int[] bytes = read4(fstream);
-	if (bytes[0] == 0xFF  bytes[1] == 0xFF) {
+	if (bytes[0] == 0xFF && bytes[1] == 0xFF) {
 	    songInfo.type = SongType.COMPLEX;
 	} else {
 	    songInfo.type = SongType.SIMPLE;
@@ -257,10 +267,10 @@ class SongData {
     }
 
     private void saveSong(SongStart songInfo) throws Exception {
-	String fname = songs/ + songInfo.songNumber;
+	String fname = "songs/" + songInfo.songNumber;
  	FileOutputStream fstream = new FileOutputStream(fname);
 	if (songInfo.type == SongType.SIMPLE)
-	    fstream.write(new byte[] {0, 0, O, K});
+	    fstream.write(new byte[] {0, 0, 'O', 'K'});
 	else
 	    fstream.write(new byte[] {(byte)0xFF, (byte)0xFF, 0, 0});
 
@@ -279,30 +289,30 @@ class SongData {
 
     private void printFullIndex(byte[] bytes) {
 	for (int n = 0; n < bytes.length; n++) {
-	    System.out.printf(%02X , bytes[n]);
+	    System.out.printf("%02X ", bytes[n]);
 	}
     }
 
     private void printArtistIndex(byte[] bytes) {
-	System.out.printf(%02X%02X , 
+	System.out.printf("%02X%02X ", 
 			  bytes[ARTIST_OFFSET], 
 			  bytes[ARTIST_OFFSET+1]);
     }
 
     private void printSongIndex(byte[] bytes) {
-	System.out.printf(%X%02X%02X , 
+	System.out.printf("%X%02X%02X ", 
 			  bytes[SONG_INDEX], 
 			  bytes[SONG_INDEX+1], 
 			  bytes[SONG_INDEX+2]);
     }
     
     private void print1byte(byte[] bytes, int index) {
-	System.out.printf(%02X , bytes[index]);
+	System.out.printf("%02X ", bytes[index]);
     }
 
     private void printBytes(int[] bytes) {
 	for (int n = 0; n < bytes.length; n++) {
-	    System.out.printf(%02X , bytes[n]);
+	    System.out.printf("%02X ", bytes[n]);
 	}
     }
     
@@ -315,8 +325,8 @@ class SongData {
     }
 
     private boolean isFF00FFFF(int[] bytes) {
-	if (bytes[0] == 0xFF 
-	    bytes[2] == 0xFF 
+	if (bytes[0] == 0xFF &&
+	    bytes[2] == 0xFF &&
 	    bytes[3] == 0xFF)
 	    return true;
 	else
@@ -325,5 +335,6 @@ class SongData {
 }
       
 ```
+
 
 

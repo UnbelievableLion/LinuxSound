@@ -1,16 +1,20 @@
-#  The audio player side 
+
+##  The audio player side 
+
 
 On the audio player, a service has to listen for URLs to be played.
       Each song will be pulled off the file server by an HTTP request
-      (using a tool such as
- `wget`).
+      (using a tool such as `wget`).
       This should maintain a queue of requests, playing the next song
       as the previous one completes. This should show the queue, so is
       implemented using a Java program showing a Swing list.
 
-The program is
- `Player.java`:
-```sh_cpp
+
+The program is `Player.java`:
+
+```
+
+	
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
@@ -28,8 +32,7 @@ public class Player extends JFrame {
     public boolean isPlaying = false;
     private Process songPlayingProcess = null;
 
-    // we have to keep track of the tempo rate, vlc won
-t tell us
+    // we have to keep track of the tempo rate, vlc won't tell us
     private double rate = 1.0;
 
 
@@ -40,9 +43,7 @@ t tell us
     public Player() {
 	Container contentPane = getContentPane();
 
-	setTitle(
-Song Queue
-);
+	setTitle("Song Queue");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,24 +57,16 @@ Song Queue
         bottomPanel.setLayout(new GridLayout(2, 1));
         add(bottomPanel, BorderLayout.SOUTH);
 
-	playingLabel = new JLabel(
-
-);
+	playingLabel = new JLabel(" ");
 	bottomPanel.add(playingLabel);
 
         JPanel controlPanel = new JPanel();
         bottomPanel.add(controlPanel);
         controlPanel.setLayout(new FlowLayout());
 
-	JButton stopBtn = new JButton(
-Stop
-);
-	JButton fasterBtn = new JButton(
-Faster
-);
-	JButton slowerBtn = new JButton(
-Slower
-);
+	JButton stopBtn = new JButton("Stop");
+	JButton fasterBtn = new JButton("Faster");
+	JButton slowerBtn = new JButton("Slower");
 
 	controlPanel.add(stopBtn);
 	controlPanel.add(fasterBtn);
@@ -83,9 +76,7 @@ Slower
                 public void actionPerformed(ActionEvent evt){
 		    if (songPlayingProcess != null) {
 			PrintStream writer = new PrintStream(songPlayingProcess.getOutputStream());
-			writer.println(
-quit
-);
+			writer.println("quit");
 			writer.flush();
 		    }
 		}
@@ -97,9 +88,7 @@ quit
 		    if (songPlayingProcess != null) {
 			PrintStream writer = new PrintStream(songPlayingProcess.getOutputStream());
 			rate += 0.03;
-			writer.println(
-rate
-+ rate);
+			writer.println("rate " + rate);
 			writer.flush();
 		    }
 		}
@@ -110,9 +99,7 @@ rate
 		    if (songPlayingProcess != null) {
 			PrintStream writer = new PrintStream(songPlayingProcess.getOutputStream());
 			rate -= 0.03;
-			writer.println(
-rate
-+ rate);
+			writer.println("rate " + rate);
 			writer.flush();
 		    }
 		}
@@ -132,29 +119,15 @@ rate
     public void playSong(SongInformation info) {
 	isPlaying = true;
 	try {
-	    if (info.path.endsWith(
-.zip
-)) {
-		songPlayingProcess = Runtime.getRuntime().exec(new String[] {
-bash
-,
-playZip
-, info.path});
-	    }  else if (info.path.endsWith(
-.kar
-)) {
-		songPlayingProcess = Runtime.getRuntime().exec(new String[] {
-bash
-,
-playKar
-, info.path});
+	    if (info.path.endsWith(".zip")) {
+		songPlayingProcess = Runtime.getRuntime().exec(new String[] {"bash", "playZip", info.path});
+	    }  else if (info.path.endsWith(".kar")) {
+		songPlayingProcess = Runtime.getRuntime().exec(new String[] {"bash", "playKar", info.path});
 	    } else {
 		isPlaying = false;
 		return;
 	    }
-	    playingLabel.setText(
-Now playing:
-+ info.toString());
+	    playingLabel.setText("Now playing: " + info.toString());
 	    new Thread(new WaitForSongToEnd()).start();
 	} catch(IOException e) {
 	    System.err.println(e.toString());
@@ -194,12 +167,8 @@ Now playing:
 	    Player.this.isPlaying = false;
 	    rate = 1.0;
 	    songPlayingProcess = null;
-	    System.out.println(
-Song finished!
-);
-	    Player.this.playingLabel.setText(
-
-);
+	    System.out.println("Song finished!");
+	    Player.this.playingLabel.setText(" ");
 	    Player.this.playNextSong();
 	}
     }
@@ -209,9 +178,7 @@ Song finished!
 
 	public void run() {
 	    try {
-		System.out.println(
-Listening...
-);
+		System.out.println("Listening...");
 		ServerSocket s = new ServerSocket(PORT);
 		while (true) {
 		    Socket incoming = s.accept();
@@ -233,31 +200,17 @@ Listening...
 		if (fname == null) {
 		    return;
 		}
-		System.out.println(
-Echo:
-+ fname);
+		System.out.println("Echo: " + fname);
 		
-		if (fname.endsWith(
-.zip
-) || 
-		    fname.endsWith(
-.mp3
-) || 
-		    fname.endsWith(
-.kar
-)) {
+		if (fname.endsWith(".zip") || 
+		    fname.endsWith(".mp3") || 
+		    fname.endsWith(".kar")) {
 		    // lose extension
 		    String root = fname.substring(0, fname.length()-4);
 		    // lose /.../
-		    root = root.substring(root.lastIndexOf(
-/
-)+1);
-		    //System.err.println(
-root
-+ root);
-		    String parts[] = root.split(
--
-, 3);
+		    root = root.substring(root.lastIndexOf('/')+1);
+		    //System.err.println(" root " + root);
+		    String parts[] = root.split(" - ", 3);
 		    if (parts.length != 3)
 			return;
 		    
@@ -284,12 +237,14 @@ root
 	}
     }
 }
-
+      
 ```
+
+
+
 
 
 It contains buttons to control the speed of play
       and to stop play. More importantly, it hands control
       to different shell scripts based on the type of file
       downloaded.
-

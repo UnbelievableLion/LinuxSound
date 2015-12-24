@@ -1,37 +1,17 @@
-#  Comparison 
+
+##  Comparison 
+
 
 On playing the same song with the different systems, I observed
       the following CPU patterns:
 
-+ __
-	  Timidity + pulseaudio (with GUS or SF2 soundfonts)
-	__:
- 
++ __Timidity + pulseaudio (with GUS or SF2 soundfonts)__:
 12-20% CPU
-
-+ __
-	  FluidSynth + pulseaudio
-	__:
- 
++ __FluidSynth + pulseaudio__:
 65-72% CPU
-
-+ __
-	  WildMIDI
-	__:
- 
++ __WildMIDI__:
 6% CPU
-
-+ __
-	  JavaSound
-	__:
- 
++ __JavaSound__:
 52-60%
-
-+ __
-	  GStreamer
-	__:
- 
++ __GStreamer__:
 15-20% CPU
-
-
-

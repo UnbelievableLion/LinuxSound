@@ -1,17 +1,17 @@
-#  User level tools 
 
-LADSPA plugins live in a directory defaulting to
- `/usr/lib/ladspa`. This can be controlled
-      by the environment variable
- `LADSPA_PATH`.
-      This directory will contain a set of
- `.so`files as LADSPA plugins.
+##  User level tools 
+
+
+LADSPA plugins live in a directory defaulting to `/usr/lib/ladspa`. This can be controlled
+      by the environment variable `LADSPA_PATH`.
+      This directory will contain a set of `.so`files as LADSPA plugins.
+
 
 Each plugin contains information
       about itself, and the set of plugins can be inspected by running the
-      command line tool
- `listplugins`. By installing
+      command line tool `listplugins`. By installing
       just LADPSA, the default plugins are
+
 ```
 
 	
@@ -36,9 +36,8 @@ Each plugin contains information
 
 
 More detailed information about each plugin can be found from
-      the tool
- `analyseplugin`. For example for the
- `amp`plugin,
+      the tool `analyseplugin`. For example for the `amp`plugin,
+
 ```
 
 	
@@ -78,9 +77,9 @@ Ports:	"Gain" input, control, 0 to ..., default 1, logarithmic
 ```
 
 
-A simple test of each plugin can be performed using
- `applyplugin`. When run with no arguments
+A simple test of each plugin can be performed using `applyplugin`. When run with no arguments
       it gives a usage message:
+
 ```
 
 	
@@ -92,15 +91,14 @@ Flags:	-s<seconds>  Add seconds of silence after end of input file.
 	
       
 ```
+
+
 This takes an input and an output WAV file as first and second parameters.
-      The next ones are the names of the
- `.so`file
+      The next ones are the names of the `.so`file
        and the plugin label chosen. This is followed by values of the
-      controls. For the
- `amp`plugin, the file name is
- `amp.so`, the stereo plugin is
- `amp_stereo`and there is only one control for gain as a value between zero
+      controls. For the `amp`plugin, the file name is `amp.so`, the stereo plugin is `amp_stereo`and there is only one control for gain as a value between zero
       and one. To halve the volume of a file containing stereo WAV data,
+
 ```
 
 	
@@ -108,5 +106,3 @@ applyplugin 54154.wav tmp.wav amp.so amp_stereo 0.5
 	
       
 ```
-
-

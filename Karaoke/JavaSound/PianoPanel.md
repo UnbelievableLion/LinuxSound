@@ -1,16 +1,22 @@
-#  PianoPanel 
+
+##  PianoPanel 
+
 
 The pianoPanel shows a piano-like keyboard. As a note is turned on,
       it colours the note in blue and returns to normal any previously playing note.
       When a note is turned off, the note reverts to its normal colour (black or white).
 
+
 Colouring notes is called by setNote as nonte on/note off messsages come
       from the sequencer.
 
+
 The PianoPanel is
+
 ```
 
-
+      
+      
 import java.util.Vector;
 import javax.swing.*;
 import java.awt.*;
@@ -130,6 +136,6 @@ public class PianoPanel extends JPanel {
 
     }
 }
+      
+    
 ```
-
-

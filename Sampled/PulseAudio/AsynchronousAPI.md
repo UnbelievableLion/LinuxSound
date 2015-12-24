@@ -1,8 +1,11 @@
-#  Asynchronous API 
+
+##  Asynchronous API 
+
 
 The simple API is ... simple. By contrast, the asynchronous API is
       large and complex. There are also very few examples of using this
       API.
+
 
 Nearly all interaction with this API is asynchronous.
       A call is made to the PulseAudio server and when the response
@@ -11,54 +14,32 @@ Nearly all interaction with this API is asynchronous.
       This avoids the need for user code to either block or make
       polling calls.
 
+
 The essential structure is
 
-+  Create a PulseAudio mainloop (synchronous - pa_mainloop_new)
-
-
-+  Get the mainloop API object, a table of mainloop functions
++ Create a PulseAudio mainloop (synchronous - pa_mainloop_new)
++ Get the mainloop API object, a table of mainloop functions
 	  (synchronous - pa_mainloop_get_api)
-
-
-+  Get a context object to talk to the PulseAudio server
++ Get a context object to talk to the PulseAudio server
 	  (synchronous - pa_context_new)
-
-
-+  Establish a connection to the PulseAudio server.
++ Establish a connection to the PulseAudio server.
 	  This is asynchronous -  pa_context_connect
-
-
-+  Register a callback for context state changes from the server
++ Register a callback for context state changes from the server
 	  -  pa_context_set_state_callback
-
-
-+  Commence the event processing loop - (pa_mainloop_run
-
-
-+  Within the context state callback, determine what state
++ Commence the event processing loop - (pa_mainloop_run
++ Within the context state callback, determine what state
 	  has changed e.g. the connection has been established
-
-
-+  Within this callback, set up, for example, 
++ Within this callback, set up, for example, 
 	  record or playback streams
-
-
-+  Establish further callbacks for these streams
-
-
-+  Within the stream callbacks, do more processing,
++ Establish further callbacks for these streams
++ Within the stream callbacks, do more processing,
 	  such as saving a recording stream to file
-
-
-
 
 Steps (1) - (7) will be common to most applications.
       The context state callback wil be called in response to changes
-      in the server. These are state changes such as
- `PA_CONTEXT_CONNECTIN`,
- `PA_CONTEXT_SETTING_NAME`and so on. The change of relevance to most applications will be
- `PA_CONTEXT_READY`. This signifies that the application
+      in the server. These are state changes such as `PA_CONTEXT_CONNECTIN`, `PA_CONTEXT_SETTING_NAME`and so on. The change of relevance to most applications will be `PA_CONTEXT_READY`. This signifies that the application
       can make requests of the server in its steady state.
+
 
 In step (8) the application will set its own behaviour.
       This is done by setting up further callback functions for various 
@@ -66,8 +47,9 @@ In step (8) the application will set its own behaviour.
 
 ###  List of devices 
 
-The function
- `pa_context_get_sink_info_list`will set up a callback function to list source devices by
+
+The function `pa_context_get_sink_info_list`will set up a callback function to list source devices by
+
 ```
 
 	
@@ -75,13 +57,14 @@ pa_context_get_sink_info_list(c, sinklist_cb, NULL)
 	
       
 ```
-where
- `c`is the context,
- `sinklist_cb`is the application's callback
-      and
- `NULL`is user data passed to the callback.
+
+
+where `c`is the context, `sinklist_cb`is the application's callback
+      and `NULL`is user data passed to the callback.
+
 
 The callback is called as
+
 ```
 
 	
@@ -89,14 +72,15 @@ void sinklist_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
 	
       
 ```
-The parameter
- `eol`can take three values: negative means a failure
-      of some kind; zero means a valid entry for
- `pa_sink_info`; positive means that there are no more
+
+
+The parameter `eol`can take three values: negative means a failure
+      of some kind; zero means a valid entry for `pa_sink_info`; positive means that there are no more
       valid entries in the list.
 
-The structure
- `pa_sink_info`is defined as
+
+The structure `pa_sink_info`is defined as
+
 ```
 
 	
@@ -129,31 +113,29 @@ struct {
 	
       
 ```
+
+
 Further information about this structure is maintained in the
-      Doxygen entry
- [
+      Doxygen entry [
 	pa_sink_info Struct Reference
-      ] (http://freedesktop.org/software/pulseaudio/doxygen/structpa__sink__info.html)
+      ](http://freedesktop.org/software/pulseaudio/doxygen/structpa__sink__info.html) 
 
 
-For information, the major fields are the
- `name`and the
- `description`. The
- `index`is an opaque index into
+For information, the major fields are the `name`and the `description`. The `index`is an opaque index into
       some data structure and is used in many PulseAudio functions. 
-      The
- `proplist`is a map of general information that may contain interesting information.
+      The `proplist`is a map of general information that may contain interesting information.
       This can be retrieved by iterating through the map.
+
 
 There is a similar callback and data structures for input devices.
 
-A program to list input and output devices current when the application connects
-      to the server is
- [
-	 palist_devices.c:
-      ] (palist_devices.c)
 
-```sh_cpp
+A program to list input and output devices current when the application connects
+      to the server is [
+	 palist_devices.c:
+      ](palist_devices.c) 
+
+```
 
       /**
  * palist_devices.c 
@@ -174,20 +156,20 @@ int ret;
 pa_context *context;
 
 void show_error(char *s) {
-    fprintf(stderr, %s\n, s);
+    fprintf(stderr, "%s\n", s);
 }
 
 void print_properties(pa_proplist *props) {
     void *state = NULL;
 
-    printf(  Properties are: \n);
+    printf("  Properties are: \n");
     while (1) {
 	char *key;
-	if ((key = pa_proplist_iterate(props, state)) == NULL) {
+	if ((key = pa_proplist_iterate(props, &state)) == NULL) {
 	    return;
 	}
 	char *value = pa_proplist_gets(props, key);
-	printf(   key: %s, value: %s\n, key, value);
+	printf("   key: %s, value: %s\n", key, value);
     }
 }
 
@@ -197,16 +179,16 @@ void print_properties(pa_proplist *props) {
  */
 void sinklist_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata) {
 
-    // If eol is set to a positive number, youre at the end of the list
+    // If eol is set to a positive number, you're at the end of the list
     if (eol > 0) {
-	printf(**No more sinks\n);
+	printf("**No more sinks\n");
 	no_more_sources_or_sinks++;
 	if (no_more_sources_or_sinks == 2)
 	    exit(0);
 	return;
     }
 
-    printf(Sink: name %s, description %s\n, i->name, i->description);
+    printf("Sink: name %s, description %s\n", i->name, i->description);
     print_properties(i->proplist);
 }
 
@@ -215,14 +197,14 @@ void sinklist_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata) 
  */
 void sourcelist_cb(pa_context *c, const pa_source_info *i, int eol, void *userdata) {
     if (eol > 0) {
-	printf(**No more sources\n);
+	printf("**No more sources\n");
 	no_more_sources_or_sinks++;
 	if (no_more_sources_or_sinks == 2)
 	    exit(0);
 	return;
     }
 
-    printf(Source: name %s, description %s\n, i->name, i->description);
+    printf("Source: name %s, description %s\n", i->name, i->description);
     print_properties(i->proplist);
 }
 
@@ -244,7 +226,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 					    sourcelist_cb,
 					    NULL
 						  ))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -254,7 +236,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 					    sinklist_cb,
 					    NULL
 						  ))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -278,7 +260,7 @@ int main(int argc, char *argv[]) {
     // Create a mainloop API and connection to the default server
     pa_ml = pa_mainloop_new();
     pa_mlapi = pa_mainloop_get_api(pa_ml);
-    context = pa_context_new(pa_mlapi, Device list);
+    context = pa_context_new(pa_mlapi, "Device list");
 
     // This function connects to the pulse server
     pa_context_connect(context, NULL, 0, NULL);
@@ -286,8 +268,8 @@ int main(int argc, char *argv[]) {
     // This function defines a callback so the server will tell us its state.
     pa_context_set_state_callback(context, context_state_cb, NULL);
 
-    if (pa_mainloop_run(pa_ml, ret) < 0) {
-	printf(pa_mainloop_run() failed.);
+    if (pa_mainloop_run(pa_ml, &ret) < 0) {
+	printf("pa_mainloop_run() failed.");
 	exit(1);
     }
 }
@@ -297,6 +279,7 @@ int main(int argc, char *argv[]) {
 
 
 On my laptop this gives (elided)
+
 ```
 
 	
@@ -376,18 +359,17 @@ Sink: name alsa_output.usb-Creative_Technology_Ltd_SB_X-Fi_Surround_5.1_Pro_0000
       
 ```
 
-An alternative program with the same effect is
- [
+
+An alternative program with the same effect is [
 	PulseAudio: An Async Example To Get Device Lists
-      ] (http://www.ypass.net/blog/2009/10/pulseaudio-an-async-example-to-get-device-lists)
-by Igor Brezac and Eric Connell.
+      ](http://www.ypass.net/blog/2009/10/pulseaudio-an-async-example-to-get-device-lists) by Igor Brezac and Eric Connell.
       It doesn't follow quite as complex a route as the above,
       as it only queries the server for its devices.
       However, it uses its own state machine to track where in the
       callback process it is!
 
-
 ###  Monitoring ongoing changes: new sources and sinks 
+
 
 The last program listed the source and sink devices registered
       with PulseAudio at the time a connection to the server was established.
@@ -395,58 +377,43 @@ The last program listed the source and sink devices registered
       disconnected, PulseAudio registers a changes in the context and this
       can also be monitored by callbacks.
 
-The key to doing this is to
-subscribe
-to context changes by
- `pa_context_subscribe`. This takes a context, a mask of
+
+The key to doing this is to _subscribe_ to context changes by `pa_context_subscribe`. This takes a context, a mask of
       subscription events and user data. Possible values of the mask are
-      described at
- [
+      described at [
 	Subscription event mask
-      ] (http://freedesktop.org/software/pulseaudio/doxygen/def_8h.html#ad4e7f11f879e8c77ae5289145ecf6947)
-and include
- `PA_SUBSCRIPTION_MASK_SINK`for changes in sinks
-      and
- `PA_SUBSCRIPTION_MASK_SINK_INPUT`for sink input events.
+      ](http://freedesktop.org/software/pulseaudio/doxygen/def_8h.html#ad4e7f11f879e8c77ae5289145ecf6947) and include `PA_SUBSCRIPTION_MASK_SINK`for changes in sinks
+      and `PA_SUBSCRIPTION_MASK_SINK_INPUT`for sink input events.
+
 
 Setting the callback function to monitor these changes
       is a bit odd.
-      The function
- `pa_context_subscribe`takes a callback function
-      of type
- `pa_context_success_cb`but this doesn't contain
+      The function `pa_context_subscribe`takes a callback function
+      of type `pa_context_success_cb`but this doesn't contain
       information about what caused the callback.
-      Instead, it is better to first call
- `pa_context_set_subscribe_callback`which takes a
-      callback function of type
- ` 	pa_context_subscribe_cb_t`which
-does
-get passed such information and then use
- `NULL`for the callback in
- `pa_context_subscribe`!
+      Instead, it is better to first call `pa_context_set_subscribe_callback`which takes a
+      callback function of type ` 	pa_context_subscribe_cb_t`which _does_ get passed such information and then use `NULL`for the callback in `pa_context_subscribe`!
 
-Within a
- ` 	pa_context_subscribe_cb_t`subscription callback, the cause of the callback can be
+
+Within a ` 	pa_context_subscribe_cb_t`subscription callback, the cause of the callback can be
       examined and appropriate code called. If a new subscription to a sink
-      is found, then information about the sink can be found by
- ` pa_context_get_sink_info_by_index`which takes
+      is found, then information about the sink can be found by ` pa_context_get_sink_info_by_index`which takes
       another callback! after chasing through all these callbacks, you can
       eventually get information about new devices.
 
-Note that the callback function used by
- `pa_context_get_sink_info_list`and the callback
-      function used by
- `pa_context_get_sink_info_by_index`are the same - the callback is called once per sink device
+
+Note that the callback function used by `pa_context_get_sink_info_list`and the callback
+      function used by `pa_context_get_sink_info_by_index`are the same - the callback is called once per sink device
       regardless of whether it is a singleton or one of a list
       of devices.
 
-A program to list devices on connection and also to list changes
-      as devices are connected or disconnected is
- [
-	palist_devices_ongoing.c:
-      ] (palist_devices_ongoing.c)
 
-```sh_cpp
+A program to list devices on connection and also to list changes
+      as devices are connected or disconnected is [
+	palist_devices_ongoing.c:
+      ](palist_devices_ongoing.c) 
+
+```
 
       /**
  * palist_clients.c 
@@ -488,20 +455,20 @@ int ret;
 pa_context *context;
 
 void show_error(char *s) {
-    fprintf(stderr, %s\n, s);
+    fprintf(stderr, "%s\n", s);
 }
 
 void print_properties(pa_proplist *props) {
     void *state = NULL;
 
-    printf(  Properties are: \n);
+    printf("  Properties are: \n");
     while (1) {
 	char *key;
-	if ((key = pa_proplist_iterate(props, state)) == NULL) {
+	if ((key = pa_proplist_iterate(props, &state)) == NULL) {
 	    return;
 	}
 	char *value = pa_proplist_gets(props, key);
-	printf(   key: %s, value: %s\n, key, value);
+	printf("   key: %s, value: %s\n", key, value);
     }
 }
 
@@ -510,12 +477,12 @@ void print_properties(pa_proplist *props) {
  */
 void sink_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata) {
 
-    // If eol is set to a positive number, youre at the end of the list
+    // If eol is set to a positive number, you're at the end of the list
     if (eol > 0) {
 	return;
     }
 
-    printf(Sink: name %s, description %s\n, i->name, i->description);
+    printf("Sink: name %s, description %s\n", i->name, i->description);
     // print_properties(i->proplist);
 }
 
@@ -527,21 +494,21 @@ void source_cb(pa_context *c, const pa_source_info *i, int eol, void *userdata) 
 	return;
     }
 
-    printf(Source: name %s, description %s\n, i->name, i->description);
+    printf("Source: name %s, description %s\n", i->name, i->description);
     // print_properties(i->proplist);
 }
 
 void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
 
-    switch (t  PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
+    switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
 	
     case PA_SUBSCRIPTION_EVENT_SINK:
-	if ((t  PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
-	    printf(Removing sink index %d\n, index);
+	if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
+	    printf("Removing sink index %d\n", index);
 	else {
 	    pa_operation *o;
 	    if (!(o = pa_context_get_sink_info_by_index(c, index, sink_cb, NULL))) {
-		show_error(_(pa_context_get_sink_info_by_index() failed));
+		show_error(_("pa_context_get_sink_info_by_index() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -549,12 +516,12 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
 	break;
 
     case PA_SUBSCRIPTION_EVENT_SOURCE:
-	if ((t  PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
-	    printf(Removing source index %d\n, index);
+	if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
+	    printf("Removing source index %d\n", index);
 	else {
 	    pa_operation *o;
 	    if (!(o = pa_context_get_source_info_by_index(c, index, source_cb, NULL))) {
-		show_error(_(pa_context_get_source_info_by_index() failed));
+		show_error(_("pa_context_get_source_info_by_index() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -579,7 +546,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 						  source_cb,
 						  NULL
 						  ))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -588,7 +555,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 						sink_cb,
 						NULL
 						))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -598,7 +565,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 	if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
 				       (PA_SUBSCRIPTION_MASK_SINK|
 					PA_SUBSCRIPTION_MASK_SOURCE), NULL, NULL))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -624,7 +591,7 @@ int main(int argc, char *argv[]) {
     // Create a mainloop API and connection to the default server
     pa_ml = pa_mainloop_new();
     pa_mlapi = pa_mainloop_get_api(pa_ml);
-    context = pa_context_new(pa_mlapi, Device list);
+    context = pa_context_new(pa_mlapi, "Device list");
 
     // This function connects to the pulse server
     pa_context_connect(context, NULL, 0, NULL);
@@ -633,8 +600,8 @@ int main(int argc, char *argv[]) {
     pa_context_set_state_callback(context, context_state_cb, NULL);
 
     
-    if (pa_mainloop_run(pa_ml, ret) < 0) {
-	printf(pa_mainloop_run() failed.);
+    if (pa_mainloop_run(pa_ml, &ret) < 0) {
+	printf("pa_mainloop_run() failed.");
 	exit(1);
     }
 }
@@ -642,27 +609,22 @@ int main(int argc, char *argv[]) {
       
 ```
 
-
 ###  Record a stream 
 
+
 If you download the source for PulseAudio
-      from
- [
-	FreeDesktop.org] (http://www.freedesktop.org/wiki/Software/PulseAudio/Download)
-you will find a program
- `pacat.c`in the
- `utils`directory. This program uses some of the "private" API and will not
+      from [
+	FreeDesktop.org](http://www.freedesktop.org/wiki/Software/PulseAudio/Download) you will find a program `pacat.c`in the `utils`directory. This program uses some of the "private" API and will not
       compile using the "public" libraries. It also has
       all the bells and whistles that you would expect from a production program. 
       I've taken
       this and stripped out the complexities so that you can find your
       way into this API.
-      The file is
- [
+      The file is [
 	parec.c:
-      ] (parec.c)
+      ](parec.c) 
 
-```sh_cpp
+```
 
       /**
  * parec.c 
@@ -697,15 +659,15 @@ you will find a program
 #include <string.h>
 #include <pulse/pulseaudio.h>
 
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 #define _(x) x
 
 // From pulsecore/macro.h
 #define pa_memzero(x,l) (memset((x), 0, (l)))
-#define pa_zero(x) (pa_memzero((x), sizeof(x)))
+#define pa_zero(x) (pa_memzero(&(x), sizeof(x)))
 
 int fdout;
-char *fname = tmp.s16;
+char *fname = "tmp.s16";
 
 int verbose = 1;
 int ret;
@@ -723,7 +685,7 @@ static pa_stream *stream = NULL;
 /* This is my builtin card. Use paman to find yours
    or set it to NULL to get the default device
 */
-static char *device = alsa_input.pci-0000_00_1b.0.analog-stereo;
+static char *device = "alsa_input.pci-0000_00_1b.0.analog-stereo";
 
 static pa_stream_flags_t flags = 0;
 
@@ -733,8 +695,8 @@ void stream_state_callback(pa_stream *s, void *userdata) {
   switch (pa_stream_get_state(s)) {
   case PA_STREAM_CREATING:
     // The stream has been created, so 
-    // lets open a file to record to
-    printf(Creating stream\n);
+    // let's open a file to record to
+    printf("Creating stream\n");
     fdout = creat(fname,  0711);
     break;
 
@@ -749,26 +711,26 @@ void stream_state_callback(pa_stream *s, void *userdata) {
       const pa_buffer_attr *a;
       char cmt[PA_CHANNEL_MAP_SNPRINT_MAX], sst[PA_SAMPLE_SPEC_SNPRINT_MAX];
 
-      printf(Stream successfully created.);
+      printf("Stream successfully created.");
 
       if (!(a = pa_stream_get_buffer_attr(s)))
-	printf(pa_stream_get_buffer_attr() failed: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("pa_stream_get_buffer_attr() failed: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
       else {
-	printf(Buffer metrics: maxlength=%u, fragsize=%u, a->maxlength, a->fragsize);
+	printf("Buffer metrics: maxlength=%u, fragsize=%u", a->maxlength, a->fragsize);
                     
       }
 
-      printf(Connected to device %s (%u, %ssuspended).,
+      printf("Connected to device %s (%u, %ssuspended).",
 	     pa_stream_get_device_name(s),
 	     pa_stream_get_device_index(s),
-	     pa_stream_is_suspended(s) ?  : not );
+	     pa_stream_is_suspended(s) ? "" : "not ");
     }
 
     break;
 
   case PA_STREAM_FAILED:
   default:
-    printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+    printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
     exit(1);
   }
 }
@@ -782,7 +744,7 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
   assert(length > 0);
 
   // Copy the data from the server out to a file
-  fprintf(stderr, Can read %d\n, length);
+  fprintf(stderr, "Can read %d\n", length);
 
 
   while (pa_stream_readable_size(s) > 0) {
@@ -790,12 +752,12 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
     size_t length;
     
     // peek actually creates and fills the data vbl
-    if (pa_stream_peek(s, data, length) < 0) {
-      fprintf(stderr, Read failed\n);
+    if (pa_stream_peek(s, &data, &length) < 0) {
+      fprintf(stderr, "Read failed\n");
       exit(1);
       return;
     }
-    fprintf(stderr, Writing %d\n, length);
+    fprintf(stderr, "Writing %d\n", length);
     write(fdout, data, length);
 
     // swallow the data peeked at before
@@ -805,12 +767,12 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
 
 
 // This callback gets called when our context changes state.  We really only
-// care about when its ready or if it has failed
+// care about when it's ready or if it has failed
 void state_cb(pa_context *c, void *userdata) {
   pa_context_state_t state;
   int *pa_ready = userdata;
 
-  printf(State changed\n);
+  printf("State changed\n");
   state = pa_context_get_state(c);
   switch  (state) {
     // There are just here for reference
@@ -828,17 +790,17 @@ void state_cb(pa_context *c, void *userdata) {
     pa_buffer_attr buffer_attr;
 
     if (verbose)
-      printf(Connection established.%s\n, CLEAR_LINE);
+      printf("Connection established.%s\n", CLEAR_LINE);
 
-    if (!(stream = pa_stream_new(c, JanCapture, sample_spec, NULL))) {
-      printf(pa_stream_new() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (!(stream = pa_stream_new(c, "JanCapture", &sample_spec, NULL))) {
+      printf("pa_stream_new() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
 
     // Watch for changes in the stream state to create the output file
     pa_stream_set_state_callback(stream, stream_state_callback, NULL);
     
-    // Watch for changes in the streams read state to write to the output file
+    // Watch for changes in the stream's read state to write to the output file
     pa_stream_set_read_callback(stream, stream_read_callback, NULL);
 
     // Set properties of the record buffer
@@ -849,8 +811,8 @@ void state_cb(pa_context *c, void *userdata) {
     buffer_attr.minreq = (uint32_t) -1;
       
     // and start recording
-    if (pa_stream_connect_record(stream, device, buffer_attr, flags) < 0) {
-      printf(pa_stream_connect_record() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (pa_stream_connect_record(stream, device, &buffer_attr, flags) < 0) {
+      printf("pa_stream_connect_record() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
   }
@@ -870,7 +832,7 @@ int main(int argc, char *argv[]) {
   // Create a mainloop API and connection to the default server
   pa_ml = pa_mainloop_new();
   pa_mlapi = pa_mainloop_get_api(pa_ml);
-  context = pa_context_new(pa_mlapi, test);
+  context = pa_context_new(pa_mlapi, "test");
 
   // This function connects to the pulse server
   pa_context_connect(context, NULL, 0, NULL);
@@ -878,8 +840,8 @@ int main(int argc, char *argv[]) {
   // This function defines a callback so the server will tell us its state.
   pa_context_set_state_callback(context, state_cb, NULL);
 
-  if (pa_mainloop_run(pa_ml, ret) < 0) {
-    printf(pa_mainloop_run() failed.);
+  if (pa_mainloop_run(pa_ml, &ret) < 0) {
+    printf("pa_mainloop_run() failed.");
     exit(1);
   }
 }
@@ -887,15 +849,14 @@ int main(int argc, char *argv[]) {
       
 ```
 
-
 ###  Play a file 
 
+
 Recording  an input stream is done within a stream read callback by the
-      call
- `pa_stream_peek`.
+      call `pa_stream_peek`.
       Similarly, playing an output stream is done by a stream write callback
-      by the call
- `pa_stream_write`.
+      by the call `pa_stream_write`.
+
 
 In the following program
       the callback is set within the PA_CONTEXT_READY branch of the context
@@ -903,22 +864,23 @@ In the following program
       of bytes the consuming stream is prepared to receive, so read that number
       of bytes from the file and write them to the stream.
 
+
 Care has to be taken at the end of file. There may be unplayed material in
       PulseAudio's output buffers. This needs to be drained before the program
-      can exit. This is done by the function
- `pa_stream_drain`.
+      can exit. This is done by the function `pa_stream_drain`.
       On end of file, first set the stream write callback to null so that the
       output stream doesn't keep calling for more input, and then drain the stream.
       A stream drain complete callback will be called on completion of this, so the
       program can then exit (or do something else).
 
+
 In this program we include many more callbacks than in earlier ones, to show
       the range of features that can be monitored.
 
-The program is
- [pacat2.c:] (pacat2.c)
 
-```sh_cpp
+The program is [pacat2.c:](pacat2.c) 
+
+```
 
       
 /**
@@ -961,11 +923,11 @@ The program is
 #include <unistd.h>
 
 // ???
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 
 // From pulsecore/macro.h JN
 #define pa_memzero(x,l) (memset((x), 0, (l)))
-#define pa_zero(x) (pa_memzero((x), sizeof(x)))
+#define pa_zero(x) (pa_memzero(&(x), sizeof(x)))
 
 int verbose = 1;
 int ret;
@@ -997,7 +959,7 @@ static size_t buffer_length = 0, buffer_index = 0;
 static pa_io_event* stdio_event = NULL;
 
 // Get device name from e.g. paman
-//static char *device = alsa_output.pci-0000_00_1b.0.analog-stereo;
+//static char *device = "alsa_output.pci-0000_00_1b.0.analog-stereo";
 // Use default device
 static char *device = NULL;
 
@@ -1018,12 +980,12 @@ static void stream_drain_complete(pa_stream*s, int success, void *userdata) {
   pa_operation *o = NULL;
 
   if (!success) {
-    printf(Failed to drain stream: %s, pa_strerror(pa_context_errno(context)));
+    printf("Failed to drain stream: %s", pa_strerror(pa_context_errno(context)));
     exit(1);
   }
 
   if (verbose)
-    printf(Playback stream drained.);
+    printf("Playback stream drained.");
 
   pa_stream_disconnect(stream);
   pa_stream_unref(stream);
@@ -1034,21 +996,21 @@ static void stream_drain_complete(pa_stream*s, int success, void *userdata) {
   else {
     pa_operation_unref(o);
     if (verbose)
-      printf(Draining connection to server.);
+      printf("Draining connection to server.");
   }
 }
 
 
 /* Start draining */
 static void start_drain(void) {
-  printf(Draining\n);
+  printf("Draining\n");
   if (stream) {
     pa_operation *o;
 
     pa_stream_set_write_callback(stream, NULL, NULL);
 
     if (!(o = pa_stream_drain(stream, stream_drain_complete, NULL))) {
-      //printf(pa_stream_drain(): %s, pa_strerror(pa_context_errno(context)));
+      //printf("pa_stream_drain(): %s", pa_strerror(pa_context_errno(context)));
       exit(1);
       return;
     }
@@ -1063,13 +1025,13 @@ static void do_stream_write(size_t length) {
   size_t l;
   assert(length);
 
-  printf(do stream write: Writing %d to stream\n, length);
+  printf("do stream write: Writing %d to stream\n", length);
   
   if (!buffer || !buffer_length) {
     buffer = pa_xmalloc(length);
     buffer_length = length;
     buffer_index = 0;
-    //printf(  return without writing\n);
+    //printf("  return without writing\n");
     //return;
 
   }
@@ -1081,7 +1043,7 @@ static void do_stream_write(size_t length) {
       return;
     }
     if (pa_stream_write(stream, (uint8_t*) buffer + buffer_index, l, NULL, 0, PA_SEEK_RELATIVE) < 0) {
-      printf(pa_stream_write() failed: %s, pa_strerror(pa_context_errno(context)));
+      printf("pa_stream_write() failed: %s", pa_strerror(pa_context_errno(context)));
       exit(1);
       return;
     }
@@ -1112,31 +1074,31 @@ void stream_state_callback(pa_stream *s, void *userdata) {
       const pa_buffer_attr *a;
       char cmt[PA_CHANNEL_MAP_SNPRINT_MAX], sst[PA_SAMPLE_SPEC_SNPRINT_MAX];
 
-      printf(Stream successfully created.\n);
+      printf("Stream successfully created.\n");
 
       if (!(a = pa_stream_get_buffer_attr(s)))
-	printf(pa_stream_get_buffer_attr() failed: %s\n, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("pa_stream_get_buffer_attr() failed: %s\n", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
       else {
-	printf(Buffer metrics: maxlength=%u, fragsize=%u\n, a->maxlength, a->fragsize);
+	printf("Buffer metrics: maxlength=%u, fragsize=%u\n", a->maxlength, a->fragsize);
                     
       }
       /*
-	printf(Using sample spec %s, channel map %s.,
+	printf("Using sample spec '%s', channel map '%s'.",
 	pa_sample_spec_snprint(sst, sizeof(sst), pa_stream_get_sample_spec(s)),
 	pa_channel_map_snprint(cmt, sizeof(cmt), pa_stream_get_channel_map(s)));
       */
 
-      printf(Connected to device %s (%u, %ssuspended).\n,
+      printf("Connected to device %s (%u, %ssuspended).\n",
 	     pa_stream_get_device_name(s),
 	     pa_stream_get_device_index(s),
-	     pa_stream_is_suspended(s) ?  : not );
+	     pa_stream_is_suspended(s) ? "" : "not ");
     }
 
     break;
 
   case PA_STREAM_FAILED:
   default:
-    printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+    printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
     exit(1); //quit(1);
   }
 }
@@ -1146,7 +1108,7 @@ void stream_state_callback(pa_stream *s, void *userdata) {
 
 
 static void stream_success(pa_stream *s, int succes, void *userdata) {
-  printf(Succeded\n);
+  printf("Succeded\n");
 }
 
 
@@ -1155,9 +1117,9 @@ static void stream_suspended_callback(pa_stream *s, void *userdata) {
 
   if (verbose) {
     if (pa_stream_is_suspended(s))
-      fprintf(stderr, Stream device suspended.%s \n, CLEAR_LINE);
+      fprintf(stderr, "Stream device suspended.%s \n", CLEAR_LINE);
     else
-      fprintf(stderr, Stream device resumed.%s \n, CLEAR_LINE);
+      fprintf(stderr, "Stream device resumed.%s \n", CLEAR_LINE);
   }
 }
 
@@ -1165,35 +1127,35 @@ static void stream_underflow_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream underrun.%s \n,  CLEAR_LINE);
+    fprintf(stderr, "Stream underrun.%s \n",  CLEAR_LINE);
 }
 
 static void stream_overflow_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream overrun.%s \n, CLEAR_LINE);
+    fprintf(stderr, "Stream overrun.%s \n", CLEAR_LINE);
 }
 
 static void stream_started_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream started.%s \n, CLEAR_LINE);
+    fprintf(stderr, "Stream started.%s \n", CLEAR_LINE);
 }
 
 static void stream_moved_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream moved to device %s (%u, %ssuspended).%s \n, pa_stream_get_device_name(s), pa_stream_get_device_index(s), pa_stream_is_suspended(s) ?  : not ,  CLEAR_LINE);
+    fprintf(stderr, "Stream moved to device %s (%u, %ssuspended).%s \n", pa_stream_get_device_name(s), pa_stream_get_device_index(s), pa_stream_is_suspended(s) ? "" : "not ",  CLEAR_LINE);
 }
 
 static void stream_buffer_attr_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream buffer attributes changed.%s \n,  CLEAR_LINE);
+    fprintf(stderr, "Stream buffer attributes changed.%s \n",  CLEAR_LINE);
 }
 
 static void stream_event_callback(pa_stream *s, const char *name, pa_proplist *pl, void *userdata) {
@@ -1203,8 +1165,8 @@ static void stream_event_callback(pa_stream *s, const char *name, pa_proplist *p
   assert(name);
   assert(pl);
 
-  t = pa_proplist_to_string_sep(pl, , );
-  fprintf(stderr, Got event %s, properties %s\n, name, t);
+  t = pa_proplist_to_string_sep(pl, ", ");
+  fprintf(stderr, "Got event '%s', properties '%s'\n", name, t);
   pa_xfree(t);
 }
 
@@ -1214,21 +1176,21 @@ static void stream_write_callback(pa_stream *s, size_t length, void *userdata) {
   //assert(s);
   //assert(length > 0);
 
-  printf(Stream write callback: Ready to write %d bytes\n, length);
+  printf("Stream write callback: Ready to write %d bytes\n", length);
   
-  printf(  do stream write from stream write callback\n);
+  printf("  do stream write from stream write callback\n");
   do_stream_write(length);
 
  }
 
 
 // This callback gets called when our context changes state.  We really only
-// care about when its ready or if it has failed
+// care about when it's ready or if it has failed
 void state_cb(pa_context *c, void *userdata) {
   pa_context_state_t state;
   int *pa_ready = userdata;
 
-  printf(State changed\n);
+  printf("State changed\n");
   state = pa_context_get_state(c);
   switch  (state) {
     // There are just here for reference
@@ -1246,10 +1208,10 @@ void state_cb(pa_context *c, void *userdata) {
     pa_buffer_attr buffer_attr;
 
     if (verbose)
-      printf(Connection established.%s\n, CLEAR_LINE);
+      printf("Connection established.%s\n", CLEAR_LINE);
 
-    if (!(stream = pa_stream_new(c, JanPlayback, sample_spec, NULL))) {
-      printf(pa_stream_new() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (!(stream = pa_stream_new(c, "JanPlayback", &sample_spec, NULL))) {
+      printf("pa_stream_new() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1); // goto fail;
     }
 
@@ -1280,13 +1242,13 @@ void state_cb(pa_context *c, void *userdata) {
 
 
 
-    if (pa_stream_connect_playback(stream, NULL, buffer_attr, flags,
+    if (pa_stream_connect_playback(stream, NULL, &buffer_attr, flags,
 				   NULL, 
 				   NULL) < 0) {
-      printf(pa_stream_connect_playback() failed: %s, pa_strerror(pa_context_errno(c)));
+      printf("pa_stream_connect_playback() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1); //goto fail;
     } else {
-      printf(Set playback callback\n);
+      printf("Set playback callback\n");
     }
 
     pa_stream_trigger(stream, stream_success, NULL);
@@ -1304,39 +1266,39 @@ int main(int argc, char *argv[]) {
   off_t size;
   ssize_t nread;
 
-  // Well need these state variables to keep track of our requests
+  // We'll need these state variables to keep track of our requests
   int state = 0;
   int pa_ready = 0;
 
   if (argc != 2) {
-    fprintf(stderr, Usage: %s file\n, argv[0]);
+    fprintf(stderr, "Usage: %s file\n", argv[0]);
     exit(1);
   }
   // slurp the whole file into buffer
   if ((fdin = open(argv[1],  O_RDONLY)) == -1) {
-    perror(open);
+    perror("open");
     exit(1);
   }
 
   // Create a mainloop API and connection to the default server
   mainloop = pa_mainloop_new();
   mainloop_api = pa_mainloop_get_api(mainloop);
-  context = pa_context_new(mainloop_api, test);
+  context = pa_context_new(mainloop_api, "test");
 
   // This function connects to the pulse server
   pa_context_connect(context, NULL, 0, NULL);
-  printf(Connecting\n);
+  printf("Connecting\n");
 
-  // This function defines a callback so the server will tell us its state.
+  // This function defines a callback so the server will tell us it's state.
   // Our callback will wait for the state to be ready.  The callback will
-  // modify the variable to 1 so we know when we have a connection and its
+  // modify the variable to 1 so we know when we have a connection and it's
   // ready.
-  // If theres an error, the callback will set pa_ready to 2
-  pa_context_set_state_callback(context, state_cb, pa_ready);
+  // If there's an error, the callback will set pa_ready to 2
+  pa_context_set_state_callback(context, state_cb, &pa_ready);
 
 
-  if (pa_mainloop_run(mainloop, ret) < 0) {
-    printf(pa_mainloop_run() failed.);
+  if (pa_mainloop_run(mainloop, &ret) < 0) {
+    printf("pa_mainloop_run() failed.");
     exit(1); // goto quit
   }
 
@@ -1357,28 +1319,23 @@ With the latency set to the default, the number of bytes that can be written on 
 
 ###  Play a file using I/O callbacks 
 
+
 Writing a file to an output stream is simple:
       read from a file into a buffer, and keep emptying the buffer by
       writing to the stream.  Reading from a file is straightforward:
-      use the standard Unix
- `read`function. You request a read of a
-      number of bytes, and the
- `read`function returns the number of bytes
+      use the standard Unix `read`function. You request a read of a
+      number of bytes, and the `read`function returns the number of bytes
       actually read.
       This was discussed in the last section.
+
 
 The program in the PulseAudio distribution uses a more complex system.
       It uses I/O-ready callbacks to pass some handling to an I/O callback.
       This makes use of two functions:
 
-+  
- ` pa_stream_writable_size`tells how many bytes can be
++  ` pa_stream_writable_size`tells how many bytes can be
 	  written to the stream
-
-
-+  
- `pa_stream_write`writes a number of bytes to a stream
-
++  `pa_stream_write`writes a number of bytes to a stream
 
 The logic becomes: fill a buffer by reading from the file, and at the
       same time write as many bytes as possible from the buffer to the stream,
@@ -1386,13 +1343,16 @@ The logic becomes: fill a buffer by reading from the file, and at the
       of the buffer size or however many bytes the stream can take, whichever
       is smaller.
 
+
 In PulseAudio this is done asynchronously,
       using callback functions. The two relevant functions are
 
-+  The function
- `pa_stream_set_write_callback()`registers a
++ 
+
+The function `pa_stream_set_write_callback()`registers a
 	  callback that will be called whenever the stream is ready to be
 	  written to. Registering the callback looks like
+
 ```
 
 	    
@@ -1400,8 +1360,11 @@ In PulseAudio this is done asynchronously,
 	    
 	  
 ```
+
+
 The callback is passed the stream to write to (s) and the number
 	  of bytes that can be written (length):
+
 ```
 
 	    
@@ -1410,14 +1373,13 @@ void stream_write_callback(pa_stream *s, size_t length, void *userdata)
 	  
 ```
 
++ 
 
-
-+  A callback to read from files is registered by one of the functions
-	  kept in the
- `mainloop_api`table. The registering function
-	  is
- `io_new`and is passed a Unix file descriptor for the file
+A callback to read from files is registered by one of the functions
+	  kept in the `mainloop_api`table. The registering function
+	  is `io_new`and is passed a Unix file descriptor for the file
 	  and the callback function. Reigstering the callback looks like
+
 ```
 
 	    
@@ -1428,7 +1390,10 @@ void stream_write_callback(pa_stream *s, size_t length, void *userdata)
 	    
 	  
 ```
+
+
 The callback is passed the file descriptor (fd) to read from:
+
 ```
 
 	    
@@ -1437,58 +1402,36 @@ void stdin_callback(pa_mainloop_api *mainloop_api, pa_io_event *stdio_event,
 	    
 	  
 ```
-(Note: the PulseAudio code does a
- `dup2`from the source file's
-	  descriptor to
- `STDIN_FILENO`- which matches the name of the
-	  function. I can't see the point of that, and their code uses
- `fd`anyway.)
 
 
+(Note: the PulseAudio code does a `dup2`from the source file's
+	  descriptor to `STDIN_FILENO`- which matches the name of the
+	  function. I can't see the point of that, and their code uses `fd`anyway.)
 
 
 When should these callbacks be registered? The stream write callback can
-      be registered at any time after the stream has been created which is done by
- `pa_stream_new`. For the stdin callback, I could only get it
+      be registered at any time after the stream has been created which is done by `pa_stream_new`. For the stdin callback, I could only get it
       to work properly by registering it once the stream was ready i.e.
-      in the
- ` PA_STREAM_READY`branch of the stream state callback
+      in the ` PA_STREAM_READY`branch of the stream state callback
       function.
+
 
 So after all that, what is the logic of the program?
 
-+  In the stdin callback:
-
-+  if the buffer has stuff in it, then just return - no point in adding
++ In the stdin callback:
++ if the buffer has stuff in it, then just return - no point in adding
 	      any more
-
-
-+  if the buffer is empty, then query the stream to see how much can be written
++ if the buffer is empty, then query the stream to see how much can be written
 	      to it
-
-
-+  if the stream says no more, then just read something into the buffer and return
-
-
-+  if the stream can be written to, then read from the file into the buffer
++ if the stream says no more, then just read something into the buffer and return
++ if the stream can be written to, then read from the file into the buffer
 	      and write it to the stream
++ In the stream write callback:
++ if the buffer is non-empty, write its contents to the stream
 
+The program to play from a file presently looks like [ pacat.c:](pacat.c) 
 
-
-+  In the stream write callback:
-
-+  if the buffer is non-empty, write its contents to the stream
-
-
-
-
-
-
-
-The program to play from a file presently looks like
- [ pacat.c:] (pacat.c)
-
-```sh_cpp
+```
 
       /***
   This file is based on pacat.c,  part of PulseAudio.
@@ -1524,11 +1467,11 @@ The program to play from a file presently looks like
 #include <errno.h>
 #include <unistd.h>
 
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 
 // From pulsecore/macro.h JN
 #define pa_memzero(x,l) (memset((x), 0, (l)))
-#define pa_zero(x) (pa_memzero((x), sizeof(x)))
+#define pa_zero(x) (pa_memzero(&(x), sizeof(x)))
 
 int verbose = 1;
 int ret;
@@ -1560,7 +1503,7 @@ static size_t buffer_length = 0, buffer_index = 0;
 static pa_io_event* stdio_event = NULL;
 
 
-static char *device = alsa_output.pci-0000_00_1b.0.analog-stereo;
+static char *device = "alsa_output.pci-0000_00_1b.0.analog-stereo";
 
 static pa_stream_flags_t flags = 0;
 
@@ -1576,19 +1519,19 @@ static void do_stream_write(size_t length) {
   size_t l;
   assert(length);
 
-  printf(do stream write: Writing %d to stream\n, length);
+  printf("do stream write: Writing %d to stream\n", length);
   
   if (!buffer || !buffer_length) {
-    printf(  return without writing\n);
+    printf("  return without writing\n");
     return;
   }
 
   l = length;
   if (l > buffer_length)
     l = buffer_length;
-  printf(  writing %d\n, l);
+  printf("  writing %d\n", l);
   if (pa_stream_write(stream, (uint8_t*) buffer + buffer_index, l, NULL, 0, PA_SEEK_RELATIVE) < 0) {
-    printf(pa_stream_write() failed: %s, pa_strerror(pa_context_errno(context)));
+    printf("pa_stream_write() failed: %s", pa_strerror(pa_context_errno(context)));
     exit(1);
     return;
   }
@@ -1613,12 +1556,12 @@ static void stream_drain_complete(pa_stream*s, int success, void *userdata) {
   pa_operation *o = NULL;
 
   if (!success) {
-    printf(Failed to drain stream: %s, pa_strerror(pa_context_errno(context)));
+    printf("Failed to drain stream: %s", pa_strerror(pa_context_errno(context)));
     exit(1);
   }
 
   if (verbose)
-    printf(Playback stream drained.);
+    printf("Playback stream drained.");
 
   pa_stream_disconnect(stream);
   pa_stream_unref(stream);
@@ -1629,21 +1572,21 @@ static void stream_drain_complete(pa_stream*s, int success, void *userdata) {
   else {
     pa_operation_unref(o);
     if (verbose)
-      printf(Draining connection to server.);
+      printf("Draining connection to server.");
   }
 }
 
 
 /* Start draining */
 static void start_drain(void) {
-  printf(Draining\n);
+  printf("Draining\n");
   if (stream) {
     pa_operation *o;
 
     pa_stream_set_write_callback(stream, NULL, NULL);
 
     if (!(o = pa_stream_drain(stream, stream_drain_complete, NULL))) {
-      //printf(pa_stream_drain(): %s, pa_strerror(pa_context_errno(context)));
+      //printf("pa_stream_drain(): %s", pa_strerror(pa_context_errno(context)));
       exit(1);
       return;
     }
@@ -1659,14 +1602,14 @@ static void stdin_callback(pa_mainloop_api *mainloop_api, pa_io_event *stdio_eve
   size_t l, w = 0;
   ssize_t r;
 
-  printf(In stdin callback\n);
+  printf("In stdin callback\n");
   //pa_assert(a == mainloop_api);
   // pa_assert(e);
   // pa_assert(stdio_event == e);
 
   if (buffer) {
     mainloop_api->io_enable(stdio_event, PA_IO_EVENT_NULL);
-    printf(  Buffer isnt null\n);
+    printf("  Buffer isn't null\n");
     return;
   }
 
@@ -1678,12 +1621,12 @@ static void stdin_callback(pa_mainloop_api *mainloop_api, pa_io_event *stdio_eve
   if ((r = read(fd, buffer, l)) <= 0) {
     if (r == 0) {
       if (verbose)
-	printf(Got EOF.\n);
+	printf("Got EOF.\n");
 
       start_drain();
 
     } else {
-      printf(read() failed: %s\n, strerror(errno));
+      printf("read() failed: %s\n", strerror(errno));
       exit(1);
     }
 
@@ -1691,13 +1634,13 @@ static void stdin_callback(pa_mainloop_api *mainloop_api, pa_io_event *stdio_eve
     stdio_event = NULL;
     return;
   }
-  printf(  Read %d\n, r);
+  printf("  Read %d\n", r);
 
   buffer_length = (uint32_t) r;
   buffer_index = 0;
 
   if (w) {
-    printf(  do stream write from stdin callback\n);    
+    printf("  do stream write from stdin callback\n");    
     do_stream_write(w);
   }
 }
@@ -1719,24 +1662,24 @@ void stream_state_callback(pa_stream *s, void *userdata) {
       const pa_buffer_attr *a;
       char cmt[PA_CHANNEL_MAP_SNPRINT_MAX], sst[PA_SAMPLE_SPEC_SNPRINT_MAX];
 
-      printf(Stream successfully created.\n);
+      printf("Stream successfully created.\n");
 
       if (!(a = pa_stream_get_buffer_attr(s)))
-	printf(pa_stream_get_buffer_attr() failed: %s\n, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("pa_stream_get_buffer_attr() failed: %s\n", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
       else {
-	printf(Buffer metrics: maxlength=%u, fragsize=%u\n, a->maxlength, a->fragsize);
+	printf("Buffer metrics: maxlength=%u, fragsize=%u\n", a->maxlength, a->fragsize);
                     
       }
       /*
-	printf(Using sample spec %s, channel map %s.,
+	printf("Using sample spec '%s', channel map '%s'.",
 	pa_sample_spec_snprint(sst, sizeof(sst), pa_stream_get_sample_spec(s)),
 	pa_channel_map_snprint(cmt, sizeof(cmt), pa_stream_get_channel_map(s)));
       */
 
-      printf(Connected to device %s (%u, %ssuspended).\n,
+      printf("Connected to device %s (%u, %ssuspended).\n",
 	     pa_stream_get_device_name(s),
 	     pa_stream_get_device_index(s),
-	     pa_stream_is_suspended(s) ?  : not );
+	     pa_stream_is_suspended(s) ? "" : "not ");
     }
 
     // TRY HERE???
@@ -1745,7 +1688,7 @@ void stream_state_callback(pa_stream *s, void *userdata) {
 					     fdin, // STDIN_FILENO,
 					     PA_IO_EVENT_INPUT,
 					     stdin_callback, NULL))) {
-      printf(io_new() failed.);
+      printf("io_new() failed.");
       exit(1);
     }
     
@@ -1753,7 +1696,7 @@ void stream_state_callback(pa_stream *s, void *userdata) {
 
   case PA_STREAM_FAILED:
   default:
-    printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+    printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
     exit(1); //quit(1);
   }
 }
@@ -1763,12 +1706,12 @@ void stream_state_callback(pa_stream *s, void *userdata) {
 
 
 static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
-  printf(Raedy to read\n);
+  printf("Raedy to read\n");
 }
 
 
 static void stream_success(pa_stream *s, int succes, void *userdata) {
-  printf(Succeded\n);
+  printf("Succeded\n");
 }
 
 
@@ -1777,9 +1720,9 @@ static void stream_suspended_callback(pa_stream *s, void *userdata) {
 
   if (verbose) {
     if (pa_stream_is_suspended(s))
-      fprintf(stderr, Stream device suspended.%s \n, CLEAR_LINE);
+      fprintf(stderr, "Stream device suspended.%s \n", CLEAR_LINE);
     else
-      fprintf(stderr, Stream device resumed.%s \n, CLEAR_LINE);
+      fprintf(stderr, "Stream device resumed.%s \n", CLEAR_LINE);
   }
 }
 
@@ -1787,35 +1730,35 @@ static void stream_underflow_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream underrun.%s \n,  CLEAR_LINE);
+    fprintf(stderr, "Stream underrun.%s \n",  CLEAR_LINE);
 }
 
 static void stream_overflow_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream overrun.%s \n, CLEAR_LINE);
+    fprintf(stderr, "Stream overrun.%s \n", CLEAR_LINE);
 }
 
 static void stream_started_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream started.%s \n, CLEAR_LINE);
+    fprintf(stderr, "Stream started.%s \n", CLEAR_LINE);
 }
 
 static void stream_moved_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream moved to device %s (%u, %ssuspended).%s \n, pa_stream_get_device_name(s), pa_stream_get_device_index(s), pa_stream_is_suspended(s) ?  : not ,  CLEAR_LINE);
+    fprintf(stderr, "Stream moved to device %s (%u, %ssuspended).%s \n", pa_stream_get_device_name(s), pa_stream_get_device_index(s), pa_stream_is_suspended(s) ? "" : "not ",  CLEAR_LINE);
 }
 
 static void stream_buffer_attr_callback(pa_stream *s, void *userdata) {
   assert(s);
 
   if (verbose)
-    fprintf(stderr, Stream buffer attributes changed.%s \n,  CLEAR_LINE);
+    fprintf(stderr, "Stream buffer attributes changed.%s \n",  CLEAR_LINE);
 }
 
 static void stream_event_callback(pa_stream *s, const char *name, pa_proplist *pl, void *userdata) {
@@ -1825,8 +1768,8 @@ static void stream_event_callback(pa_stream *s, const char *name, pa_proplist *p
   assert(name);
   assert(pl);
 
-  t = pa_proplist_to_string_sep(pl, , );
-  fprintf(stderr, Got event %s, properties %s\n, name, t);
+  t = pa_proplist_to_string_sep(pl, ", ");
+  fprintf(stderr, "Got event '%s', properties '%s'\n", name, t);
   pa_xfree(t);
 }
 
@@ -1836,7 +1779,7 @@ static void stream_write_callback(pa_stream *s, size_t length, void *userdata) {
   //assert(s);
   //assert(length > 0);
 
-  printf(Stream write callback: Ready to write %d bytes\n, length);
+  printf("Stream write callback: Ready to write %d bytes\n", length);
   
   if (raw) {
     // assert(!sndfile);
@@ -1846,19 +1789,19 @@ static void stream_write_callback(pa_stream *s, size_t length, void *userdata) {
 
     if (!buffer)
       return;
-    printf(  do stream write from stream write callback\n);
+    printf("  do stream write from stream write callback\n");
     do_stream_write(length);
 
   } 
 }
 
 // This callback gets called when our context changes state.  We really only
-// care about when its ready or if it has failed
+// care about when it's ready or if it has failed
 void state_cb(pa_context *c, void *userdata) {
   pa_context_state_t state;
   int *pa_ready = userdata;
 
-  printf(State changed\n);
+  printf("State changed\n");
   state = pa_context_get_state(c);
   switch  (state) {
     // There are just here for reference
@@ -1876,10 +1819,10 @@ void state_cb(pa_context *c, void *userdata) {
     pa_buffer_attr buffer_attr;
 
     if (verbose)
-      printf(Connection established.%s\n, CLEAR_LINE);
+      printf("Connection established.%s\n", CLEAR_LINE);
 
-    if (!(stream = pa_stream_new(c, JanPlayback, sample_spec, NULL))) {
-      printf(pa_stream_new() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (!(stream = pa_stream_new(c, "JanPlayback", &sample_spec, NULL))) {
+      printf("pa_stream_new() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1); // goto fail;
     }
 
@@ -1910,13 +1853,13 @@ void state_cb(pa_context *c, void *userdata) {
     
     pa_cvolume cv;
  
-    if (pa_stream_connect_playback(stream, NULL, buffer_attr, flags,
+    if (pa_stream_connect_playback(stream, NULL, &buffer_attr, flags,
 				   NULL, 
 				   NULL) < 0) {
-      printf(pa_stream_connect_playback() failed: %s, pa_strerror(pa_context_errno(c)));
+      printf("pa_stream_connect_playback() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1); //goto fail;
     } else {
-      printf(Set playback callback\n);
+      printf("Set playback callback\n");
     }
 
     pa_stream_trigger(stream, stream_success, NULL);
@@ -1934,39 +1877,39 @@ int main(int argc, char *argv[]) {
   off_t size;
   ssize_t nread;
 
-  // Well need these state variables to keep track of our requests
+  // We'll need these state variables to keep track of our requests
   int state = 0;
   int pa_ready = 0;
 
   if (argc != 2) {
-    fprintf(stderr, Usage: %s file\n, argv[0]);
+    fprintf(stderr, "Usage: %s file\n", argv[0]);
     exit(1);
   }
   // slurp the whole file into buffer
   if ((fdin = open(argv[1],  O_RDONLY)) == -1) {
-    perror(open);
+    perror("open");
     exit(1);
   }
 
   // Create a mainloop API and connection to the default server
   mainloop = pa_mainloop_new();
   mainloop_api = pa_mainloop_get_api(mainloop);
-  context = pa_context_new(mainloop_api, test);
+  context = pa_context_new(mainloop_api, "test");
 
   // This function connects to the pulse server
   pa_context_connect(context, NULL, 0, NULL);
-  printf(Connecting\n);
+  printf("Connecting\n");
 
-  // This function defines a callback so the server will tell us its state.
+  // This function defines a callback so the server will tell us it's state.
   // Our callback will wait for the state to be ready.  The callback will
-  // modify the variable to 1 so we know when we have a connection and its
+  // modify the variable to 1 so we know when we have a connection and it's
   // ready.
-  // If theres an error, the callback will set pa_ready to 2
-  pa_context_set_state_callback(context, state_cb, pa_ready);
+  // If there's an error, the callback will set pa_ready to 2
+  pa_context_set_state_callback(context, state_cb, &pa_ready);
 
 
-  if (pa_mainloop_run(mainloop, ret) < 0) {
-    printf(pa_mainloop_run() failed.);
+  if (pa_mainloop_run(mainloop, &ret) < 0) {
+    printf("pa_mainloop_run() failed.");
     exit(1); // goto quit
   }
 }
@@ -1974,36 +1917,37 @@ int main(int argc, char *argv[]) {
       
 ```
 
-
 ###  Controlling latency 
 
-Managing latency is described at
- [
-	Software/PulseAudio/Documentation/Developer/Clients/LatencyControl
-      ] (http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/Developer/Clients/LactencyControl)
-. In brief:
-In your code you then have to do the following when calling pa_stream_connect_playback() 
-	resp. pa_stream_connect_record():
 
-+  Pass PA_STREAM_ADJUST_LATENCY in the flags parameter. 
+Managing latency is described at [
+	Software/PulseAudio/Documentation/Developer/Clients/LatencyControl
+      ](http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/Developer/Clients/LactencyControl) . In brief:
+
+
+
+
+
+   > In your code you then have to do the following when calling pa_stream_connect_playback() 
+	resp. pa_stream_connect_record():
+> + Pass PA_STREAM_ADJUST_LATENCY in the flags parameter. 
 	    Only if this flag is set PA will reconfigure the low-level 
 	    device's buffer size and adjust it to the latency you specify.
-
-
-+  Pass a pa_buffer_attr struct in the buffer_attr parameter. 
+> + Pass a pa_buffer_attr struct in the buffer_attr parameter. 
 	    In the fields of this struct make sure to initialize every 
 	    single field to (uint32_t) -1, with the exception of tlength (for playback) 
 	    resp. fragsize (for recording). Initialize those to the latency 
-	    you want to achieve. Use pa_usec_to_bytes(
-, ...) to convert 
+	    you want to achieve. Use pa_usec_to_bytes(&ss, ...) to convert 
 	    the latency from a time unit to bytes.
 
 
 
-
-
 The extra code is:
-```sh_cpp
+
+
+
+
+```
 
 	
     // Set properties of the record buffer
@@ -2012,7 +1956,7 @@ The extra code is:
     buffer_attr.prebuf = (uint32_t) -1;
 
     if (latency_msec > 0) {
-      buffer_attr.fragsize = buffer_attr.tlength = pa_usec_to_bytes(latency_msec * PA_USEC_PER_MSEC, sample_spec);
+      buffer_attr.fragsize = buffer_attr.tlength = pa_usec_to_bytes(latency_msec * PA_USEC_PER_MSEC, &sample_spec);
       flags |= PA_STREAM_ADJUST_LATENCY;
     } else if (latency > 0) {
       buffer_attr.fragsize = buffer_attr.tlength = (uint32_t) latency;
@@ -2021,7 +1965,7 @@ The extra code is:
       buffer_attr.fragsize = buffer_attr.tlength = (uint32_t) -1;
 
     if (process_time_msec > 0) {
-      buffer_attr.minreq = pa_usec_to_bytes(process_time_msec * PA_USEC_PER_MSEC, sample_spec);
+      buffer_attr.minreq = pa_usec_to_bytes(process_time_msec * PA_USEC_PER_MSEC, &sample_spec);
     } else if (process_time > 0)
       buffer_attr.minreq = (uint32_t) process_time;
     else
@@ -2034,6 +1978,10 @@ The extra code is:
 PulseAudio also has mechanisms to estimate the latency of the devices.
       It uses information from timing events.
       A timer event callback has to be declared, as in
+
+
+
+
 ```
 
 	
@@ -2045,6 +1993,7 @@ PulseAudio also has mechanisms to estimate the latency of the devices.
 
 The timer event callback is a "single shot" calback.  It installs a stream update timer callback
       and sets up another timer callback:
+
 ```
 
 	
@@ -2066,6 +2015,7 @@ void time_event_callback(pa_mainloop_api *m,
 
 
 The stream update timer callback can then estimate the latency:
+
 ```
 
 	
@@ -2078,8 +2028,8 @@ void stream_update_timing_callback(pa_stream *s, int success, void *userdata) {
     fprintf(stderr, "Update timing\n");
 
     if (!success ||
-        pa_stream_get_time(s, usec) < 0 ||
-        pa_stream_get_latency(s, l, negative) < 0) {
+        pa_stream_get_time(s, &usec) < 0 ||
+        pa_stream_get_latency(s, &l, &negative) < 0) {
         fprintf(stderr, "Failed to get latency\n");
         return;
     }
@@ -2096,6 +2046,7 @@ void stream_update_timing_callback(pa_stream *s, int success, void *userdata) {
 
 With latency left to PulseAudio by setting  fragsize and tlength to -1,
       I got:
+
 ```
 
 	
@@ -2121,6 +2072,7 @@ Time: 1.602 sec; Latency: 601594 usec.
 
 
 With them set to 1 msec, I got:
+
 ```
 
 	
@@ -2145,10 +2097,9 @@ Time: 2.351 sec; Latency: 1257 usec.
 ```
 
 
-The program to do all this is
- [parec-latency.c:] (parec-latency.c)
+The program to do all this is [parec-latency.c:](parec-latency.c) 
 
-```sh_cpp
+```
 
       /* parec-latency.c */
 
@@ -2157,17 +2108,17 @@ The program to do all this is
 #include <string.h>
 #include <pulse/pulseaudio.h>
 
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 #define _(x) x
 
 #define TIME_EVENT_USEC 50000
 
 // From pulsecore/macro.h
 #define pa_memzero(x,l) (memset((x), 0, (l)))
-#define pa_zero(x) (pa_memzero((x), sizeof(x)))
+#define pa_zero(x) (pa_memzero(&(x), sizeof(x)))
 
 int fdout;
-char *fname = tmp.pcm;
+char *fname = "tmp.pcm";
 
 int verbose = 1;
 int ret;
@@ -2185,7 +2136,7 @@ static pa_stream *stream = NULL;
 /* This is my builtin card. Use paman to find yours
    or set it to NULL to get the default device
 */
-static char *device = alsa_input.pci-0000_00_1b.0.analog-stereo;
+static char *device = "alsa_input.pci-0000_00_1b.0.analog-stereo";
 
 static pa_stream_flags_t flags = 0;
 
@@ -2198,8 +2149,8 @@ void stream_state_callback(pa_stream *s, void *userdata) {
   switch (pa_stream_get_state(s)) {
   case PA_STREAM_CREATING:
     // The stream has been created, so 
-    // lets open a file to record to
-    printf(Creating stream\n);
+    // let's open a file to record to
+    printf("Creating stream\n");
     fdout = creat(fname,  0711);
     break;
 
@@ -2214,26 +2165,26 @@ void stream_state_callback(pa_stream *s, void *userdata) {
       const pa_buffer_attr *a;
       char cmt[PA_CHANNEL_MAP_SNPRINT_MAX], sst[PA_SAMPLE_SPEC_SNPRINT_MAX];
 
-      printf(Stream successfully created.);
+      printf("Stream successfully created.");
 
       if (!(a = pa_stream_get_buffer_attr(s)))
-	printf(pa_stream_get_buffer_attr() failed: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("pa_stream_get_buffer_attr() failed: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
       else {
-	printf(Buffer metrics: maxlength=%u, fragsize=%u, a->maxlength, a->fragsize);
+	printf("Buffer metrics: maxlength=%u, fragsize=%u", a->maxlength, a->fragsize);
                     
       }
 
-      printf(Connected to device %s (%u, %ssuspended).,
+      printf("Connected to device %s (%u, %ssuspended).",
 	     pa_stream_get_device_name(s),
 	     pa_stream_get_device_index(s),
-	     pa_stream_is_suspended(s) ?  : not );
+	     pa_stream_is_suspended(s) ? "" : "not ");
     }
 
     break;
 
   case PA_STREAM_FAILED:
   default:
-    printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+    printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
     exit(1);
   }
 }
@@ -2246,30 +2197,30 @@ static void stream_update_timing_callback(pa_stream *s, int success, void *userd
 
     // pa_assert(s);
 
-    fprintf(stderr, Update timing\n);
+    fprintf(stderr, "Update timing\n");
 
     if (!success ||
-        pa_stream_get_time(s, usec) < 0 ||
-        pa_stream_get_latency(s, l, negative) < 0) {
-        // pa_log(_(Failed to get latency));
-        //pa_log(_(Failed to get latency: %s), pa_strerror(pa_context_errno(context)));
+        pa_stream_get_time(s, &usec) < 0 ||
+        pa_stream_get_latency(s, &l, &negative) < 0) {
+        // pa_log(_("Failed to get latency"));
+        //pa_log(_("Failed to get latency: %s"), pa_strerror(pa_context_errno(context)));
         // quit(1);
         return;
     }
 
-    fprintf(stderr, _(Time: %0.3f sec; Latency: %0.0f usec.\n),
+    fprintf(stderr, _("Time: %0.3f sec; Latency: %0.0f usec.\n"),
             (float) usec / 1000000,
             (float) l * (negative?-1.0f:1.0f));
-    //fprintf(stderr,         \r);
+    //fprintf(stderr, "        \r");
 }
 
 static void time_event_callback(pa_mainloop_api *m, 
 				pa_time_event *e, const struct timeval *t, 
 				void *userdata) {
-    if (stream  pa_stream_get_state(stream) == PA_STREAM_READY) {
+    if (stream && pa_stream_get_state(stream) == PA_STREAM_READY) {
         pa_operation *o;
         if (!(o = pa_stream_update_timing_info(stream, stream_update_timing_callback, NULL)))
-	  1; //pa_log(_(pa_stream_update_timing_info() failed: %s), pa_strerror(pa_context_errno(context)));
+	  1; //pa_log(_("pa_stream_update_timing_info() failed: %s"), pa_strerror(pa_context_errno(context)));
         else
             pa_operation_unref(o);
     }
@@ -2285,12 +2236,12 @@ void get_latency(pa_stream *s) {
 
   timing_info = pa_stream_get_timing_info(s);
   
-  if (pa_stream_get_latency(s, latency, neg) != 0) {
-    fprintf(stderr, __FILE__: pa_stream_get_latency() failed\n);
+  if (pa_stream_get_latency(s, &latency, &neg) != 0) {
+    fprintf(stderr, __FILE__": pa_stream_get_latency() failed\n");
     return;
   }
   
-  fprintf(stderr, %0.0f usec    \r, (float)latency);
+  fprintf(stderr, "%0.0f usec    \r", (float)latency);
 }
 
 
@@ -2303,7 +2254,7 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
   assert(length > 0);
 
   // Copy the data from the server out to a file
-  //fprintf(stderr, Can read %d\n, length);
+  //fprintf(stderr, "Can read %d\n", length);
 
 
   while (pa_stream_readable_size(s) > 0) {
@@ -2313,12 +2264,12 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
     //get_latency(s);
 
     // peek actually creates and fills the data vbl
-    if (pa_stream_peek(s, data, length) < 0) {
-      fprintf(stderr, Read failed\n);
+    if (pa_stream_peek(s, &data, &length) < 0) {
+      fprintf(stderr, "Read failed\n");
       exit(1);
       return;
     }
-    fprintf(stderr, Writing %d\n, length);
+    fprintf(stderr, "Writing %d\n", length);
     write(fdout, data, length);
 
     // swallow the data peeked at before
@@ -2328,12 +2279,12 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
 
 
 // This callback gets called when our context changes state.  We really only
-// care about when its ready or if it has failed
+// care about when it's ready or if it has failed
 void state_cb(pa_context *c, void *userdata) {
   pa_context_state_t state;
   int *pa_ready = userdata;
 
-  printf(State changed\n);
+  printf("State changed\n");
   state = pa_context_get_state(c);
   switch  (state) {
     // There are just here for reference
@@ -2351,17 +2302,17 @@ void state_cb(pa_context *c, void *userdata) {
     pa_buffer_attr buffer_attr;
 
     if (verbose)
-      printf(Connection established.%s\n, CLEAR_LINE);
+      printf("Connection established.%s\n", CLEAR_LINE);
 
-    if (!(stream = pa_stream_new(c, JanCapture, sample_spec, NULL))) {
-      printf(pa_stream_new() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (!(stream = pa_stream_new(c, "JanCapture", &sample_spec, NULL))) {
+      printf("pa_stream_new() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
 
     // Watch for changes in the stream state to create the output file
     pa_stream_set_state_callback(stream, stream_state_callback, NULL);
     
-    // Watch for changes in the streams read state to write to the output file
+    // Watch for changes in the stream's read state to write to the output file
     pa_stream_set_read_callback(stream, stream_read_callback, NULL);
 
     // timing info
@@ -2373,7 +2324,7 @@ void state_cb(pa_context *c, void *userdata) {
     buffer_attr.prebuf = (uint32_t) -1;
 
     if (latency_msec > 0) {
-      buffer_attr.fragsize = buffer_attr.tlength = pa_usec_to_bytes(latency_msec * PA_USEC_PER_MSEC, sample_spec);
+      buffer_attr.fragsize = buffer_attr.tlength = pa_usec_to_bytes(latency_msec * PA_USEC_PER_MSEC, &sample_spec);
       flags |= PA_STREAM_ADJUST_LATENCY;
     } else if (latency > 0) {
       buffer_attr.fragsize = buffer_attr.tlength = (uint32_t) latency;
@@ -2382,7 +2333,7 @@ void state_cb(pa_context *c, void *userdata) {
       buffer_attr.fragsize = buffer_attr.tlength = (uint32_t) -1;
 
     if (process_time_msec > 0) {
-      buffer_attr.minreq = pa_usec_to_bytes(process_time_msec * PA_USEC_PER_MSEC, sample_spec);
+      buffer_attr.minreq = pa_usec_to_bytes(process_time_msec * PA_USEC_PER_MSEC, &sample_spec);
     } else if (process_time > 0)
       buffer_attr.minreq = (uint32_t) process_time;
     else
@@ -2393,8 +2344,8 @@ void state_cb(pa_context *c, void *userdata) {
     get_latency(stream);
 
     // and start recording
-    if (pa_stream_connect_record(stream, device, buffer_attr, flags) < 0) {
-      printf(pa_stream_connect_record() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (pa_stream_connect_record(stream, device, &buffer_attr, flags) < 0) {
+      printf("pa_stream_connect_record() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
   }
@@ -2414,7 +2365,7 @@ int main(int argc, char *argv[]) {
   // Create a mainloop API and connection to the default server
   pa_ml = pa_mainloop_new();
   pa_mlapi = pa_mainloop_get_api(pa_ml);
-  context = pa_context_new(pa_mlapi, test);
+  context = pa_context_new(pa_mlapi, "test");
 
   // This function connects to the pulse server
   pa_context_connect(context, NULL, 0, NULL);
@@ -2423,13 +2374,13 @@ int main(int argc, char *argv[]) {
   pa_context_set_state_callback(context, state_cb, NULL);
 
   if (!(time_event = pa_context_rttime_new(context, pa_rtclock_now() + TIME_EVENT_USEC, time_event_callback, NULL))) {
-    //pa_log(_(pa_context_rttime_new() failed.));
+    //pa_log(_("pa_context_rttime_new() failed."));
     //goto quit;
   }
   
 
-  if (pa_mainloop_run(pa_ml, ret) < 0) {
-    printf(pa_mainloop_run() failed.);
+  if (pa_mainloop_run(pa_ml, &ret) < 0) {
+    printf("pa_mainloop_run() failed.");
     exit(1);
   }
 }
@@ -2437,14 +2388,12 @@ int main(int argc, char *argv[]) {
       
 ```
 
-
-
 ###  Play microphone to speaker 
 
-Combining what we have so far, we get
- [pa-mic-2-speaker.c:] (pa-mic-2-speaker.c)
 
-```sh_cpp
+Combining what we have so far, we get [pa-mic-2-speaker.c:](pa-mic-2-speaker.c) 
+
+```
 
       /*
  * Copy from microphone to speaker
@@ -2456,12 +2405,12 @@ Combining what we have so far, we get
 #include <string.h>
 #include <pulse/pulseaudio.h>
 
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 #define BUFF_LEN 4096
 
 // From pulsecore/macro.h
 #define pa_memzero(x,l) (memset((x), 0, (l)))
-#define pa_zero(x) (pa_memzero((x), sizeof(x)))
+#define pa_zero(x) (pa_memzero(&(x), sizeof(x)))
 
 static void *buffer = NULL;
 static size_t buffer_length = 0, buffer_index = 0;
@@ -2480,7 +2429,7 @@ static pa_stream *istream = NULL,
                  *ostream = NULL;
 
 // This is my builtin card. Use paman to find yours
-//static char *device = alsa_input.pci-0000_00_1b.0.analog-stereo;
+//static char *device = "alsa_input.pci-0000_00_1b.0.analog-stereo";
 static char *idevice = NULL;
 static char *odevice = NULL;
 
@@ -2495,8 +2444,8 @@ void stream_state_callback(pa_stream *s, void *userdata) {
   switch (pa_stream_get_state(s)) {
   case PA_STREAM_CREATING:
     // The stream has been created, so 
-    // lets open a file to record to
-    printf(Creating stream\n);
+    // let's open a file to record to
+    printf("Creating stream\n");
     // fdout = creat(fname,  0711);
     buffer = pa_xmalloc(BUFF_LEN);
     buffer_length = BUFF_LEN;
@@ -2514,26 +2463,26 @@ void stream_state_callback(pa_stream *s, void *userdata) {
       const pa_buffer_attr *a;
       char cmt[PA_CHANNEL_MAP_SNPRINT_MAX], sst[PA_SAMPLE_SPEC_SNPRINT_MAX];
 
-      printf(Stream successfully created.);
+      printf("Stream successfully created.");
 
       if (!(a = pa_stream_get_buffer_attr(s)))
-	printf(pa_stream_get_buffer_attr() failed: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("pa_stream_get_buffer_attr() failed: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
       else {
-	printf(Buffer metrics: maxlength=%u, fragsize=%u, a->maxlength, a->fragsize);
+	printf("Buffer metrics: maxlength=%u, fragsize=%u", a->maxlength, a->fragsize);
                     
       }
 
-      printf(Connected to device %s (%u, %ssuspended).,
+      printf("Connected to device %s (%u, %ssuspended).",
 	     pa_stream_get_device_name(s),
 	     pa_stream_get_device_index(s),
-	     pa_stream_is_suspended(s) ?  : not );
+	     pa_stream_is_suspended(s) ? "" : "not ");
     }
 
     break;
 
   case PA_STREAM_FAILED:
   default:
-    printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+    printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
     exit(1);
   }
 }
@@ -2548,40 +2497,40 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
   assert(length > 0);
 
   // Copy the data from the server out to a file
-  fprintf(stderr, Can read %d\n, length);
+  fprintf(stderr, "Can read %d\n", length);
 
   while (pa_stream_readable_size(s) > 0) {
     const void *data;
     size_t length, lout;
     
     // peek actually creates and fills the data vbl
-    if (pa_stream_peek(s, data, length) < 0) {
-      fprintf(stderr, Read failed\n);
+    if (pa_stream_peek(s, &data, &length) < 0) {
+      fprintf(stderr, "Read failed\n");
       exit(1);
       return;
     }
 
-    fprintf(stderr, read %d\n, length);
+    fprintf(stderr, "read %d\n", length);
     lout =  pa_stream_writable_size(ostream);
-    fprintf(stderr, Writable: %d\n, lout);
+    fprintf(stderr, "Writable: %d\n", lout);
     if (lout == 0) {
-      fprintf(stderr, cant write, zero writable\n);
+      fprintf(stderr, "can't write, zero writable\n");
       return;
     }
     if (lout < length) {
-      fprintf(stderr, Truncating read\n);
+      fprintf(stderr, "Truncating read\n");
       length = lout;
   }
     
   if (pa_stream_write(ostream, (uint8_t*) data, length, NULL, 0, PA_SEEK_RELATIVE) < 0) {
-    fprintf(stderr, pa_stream_write() failed\n);
+    fprintf(stderr, "pa_stream_write() failed\n");
     exit(1);
     return;
   }
     
 
     // STICK OUR CODE HERE TO WRITE OUT
-    //fprintf(stderr, Writing %d\n, length);
+    //fprintf(stderr, "Writing %d\n", length);
     //write(fdout, data, length);
 
     // swallow the data peeked at before
@@ -2592,22 +2541,22 @@ static void stream_read_callback(pa_stream *s, size_t length, void *userdata) {
 
 
 /* This is called whenever new data may be written to the stream */
-// We dont actually write anything this time
+// We don't actually write anything this time
 static void stream_write_callback(pa_stream *s, size_t length, void *userdata) {
   //assert(s);
   //assert(length > 0);
 
-  printf(Stream write callback: Ready to write %d bytes\n, length);
+  printf("Stream write callback: Ready to write %d bytes\n", length);
  }
 
 
 // This callback gets called when our context changes state.  We really only
-// care about when its ready or if it has failed
+// care about when it's ready or if it has failed
 void state_cb(pa_context *c, void *userdata) {
   pa_context_state_t state;
   int *pa_ready = userdata;
 
-  printf(State changed\n);
+  printf("State changed\n");
   state = pa_context_get_state(c);
   switch  (state) {
     // There are just here for reference
@@ -2625,22 +2574,22 @@ void state_cb(pa_context *c, void *userdata) {
     pa_buffer_attr buffer_attr;
 
     if (verbose)
-      printf(Connection established.%s\n, CLEAR_LINE);
+      printf("Connection established.%s\n", CLEAR_LINE);
 
-    if (!(istream = pa_stream_new(c, JanCapture, sample_spec, NULL))) {
-      printf(pa_stream_new() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (!(istream = pa_stream_new(c, "JanCapture", &sample_spec, NULL))) {
+      printf("pa_stream_new() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
 
-    if (!(ostream = pa_stream_new(c, JanPlayback, sample_spec, NULL))) {
-      printf(pa_stream_new() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (!(ostream = pa_stream_new(c, "JanPlayback", &sample_spec, NULL))) {
+      printf("pa_stream_new() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
 
     // Watch for changes in the stream state to create the output file
     pa_stream_set_state_callback(istream, stream_state_callback, NULL);
     
-    // Watch for changes in the streams read state to write to the output file
+    // Watch for changes in the stream's read state to write to the output file
     pa_stream_set_read_callback(istream, stream_read_callback, NULL);
 
     pa_stream_set_write_callback(ostream, stream_write_callback, NULL);
@@ -2653,7 +2602,7 @@ void state_cb(pa_context *c, void *userdata) {
     buffer_attr.prebuf = (uint32_t) -1;
 
     if (latency_msec > 0) {
-      buffer_attr.fragsize = buffer_attr.tlength = pa_usec_to_bytes(latency_msec * PA_USEC_PER_MSEC, sample_spec);
+      buffer_attr.fragsize = buffer_attr.tlength = pa_usec_to_bytes(latency_msec * PA_USEC_PER_MSEC, &sample_spec);
       flags |= PA_STREAM_ADJUST_LATENCY;
     } else if (latency > 0) {
       buffer_attr.fragsize = buffer_attr.tlength = (uint32_t) latency;
@@ -2662,26 +2611,26 @@ void state_cb(pa_context *c, void *userdata) {
       buffer_attr.fragsize = buffer_attr.tlength = (uint32_t) -1;
 
     if (process_time_msec > 0) {
-      buffer_attr.minreq = pa_usec_to_bytes(process_time_msec * PA_USEC_PER_MSEC, sample_spec);
+      buffer_attr.minreq = pa_usec_to_bytes(process_time_msec * PA_USEC_PER_MSEC, &sample_spec);
     } else if (process_time > 0)
       buffer_attr.minreq = (uint32_t) process_time;
     else
       buffer_attr.minreq = (uint32_t) -1;
 
     // and start recording
-    if (pa_stream_connect_record(istream, idevice, buffer_attr, flags) < 0) {
-      printf(pa_stream_connect_record() failed: %s, pa_strerror(pa_context_errno(c)));
+    if (pa_stream_connect_record(istream, idevice, &buffer_attr, flags) < 0) {
+      printf("pa_stream_connect_record() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
 
     
-    if (pa_stream_connect_playback(ostream, odevice, buffer_attr, flags,
+    if (pa_stream_connect_playback(ostream, odevice, &buffer_attr, flags,
 				   NULL, 
 				   NULL) < 0) {
-      printf(pa_stream_connect_playback() failed: %s, pa_strerror(pa_context_errno(c)));
+      printf("pa_stream_connect_playback() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1); //goto fail;
     } else {
-      printf(Set playback callback\n);
+      printf("Set playback callback\n");
     }
     
   }
@@ -2701,7 +2650,7 @@ int main(int argc, char *argv[]) {
   // Create a mainloop API and connection to the default server
   pa_ml = pa_mainloop_new();
   pa_mlapi = pa_mainloop_get_api(pa_ml);
-  pa_ctx = pa_context_new(pa_mlapi, test);
+  pa_ctx = pa_context_new(pa_mlapi, "test");
 
   // This function connects to the pulse server
   pa_context_connect(pa_ctx, NULL, 0, NULL);
@@ -2709,8 +2658,8 @@ int main(int argc, char *argv[]) {
   // This function defines a callback so the server will tell us its state.
   pa_context_set_state_callback(pa_ctx, state_cb, NULL);
 
-  if (pa_mainloop_run(pa_ml, ret) < 0) {
-    printf(pa_mainloop_run() failed.);
+  if (pa_mainloop_run(pa_ml, &ret) < 0) {
+    printf("pa_mainloop_run() failed.");
     exit(1);
   }
 }
@@ -2724,29 +2673,18 @@ When the latency is set to 1 msec for everything, the actual latency is
 
 ###  Setting the volume on devices 
 
+
 Each device can have its input or output volume controlled by
-      PulseAudio. The principal calls for sinks are
- `pa_context_set_sink_volume_by_name`and
- ` pa_context_set_sink_volume_by_index`with similar
+      PulseAudio. The principal calls for sinks are `pa_context_set_sink_volume_by_name`and ` pa_context_set_sink_volume_by_index`with similar
       calls for sources.
 
-These calls make use of a structure
- `pa_cvolume`.
+
+These calls make use of a structure `pa_cvolume`.
       This stucture can be manipulated using calls such as
 
-+  
- ` pa_cvolume_init`
-
-
-+  
- `pa_cvolume_set`
-
-
-+  
- `pa_cvolume_mute`
-
-
-
++  ` pa_cvolume_init`
++  `pa_cvolume_set`
++  `pa_cvolume_mute`
 
 In the following program we set the volume on a particular device
       by reading integer values from stdin and using these to set the
@@ -2756,29 +2694,15 @@ In the following program we set the volume on a particular device
       calls which set up a separate thread for the PulseAudio main loop.
       These calls are
 
-+  
- ` pa_threaded_mainloop`instead of
- ` pa_mainloop`
-
-
-+  
- ` pa_threaded_mainloop_get_api`instead of
- ` pa_mainloop_get_api`
-
-
-+  
- `pa_threaded_mainloop_start`instead of
- `pa_mainloop_start`
-
-
-
++  ` pa_threaded_mainloop`instead of ` pa_mainloop`
++  ` pa_threaded_mainloop_get_api`instead of ` pa_mainloop_get_api`
++  `pa_threaded_mainloop_start`instead of `pa_mainloop_start`
 
 The threaded calls allow us to start PulseAudio in its own thread,
       and leave the current thread for reading volume values. This gives
-      the relatively simple program
- [pavolume.c:] (pavolume.c)
+      the relatively simple program [pavolume.c:](pavolume.c) 
 
-```sh_cpp
+```
 
       /**
  * pavolume.c 
@@ -2791,22 +2715,22 @@ The threaded calls allow us to start PulseAudio in its own thread,
 
 #define _(x) x
 
-char *device = alsa_output.pci-0000_00_1b.0.analog-stereo;
+char *device = "alsa_output.pci-0000_00_1b.0.analog-stereo";
 
 int ret;
 
 pa_context *context;
 
 void show_error(char *s) {
-    fprintf(stderr, %s\n, s);
+    fprintf(stderr, "%s\n", s);
 }
 
 
 void volume_cb(pa_context *c, int success, void *userdata) {
     if (success) 
-	printf(Volume set\n);
+	printf("Volume set\n");
     else
-	printf(Volume not set\n);
+	printf("Volume not set\n");
 }
 		       
 void context_state_cb(pa_context *c, void *userdata) {
@@ -2844,7 +2768,7 @@ int main(int argc, char *argv[]) {
     //pa_ml = pa_mainloop_new();
     pa_ml = pa_threaded_mainloop_new();
     pa_mlapi = pa_threaded_mainloop_get_api(pa_ml);
-    context = pa_context_new(pa_mlapi, Voulme control);
+    context = pa_context_new(pa_mlapi, "Voulme control");
 
     // This function connects to the pulse server
     pa_context_connect(context, NULL, 0, NULL);
@@ -2853,17 +2777,17 @@ int main(int argc, char *argv[]) {
     pa_context_set_state_callback(context, context_state_cb, NULL);
 
     pa_threaded_mainloop_start(pa_ml);
-    printf(Enter volume for device %s\n);
+    printf("Enter volume for device %s\n");
     
-    pa_cvolume_init(v);
+    pa_cvolume_init(&v);
     while (1) {
-        puts(Enter an integer 0-65536\n);
+        puts("Enter an integer 0-65536\n");
         fgets(buf, 128, stdin);
         volume = atoi(buf);
-	pa_cvolume_set(v, 2, volume);
+	pa_cvolume_set(&v, 2, volume);
 	pa_context_set_sink_volume_by_name(context,
 					   device,
-					   v,
+					   &v,
 					   volume_cb,
 					   NULL
 					   );
@@ -2873,30 +2797,24 @@ int main(int argc, char *argv[]) {
       
 ```
 
-
 ###  Listing clients 
+
 
 PulseAudio is a server that talks to devices at the bottom layer and to clients
       at the top layer. The clients are producers and consumers of audio.
       One of the roles of PulseAudio is to mix signals from different source clients
       to shared output devices. In order to do this, PulseAudio keeps track
-      of registrations by clients, and can make these available to
-other
-clients by suitbale callbacks.
+      of registrations by clients, and can make these available to _other_ clients by suitbale callbacks.
+
 
 The program palist_clients.c is very similar to the program
       palist_devices.c. The principal difference is that when the 
-      context changes state to
- `PA_CONTEXT_READY`the application subscribes to
- `PA_SUBSCRIPTION_MASK_CLIENT`instead of
- `(PA_SUBSCRIPTION_MASK_SINK|PA_SUBSCRIPTION_MASK_SOURCE)`and the subscription callback asks for
- `pa_context_get_client_info`instead of
- `pa_context_get_source_info`.
+      context changes state to `PA_CONTEXT_READY`the application subscribes to `PA_SUBSCRIPTION_MASK_CLIENT`instead of `(PA_SUBSCRIPTION_MASK_SINK|PA_SUBSCRIPTION_MASK_SOURCE)`and the subscription callback asks for `pa_context_get_client_info`instead of `pa_context_get_source_info`.
 
-The program
- [palist_clients.c] (palist_clients.c)
-is
-```sh_cpp
+
+The program [palist_clients.c](palist_clients.c) is
+
+```
 
       /**
  * palist_clients.c 
@@ -2907,12 +2825,12 @@ is
 #include <string.h>
 #include <pulse/pulseaudio.h>
 
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 #define _(x) x
 
 // From pulsecore/macro.h
 //#define pa_memzero(x,l) (memset((x), 0, (l)))
-//#define pa_zero(x) (pa_memzero((x), sizeof(x)))
+//#define pa_zero(x) (pa_memzero(&(x), sizeof(x)))
 
 int ret;
 
@@ -2925,14 +2843,14 @@ void show_error(char *s) {
 void print_properties(pa_proplist *props) {
     void *state = NULL;
 
-    printf(  Properties are: \n);
+    printf("  Properties are: \n");
     while (1) {
 	char *key;
-	if ((key = pa_proplist_iterate(props, state)) == NULL) {
+	if ((key = pa_proplist_iterate(props, &state)) == NULL) {
 	    return;
 	}
 	char *value = pa_proplist_gets(props, key);
-	printf(   key %s, value %s\n, key, value);
+	printf("   key %s, value %s\n", key, value);
     }
 }
 
@@ -2942,7 +2860,7 @@ void add_client_cb(pa_context *context, const pa_client_info *i, int eol, void *
         if (pa_context_errno(context) == PA_ERR_NOENTITY)
             return;
 
-        show_error(_(Client callback failure));
+        show_error(_("Client callback failure"));
         return;
     }
 
@@ -2950,7 +2868,7 @@ void add_client_cb(pa_context *context, const pa_client_info *i, int eol, void *
         return;
     }
 
-    printf(Found a new client index %d name %s eol %d\n, i->index, i->name, eol);
+    printf("Found a new client index %d name %s eol %d\n", i->index, i->name, eol);
     print_properties(i->proplist);
 }
 
@@ -2960,7 +2878,7 @@ void remove_client_cb(pa_context *context, const pa_client_info *i, int eol, voi
         if (pa_context_errno(context) == PA_ERR_NOENTITY)
             return;
 
-        show_error(_(Client callback failure));
+        show_error(_("Client callback failure"));
         return;
     }
 
@@ -2968,20 +2886,20 @@ void remove_client_cb(pa_context *context, const pa_client_info *i, int eol, voi
         return;
     }
 
-    printf(Removing a client index %d name %s\n, i->index, i->name);
+    printf("Removing a client index %d name %s\n", i->index, i->name);
     print_properties(i->proplist);
 }
 
 void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
 
-    switch (t  PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
+    switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
 
     case PA_SUBSCRIPTION_EVENT_CLIENT:
-	if ((t  PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
-	    printf(Remove event at index %d\n, index);
+	if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
+	    printf("Remove event at index %d\n", index);
 	    pa_operation *o;
 	    if (!(o = pa_context_get_client_info(c, index, remove_client_cb, NULL))) {
-		show_error(_(pa_context_get_client_info() failed));
+		show_error(_("pa_context_get_client_info() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -2989,7 +2907,7 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
 	} else {
 	    pa_operation *o;
 	    if (!(o = pa_context_get_client_info(c, index, add_client_cb, NULL))) {
-		show_error(_(pa_context_get_client_info() failed));
+		show_error(_("pa_context_get_client_info() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -3014,7 +2932,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 
 	if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
 				       (PA_SUBSCRIPTION_MASK_CLIENT), NULL, NULL))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -3023,7 +2941,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 						  add_client_cb,
 						  NULL
 	) )) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -3060,7 +2978,7 @@ void stream_state_callback(pa_stream *s, void *userdata) {
 
     case PA_STREAM_FAILED:
     default:
-	printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
 	exit(1);
     }
 }
@@ -3076,7 +2994,7 @@ int main(int argc, char *argv[]) {
     // Create a mainloop API and connection to the default server
     pa_ml = pa_mainloop_new();
     pa_mlapi = pa_mainloop_get_api(pa_ml);
-    context = pa_context_new(pa_mlapi, test);
+    context = pa_context_new(pa_mlapi, "test");
 
     // This function connects to the pulse server
     pa_context_connect(context, NULL, 0, NULL);
@@ -3086,8 +3004,8 @@ int main(int argc, char *argv[]) {
     pa_context_set_state_callback(context, context_state_cb, NULL);
 
     
-    if (pa_mainloop_run(pa_ml, ret) < 0) {
-	printf(pa_mainloop_run() failed.);
+    if (pa_mainloop_run(pa_ml, &ret) < 0) {
+	printf("pa_mainloop_run() failed.");
 	exit(1);
     }
 }
@@ -3097,6 +3015,7 @@ int main(int argc, char *argv[]) {
 
 
 The output on my system is (elided)
+
 ```
 
 	
@@ -3131,41 +3050,30 @@ Found a new client index 341 name test eol 0
       
 ```
 
-
 ###  Listing client sources and sinks 
 
-Clients can act as sources: programs such as
- `mplayer`and
- `vlc`do just that, sending streams to PulseAudio.
+
+Clients can act as sources: programs such as `mplayer`and `vlc`do just that, sending streams to PulseAudio.
       Other clients can act as sinks. The clients themselves are monitored
-      by the previous program. To monitor their
-activity
-you set the mask on
- `pa_subscribe_callback`to
- `(PA_SUBSCRIPTION_MASK_CLIENT | PA_SUBSCRIPTION_MASK_SINK_INPUT | 					PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT)`.
+      by the previous program. To monitor their _activity_ you set the mask on `pa_subscribe_callback`to `(PA_SUBSCRIPTION_MASK_CLIENT | PA_SUBSCRIPTION_MASK_SINK_INPUT | 					PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT)`.
       Within the subscription
-      callback you make calls to
- `pa_context_get_sink_input_info`within the
- ` PA_SUBSCRIPTION_EVENT_SINK_INPUT`branch
+      callback you make calls to `pa_context_get_sink_input_info`within the ` PA_SUBSCRIPTION_EVENT_SINK_INPUT`branch
       and similarly for the source output.
 
-The sink input callback is passed the structure
- `pa_sink_input_info`. This contains the familiar
- `name`and
- `index`fields but also
-      has an integer field
- `client`. This links the sink input
+
+The sink input callback is passed the structure `pa_sink_input_info`. This contains the familiar `name`and `index`fields but also
+      has an integer field `client`. This links the sink input
       back to the index of the client responsible for the sink.
       In the following program we list all the clients as well, so that
       these links can followed visually. Programatically, PulseAudio makes you
       keep much information (such as what clients have what indices)
       yourself: this is ignored here.
 
-The program to list clients and monitor changes in their input and
-      output streams is
- [pamonitor_clients.c:] (pamonitor_clients.c)
 
-```sh_cpp
+The program to list clients and monitor changes in their input and
+      output streams is [pamonitor_clients.c:](pamonitor_clients.c) 
+
+```
 
       /**
  * pamonitor_clients.c 
@@ -3178,12 +3086,12 @@ The program to list clients and monitor changes in their input and
 #include <string.h>
 #include <pulse/pulseaudio.h>
 
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 #define _(x) x
 
 // From pulsecore/macro.h
 #define pa_memzero(x,l) (memset((x), 0, (l)))
-#define pa_zero(x) (pa_memzero((x), sizeof(x)))
+#define pa_zero(x) (pa_memzero(&(x), sizeof(x)))
 
 int ret;
 
@@ -3199,7 +3107,7 @@ void add_client_cb(pa_context *context, const pa_client_info *i, int eol, void *
         if (pa_context_errno(context) == PA_ERR_NOENTITY)
             return;
 
-        show_error(_(Client callback failure));
+        show_error(_("Client callback failure"));
         return;
     }
 
@@ -3207,7 +3115,7 @@ void add_client_cb(pa_context *context, const pa_client_info *i, int eol, void *
         return;
     }
 
-    printf(Found a new client index %d name %s eol %d\n, i->index, i->name, eol);
+    printf("Found a new client index %d name %s eol %d\n", i->index, i->name, eol);
 }
 
 void remove_client_cb(pa_context *context, const pa_client_info *i, int eol, void *userdata) {
@@ -3216,7 +3124,7 @@ void remove_client_cb(pa_context *context, const pa_client_info *i, int eol, voi
         if (pa_context_errno(context) == PA_ERR_NOENTITY)
             return;
 
-        show_error(_(Client callback failure));
+        show_error(_("Client callback failure"));
         return;
     }
 
@@ -3224,7 +3132,7 @@ void remove_client_cb(pa_context *context, const pa_client_info *i, int eol, voi
         return;
     }
 
-    printf(Removing a client index %d name %s\n, i->index, i->name);
+    printf("Removing a client index %d name %s\n", i->index, i->name);
 }
 
 void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata) {
@@ -3232,14 +3140,14 @@ void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *us
         if (pa_context_errno(context) == PA_ERR_NOENTITY)
             return;
 
-        show_error(_(Sink input callback failure));
+        show_error(_("Sink input callback failure"));
         return;
     }
 
     if (eol > 0) {
         return;
     }
-    printf(Sink input found index %d name %s for client %d\n, i->index, i->name, i->client);
+    printf("Sink input found index %d name %s for client %d\n", i->index, i->name, i->client);
 }
 
 void source_output_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata) {
@@ -3247,27 +3155,27 @@ void source_output_cb(pa_context *c, const pa_source_output_info *i, int eol, vo
         if (pa_context_errno(context) == PA_ERR_NOENTITY)
             return;
 
-        show_error(_(Source output callback failure));
+        show_error(_("Source output callback failure"));
         return;
     }
 
     if (eol > 0) {
         return;
     }
-    printf(Source output found index %d name %s for client %d\n, i->index, i->name, i->client);
+    printf("Source output found index %d name %s for client %d\n", i->index, i->name, i->client);
 }
 
 
 void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
 
-    switch (t  PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
+    switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
 
     case PA_SUBSCRIPTION_EVENT_CLIENT:
-	if ((t  PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
-	    printf(Remove event at index %d\n, index);
+	if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
+	    printf("Remove event at index %d\n", index);
 	    pa_operation *o;
 	    if (!(o = pa_context_get_client_info(c, index, remove_client_cb, NULL))) {
-		show_error(_(pa_context_get_client_info() failed));
+		show_error(_("pa_context_get_client_info() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -3275,7 +3183,7 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
 	} else {
 	    pa_operation *o;
 	    if (!(o = pa_context_get_client_info(c, index, add_client_cb, NULL))) {
-		show_error(_(pa_context_get_client_info() failed));
+		show_error(_("pa_context_get_client_info() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -3283,12 +3191,12 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
 	break;
 
     case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
-	if ((t  PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
-	    printf(Removing sink input %d\n, index);
+	if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
+	    printf("Removing sink input %d\n", index);
 	else {
 	    pa_operation *o;
 	    if (!(o = pa_context_get_sink_input_info(context, index, sink_input_cb, NULL))) {
-		show_error(_(pa_context_get_sink_input_info() failed));
+		show_error(_("pa_context_get_sink_input_info() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -3296,12 +3204,12 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
 	break;
 
     case PA_SUBSCRIPTION_EVENT_SOURCE_OUTPUT:
-	if ((t  PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
-	    printf(Removing source output %d\n, index);
+	if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
+	    printf("Removing source output %d\n", index);
 	else {
 	    pa_operation *o;
 	    if (!(o = pa_context_get_source_output_info(context, index, source_output_cb, NULL))) {
-		show_error(_(pa_context_get_sink_input_info() failed));
+		show_error(_("pa_context_get_sink_input_info() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -3328,7 +3236,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 				       (PA_SUBSCRIPTION_MASK_CLIENT | 
 					PA_SUBSCRIPTION_MASK_SINK_INPUT | 
 					PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), NULL, NULL))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -3337,7 +3245,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 						  add_client_cb,
 						  NULL
 	) )) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	pa_operation_unref(o);
@@ -3373,7 +3281,7 @@ void stream_state_callback(pa_stream *s, void *userdata) {
 
     case PA_STREAM_FAILED:
     default:
-	printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
 	exit(1);
     }
 }
@@ -3389,7 +3297,7 @@ int main(int argc, char *argv[]) {
     // Create a mainloop API and connection to the default server
     pa_ml = pa_mainloop_new();
     pa_mlapi = pa_mainloop_get_api(pa_ml);
-    context = pa_context_new(pa_mlapi, test);
+    context = pa_context_new(pa_mlapi, "test");
 
     // This function connects to the pulse server
     pa_context_connect(context, NULL, 0, NULL);
@@ -3399,8 +3307,8 @@ int main(int argc, char *argv[]) {
     pa_context_set_state_callback(context, context_state_cb, NULL);
 
     
-    if (pa_mainloop_run(pa_ml, ret) < 0) {
-	printf(pa_mainloop_run() failed.);
+    if (pa_mainloop_run(pa_ml, &ret) < 0) {
+	printf("pa_mainloop_run() failed.");
 	exit(1);
     }
 }
@@ -3410,6 +3318,7 @@ int main(int argc, char *argv[]) {
 
 
 The output on my system is
+
 ```
 
 	
@@ -3425,38 +3334,34 @@ Found a new client index 342 name test eol 0
       
 ```
 
-
 ###  Controlling the volume of a sink client 
+
 
 One of the significant features of PulseAudio is that not only can it 
       mix streams to a device, but it can also control the volume of each stream.
       This is in addition to the volume control of each device.
-      In
- `pavucontrol`you can see this under the Playback
+      In `pavucontrol`you can see this under the Playback
       tab, where the volume of playback clients can be adjusted.
 
-Programatically this is done by calling
- `pa_context_set_sink_input_volume`with parameters
+
+Programatically this is done by calling `pa_context_set_sink_input_volume`with parameters
       the index of the sink input and the volume.
       In the following program we follow what we did in the
       pavolume_client.c program where we set PulseAudio to run
       in a separate thread and input values for the volume in the
       main thread. A slight difference is that we have to wait for a client
       to start up a sink input, which we do by sleeping until the
-      sink input callback assigns a non-zero value to the
- `sink_index`variable. Crude, yes. In a program such
-      as
- `pavucontrol`the GUI runs in separate threads
+      sink input callback assigns a non-zero value to the `sink_index`variable. Crude, yes. In a program such
+      as `pavucontrol`the GUI runs in separate threads
       anyway and we do not need to rsort to such simple tricks.
 
-The program is
- [pavolume_sink.c] (pavolume_sink.c)
-.
+
+The program is [pavolume_sink.c](pavolume_sink.c) .
       If you play a file using
-      e.g.
- `mplayer`then its volume can be adjusted
+      e.g. `mplayer`then its volume can be adjusted
       by this program.
-```sh_cpp
+
+```
 
       /**
  * pavolume_sink.c 
@@ -3467,7 +3372,7 @@ The program is
 #include <string.h>
 #include <pulse/pulseaudio.h>
 
-#define CLEAR_LINE \n
+#define CLEAR_LINE "\n"
 #define _(x) x
 
 int ret;
@@ -3487,36 +3392,36 @@ void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *us
         if (pa_context_errno(context) == PA_ERR_NOENTITY)
             return;
 
-        show_error(_(Sink input callback failure));
+        show_error(_("Sink input callback failure"));
         return;
     }
 
     if (eol > 0) {
         return;
     }
-    printf(Sink input found index %d name %s for client %d\n, i->index, i->name, i->client);
+    printf("Sink input found index %d name %s for client %d\n", i->index, i->name, i->client);
     sink_num_channels = i->channel_map.channels;
     sink_index = i->index;
 }
 
 void volume_cb(pa_context *c, int success, void *userdata) {
     if (success) 
-	printf(Volume set\n);
+	printf("Volume set\n");
     else
-	printf(Volume not set\n);
+	printf("Volume not set\n");
 }
 
 void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
 
-    switch (t  PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
+    switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
 
     case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
-	if ((t  PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
-	    printf(Removing sink input %d\n, index);
+	if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
+	    printf("Removing sink input %d\n", index);
 	else {
 	    pa_operation *o;
 	    if (!(o = pa_context_get_sink_input_info(context, index, sink_input_cb, NULL))) {
-		show_error(_(pa_context_get_sink_input_info() failed));
+		show_error(_("pa_context_get_sink_input_info() failed"));
 		return;
 	    }
 	    pa_operation_unref(o);
@@ -3541,7 +3446,7 @@ void context_state_cb(pa_context *c, void *userdata) {
 
 	if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
 				       (PA_SUBSCRIPTION_MASK_SINK_INPUT), NULL, NULL))) {
-	    show_error(_(pa_context_subscribe() failed));
+	    show_error(_("pa_context_subscribe() failed"));
 	    return;
 	}
 	break;
@@ -3572,7 +3477,7 @@ void stream_state_callback(pa_stream *s, void *userdata) {
 
     case PA_STREAM_FAILED:
     default:
-	printf(Stream error: %s, pa_strerror(pa_context_errno(pa_stream_get_context(s))));
+	printf("Stream error: %s", pa_strerror(pa_context_errno(pa_stream_get_context(s))));
 	exit(1);
     }
 }
@@ -3591,7 +3496,7 @@ int main(int argc, char *argv[]) {
     // Create a mainloop API and connection to the default server
     pa_ml = pa_threaded_mainloop_new();
     pa_mlapi = pa_threaded_mainloop_get_api(pa_ml);
-    context = pa_context_new(pa_mlapi, test);
+    context = pa_context_new(pa_mlapi, "test");
 
     // This function connects to the pulse server
     pa_context_connect(context, NULL, 0, NULL);
@@ -3608,16 +3513,16 @@ int main(int argc, char *argv[]) {
 	sleep(1);
     }
 
-    printf(Enter volume for sink %d\n, sink_index);
-    pa_cvolume_init(v);
+    printf("Enter volume for sink %d\n", sink_index);
+    pa_cvolume_init(&v);
     while (1) {
-        puts(Enter an integer 0-65536);
+        puts("Enter an integer 0-65536");
         fgets(buf, 128, stdin);
         volume = atoi(buf);
-	pa_cvolume_set(v, sink_num_channels, volume);
+	pa_cvolume_set(&v, sink_num_channels, volume);
 	pa_context_set_sink_input_volume(context,
 					   sink_index,
-					   v,
+					   &v,
 					   volume_cb,
 					   NULL
 					   );
@@ -3626,5 +3531,3 @@ int main(int argc, char *argv[]) {
 
       
 ```
-
-

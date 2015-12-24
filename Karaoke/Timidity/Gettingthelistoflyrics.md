@@ -1,22 +1,23 @@
-#  Getting the list of lyrics 
+
+##  Getting the list of lyrics 
+
 
 The failing of the current interfaces in TiMidity with regard
       to Karaoke is that while they can show the lyrics as they are played,
       they don't show the lyric lines and progressively highlight them as they are
       played. For that, you need the set of lyrics.
 
+
 TiMidity in fact builds a list of lyrics, and makes them accessible.
-      It has a function
- `event2string()`which
+      It has a function `event2string()`which
       takes an integer parameter from one upwards. For each value
       it returns the string of a lyric or text event, finally
-      returning
- `NULL`on the end of the list.
+      returning `NULL`on the end of the list.
       The first character returned is a type parameter, the rest is
       the string. Using GLib functions, we can build up an array
-      of lines for a
- `KAR`file by
-```sh_cpp
+      of lines for a `KAR`file by
+
+```
 
 	
 struct _lyric_t {
@@ -49,12 +50,12 @@ static void build_lyric_lines() {
     while ((evt_str = event2string(n++)) != NULL) {
         gchar *lyric = evt_str+1;
 
-        if ((strlen(lyric) >= 2)  (lyric[0] == '@')  (lyric[1] == 'L')) {
+        if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'L')) {
             lyric_lines.language =  lyric + 2;
             continue;
         }
 
-        if ((strlen(lyric) >= 2)  (lyric[0] == '@')  (lyric[1] == 'T')) {
+        if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'T')) {
             if (lyric_lines.title == NULL) {
                 lyric_lines.title = lyric + 2;
             } else {
@@ -90,9 +91,8 @@ static void build_lyric_lines() {
 ```
 
 
-The function
- `build_lyric_lines()`should be called
-      from the
- `CTLE_LOADING_DONE`branch of
- `ctl_event()`.
 
+
+
+The function `build_lyric_lines()`should be called
+      from the `CTLE_LOADING_DONE`branch of `ctl_event()`.

@@ -1,14 +1,14 @@
-#  Extending FluidSynth with callbacks 
+
+##  Extending FluidSynth with callbacks 
+
 
 Callbacks are functions registered with an application which
       are called when certain events occur. In order to build a Karaoke
       player we need to know
 
-+  When a file is loaded so that we can extract all of the lyrics
++ When a file is loaded so that we can extract all of the lyrics
 	  from it for display at the right times.
-
-
-+  When each Meta Lyric or Text event occurs as output from
++ When each Meta Lyric or Text event occurs as output from
 	  a sequencer, so that we can see what lyric is about to be
 	  sung.
 
@@ -16,10 +16,10 @@ Callbacks are functions registered with an application which
 
 
 The first of these is fairly straightforward: FluidSynth
-      has a function
- `fluid_player_load`which will
+      has a function `fluid_player_load`which will
       load a file. We can change the code to add a suitable callback into that
       function which will give us access to the loaded MIDI file.
+
 
 Getting Lyric or Text events out of a sequencer is not so easy, since they
       are never meant to appear! The MIDI specification allows these
@@ -28,11 +28,10 @@ Getting Lyric or Text events out of a sequencer is not so easy, since they
       The Java MIDI API makes them available by an out-of-band call
       to a Meta event handler. FluidSynth just throws them away.
 
+
 On the other hand, FluidSynth already has a callback to handle
       MIDI events sent from the sequencer to the synthesizer. It is
-      the function
- `fluid_synth_handle_midi_event`and is set by the call
- `fluid_player_set_playback_callback`.
+      the function `fluid_synth_handle_midi_event`and is set by the call `fluid_player_set_playback_callback`.
       What we need to do is to firstly alter the 
       existing FluidSynth code so that Lyric and
       Text events are passed through, and then insert a new playback
@@ -41,30 +40,32 @@ On the other hand, FluidSynth already has a callback to handle
       handler. The default handler will ignore any such events
       anyway, so it does not need to be changed.
 
-I have added one new function to FluidSynth,
- `fluid_player_set_onload_callback`and added appropriate code to pass on some Meta
+
+I have added one new function to FluidSynth, `fluid_player_set_onload_callback`and added appropriate code to pass on some Meta
       events. Then it is a matter of writing an onload
       callback to walk through the MIDI data from the parsed
       input file, and writing a suitable MIDI event callback
       to handle the intercepted Meta events while passing the rest
       through to the default handler.
 
+
 These changes have been made to give a new source
-      package
- [
+      package [
 	fluidsynth-1.1.6-karaoke.tar.bz2
-      ] (fluidsynth-1.1.6-karaoke.tar.bz2)
-.
-      If you just want to work from a patch file, that is
- [
+      ](fluidsynth-1.1.6-karaoke.tar.bz2) .
+      If you just want to work from a patch file, that is [
 	fluid.patch
-      ] (fluid.patch)
-.
+      ](fluid.patch) .
       The patch has been submitted to the FluidSynth
       maintainers.
 
+
+
+
+
 To build from this package, do the same as you normally
       would:
+
 ```
 
 	
@@ -76,22 +77,22 @@ make
 	
       
 ```
+
+
 To get ALSA support, you will need to have installed
-      the
- `libasound2-dev`package, and similarly
+      the `libasound2-dev`package, and similarly
       for Jack or other packages. You probably won't have  many
       of them installed, so
-      don't run
- `make install`or you will overwrite
-      the normal
- `fluidsynth`package which will 
+      don't run `make install`or you will overwrite
+      the normal `fluidsynth`package which will 
       probably have more features.
+
 
 The previous program modified to just print out
       the lyric lines and the lyric events as they occur
-      is
- `karaoke_player.c`:
-```sh_cpp
+      is `karaoke_player.c`:
+
+```
 
 #include <fluidsynth.h>
 #include <fluid_midi.h>
@@ -106,15 +107,15 @@ int event_callback(void *data, fluid_midi_event_t *event) {
     fluid_synth_t* synth = (fluid_synth_t*) data;
     int type = fluid_midi_event_get_type(event);
     int chan = fluid_midi_event_get_channel(event);
-    if (synth == NULL) printf(Synth is null\n);
+    if (synth == NULL) printf("Synth is null\n");
     switch(type) {
     case MIDI_TEXT:
-	printf(Callback: Playing text event %s (length %d)\n, 
+	printf("Callback: Playing text event %s (length %d)\n", 
 	       (char *) event->paramptr, event->param1);
 	return  FLUID_OK;
 
     case MIDI_LYRIC:
-	printf(Callback: Playing lyric event %d %s\n, 
+	printf("Callback: Playing lyric event %d %s\n", 
 	       event->param1, (char *) event->paramptr);
 	return  FLUID_OK;
     }
@@ -128,17 +129,17 @@ int event_callback(void *data, fluid_midi_event_t *event) {
  * as the events are received by the event callback.
  */ 
 int onload_callback(void *data, fluid_player_t *player) {
-    printf(Load callback, tracks %d \n, player->ntracks);
+    printf("Load callback, tracks %d \n", player->ntracks);
     int n;
     for (n = 0; n < player->ntracks; n++) {
 	fluid_track_t *track = player->track[n];
-	printf(Track %d\n, n);
+	printf("Track %d\n", n);
 	fluid_midi_event_t *event = fluid_track_first_event(track);
 	while (event != NULL) {
 	    switch (event->type) {
 	    case MIDI_TEXT:
 	    case MIDI_LYRIC:
-		printf(Loaded event %s\n, (char *) event->paramptr);
+		printf("Loaded event %s\n", (char *) event->paramptr);
 	    }
 	    event = fluid_track_next_event(track);
 	}
@@ -154,8 +155,8 @@ int main(int argc, char** argv)
     fluid_player_t* player;
     fluid_audio_driver_t* adriver;
     settings = new_fluid_settings();
-    fluid_settings_setstr(settings, audio.driver, alsa);
-    fluid_settings_setint(settings, synth.polyphony, 64);
+    fluid_settings_setstr(settings, "audio.driver", "alsa");
+    fluid_settings_setint(settings, "synth.polyphony", 64);
     synth = new_fluid_synth(settings);
     player = new_fluid_player(synth);
 
@@ -191,9 +192,13 @@ int main(int argc, char** argv)
 ```
 
 
+
+
+
 Assuming the new fluidsynth package is in an immediate subdirectory,
       to compile the program you will need  to pick up the local 
       includes and libraries
+
 ```
 
 	
@@ -205,8 +210,12 @@ gcc karaoke_player.o -Lfluidsynth-1.1.6/src/.libs -l fluidsynth -o karaoke_playe
 ```
 
 
+
+
+
 To run the program, you will also need to pick up the local library
       and the soundfont file:
+
 ```
 
 	
@@ -217,8 +226,11 @@ export LD_LIBRARY_PATH=./fluidsynth-1.1.6/src/.libs/
 ```
 
 
-The output for a typical
- `KAR`file is
+
+
+
+The output for a typical `KAR`file is
+
 ```
 
 	
@@ -242,5 +254,6 @@ Callback: Playing lyric event 3
 	
       
 ```
+
 
 

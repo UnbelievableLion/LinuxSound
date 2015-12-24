@@ -1,13 +1,17 @@
-#  Overlaying an image on top of an image 
+
+##  Overlaying an image on top of an image 
+
 
 It is common in a movie on TV to see a fixed image layered
       on top of the video. Subtitles can be an example of dynamic
       images but may be text overlaid instead. This section just 
       considers one image on top of another.
 
+
 In Gtk 2.0 it is surprisingly easy: draw one pixbuf into a
       pixmap and then draw the overlay pixbuf into the same pixmap.
-```sh_cpp
+
+```
 
 pixmap = gdk_pixmap_new(window->window, 720, 480, -1);
 	
@@ -31,28 +35,23 @@ gtk_widget_queue_draw(image);
 
 Gtk 3.0 does not seem so straightforward as pixmaps have disappeared.
       Various pages suggest using Cairo surfaces instead and later sections
-      will look at that. But the page on the
- [
+      will look at that. But the page on the [
 	The GdkPixbuf Structure
-      ] (https://developer.gnome.org/gdk-pixbuf/unstable/gdk-pixbuf-The-GdkPixbuf-Structure.html)
-suggests that - as long as you get the data types aligned - you
+      ](https://developer.gnome.org/gdk-pixbuf/unstable/gdk-pixbuf-The-GdkPixbuf-Structure.html) suggests that - as long as you get the data types aligned - you
       can just write the pixels of the second image into the pixbuf
-      data of the first. The page (although old)
- [
+      data of the first. The page (although old) [
 	Gdk-pixbuf
-      ] (http://openbooks.sourceforge.net/books/wga/graphics-gdk-pixbuf.html)
-is a useful tutorial on Gdk pixbufs.
-      One of the details you have to get right is the
-rowstride
-of each image: the two-dimensional image 
+      ](http://openbooks.sourceforge.net/books/wga/graphics-gdk-pixbuf.html) is a useful tutorial on Gdk pixbufs.
+      One of the details you have to get right is the _rowstride_ of each image: the two-dimensional image 
       is stored as a linear array of bytes and the rowstride tells how
       many bytes make up a row. Typically there are 3 or 4 bytes per
       pixel (for RGB or RGB+alpha) and these also need to be matched between
       the images.
 
-The program
- `gtk_play_video_overlay.c`is
-```sh_cpp
+
+The program `gtk_play_video_overlay.c`is
+
+```
 
 	
 #include <gtk/gtk.h>
@@ -62,10 +61,10 @@ The program
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
 
-//#define OVERLAY_IMAGE /home/newmarch/jannewmarch.signature.png
-#define OVERLAY_IMAGE jan-small.png
-#define VIDEO short.mpg
-//#define VIDEO video1.mp4
+//#define OVERLAY_IMAGE "/home/newmarch/jannewmarch.signature.png"
+#define OVERLAY_IMAGE "jan-small.png"
+#define VIDEO "short.mpg"
+//#define VIDEO "video1.mp4"
 
 GtkWidget *image;
 GtkWidget *window;
@@ -85,7 +84,7 @@ AVCodec *pCodec = NULL;
 
 static void pixmap_destroy_notify(guchar *pixels,
 				  gpointer data) {
-    printf(Destroy pixmap - not sure how\n);
+    printf("Destroy pixmap - not sure how\n");
 }
 
 #if  GTK_MAJOR_VERSION == 3
@@ -105,7 +104,7 @@ static void overlay(GdkPixbuf *pixbuf, GdkPixbuf *overlay_pixbuf,
     /* get stuff out of overlay pixbuf */
     overlay_n_channels = gdk_pixbuf_get_n_channels (overlay_pixbuf);
     n_channels =  gdk_pixbuf_get_n_channels(pixbuf);
-    printf(Overlay has %d channels, destination has %d channels\n,
+    printf("Overlay has %d channels, destination has %d channels\n",
            overlay_n_channels, n_channels);
     overlay_width = gdk_pixbuf_get_width (overlay_pixbuf);
     overlay_height = gdk_pixbuf_get_height (overlay_pixbuf);
@@ -117,8 +116,8 @@ static void overlay(GdkPixbuf *pixbuf, GdkPixbuf *overlay_pixbuf,
     width = gdk_pixbuf_get_width (pixbuf);
     pixels = gdk_pixbuf_get_pixels (pixbuf);
 
-    printf(Overlay: width %d str8ide %d\n, overlay_width, overlay_rowstride);
-    printf(Dest: width  str8ide %d\n, rowstride);
+    printf("Overlay: width %d str8ide %d\n", overlay_width, overlay_rowstride);
+    printf("Dest: width  str8ide %d\n", rowstride);
 
     for (m = 0; m < overlay_width; m++) {
         for (n = 0; n < overlay_height; n++) {
@@ -160,9 +159,9 @@ static void *play_background(void *args) {
     char *buffer;
 
     GError *error = NULL;
-    overlay_pixbuf = gdk_pixbuf_new_from_file(OVERLAY_IMAGE, error);
+    overlay_pixbuf = gdk_pixbuf_new_from_file(OVERLAY_IMAGE, &error);
     if (!overlay_pixbuf) {
-	fprintf(stderr, %s\n, error->message);
+	fprintf(stderr, "%s\n", error->message);
 	g_error_free(error);
 	exit(1);
     }
@@ -176,12 +175,12 @@ static void *play_background(void *args) {
     buffer = malloc (avpicture_get_size(PIX_FMT_RGB24, 720, 576));
     avpicture_fill((AVPicture *)picture_RGB, buffer, PIX_FMT_RGB24, 720, 576);
 
-    while(av_read_frame(pFormatCtx, packet)>=0) {
+    while(av_read_frame(pFormatCtx, &packet)>=0) {
 	if(packet.stream_index==videoStream) {
 	    usleep(33670);  // 29.7 frames per second
 	    // Decode video frame
-	    avcodec_decode_video2(pCodecCtx, pFrame, frameFinished,
-				  packet);
+	    avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished,
+				  &packet);
 	    int width = pCodecCtx->width;
 	    int height = pCodecCtx->height;
 	    
@@ -189,11 +188,11 @@ static void *play_background(void *args) {
 				     PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
 
 	    if (frameFinished) {
-		printf(Frame %d\n, i++);
+		printf("Frame %d\n", i++);
 		
 		sws_scale(sws_ctx,  (uint8_t const * const *) pFrame->data, pFrame->linesize, 0, height, picture_RGB->data, picture_RGB->linesize);
 		
-		printf(old width %d new width %d\n,  pCodecCtx->width, picture_RGB->width);
+		printf("old width %d new width %d\n",  pCodecCtx->width, picture_RGB->width);
 		pixbuf = gdk_pixbuf_new_from_data(picture_RGB->data[0], GDK_COLORSPACE_RGB,
 						  0, 8, width, height, 
 						  picture_RGB->linesize[0], pixmap_destroy_notify,
@@ -234,10 +233,10 @@ static void *play_background(void *args) {
 		gdk_threads_leave();
 	    }
 	}
-	av_free_packet(packet);
+	av_free_packet(&packet);
     }
 
-    printf(Video over!\n);
+    printf("Video over!\n");
     exit(0);
 }
 
@@ -246,23 +245,23 @@ static void *play_background(void *args) {
 static void realize_cb (GtkWidget *widget, gpointer data) {
     /* start the video playing in its own thread */
     pthread_t tid;
-    pthread_create(tid, NULL, play_background, NULL);
+    pthread_create(&tid, NULL, play_background, NULL);
 }
 
 static gboolean delete_event( GtkWidget *widget,
                               GdkEvent  *event,
                               gpointer   data )
 {
-    /* If you return FALSE in the delete-event signal handler,
-     * GTK will emit the destroy signal. Returning TRUE means
-     * you dont want the window to be destroyed.
-     * This is useful for popping up are you sure you want to quit?
+    /* If you return FALSE in the "delete-event" signal handler,
+     * GTK will emit the "destroy" signal. Returning TRUE means
+     * you don't want the window to be destroyed.
+     * This is useful for popping up 'are you sure you want to quit?'
      * type dialogs. */
 
-    g_print (delete event occurred\n);
+    g_print ("delete event occurred\n");
 
     /* Change TRUE to FALSE and the main window will be destroyed with
-     * a delete-event. */
+     * a "delete-event". */
     return TRUE;
 }
 
@@ -290,12 +289,12 @@ int main(int argc, char** argv)
 
     av_register_all();
 
-    if(avformat_open_input(pFormatCtx, VIDEO, NULL, NULL)!=0)
-	return -1; // Couldnt open file
+    if(avformat_open_input(&pFormatCtx, VIDEO, NULL, NULL)!=0)
+	return -1; // Couldn't open file
   
     // Retrieve stream information
     if(avformat_find_stream_info(pFormatCtx, NULL)<0)
-	return -1; // Couldnt find stream information
+	return -1; // Couldn't find stream information
   
     // Dump information about file onto standard error
     av_dump_format(pFormatCtx, 0, argv[1], 0);
@@ -308,11 +307,11 @@ int main(int argc, char** argv)
 	    break;
 	}
     if(videoStream==-1)
-	return -1; // Didnt find a video stream
+	return -1; // Didn't find a video stream
 
     for(i=0; i<pFormatCtx->nb_streams; i++)
 	if(pFormatCtx->streams[i]->codec->codec_type==AVMEDIA_TYPE_AUDIO) {
-	    printf(Found an audio stream too\n);
+	    printf("Found an audio stream too\n");
 	    break;
 	}
 
@@ -323,12 +322,12 @@ int main(int argc, char** argv)
     // Find the decoder for the video stream
     pCodec=avcodec_find_decoder(pCodecCtx->codec_id);
     if(pCodec==NULL) {
-	fprintf(stderr, Unsupported codec!\n);
+	fprintf(stderr, "Unsupported codec!\n");
 	return -1; // Codec not found
     }
   
     // Open codec
-    if(avcodec_open2(pCodecCtx, pCodec, optionsDict)<0)
+    if(avcodec_open2(pCodecCtx, pCodec, &optionsDict)<0)
 	return -1; // Could not open codec
 
     sws_ctx =
@@ -350,26 +349,26 @@ int main(int argc, char** argv)
 
     /* This is called in all GTK applications. Arguments are parsed
      * from the command line and are returned to the application. */
-    gtk_init (argc, argv);
+    gtk_init (&argc, &argv);
     
     /* create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    /* When the window is given the delete-event signal (this is given
-     * by the window manager, usually by the close option, or on the
+    /* When the window is given the "delete-event" signal (this is given
+     * by the window manager, usually by the "close" option, or on the
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
-    g_signal_connect (window, delete-event,
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (delete_event), NULL);
     
-    /* Here we connect the destroy event to a signal handler.  
+    /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
-     * or if we return FALSE in the delete-event callback. */
-    g_signal_connect (window, destroy,
+     * or if we return FALSE in the "delete-event" callback. */
+    g_signal_connect (window, "destroy",
 		      G_CALLBACK (destroy), NULL);
 
-    g_signal_connect (window, realize, G_CALLBACK (realize_cb), NULL);
+    g_signal_connect (window, "realize", G_CALLBACK (realize_cb), NULL);
     
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -394,5 +393,3 @@ int main(int argc, char** argv)
 
       
 ```
-
-

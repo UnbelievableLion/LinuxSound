@@ -1,34 +1,38 @@
-#  Playing lyrics using Pnago + Cairo + Xlib 
+
+##  Playing lyrics using Pnago + Cairo + Xlib 
+
 
 I want to be able to play my Karaoke files on the Raspberry Pi and similar 
       Systems on a Chip (SOCs). Unfortuanately the rapsberry Pi has a grossly
-      underpowered CPU, so I have ended up using a
- [CubieBoard 2] (http://cubieboard.org/2013/06/19/cubieboard2-is-here/)
-.
+      underpowered CPU, so I have ended up using a [CubieBoard 2](http://cubieboard.org/2013/06/19/cubieboard2-is-here/) .
+
 
 Even then I don't know how to program the GPU, so anything involving heavy graphics
       is not possible on this CPU. Any of the MIDI players hit close to (or over) 100%
       CPU usage just be themselves. So the system discussed in the next section,
       showing background video, isn't feasible.
 
+
 In this section we use TiMidity as MIDI player with a minimal backend to display
       the lyrics as they are played. The lowest level of GUI support is used, namely
-      Xlib. This can be used to draw text using low-level Xlib calls such as
- `XDrawImageString`. This wrks fine with ASCII languages, and with
+      Xlib. This can be used to draw text using low-level Xlib calls such as `XDrawImageString`. This wrks fine with ASCII languages, and with
       appropriate font choices, with other languages in the ISO-8859 family.
 
-Asian langauges are harder to deal with in standard C. They involve one or two byte 
+
+Asian languages are harder to deal with in standard C. They involve one or two byte 
       characters when using an encoding such as UTF-8. To manage these. it is easiest
       to switch to a library designed to handle them such, such as Cairo.
 
-Cairo si good for drawing simple text. For e.g. Chinese characters you have to
+
+Cairo is good for drawing simple text. For e.g. Chinese characters you have to
       find a font that will allow you to draw them. Alternatively, you can jump
       up one further level to Pango. Pango looks after all the font issues and
       produces glyphs which are sent to the X server.
 
-that approach is adopted in the following interface,
- `x_code.c`
-```sh_cpp
+
+that approach is adopted in the following interface, `x_code.c`
+
+```
 
 
 #include <X11/Xlib.h>
@@ -40,7 +44,7 @@ that approach is adopted in the following interface,
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
 
-#include mytimidity.h
+#include "mytimidity.h"
 
 #define WIDTH 720
 #define HEIGHT 480
@@ -90,11 +94,11 @@ GString *front_of_lyric;  // part of lyric to be coloured red
 //GString *end_of_lyric;    // part of lyrci to not be coloured
 
 
-gchar *markup[] = {<span font=\28\ foreground=\RED\>,
-		   </span><span font=\28\ foreground=\white\>,
-		   </span>};
-gchar *markup_newline[] = {<span foreground=\black\>,
-			   </span>};
+gchar *markup[] = {"<span font=\"28\" foreground=\"RED\">",
+		   "</span><span font=\"28\" foreground=\"white\">",
+		   "</span>"};
+gchar *markup_newline[] = {"<span foreground=\"black\">",
+			   "</span>"};
 GString *marked_up_label;
 
 PangoFontDescription *font_description;
@@ -106,8 +110,8 @@ extern ControlMode  *ctl;
 
 ControlMode video_ctl=
     {
-	x interface, N,
-	x,
+	"x interface", 'N',
+	"x",
 	1,          /* verbosity */
 	1,          /* trace playing */
 	0,          /* opened */
@@ -130,7 +134,7 @@ static int pass_playing_list(int number_of_files, char *list_of_files[]) {
     int n;
 
     for (n = 0; n < number_of_files; n++) {
-	printf(Playing list %s\n, list_of_files[n]);
+	printf("Playing list %s\n", list_of_files[n]);
 	
 	current_file = list_of_files[n];
 	play_midi_file( list_of_files[n]);
@@ -149,7 +153,7 @@ static void paint_background() {
 
 static void set_font() {
     font_description = pango_font_description_new ();
-    pango_font_description_set_family (font_description, serif);
+    pango_font_description_set_family (font_description, "serif");
     pango_font_description_set_weight (font_description, PANGO_WEIGHT_BOLD);
     pango_font_description_set_absolute_size (font_description, 32 * PANGO_SCALE);
 }
@@ -165,7 +169,7 @@ static int draw_text(char *text, float red, float green, float blue, int height,
   pango_layout_set_text (layout, text, -1);
 
   if (offset == 0) {
-      pango_layout_get_size(layout, width, ht);
+      pango_layout_get_size(layout, &width, &ht);
       offset = (WIDTH - (width/PANGO_SCALE)) / 2;
   }
 
@@ -188,12 +192,12 @@ static void init_X() {
     Colormap colormap;
     XColor rgb_color, hw_color;
     Font font;
-    //char *FNAME = hanzigb24st;
-    char *FNAME = -misc-fixed-medium-r-normal--0-0-100-100-c-0-iso10646-1;
+    //char *FNAME = "hanzigb24st";
+    char *FNAME = "-misc-fixed-medium-r-normal--0-0-100-100-c-0-iso10646-1";
 
     display = XOpenDisplay(NULL);
     if (display == NULL) {
-	fprintf(stderr, Cant open dsplay\n);
+	fprintf(stderr, "Can't open dsplay\n");
 	exit(1);
     }
     screenNumber = DefaultScreen(display);
@@ -216,10 +220,10 @@ static void init_X() {
 				 foreground, background);
 
     XSetStandardProperties(display, window, 
-			   TiMidity, TiMidity, 
+			   "TiMidity", "TiMidity", 
 			   None,
 			   argv, 0,
-			   hints);
+			   &hints);
 
     XMapWindow(display, window);
 
@@ -253,9 +257,9 @@ static int ctl_open(int using_stdin, int using_stdout)
     /*
       if (current_file != NULL) {
       current_file_info = get_midi_file_info(current_file, 1);
-      printf(Opening info for %s\n, current_file);
+      printf("Opening info for %s\n", current_file);
       } else {
-      printf(Current is NULL\n);
+      printf("Current is NULL\n");
       }
     */
     ctl->opened = 1;
@@ -280,7 +284,7 @@ static int cmsg(int type, int verbosity_level, char *fmt, ...)
     /*
       va_list ap;
 
-      if ((type==CMSG_TEXT || type==CMSG_INFO || type==CMSG_WARNING) 
+      if ((type==CMSG_TEXT || type==CMSG_INFO || type==CMSG_WARNING) &&
       video_ctl.verbosity<verbosity_level)
       return 0;
       va_start(ap, fmt);
@@ -312,7 +316,7 @@ static void ctl_total_time(long tt)
       mins=secs/60;
       secs-=mins*60;
       cmsg(CMSG_INFO, VERB_NORMAL,
-      Total playing time: %3d min %02d s, mins, secs);
+      "Total playing time: %3d min %02d s", mins, secs);
       }
     */
 }
@@ -322,7 +326,7 @@ static void ctl_file_name(char *name)
     current_file = name;
 
     if (video_ctl.verbosity>=0 || video_ctl.trace_playing)
-	cmsg(CMSG_INFO, VERB_NORMAL, Playing %s, name);
+	cmsg(CMSG_INFO, VERB_NORMAL, "Playing %s", name);
 }
 
 static void ctl_current_time(int secs)
@@ -331,22 +335,22 @@ static void ctl_current_time(int secs)
     static int prev_secs = -1;
 
 #ifdef __W32__
-    if(wrdt->id == w)
+    if(wrdt->id == 'w')
 	return;
 #endif /* __W32__ */
-    if (ctl->trace_playing  secs != prev_secs)
+    if (ctl->trace_playing && secs != prev_secs)
 	{
 	    prev_secs = secs;
 	    mins=secs/60;
 	    secs-=mins*60;
-	    fprintf(stdout, \r%3d:%02d, mins, secs);
+	    fprintf(stdout, "\r%3d:%02d", mins, secs);
 	}
 }
 
 void build_lyric_lines() {
     int n;
     lyric_t *plyric;
-    GString *line = g_string_new();
+    GString *line = g_string_new("");
     GArray *lines =  g_array_sized_new(FALSE, FALSE, sizeof(GString *), 64);
 
     lyric_lines.title = NULL;
@@ -356,14 +360,14 @@ void build_lyric_lines() {
     while ((evt_str = event2string(n++)) != NULL) {
 
         gchar *lyric = evt_str+1;
-	printf(Building line %s\n, lyric);
+	printf("Building line %s\n", lyric);
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == @)  (lyric[1] == L)) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'L')) {
 	    lyric_lines.language =  lyric + 2;
 	    continue;
 	}
 
-	if ((strlen(lyric) >= 2)  (lyric[0] == @)  (lyric[1] == T)) {
+	if ((strlen(lyric) >= 2) && (lyric[0] == '@') && (lyric[1] == 'T')) {
 	    if (lyric_lines.title == NULL) {
 		lyric_lines.title = lyric + 2;
 	    } else {
@@ -372,15 +376,15 @@ void build_lyric_lines() {
 	    continue;
 	}
 
-	if (lyric[0] == @) {
+	if (lyric[0] == '@') {
 	    // some other stuff like @KMIDI KARAOKE FILE
 	    continue;
 	}
 
-	if ((lyric[0] == /) || (lyric[0] == \\)) {
+	if ((lyric[0] == '/') || (lyric[0] == '\\')) {
 	    // start of a new line
 	    // add to lines
-	    printf(New line\n);
+	    printf("New line\n");
 	    g_array_append_val(lines, line);
 	    line = g_string_new(lyric + 1);
 	}  else {
@@ -389,10 +393,10 @@ void build_lyric_lines() {
     }
     lyric_lines.lines = lines;
     
-    printf(Title is %s, performer is %s, language is %s\n, 
+    printf("Title is %s, performer is %s, language is %s\n", 
 	   lyric_lines.title, lyric_lines.performer, lyric_lines.language);
     for (n = 0; n < lines->len; n++) {
-	printf(Line is %s\n, g_array_index(lines, GString *, n)->str);
+	printf("Line is %s\n", g_array_index(lines, GString *, n)->str);
     }
     
 }
@@ -406,10 +410,10 @@ static void ctl_lyric(int lyricid)
     lyric = event2string(lyricid);
     if(lyric != NULL)
 	lyric++;
-    printf(Got a lyric %s\n, lyric);
+    printf("Got a lyric %s\n", lyric);
 
 
-    if ((*lyric == \\) || (*lyric == /)) {
+    if ((*lyric == '\\') || (*lyric == '/')) {
 	// int next_panel = (current_panel+2) % NUM_LINES; // really (current_panel+2)%2
 	int next_line = current_line + NUM_LINES;
 	gchar *next_lyric;
@@ -426,7 +430,7 @@ static void ctl_lyric(int lyricid)
 	} else {
 	    current_line += 1;
 	    lyrics_array[(next_line-1) % NUM_LINES] = NULL;
-	    next_lyric = ;
+	    next_lyric = "";
 	}
 
 	// set up new line as current line
@@ -435,7 +439,7 @@ static void ctl_lyric(int lyricid)
 	    current_lyric = gstr->str;
 	    front_of_lyric = g_string_new(lyric+1); // lose	slosh
 	}	  
-	printf(New line. Setting front to %s end to \%s\\n, lyric+1, current_lyric); 
+	printf("New line. Setting front to %s end to \"%s\"\n", lyric+1, current_lyric); 
 
 
 	// Now draw stuff
@@ -466,7 +470,7 @@ static void ctl_lyric(int lyricid)
 	    // draw next line in brighter blue
 	    coloured_text_offset = draw_text(lyrics_array[(current_line-1) % NUM_LINES]->str,
 		      0.0, 0.0, 1.0, height_lyric_pixbufs[(current_line-1) % NUM_LINES], 0);
-	    printf(coloured text offset %d\n, coloured_text_offset);
+	    printf("coloured text offset %d\n", coloured_text_offset);
 	}
 
 	//try
@@ -490,7 +494,7 @@ static void ctl_lyric(int lyricid)
 
     } else {
 	// change text colour as chars are played
-	if ((front_of_lyric != NULL)  (lyric != NULL)) {
+	if ((front_of_lyric != NULL) && (lyric != NULL)) {
 	    g_string_append(front_of_lyric, lyric);
 	    char *s = front_of_lyric->str;
 	    //coloured_lines[current_panel].front_of_line = s;
@@ -512,7 +516,7 @@ static void ctl_lyric(int lyricid)
 
 static void ctl_event(CtlEvent *e)
 {
-    //printf(Got ctl event %d\n, e->type);
+    //printf("Got ctl event %d\n", e->type);
     switch(e->type)
 	{
 	case CTLE_NOW_LOADING:
@@ -522,15 +526,15 @@ static void ctl_event(CtlEvent *e)
 	    // MIDI file is loaded, about to play
 	    current_file_info = get_midi_file_info(current_file, 1);
 	    if (current_file_info != NULL) {
-		printf(file info not NULL\n);
+		printf("file info not NULL\n");
 	    } else {
-		printf(File info is NULL\n);
+		printf("File info is NULL\n");
 	    }
 
 	    int n = 1;
 	    char *evt_str;
 	    while ((evt_str = event2string(n++)) != NULL) {
-		printf(Event in tabel: %s\n, evt_str);
+		printf("Event in tabel: %s\n", evt_str);
 	    }
 
 	    build_lyric_lines();
@@ -563,7 +567,7 @@ static void ctl_event(CtlEvent *e)
 	    ctl_total_time(e->v1);
 	    break;
         case CTLE_PLAY_END:
-	    printf(Exiting, play ended\n);
+	    printf("Exiting, play ended\n");
 	    exit(0);
 	    break;
 	case CTLE_CURRENT_TIME:
@@ -574,12 +578,12 @@ static void ctl_event(CtlEvent *e)
 	    break;
 	    /*
 	      case CTLE_REFRESH:
-	      printf(Refresh\n);
+	      printf("Refresh\n");
 	      break;
 	    */
 	default:
 	    0;
-	    //printf(Other event\n);
+	    //printf("Other event\n");
 	}
 }
 
@@ -588,23 +592,30 @@ static void ctl_event(CtlEvent *e)
  */
 ControlMode *interface_x_loader(void)
 {
-    return video_ctl;
+    return &video_ctl;
 }
 
       
 ```
+
+
 it is compiled by
-```sh_cpp
+
+```
 
         gcc  -fPIC $(CFLAGS) -c -o x_code.o x_code.c $(LIBS)
         gcc -shared -o if_x.so x_code.o $(LIBS)
       
 ```
+
+
 and run by
-```sh_cpp
+
+```
 
 timidity -d. -ix --trace --trace-text-meta ...
       
 ```
+
 
 

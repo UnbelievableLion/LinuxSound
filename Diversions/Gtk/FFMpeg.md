@@ -1,19 +1,20 @@
-#  FFMpeg 
+
+##  FFMpeg 
+
 
 To play Mpeg files, OGV files or similar, a decoder is
       required. The main contenders seem to be GStreamer and 
       FFMpeg. For no particular reason I chose FFMpeg.
 
+
 The following program reads from a video file and stores
       the first five frames to disk. It is taken directly
-      from
- [
+      from [
 	An ffmpeg and SDL Tutorial
-      ] (http://dranger.com/ffmpeg/)
-by Stephen Dranger.
-      The program is
- `play_video.c`:
-```sh_cpp
+      ](http://dranger.com/ffmpeg/) by Stephen Dranger.
+      The program is `play_video.c`:
+
+```
 
 	
 #include <libavcodec/avcodec.h>
@@ -32,13 +33,13 @@ void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {
     int  y;
   
     // Open file
-    sprintf(szFilename, frame%d.ppm, iFrame);
-    pFile=fopen(szFilename, wb);
+    sprintf(szFilename, "frame%d.ppm", iFrame);
+    pFile=fopen(szFilename, "wb");
     if(pFile==NULL)
 	return;
   
     // Write header
-    fprintf(pFile, P6\n%d %d\n255\n, width, height);
+    fprintf(pFile, "P6\n%d %d\n255\n", width, height);
   
     // Write pixel data
     for(y=0; y<height; y++)
@@ -65,19 +66,19 @@ main(int argc, char **argv) {
   
 
     if(argc < 2) {
-	printf(Please provide a movie file\n);
+	printf("Please provide a movie file\n");
 	return -1;
     }
     // Register all formats and codecs
     av_register_all();
   
     // Open video file
-    if(avformat_open_input(pFormatCtx, argv[1], NULL, NULL)!=0)
-	return -1; // Couldnt open file
+    if(avformat_open_input(&pFormatCtx, argv[1], NULL, NULL)!=0)
+	return -1; // Couldn't open file
   
     // Retrieve stream information
     if(avformat_find_stream_info(pFormatCtx, NULL)<0)
-	return -1; // Couldnt find stream information
+	return -1; // Couldn't find stream information
   
     // Dump information about file onto standard error
     av_dump_format(pFormatCtx, 0, argv[1], 0);
@@ -90,7 +91,7 @@ main(int argc, char **argv) {
 	    break;
 	}
     if(videoStream==-1)
-	return -1; // Didnt find a video stream
+	return -1; // Didn't find a video stream
   
     // Get a pointer to the codec context for the video stream
     pCodecCtx=pFormatCtx->streams[videoStream]->codec;
@@ -98,11 +99,11 @@ main(int argc, char **argv) {
     // Find the decoder for the video stream
     pCodec=avcodec_find_decoder(pCodecCtx->codec_id);
     if(pCodec==NULL) {
-	fprintf(stderr, Unsupported codec!\n);
+	fprintf(stderr, "Unsupported codec!\n");
 	return -1; // Codec not found
     }
     // Open codec
-    if(avcodec_open2(pCodecCtx, pCodec, optionsDict)<0)
+    if(avcodec_open2(pCodecCtx, pCodec, &optionsDict)<0)
 	return -1; // Could not open codec
   
     // Allocate video frame
@@ -143,12 +144,12 @@ main(int argc, char **argv) {
 
     // Read frames and save first five frames to disk
     i=0;
-    while(av_read_frame(pFormatCtx, packet)>=0) {
+    while(av_read_frame(pFormatCtx, &packet)>=0) {
 	// Is this a packet from the video stream?
 	if(packet.stream_index==videoStream) {
 	    // Decode video frame
-	    avcodec_decode_video2(pCodecCtx, pFrame, frameFinished,
-				  packet);
+	    avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished,
+				  &packet);
       
 	    // Did we get a video frame?
 	    if(frameFinished) {
@@ -164,7 +165,7 @@ main(int argc, char **argv) {
 		     pFrameRGB->linesize
 		     );
 
-		printf(Read frame\n);
+		printf("Read frame\n");
 		// Save the frame to disk
 		if(++i<=5)
 		    SaveFrame(pFrameRGB, pCodecCtx->width, pCodecCtx->height,
@@ -175,7 +176,7 @@ main(int argc, char **argv) {
 	}
     
 	// Free the packet that was allocated by av_read_frame
-	av_free_packet(packet);
+	av_free_packet(&packet);
     }
   
     // Free the RGB image
@@ -189,7 +190,7 @@ main(int argc, char **argv) {
     avcodec_close(pCodecCtx);
   
     // Close the video file
-    avformat_close_input(pFormatCtx);
+    avformat_close_input(&pFormatCtx);
   
     return 0;
 
@@ -198,5 +199,3 @@ main(int argc, char **argv) {
 
       
 ```
-
-

@@ -13,7 +13,7 @@ These two programs from jsresources.org dump a MIDI file to the console.
 
 DumpSequence.java is
 
-```
+```cpp
 
       
       /*
@@ -251,7 +251,7 @@ public class DumpSequence
 
 DmpReceiver.java is
 
-```
+```cpp
 
       
       /*

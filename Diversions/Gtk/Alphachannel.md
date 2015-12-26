@@ -24,7 +24,7 @@ Converting an image which doesn't have an alpha channel to one which
       matching against a colour. For example, the following should set the
       alpha value to 0 for any white pixels and to 255 for all others:
 
-```
+```cpp
 
 pixbuf = gdk_pixbuf_add_alpha(pixbuf, TRUE, 255, 255, 255);
       
@@ -38,7 +38,7 @@ Unfortunately it seems to want to leave an "edge" of pixels which
 With alpha marking in place, a simple test can be used in the overlay 
       function as to whether or not to perform the overlay:
 
-```
+```cpp
 
 	
 if (alpha < 128) {

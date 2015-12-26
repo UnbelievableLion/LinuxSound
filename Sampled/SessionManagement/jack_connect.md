@@ -9,7 +9,7 @@ The programs `jack_connect`and `jack_disconnect`canbe used to reconfigure connec
       and then connected to the correct ones. On the other hand, `jack-rack`does not connect to anything by default
       so may need to be connected to the system ports. This is done by e.g.
 
-```
+```cpp
 
 jack_disconnect TiMidity:port_1 system:playback_1
 jack_disconnect TiMidity:port_2 system:playback_2

@@ -1,8 +1,19 @@
-
+#!/usr/bin/python
 
 import urllib;
 from HTMLParser import HTMLParser
 import string
+import sys
+
+# Pull the LinuxSound/index.html off my site jan.newmarch.name
+# search for all the part, chapter and section headings
+# and write them into SUMMARY.md by default
+# argv[1] can overwrite the default filename
+
+if len(sys.argv) > 1:
+    summary = sys.argv[1]
+else:
+    summary = 'SUMMARY.md'
 
 class ContentsParser(HTMLParser):
     in_contents = False
@@ -11,9 +22,11 @@ class ContentsParser(HTMLParser):
     url = ""
     depth = 0
 
+    part_num = 1
+
     def write_preface(self):
         # this breaks if done in __init__, don't know why
-        self.contents_file = open("SUMMARY.md", "w")
+        self.contents_file = open(summary, "w")
         self.contents_file.write("# Contents\n\n")
         self.contents_file.write("* [Introduction](README.md)\n")
    
@@ -56,20 +69,21 @@ class ContentsParser(HTMLParser):
 
         # print PART heading
         if self.in_contents and string.find(data, "PART") >= 0:
-            self.contents_file.write("\n## " + string.strip(data) + "\n")
+            self.contents_file.write("\n* [" + string.strip(data) + "](PART" + str(self.part_num) + ".md)\n")
+            self.part_num += 1
 
         # print chapter heading
         if self.in_contents and self.depth == 1 and self.in_aref:
             #print "depth",self. depth, data
-            print "* [", data, "](", self.url, ")"
-            self.contents_file.write("+ [" + string.strip(data)  + "](" +  self.url + "README.md)\n")
+            print "  * [", data, "](", self.url, ")"
+            self.contents_file.write("   + [" + string.strip(data)  + "](" +  self.url + "README.md)\n")
 
         # print section heading
         if self.in_contents and self.depth == 2:
             #print "depth",self. depth, data
-            print "  * [", data, "] (", \
+            print "    * [", data, "] (", \
                 self.url+self.lose_spaces(data), ")"
-            self.contents_file.write("   + [" +  string.strip(data) + "](" + \
+            self.contents_file.write("      + [" +  string.strip(data) + "](" + \
                                      self.url+self.lose_spaces(data) + ".md)\n")
                 
 

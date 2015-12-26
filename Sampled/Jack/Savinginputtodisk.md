@@ -12,7 +12,7 @@ Disk I/O cannot be performed within the Jack processing
 The program `capture_client.c`from the
       examples does this:
 
-```
+```cpp
 
 /*
     Copyright (C) 2001 Paul Davis

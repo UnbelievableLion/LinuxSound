@@ -12,7 +12,7 @@ On the audio player, a service has to listen for URLs to be played.
 
 The program is `Player.java`:
 
-```
+```cpp
 
 	
 import java.awt.*;

@@ -66,7 +66,7 @@ where the "m" in the function name is the identifier.
       structure of type `ControlMode`which is defined
       elsewhere in the interface's code:
 
-```
+```cpp
 
 	
 ControlMode *interface_m_loader(void)
@@ -82,7 +82,7 @@ ControlMode *interface_m_loader(void)
 
 The `ControlMode`structure is
 
-```
+```cpp
 
 	
 typedef struct {
@@ -109,7 +109,7 @@ which defines information about the interface and a set of functions
       which are called by TiMidity in response to events and actions
       within TiMidity. For example, for "my interface" this structure is
 
-```
+```cpp
 
 	
 ControlMode ctl=
@@ -190,7 +190,7 @@ timidity -im -d. 54154.mid
 
 The code is in one file, `my_interface.c`:
 
-```
+```cpp
 
 /*
   my_interface.c
@@ -496,7 +496,7 @@ We can take the code from playing a video given earlier and put it
 
 The new "video" interface is `video_player_interface.c`
 
-```
+```cpp
 
       /*
   video_player_interface.c

@@ -18,7 +18,7 @@ This program also allows some user interaction to pause/start the playback
 
 The code is
 
-```
+```cpp
 
 /*
  * OpenMAX AL - Audio/Video Playback Example

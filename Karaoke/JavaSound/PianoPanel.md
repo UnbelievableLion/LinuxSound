@@ -13,7 +13,7 @@ Colouring notes is called by setNote as nonte on/note off messsages come
 
 The PianoPanel is
 
-```
+```cpp
 
       
       

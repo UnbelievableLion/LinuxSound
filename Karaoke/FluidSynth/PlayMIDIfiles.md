@@ -21,7 +21,7 @@ A typical program to play a sequence of MIDI files using ALSA follows.
       This program is just a repeat of the program seen in the chapter
       on [FluidSynth MIDI](../../MIDI/FluidSynth/) .
 
-```
+```cpp
 
 #include <fluidsynth.h>
 #include <fluid_midi.h>

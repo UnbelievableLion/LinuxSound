@@ -92,7 +92,7 @@ The previous program modified to just print out
       the lyric lines and the lyric events as they occur
       is `karaoke_player.c`:
 
-```
+```cpp
 
 #include <fluidsynth.h>
 #include <fluid_midi.h>

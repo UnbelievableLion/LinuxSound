@@ -16,7 +16,7 @@ A typical program to play a sequence of MIDI files using ALSA follows.
       The call to `fluid_player_play`then plays each MIDI file
       in turn:
 
-```
+```cpp
 
       
 #include <fluidsynth.h>

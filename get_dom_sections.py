@@ -1,11 +1,27 @@
 #!/usr/bin/python
 
+# Get the content of each section of each chapter
+# and save in its own Markdown file
+
+# TableOfContents parser pulls chapter headers out of 
+# LinuxSound/index.html using HTMLParser
+# Content is extracted using the DOM tree built by
+# BeautifulSoup. Yes, yes, one parser should be enough!
+# argv[1] can be set to a file extension
+
 import urllib;
 import os
 import string
 from bs4 import BeautifulSoup
 from bs4.diagnose import diagnose
 from HTMLParser import HTMLParser
+import sys
+
+if len(sys.argv) > 1:
+    file_extension = sys.argv[1]
+else:
+    file_extension = ''
+
 
 class ChapterParser():
     
@@ -20,12 +36,6 @@ class ChapterParser():
         return str.replace(" ", "")
 
     def parse(self, source):
-
-        #self.section_file = open(self.dirname + 
-        #                         self.lose_spaces(data) +
-        #                         ".md",
-        #                         "w")
-        #self.section_file = open("tmp.md", 'w')
 
         soup = BeautifulSoup(source, from_encoding="utf-8")
         #soup = BeautifulSoup(html_source, "lxml")
@@ -43,7 +53,8 @@ class ChapterParser():
 
             self.section_file = open(self.dirname + 
                                      self.lose_spaces(h2.string) +
-                                     ".md",
+                                     ".md" +
+                                     file_extension,
                                      "w")
             section_tags = []
             self.section_file.write("\n## " + h2.string + "\n")
@@ -93,6 +104,8 @@ class ChapterParser():
             text = tag.string
             if text <> None:
                 self.section_file.write(' [' + text.encode('utf-8') + '](' + href + ') ')
+            else:
+                self.section_file.write(str(tag))
 
         elif tag.name == 'li':
             self.section_file.write("\n")
@@ -146,14 +159,16 @@ class ChapterParser():
         elif tag.name == 'code':
             parent = tag.parent
             if parent.name == 'pre':
-                self.section_file.write("\n```")
+                lang = self.get_lang(parent)
+                self.section_file.write("\n```" + lang)
                 self.write_program_lines(tag.string)
                 self.section_file.write("\n```\n")
             else:
                 self.section_file.write(' `' + tag.string + '`')
 
         elif tag.name == 'pre':
-            self.section_file.write("\n```\n")
+            lang = self.get_lang(tag)
+            self.section_file.write("\n```" + lang + "\n")
 
             # <pre><code> has a tag.string but
             # <pre> alone requires looking at children???
@@ -164,9 +179,13 @@ class ChapterParser():
 
         elif tag.name == 'em':
              self.section_file.write(" _" + string.strip(tag.string) +"_ ")
-  
+             
         elif tag.name == 'br':
              self.section_file.write("\n\n\n")
+
+        elif tag.name == "hr":
+             self.section_file.write("\n***\n")
+
         else:
             children = tag.children
             self.parse_all_tags(children)
@@ -187,6 +206,17 @@ class ChapterParser():
             if n < num_lines-1:
                 self.section_file.write("\n")
             n += 1
+
+    def get_lang(self, tag):
+        # tag is a pre, may have language set in class 
+        # for js/lang as e.g. sh_cpp
+        for attr in tag.attrs:
+            if attr == 'class':
+                # class is multi-valued so pick off 1st elmt
+                lang = tag['class']
+                lang = string.replace(lang[0], 'sh_', '')
+                return lang
+        return ''
 
 class TableOfContentsParser(HTMLParser):
     in_contents = False
@@ -250,25 +280,3 @@ sock.close()
 
 parser = TableOfContentsParser()
 parser.feed(htmlSource)
-
-
-#sock = urllib.urlopen("http://localhost/LinuxSound/Sampled/Codecs/index.html")
-#html_source = sock.read()
-#html_source = html_source.encode('utf-8').decode('ascii', 'ignore')
-#sock.close()
-
-#diagnose(html_source.encode('utf-8'))
-
-#converter = DocumentToMarkdown()
-#converter.parse(html_source)
-
-
-
-#h2 = soup.h2
-#print h2.contents
-
-
-
-#toplevel_list = soup.contents
-#for toplevel in toplevel_list:
-#    print toplevel

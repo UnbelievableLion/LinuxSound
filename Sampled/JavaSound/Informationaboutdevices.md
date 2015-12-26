@@ -8,7 +8,7 @@ Each device is represented by a `Mixer`object.
       (input lines). Query each mixer about these separately.
       The program is DeviceInfo.java:
 
-```
+```cpp
 
       
 

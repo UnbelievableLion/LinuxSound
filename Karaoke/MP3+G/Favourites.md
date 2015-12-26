@@ -13,7 +13,7 @@ Each favourites list is essentially just another `SongTable`. But I have put a `
       the constructor loads a song table into this list
       by iterating through the table and adding elements
 
-```
+```cpp
 
 	int n = 0;
 	java.util.Iterator<SongInformation> iter = favouriteSongs.iterator();
@@ -53,7 +53,7 @@ Favourites aren't much good if they don't persist from one
 
 The code for `Favourites`is
 
-```
+```cpp
 
 
 import java.awt.*;

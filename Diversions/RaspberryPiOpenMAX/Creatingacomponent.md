@@ -39,7 +39,7 @@ The fourth parameter is a bit-wise OR of several flags.
 
 A typical component creation will look like
 
-```
+```cpp
 
 	
  ilclient_create_component(decoder->client,

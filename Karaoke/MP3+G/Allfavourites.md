@@ -10,7 +10,7 @@ There's nothing special here. It just loads the tables for
 
 The code for `AllFavourites`is
 
-```
+```cpp
 
 import java.awt.*;
 import java.awt.event.*;

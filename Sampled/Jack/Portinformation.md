@@ -13,7 +13,7 @@ Jack uses ports which carry mono 32-bit data. Each port has a name as a string,
 
 A program to do this is `listports.c`:
 
-```
+```cpp
 
 /** @file delay.c
  *

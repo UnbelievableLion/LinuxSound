@@ -5,7 +5,7 @@
 The KaraokePlayer class extracts the filename of the Karaoke
       file and creates a MidiPlayer to handle the file:
 
-```
+```cpp
 
       
       /*

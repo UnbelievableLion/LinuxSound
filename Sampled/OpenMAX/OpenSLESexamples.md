@@ -15,7 +15,7 @@ The programming model for OpenSL ES is that of _interfaces_ and _objects_ .
       appropriate function in the structure. The "this" object is always passed in as the
       first parameter of the function as in
 
-```
+```cpp
 
 	
 (*object) -> method(object, ...)
@@ -41,7 +41,7 @@ An OpenSL (or OpenMAX AL) application is started by creating an "engine" using `
       to `GetInterface()`or `CreateXYZ`on the engine or object. 
       For example,
 
-```
+```cpp
 
 	
 (*engine) -> CreateOutputMix(engine, &output_mix...);
@@ -64,7 +64,7 @@ The model for playing audio is not very complex, just verbose.
 + Clean up
 ####  Initialise the system 
 
-```
+```cpp
 
 	
     SLresult res;
@@ -82,7 +82,7 @@ The model for playing audio is not very complex, just verbose.
 
 ####  Prepare a data source 
 
-```
+```cpp
 
 	
     /* Local storage for Audio data */
@@ -108,7 +108,7 @@ The model for playing audio is not very complex, just verbose.
 
 ####  Prepare an output sink 
 
-```
+```cpp
 
 	
     for (i=0;i<MAX_NUMBER_INTERFACES;i++)
@@ -133,7 +133,7 @@ The callback in this case uses a data structure to hold all of the data and poin
       to the start and current position of the data. This is for this application,
       and is not a part of OpenSL
 
-```
+```cpp
 
 	
 /* Structure for passing information to callback function */
@@ -152,7 +152,7 @@ typedef struct CallbackCntxt_ {
 
 Then we can set up the output sink and callback data
 
-```
+```cpp
 
 	
     /* Setup the data sink structure */
@@ -170,7 +170,7 @@ Then we can set up the output sink and callback data
 
 ####  Create and start a playback engine 
 
-```
+```cpp
 
 	
     /* Set arrays required[] and iidArray[] for SEEK interface
@@ -224,7 +224,7 @@ Then we can set up the output sink and callback data
 
 ####  Clean up 
 
-```
+```cpp
 
 	
     /* Make sure player is stopped */
@@ -243,7 +243,7 @@ Then we can set up the output sink and callback data
 
 The full code is
 
-```
+```cpp
 
       
 #include <stdio.h>
@@ -443,7 +443,7 @@ The ability to record audio in OpenSL ES is an option for the implementation.
       similar device. The main difference in this program from the previous one
       is that checks need to be performed first on the input devices:
 
-```
+```cpp
 
 	
     res = (*sl)->GetInterface(sl, SL_IID_AUDIOIODEVICECAPABILITIES,
@@ -495,7 +495,7 @@ The other major differences are that the engine is used to create
       an audio recorder rather than a player, and that the recorded
       sounds are saved to a file.
 
-```
+```cpp
 
 	
 #include <stdio.h>

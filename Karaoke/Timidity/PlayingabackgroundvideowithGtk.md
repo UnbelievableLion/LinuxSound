@@ -21,7 +21,7 @@ All of the dynamic action needs to occur out of the back-end of TiMidity.
       back. For simplicity, we just place it all in the back in
       the file `video_code.c`:
 
-```
+```cpp
 
 
 #include <gtk/gtk.h>

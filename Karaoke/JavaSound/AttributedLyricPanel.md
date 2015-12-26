@@ -22,7 +22,7 @@ One minor wrinkle concerns language. Chinese has both the
 
 The AttributedLyricPanel is
 
-```
+```cpp
 
       
       

@@ -31,7 +31,7 @@ The list of `MidiDevice.Info`device information
       a MIDI receiver. Selecting an external receiver is done 
       by code like
 
-```
+```cpp
 
 	
 		Receiver	synthReceiver = null;
@@ -64,7 +64,7 @@ The list of `MidiDevice.Info`device information
 
 Playing an audio file to my SD-20 is done by
 
-```
+```cpp
 
       
       /*

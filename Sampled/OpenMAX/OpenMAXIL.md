@@ -260,7 +260,7 @@ Many of the openMAX IL function calls in the Broadcom examples are
       buried in Broadcom convenience functions
       such as
 
-```
+```cpp
 
 	
 ilclient_create_component(st->client, &st->audio_render, 
@@ -290,7 +290,7 @@ Each component may support a number of _roles_ . These are given by `OMX_GetRole
 
 The program is listcomponents.c:
 
-```
+```cpp
 
 	
 
@@ -586,7 +586,7 @@ We will next look at how to get information about the OpenMAX IL
       All IL clients must initialise OpenMAX IL by calling `OMX_Init()`.
       Nearly all functions return error values, and the style used by Bellagio is
 
-```
+```cpp
 
 	
   err = OMX_Init();
@@ -609,7 +609,7 @@ The next requirement is to get a _handle_ to a component.
       track behaviour of the application, but are not needed for the example
       in this section. This code shows how to get a handle to the Bellagio Volume component:
 
-```
+```cpp
 
 	
   OMX_HANDLETYPE handle;
@@ -656,7 +656,7 @@ Ports are labelled by integer indices. There are different ports for different f
       such as audio, image, video and other.
       To get information about the starting value for audio ports, use:
 
-```
+```cpp
 
 	
   setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
@@ -683,7 +683,7 @@ Particular ports may now be queried about their capablilies.
       the direction (input or output) and information
       about the MIME type supported.
 
-```
+```cpp
 
 	
   OMX_PARAM_PORTDEFINITIONTYPE sPortDef;
@@ -746,7 +746,7 @@ The Bellagio code returns a value of `OMX_AUDIO_CodingUnused`which is not correc
 
 This code tests this:
 
-```
+```cpp
 
 	
 void getSupportedAudioFormats(int indentLevel, int portNumber) {
@@ -898,7 +898,7 @@ That's kind of sad, really.
 
 Putting all the bits together gives the program info.c:
 
-```
+```cpp
 
 	
 /**
@@ -1367,7 +1367,7 @@ int main(int argc, char** argv) {
 
 The Makefile for the Bellagio version is
 
-```
+```cpp
 
 	
 INCLUDES=-I ../libomxil-bellagio-0.9.3/include/
@@ -1417,7 +1417,7 @@ Other ports:
 
 The Makefile for the Raspberry Pi is
 
-```
+```cpp
 
 	
 INCLUDES=-I /opt/vc/include/IL -I /opt/vc/include -I /opt/vc/include/interface/vcos/pthreads
@@ -1464,7 +1464,7 @@ Other ports:
 
 The Makefile for LIM is
 
-```
+```cpp
 
 	
 INCLUDES=-I ../../lim-omx-1.1/LIM/limoi-core/include/
@@ -1587,7 +1587,7 @@ Linux/Unix has standardised on the Posix pthreads library for
 
 The functions and data we use are
 
-```
+```cpp
 
 	
 pthread_mutex_t mutex;
@@ -1669,7 +1669,7 @@ There are two types of callback functions relevant to this example:
       and empty buffer callbacks which occur when a component has emptied an input
       buffer. These are registered by
 
-```
+```cpp
 
 	
 OMX_CALLBACKTYPE callbacks  = { .EventHandler = cEventHandler,
@@ -1710,7 +1710,7 @@ This last step cost me nearly a week of head scratching.
       Consequently the transition to `Idle`never took place... Code to handle this
       is
 
-```
+```cpp
 
 	
     setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
@@ -1735,7 +1735,7 @@ This last step cost me nearly a week of head scratching.
 
 Setting parameters for the audio port is
 
-```
+```cpp
 
 	
     /** Get audio port information */
@@ -1845,7 +1845,7 @@ OpenMAX has an extension mechanism which can be used by an OpenMAX
       has extension types `OMX_CONFIG_BRCMAUDIODESTINATIONTYPE`(and `OMX_CONFIG_BRCMAUDIOSOURCETYPE`) which can be used
       to set the audio destination (source) device. Code to do this is
 
-```
+```cpp
 
 	
 void setOutputDevice(const char *name) {
@@ -1901,7 +1901,7 @@ The Bellagio example use the first technique. However, the 1.2 specification say
 
 This leads to a main loop of
 
-```
+```cpp
 
 	
     emptyState = 1;
@@ -1938,7 +1938,7 @@ This leads to a main loop of
 
 The complete program is
 
-```
+```cpp
 
 	
 /**

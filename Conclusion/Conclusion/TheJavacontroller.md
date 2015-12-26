@@ -4,7 +4,7 @@
 
 Information about each song is stored in a file `SongInformation.java`:
 
-```
+```cpp
 
 
 package newmarch.songtable;
@@ -98,7 +98,7 @@ Multiple songs are stored in a `SongTable`which is basically
 
 The table is given by `SongTable.java`:
 
-```
+```cpp
 
 
 package newmarch.songtable;

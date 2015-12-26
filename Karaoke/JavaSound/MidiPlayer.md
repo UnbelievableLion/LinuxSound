@@ -38,7 +38,7 @@ Receivers do not get MetaMessages. These contain information such as Text or Lyr
 
 The MidiPlayer is:
 
-```
+```cpp
 
       
       

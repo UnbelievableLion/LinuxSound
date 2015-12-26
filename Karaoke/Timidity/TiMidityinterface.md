@@ -28,7 +28,7 @@ To recap on this,
       directory `interface`and include files such as `dumb_c.c`for the dumb interface. They all revolve
       around a data structure `ControlMode`defined in `timidity/controls.h`:
 
-```
+```cpp
 
 	
 typedef struct {
@@ -63,7 +63,7 @@ For dealing with lyrics, the main field to set is the
       pointer to a `CtlEvent`which is
       defined in `timidity/controls.h`:
 
-```
+```cpp
 
 	
 typedef struct _CtlEvent {
@@ -82,7 +82,7 @@ The type field distinguishes a large number of event types
       such as `CTLE_NOW_LOADING`and `CTLE_PITCH_BEND`.
       The type of interest to us is `CTLE_LYRIC`.
  `interface/dumb_c.c`
-```
+```cpp
 
 	
 static void ctl_event(CtlEvent *e)

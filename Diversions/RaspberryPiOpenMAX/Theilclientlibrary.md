@@ -35,7 +35,7 @@ For example, a port for a component
       enabled state. So wait for that to occur, to ensure that
       it does. Typical code is
 
-```
+```cpp
 
 	
     // enable output port of decoder

@@ -14,7 +14,7 @@ Matt Ownby and Anthong Sale did a marvellous job
       Their logic is captured in the `portSettingsChanged`function. This adds tunnelling to the
       decoder program given earlier.
 
-```
+```cpp
 
 	
 int
@@ -167,7 +167,7 @@ The co-ordinate system between TGA and the Broadcom is inverted.
       image upside down. The source is almost completely
       from the RPi `/opt/vc/src/hello_pi/hello_jpeg/jpeg.c`program, here as [decodejpeg2rgb.c](decodejpeg2rgb.c) :
 
-```
+```cpp
 
 	/*
 Copyright (c) 2012, Matt Ownby

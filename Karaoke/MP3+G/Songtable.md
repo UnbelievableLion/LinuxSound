@@ -30,7 +30,7 @@ The `SongTable`also includes code to build
 
 The code for `SongTable`is
 
-```
+```cpp
 
 
 import java.util.Vector;

@@ -21,7 +21,7 @@ The essential differences from the Programming Guide are
 
 The program is [triangle.c](triangle.c) :
 
-```
+```cpp
 
 	
 /*

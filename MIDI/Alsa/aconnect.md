@@ -39,7 +39,7 @@ The code for aconnect.c is
 	SourceArchive
       ](http://alsa-utils.sourcearchive.com/documentation/1.0.8-4/aconnect_8c-source.html) 
 
-```
+```cpp
 
       
       /*

@@ -9,7 +9,7 @@ There is a principal song table containing all the songs.
       of "favourite" songs. Each of these is its own song table.
       The UI for this is the Swing application `SongTableSwing.java`:
 
-```
+```cpp
 
 	
 package newmarch.songtable;
@@ -365,7 +365,7 @@ public class SongTableSwing extends JPanel {
 
 The favourites classes are `AllFavourites.java`:
 
-```
+```cpp
 
 	package newmarch.songtable;
 
@@ -516,7 +516,7 @@ public class AllFavourites extends JTabbedPane {
 
 and
 
-```
+```cpp
 
 	
 package newmarch.songtable;

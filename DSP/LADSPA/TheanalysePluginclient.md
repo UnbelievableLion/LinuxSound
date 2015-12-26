@@ -8,7 +8,7 @@ The `analysePlugin`client loads
       just a long-winded plough through all the possibilities,
       printing out information. Its code is:
 
-```
+```cpp
 
 	/* analyseplugin.c
 

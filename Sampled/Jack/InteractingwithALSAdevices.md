@@ -25,7 +25,7 @@ jackd -dalsa
 If you do want to worry, the examples directory
       contains ALSA examples. The program `alsa_in.c.ok`brings an ALSA input device into the Jack world
 
-```
+```cpp
 
 /** @file simple_client.c
  *

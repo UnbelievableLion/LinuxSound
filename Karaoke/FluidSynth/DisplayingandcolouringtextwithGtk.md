@@ -24,7 +24,7 @@ The first task is to build up an array of lyric lines
       with upfront information as to title, etc, prefixed
       by '@', and newlines prefixed by '\'.
 
-```
+```cpp
 
         
 struct _lyric_t {
@@ -103,7 +103,7 @@ void build_lyric_lines() {
 
 This is called from the onload callback
 
-```
+```cpp
 
 	
 int onload_callback(void *data, fluid_player_t *player) {
@@ -183,7 +183,7 @@ The program is `gtkkaraoke_player.c` _Warning: the following program crashes reg
 	I have no fix as yet and haven't replicated the bug 
 	in a simple enough way to log a bug report._ 
 
-```
+```cpp
 
 #include <fluidsynth.h>
 #include <fluid_midi.h>

@@ -4,7 +4,7 @@
 
 The code for seqdemo.c is
 
-```
+```cpp
 
       
       /* seqdemo.c by Matthias Nagorni */

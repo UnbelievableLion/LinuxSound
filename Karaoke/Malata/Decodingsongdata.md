@@ -70,7 +70,7 @@ The obvious thing to try is a substitution cipher: for example,
       It's a game of pattern matching, and the answer is the following
       piece of C code
 
-```
+```cpp
 
 #include <stdio.h>
 
@@ -237,7 +237,7 @@ However, the label for the substitution pattern appears
       is mapped to the space character ' ' is 0x20 less than byte
       0x26. e.g. the substitution for songs like file 10337 is
 
-```
+```cpp
 
         switch (ch) {
         case 0x95: ch = ' '; break;

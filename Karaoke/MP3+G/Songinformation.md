@@ -22,7 +22,7 @@ Each song has a reasonably unique identifier ("SK-50154"),
       Reasonably straight-forward pattern matching code can
       extract these parts:
 
-```
+```cpp
 
 Path file = ...
 String fname = file.getFileName().toString();
@@ -53,7 +53,7 @@ The `SongInformation`class captures this
       of a string against the various fields. For example,
       to check if a title matches,
 
-```
+```cpp
 
 public boolean titleMatch(String pattern) {
     return title.matches("(?i).*" + pattern + ".*");
@@ -71,7 +71,7 @@ This gives a case-independent match using
 
 The complete `SongInformation`file is
 
-```
+```cpp
 
 
 import java.nio.file.Path;

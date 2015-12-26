@@ -39,7 +39,7 @@ The other principal task for the MidiGUI here is to switch focus
       of LyricLine objects. Each panel displaying a line
       is given a line from this array.
 
-```
+```cpp
 
       
       

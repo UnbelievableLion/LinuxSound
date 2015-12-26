@@ -33,7 +33,7 @@ Bytes 0 and 1 of each block are a character in the lyric. Bytes 2 and 3 are the 
 My Java program to do this is
       SongExtracter.java
 
-```
+```cpp
 
 	
       
@@ -669,7 +669,7 @@ public class SongExtracter {
 
 with support classes LZW.java
 
-```
+```cpp
 
 	
       
@@ -899,7 +899,7 @@ public class LZW {
 
 SongInformation.java
 
-```
+```cpp
 
 	
       
@@ -1002,7 +1002,7 @@ public class SongInformation {
 
 and Debug.java
 
-```
+```cpp
 
 	
       
@@ -1055,7 +1055,7 @@ java SongExtracter <song number >
 The program to convert these MIDI files to Karaoke KAR files is
       KARConverter.java
 
-```
+```cpp
 
 	
       /*

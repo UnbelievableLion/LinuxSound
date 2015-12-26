@@ -26,7 +26,7 @@ Following these steps, data can then be read from the input stream and written
 
 ![alt text](PlayAudioFile.png)
 
-```
+```cpp
 
       
       import java.io.File;

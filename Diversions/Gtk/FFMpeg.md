@@ -14,7 +14,7 @@ The following program reads from a video file and stores
       ](http://dranger.com/ffmpeg/) by Stephen Dranger.
       The program is `play_video.c`:
 
-```
+```cpp
 
 	
 #include <libavcodec/avcodec.h>

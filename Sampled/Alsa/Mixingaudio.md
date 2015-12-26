@@ -82,7 +82,7 @@ The ALSA mixer does not have a great deal of functionality apart from mixing.
 	Set ALSA master volume from C code
       ](http://stackoverflow.com/questions/6787318/set-alsa-master-volume-from-c-code) :
 
-```
+```cpp
 
 /*
  *

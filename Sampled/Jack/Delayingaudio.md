@@ -29,7 +29,7 @@ The following program `delay.c`will copy
       the left channel in real time, but delay the left channel
       by 4096 samples:
 
-```
+```cpp
 
 /** @file delay.c
  *

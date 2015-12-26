@@ -27,7 +27,7 @@ To render a JPEG image, we only need to use an `image_decode`and a `video_render
 
 The program is [renderjpeg.c](renderjpeg.c) 
 
-```
+```cpp
 
 	/*
 Copyright (c) 2012, Matt Ownby

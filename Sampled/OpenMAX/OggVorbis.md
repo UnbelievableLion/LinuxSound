@@ -52,7 +52,7 @@ With those provisos in mind, the code is fairly straightforward:
       The program is `ogg_decode.c`. it reads from an Ogg
       Vorbis file and saves in a PCM file.
 
-```
+```cpp
 
 	
 /**
@@ -711,7 +711,7 @@ Thus the decoder output and renderer input buffers are linked by the IL client,
 
 The code is [play_ogg.c ](OpenMAX_IL/LIM/play_ogg.c) 
 
-```
+```cpp
 
 	
 /**

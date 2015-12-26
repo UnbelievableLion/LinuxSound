@@ -301,7 +301,7 @@ Java doesn't support unsigned integer types. This sucks _really_ badly here sinc
 The song class contains information about a single song and is given here:
       SongInformation.java
 
-```
+```cpp
 
 	
       
@@ -405,7 +405,7 @@ public class SongInformation {
 The song table class holds a list of song information objects and is given by
        SongTable.java
 
-```
+```cpp
 
 	
       
@@ -652,7 +652,7 @@ A Java program using Swing to allow display and searching of the song
       titles is
       SongTableSwing.java
 
-```
+```cpp
 
 	
       

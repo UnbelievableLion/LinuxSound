@@ -17,7 +17,7 @@ But Java can also play sampled sounds, as discussed in an earlier chapter.
       can be controlled. So in the following code a selection box allows choice of sampled
       input device, and leaves the output device to the default.
 
-```
+```cpp
 
       
      /*
@@ -83,7 +83,7 @@ The code to play the sampled media is pretty much the same as we have seen befor
 
 
 
-```
+```cpp
 
       
       

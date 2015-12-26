@@ -13,7 +13,7 @@ We just include the following example without explanation
       The label will hold an integer number. 
       The buttons will increase or decrease this number.
 
-```
+```cpp
 
 	#include <gtk/gtk.h>
 
@@ -99,7 +99,7 @@ The following example is from [
 	CS 23 Software Design and Implementation Lecture notes GTK+ Programming
       ](http://www.cs.dartmouth.edu/~xy/cs23/gtk.html) and shows an image loaded from a file:
 
-```
+```cpp
 
 #include <gtk/gtk.h>
 

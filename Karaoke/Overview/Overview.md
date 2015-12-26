@@ -77,21 +77,40 @@ Many Karaoke systems use subtitles imposed over a movie of some kind. This chapt
 FluidSynth is an application for playing MIDI files and a library for MIDI applications. It does not have the hooks for playing Karaoke files. This chapter discusses an extension to FluidSynth which adds appropriate hooks, and then uses these to build a variety of Karaoke systems.
 + __ [ Timidity ](TiMidity) __:
 TiMidity is designed as a standalone application with a particular kind of extensibility. Out of the box it can sort-of play Karaoke but not well. This chapter looks at how to work with TiMidity to build a Karaoke system.
+***
+
 
 Copyright © Jan Newmarch, jan@newmarch.name
 
 
+<a href="http://creativecommons.org/licenses/by-sa/4.0/" rel="license">
+<img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" style="border-width:0"/>
+</a>
 
 
-
-"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
-
-
-Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
-
-
-If you like this book, please contribute using Flattr
+"Programming and Using Linux Sound - in depth"by [
+  Jan Newmarch
+](https://jan.newmarch.name) is licensed under a [
+  Creative Commons Attribution-ShareAlike 4.0 International License
+](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-or donate using PayPal
-![alt text](https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_AU/i/scr/pixel.gif)
+Based on a work at [
+  https://jan.newmarch.name/LinuxSound/
+](https://jan.newmarch.name/LinuxSound/) .
+
+
+If you like this book, please contribute using PayPal
+
+
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=jan%40newmarch%2ename&amp;lc=AU&amp;item_name=LinuxSound&amp;currency_code=AUD&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted">
+<img src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_AU/i/btn/btn_donateCC_LG.gif"/>
+</a>
+
+
+Or Flattr me:
+
+
+<a href="https://flattr.com/submit/auto?user_id=jannewmarch&amp;url=http://jan.newmarch.name&amp;title=Linux%20Sound&amp;description=Programming%20and%20Using%20Linu%20Sound&amp;language=en_GB&amp;tags=linux,sound,alsa,pulseaudio,JavaSound,MIDI&amp;category=text">
+<img alt="Flattr this book" src="https://api.flattr.com/button/flattr-badge-large.png"/>
+</a>

@@ -135,7 +135,7 @@ A program to list input and output devices current when the application connects
 	 palist_devices.c:
       ](palist_devices.c) 
 
-```
+```cpp
 
       /**
  * palist_devices.c 
@@ -413,7 +413,7 @@ A program to list devices on connection and also to list changes
 	palist_devices_ongoing.c:
       ](palist_devices_ongoing.c) 
 
-```
+```cpp
 
       /**
  * palist_clients.c 
@@ -624,7 +624,7 @@ If you download the source for PulseAudio
 	parec.c:
       ](parec.c) 
 
-```
+```cpp
 
       /**
  * parec.c 
@@ -880,7 +880,7 @@ In this program we include many more callbacks than in earlier ones, to show
 
 The program is [pacat2.c:](pacat2.c) 
 
-```
+```cpp
 
       
 /**
@@ -1431,7 +1431,7 @@ So after all that, what is the logic of the program?
 
 The program to play from a file presently looks like [ pacat.c:](pacat.c) 
 
-```
+```cpp
 
       /***
   This file is based on pacat.c,  part of PulseAudio.
@@ -1947,7 +1947,7 @@ The extra code is:
 
 
 
-```
+```cpp
 
 	
     // Set properties of the record buffer
@@ -2099,7 +2099,7 @@ Time: 2.351 sec; Latency: 1257 usec.
 
 The program to do all this is [parec-latency.c:](parec-latency.c) 
 
-```
+```cpp
 
       /* parec-latency.c */
 
@@ -2393,7 +2393,7 @@ int main(int argc, char *argv[]) {
 
 Combining what we have so far, we get [pa-mic-2-speaker.c:](pa-mic-2-speaker.c) 
 
-```
+```cpp
 
       /*
  * Copy from microphone to speaker
@@ -2702,7 +2702,7 @@ The threaded calls allow us to start PulseAudio in its own thread,
       and leave the current thread for reading volume values. This gives
       the relatively simple program [pavolume.c:](pavolume.c) 
 
-```
+```cpp
 
       /**
  * pavolume.c 
@@ -2814,7 +2814,7 @@ The program palist_clients.c is very similar to the program
 
 The program [palist_clients.c](palist_clients.c) is
 
-```
+```cpp
 
       /**
  * palist_clients.c 
@@ -3073,7 +3073,7 @@ The sink input callback is passed the structure `pa_sink_input_info`. This conta
 The program to list clients and monitor changes in their input and
       output streams is [pamonitor_clients.c:](pamonitor_clients.c) 
 
-```
+```cpp
 
       /**
  * pamonitor_clients.c 
@@ -3361,7 +3361,7 @@ The program is [pavolume_sink.c](pavolume_sink.c) .
       e.g. `mplayer`then its volume can be adjusted
       by this program.
 
-```
+```cpp
 
       /**
  * pavolume_sink.c 

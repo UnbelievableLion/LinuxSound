@@ -21,7 +21,7 @@ which will convert an Ogg container of Vorbis codec data to an
 
 Internally, `ffmpeg`uses a pipeline of modules
 
-```
+```example
  _______              ______________               _________              ______________            ________
 |       |            |              |             |         |            |              |          |        |
 | input |  demuxer   | encoded data |   decoder   | decoded |  encoder   | encoded data |  muxer   | output |

@@ -19,7 +19,7 @@ The EGLSurface is a generic type which has to be backed by
 
 The relevant Dispmanx calls are
 
-```
+```cpp
 
 	
     DISPMANX_ELEMENT_HANDLE_T dispman_element;
@@ -70,7 +70,7 @@ Initialising EGL is done in the standard way of
 Apart from the last step, this follows standard EGL
       programming:
 
-```
+```cpp
 
 	
     static const EGLint attribute_list[] =
@@ -117,7 +117,7 @@ Apart from the last step, this follows standard EGL
 The next step is to link the Dispmanx window to the EGL window
       surface. This uses a structure of type `EGL_DISPMANX_WINDOW_T`which is filled in from the Dispmanx information:
 
-```
+```cpp
 
 	
    EGL_DISPMANX_WINDOW_T nativewindow;
@@ -133,7 +133,7 @@ The next step is to link the Dispmanx window to the EGL window
 
 The EGL surface is then created by
 
-```
+```cpp
 
 	
 surface = eglCreateWindowSurface(display, config, &nativewindow, NULL);
@@ -150,7 +150,7 @@ In this section we do the absolute minimum: having got an
       calls to set the background of the buffer to red
       and then display the buffer by swapping EGL buffers:
 
-```
+```cpp
 
 	
     glClearColor(1.0, 0.0, 0.0, 1.0);
@@ -167,7 +167,7 @@ The complete program is [
 	rectangle.c](rectangle.c) and just displays a large red
       square:
 
-```
+```cpp
 
 	
 /*

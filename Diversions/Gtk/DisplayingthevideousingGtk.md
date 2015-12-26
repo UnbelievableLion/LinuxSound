@@ -99,7 +99,7 @@ With Gtk 3.0, pixmaps no longer exist. You only have pixbufs,
       transcoded to the `picture_RGB`, translate it into
       a `GdkPixbuf`and create the `GtkImage`
 
-```
+```cpp
 
 	pixbuf = gdk_pixbuf_new_from_data(picture_RGB->data[0], GDK_COLORSPACE_RGB,
 	                                  0, 8, width, height, 
@@ -142,7 +142,7 @@ So what does work? Well, all I could find was a bit of a mess of
       video data, create a pixmap, write the pixbuf data into the pixmap,
       and then fill the image with the pixmap data:
 
-```
+```cpp
 
 	pixbuf = gdk_pixbuf_new_from_data(picture_RGB->data[0], GDK_COLORSPACE_RGB,
              	                          0, 8, width, height, 
@@ -167,7 +167,7 @@ The video will need to play in its own thread. Gtk will set up a
       use Posix `pthreads`. The video thread will need to
       be started explicitly by
 
-```
+```cpp
 
 	pthread_t tid;
 	pthread_create(&tid, NULL, play_background, NULL);
@@ -184,7 +184,7 @@ where the function `play_background`calls the
 
 The Gtk thread will be started by the call to
 
-```
+```cpp
 
 	gtk_widget_show (window);
       
@@ -220,7 +220,7 @@ That's okay for Gtk 2.0. What about Gtk 3.0? Ooops!
 Finally, the code to play a video in a Gtk application which
       works with both Gtk 2.0 and Gtk 3.0! It is `gtk_play_video.c`:
 
-```
+```cpp
 
 	
 #include <gtk/gtk.h>

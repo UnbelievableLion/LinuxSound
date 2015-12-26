@@ -4,7 +4,7 @@
 
 The code for the `amp`program is
 
-```
+```cpp
 
 /* amp.c
 

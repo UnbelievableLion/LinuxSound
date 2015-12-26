@@ -37,7 +37,7 @@ The `run_plugin`function then just loops,
 
 The program is `mono_amp.c`:
 
-```
+```cpp
 
 
 #include <stdlib.h>

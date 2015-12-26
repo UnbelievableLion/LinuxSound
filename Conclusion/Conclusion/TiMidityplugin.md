@@ -9,7 +9,7 @@ The last bit of the puzzle is how TiMidity will show the
       I wrote one based on Xlib, with drawing done by Cairo and Pango.
       It  is `x_code.c`
 
-```
+```cpp
 
 	
 #include <X11/Xlib.h>

@@ -33,7 +33,7 @@ Building this vector means walking the directory tree
       A string representing a file location in, say, a Linux
       or a Windows file system can be turned into a `Path`object by
 
-```
+```cpp
 
 Path startingDir = FileSystems.getDefault().getPath(dirString);
       
@@ -44,13 +44,13 @@ Traversal of a file system from a given `path`is done by walking a file tree, ca
       at each point. The visitor is a subclass of `SimpleFileVisitor<Path>`and for leaf nodes only you would override the
       method
 
-```
+```cpp
 
 public FileVisitResult visitFile(Path file, BasicFileAttributes attr)
       
 ```
 
-```
+```cpp
 
 Visitor pf = new Visitor();
 Files.walkFileTree(startingDir, pf);

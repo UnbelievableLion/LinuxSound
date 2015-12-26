@@ -11,7 +11,7 @@ It is common in a movie on TV to see a fixed image layered
 In Gtk 2.0 it is surprisingly easy: draw one pixbuf into a
       pixmap and then draw the overlay pixbuf into the same pixmap.
 
-```
+```cpp
 
 pixmap = gdk_pixmap_new(window->window, 720, 480, -1);
 	
@@ -51,7 +51,7 @@ Gtk 3.0 does not seem so straightforward as pixmaps have disappeared.
 
 The program `gtk_play_video_overlay.c`is
 
-```
+```cpp
 
 	
 #include <gtk/gtk.h>

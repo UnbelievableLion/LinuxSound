@@ -48,7 +48,7 @@ The program is [
       onto `stdin`and then reads from `stdin`. This isn't
       necessary - what not just read from the original file descriptor?
 
-```
+```cpp
 
       /***
  *   This file is part of PulseAudio.
@@ -192,7 +192,7 @@ Note that you need to tell PulseAudio the format to write
       the data, using a pa_sample_spec. Two channel, 44100hz and
       PCM 16 bit little-endian is chosen.
 
-```
+```cpp
 
       /***
   This file is part of PulseAudio.
@@ -319,7 +319,7 @@ You can combine the two programs to copy from the
 	 pa-mic-2-speaker-simple.c
       ](pa-mic-2-speaker-simple.c) :
 
-```
+```cpp
 
       
 #ifdef HAVE_CONFIG_H

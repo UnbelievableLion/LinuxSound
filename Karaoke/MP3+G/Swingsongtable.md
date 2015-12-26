@@ -9,7 +9,7 @@ This is mainly code to get the different song tables loaded
       patching matching.
       The code for `SongTableSwing`is
 
-```
+```cpp
 
 
 import java.awt.*;

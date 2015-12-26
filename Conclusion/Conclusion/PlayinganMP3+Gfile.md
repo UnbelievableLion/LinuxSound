@@ -9,7 +9,7 @@ An Mp3+G pair is pulled off the server as a ZIP file.
 
 The script is `playZip`
 
-```
+```sh
 
 	#!/bin/bash
 

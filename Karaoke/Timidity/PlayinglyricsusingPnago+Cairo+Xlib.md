@@ -32,7 +32,7 @@ Cairo is good for drawing simple text. For e.g. Chinese characters you have to
 
 that approach is adopted in the following interface, `x_code.c`
 
-```
+```cpp
 
 
 #include <X11/Xlib.h>
@@ -601,7 +601,7 @@ ControlMode *interface_x_loader(void)
 
 it is compiled by
 
-```
+```cpp
 
         gcc  -fPIC $(CFLAGS) -c -o x_code.o x_code.c $(LIBS)
         gcc -shared -o if_x.so x_code.o $(LIBS)
@@ -611,7 +611,7 @@ it is compiled by
 
 and run by
 
-```
+```cpp
 
 timidity -d. -ix --trace --trace-text-meta ...
       

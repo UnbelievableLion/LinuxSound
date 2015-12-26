@@ -32,7 +32,7 @@ As [
 This requires one change to one PyKaraoke file: change
       line 190 of `pykar.py`from
 
-```
+```cpp
 
 sele.Tempo = [(0, 0)]
       
@@ -41,7 +41,7 @@ sele.Tempo = [(0, 0)]
 
 to
 
-```
+```cpp
 
 self.Tempo = [(0, 500000)]
       
@@ -69,7 +69,7 @@ I'm not sure where PyKaraoke got that information from,
 
 The file `pykdb.py`needs the lines
 
-```
+```cpp
 
         self.KarEncoding = 'cp1252'  # Default text encoding in karaoke files
         self.KarFont = FontData("DejaVuSans.ttf")
@@ -79,7 +79,7 @@ The file `pykdb.py`needs the lines
 
 changed to
 
-```
+```cpp
 
         self.KarEncoding = 'utf-8'  # Default text encoding in karaoke files
         self.KarFont = FontData("Cyberbit.ttf")

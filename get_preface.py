@@ -4,7 +4,12 @@ import urllib;
 import os
 import string
 from HTMLParser import HTMLParser
+import sys
 
+if len(sys.argv) > 1:
+    file_extension = sys.argv[1]
+else:
+    file_extension = ''
 
 class ChapterParser(HTMLParser):
 
@@ -23,7 +28,10 @@ class ChapterParser(HTMLParser):
             for attr in attrs:
                 if attr[0] == "class" and attr[1] == "preface":
                     self.in_preface = True
-                    self.preface_file = open(self.dirname + "README.md", "w")
+                    self.preface_file = open(self.dirname + 
+                                             "README.md" +
+                                             file_extension,
+                                             "w")
 
 
     def handle_endtag(self, tag):

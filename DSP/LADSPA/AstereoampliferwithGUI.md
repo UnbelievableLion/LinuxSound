@@ -32,7 +32,7 @@ Adding a GUI such as GTK is fairly straightforward.
 
 The code is written to use GTK v3 and is:
 
-```
+```cpp
 
 #include <gtk/gtk.h>
 

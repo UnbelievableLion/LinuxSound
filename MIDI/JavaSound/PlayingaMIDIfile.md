@@ -26,7 +26,7 @@ This code is from [
 	Playing an audio file (easy)
       ](http://www.jsresources.org/examples/SimpleMidiPlayer.html) 
 
-```
+```cpp
 
       
       /*

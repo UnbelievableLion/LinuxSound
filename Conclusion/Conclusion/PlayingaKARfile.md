@@ -15,7 +15,7 @@ An annoying part of `timidity`is that you cannot set the
 
 The shell script is `playKar`:
 
-```
+```sh
 
 	#!/bin/bash
 set -x

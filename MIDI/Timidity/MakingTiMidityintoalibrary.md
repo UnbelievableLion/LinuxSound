@@ -125,7 +125,7 @@ The real Timidity application is coded to work on many different
 
 A minimal application just wraps our own `main`around the library entry points in `my_main.c`:
 
-```
+```cpp
 
 
 #include <stdio.h>
@@ -212,7 +212,7 @@ I've split the code into two files, one to play the video using Gtk
       and the other to play the TiMidity library and invoke the
       video. The video playing file is `video_code.c`:
 
-```
+```cpp
 
 
 
@@ -491,7 +491,7 @@ void *play_gtk(void *args) {
 
 The file `video_player.c`is
 
-```
+```cpp
 
 #include <string.h>
 

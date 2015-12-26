@@ -16,7 +16,7 @@ While Cairo can draw any form of text, the functions such as `cairo_show_text`do
 The simplest way of colouring text (and some other effects)
       is to create the text marked up with HTML such as
 
-```
+```cpp
 
 gchar *markup_text = "<span foreground=\"red\">hello </span><span foreground=\"black\">world</span>";
       
@@ -26,7 +26,7 @@ gchar *markup_text = "<span foreground=\"red\">hello </span><span foreground=\"b
 which has "hello" in red and "world" in black. This is then parsed into the
       text itself "ed black" and a set of attribute markups.
 
-```
+```cpp
 
 gchar *markup_text = "<span foreground=\"red\">hello </span><span foreground=\"black\">world</span>";
 PangoAttrList *attrs;
@@ -41,7 +41,7 @@ This can be rendered into a Cairo context by creating a `PangoLayout`from the Ca
       the text with its attributes in the Pango layout and then
       showing this layout in the Cairo context:
 
-```
+```cpp
 
 PangoLayout *layout;
 PangoFontDescription *desc;
@@ -67,7 +67,7 @@ Just as before, once all content has been drawn into the Cairo
 
 The complete program is `gtk_play_video_pango.c`:
 
-```
+```cpp
 
 	
 #include <gtk/gtk.h>

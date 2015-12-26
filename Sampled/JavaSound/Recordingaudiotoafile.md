@@ -27,7 +27,7 @@ Then use the `AudioSystem`function `write()`to copy the stream to the file.
 
 The program is:
 
-```
+```cpp
 
       
       

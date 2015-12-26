@@ -16,7 +16,7 @@ The Jack source code distribution has an "example clients"
 
 The code is
 
-```
+```cpp
 
 /** @file thru_client.c
  *

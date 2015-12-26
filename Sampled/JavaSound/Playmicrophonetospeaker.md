@@ -13,7 +13,7 @@ This is a combination of the previous two programs. An `AudioInputStream`is prep
 
 The program is:
 
-```
+```cpp
 
       
       

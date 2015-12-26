@@ -17,7 +17,7 @@ TiMidity in fact builds a list of lyrics, and makes them accessible.
       the string. Using GLib functions, we can build up an array
       of lines for a `KAR`file by
 
-```
+```cpp
 
 	
 struct _lyric_t {

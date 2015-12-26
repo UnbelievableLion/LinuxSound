@@ -10,7 +10,7 @@ The MelodyPanel is a scrolling panel showing all the notes of the melody.
 
 The MelodyPanel is
 
-```
+```cpp
 
       
       

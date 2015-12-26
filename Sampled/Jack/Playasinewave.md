@@ -24,7 +24,7 @@ Note that the calculation of the sine curve array
 
 The program is
 
-```
+```cpp
 
 /** @file simple_client.c
  *

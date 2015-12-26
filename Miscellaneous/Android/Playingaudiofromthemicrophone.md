@@ -39,7 +39,7 @@ Replaying the audio recorded from the microphone to the output device makes use 
 
 The code is PlayMicrophone.java:
 
-```
+```cpp
 
       
       package jan.newmarch.playmicrophone;

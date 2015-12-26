@@ -15,7 +15,7 @@ The program starts off fairly easily in `main`by reading the JPEG file into a by
       initialise the Broadcom libraries. The JPEG image decoder
       is then created and asked to decode the image.
 
-```
+```cpp
 
 	
 int
@@ -59,7 +59,7 @@ The call to `setupOpenMaxJpegDecoder`builds some
       data structures and calls to `prepareImageDecoder`to initialise the decoder and `startupImageDecoder`to move it into executing state, so that it can then decode
       the image.
 
-```
+```cpp
 
 	
 int
@@ -109,7 +109,7 @@ The function `startupImageDecoder`is a heavy-duty
       function. It has to establish the format that it will
       accept from the input file by
 
-```
+```cpp
 
 	
     // set input image format
@@ -128,7 +128,7 @@ The function `startupImageDecoder`is a heavy-duty
 
 Then it queries for the buffer requirements, building an ` OMX_PARAM_PORTDEFINITIONTYPE portdef`structure and populating it with a get parameter call.
 
-```
+```cpp
 
 	
     // get buffer requirements
@@ -147,7 +147,7 @@ Then we can make a call to enable the input port,
       allocate the input buffers and wait for the port
       to become enabled
 
-```
+```cpp
 
 	
     // enable the port and setup the buffers
@@ -193,7 +193,7 @@ Finally, we can move the component into executing state.
       we wait to ensure that it actually does make the state
       transition requested:
 
-```
+```cpp
 
 	
     // start executing the decoder 
@@ -248,7 +248,7 @@ If we were into concurrent programming, we would catch
       if it doesn't or exiting if the input buffer is empty.
       This code is a bit messy!
 
-```
+```cpp
 
 	
 	// wait for buffer to empty or port changed event
@@ -304,7 +304,7 @@ Once the output buffer has been created, we can make a
       call to fill the buffer. We should only have to do this once,
       so a flag `bFilled`is used to control this.
 
-```
+```cpp
 
 	
 	// fill the buffer if we have created the buffer
@@ -345,7 +345,7 @@ Once the input buffers have been filled and emptied
       to do but wait until the output buffer is filled.
       OpenMAX should generate a `OMX_BUFFERFLAG_EOS`when this happens, so we just wait
 
-```
+```cpp
 
 	
     // wait for end of stream events
@@ -376,7 +376,7 @@ At this point we can do something like save the decoded
 
 The final code is [jpeg-decoder.c](jpeg-decoder.c) 
 
-```
+```cpp
 
 	/*
 Copyright (c) 2012, Matt Ownby

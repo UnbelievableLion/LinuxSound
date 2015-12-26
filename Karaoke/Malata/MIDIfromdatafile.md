@@ -158,7 +158,7 @@ The file `printLyrics.c`gives a  dump fo the lyrics
       for songs like Lovers (non-coded lyrics) plus the
       deltas (assumed) and the stuff between lines
 
-```
+```cpp
 
 #include <stdio.h>
 

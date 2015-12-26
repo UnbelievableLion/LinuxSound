@@ -36,7 +36,7 @@ I'm not going to go through any of how to set up an environment such as Eclipse
       and installed from the file browser. A player for a single file
       on the SD disk looks like
 
-```
+```cpp
 
       
       package jan.newmarch.DiskPlayer;

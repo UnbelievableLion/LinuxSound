@@ -12,7 +12,7 @@ We capture each lyric line in a structure which keeps the whole
       of the line, the part that has been sung already, the Pango
       markup for the line and the Pango attributes:
 
-```
+```cpp
 
 typedef struct _coloured_line_t {
     gchar *line;
@@ -36,7 +36,7 @@ A separate thread plays the video, and on each frame overlays
 
 The program is `gtkkaraoke_player_video_pango.c`
 
-```
+```cpp
 
 #include <fluidsynth.h>
 #include <fluid_midi.h>

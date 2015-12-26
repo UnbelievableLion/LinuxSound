@@ -103,7 +103,7 @@ The main value of the `snd_pcm_info_t`structure is that it is the principal
 The program to find and display card and hardware device information is
       aplay-l.c:
 
-```
+```cpp
 
 /**
  * aplay-l.c
@@ -268,7 +268,7 @@ PCM alias information may be found from the devices by `aplay -L`.
 
 The source for this is aplay-L.c:
 
-```
+```cpp
 
 /**
  * aplay-L.c
@@ -519,7 +519,7 @@ For further examples, see [
 A program to find the range of values of various parameters from the
       initial state is device-info.c:
 
-```
+```cpp
 
 /**
  * Jan Newmarch
@@ -802,7 +802,7 @@ The following program is from Paul Davis [
 	A Tutorial on Using the ALSA Audio API
       ](http://equalarea.com/paul/alsa-audio.html) alsa_capture.c:
 
-```
+```cpp
 
 /**
  * alsa_capture.c
@@ -991,7 +991,7 @@ The following program is from Paul Davis [
 	A Tutorial on Using the ALSA Audio API
       ](http://equalarea.com/paul/alsa-audio.html) alsa_playback.c:
 
-```
+```cpp
 
 /**
  * alsa_playback.c
@@ -1240,7 +1240,7 @@ Programmatically you need to set the internal buffer and period sizes using `snd
 Playback of captured sound involves two handles, possibly for different
       cards. The direct method of just combining two of these in a loop
 
-```
+```cpp
 
 	
 while (1) {
@@ -1313,7 +1313,7 @@ ALSA needs to keep the output as full as possible. Otherwise it will generate
 
 The resultant program is playback-capture.c:
 
-```
+```cpp
 
 /**
  * Jan Newmarch

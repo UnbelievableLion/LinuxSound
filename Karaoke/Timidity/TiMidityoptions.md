@@ -25,7 +25,7 @@ The alternative is building a
       into TiMidity, but just requires (shortly after initialising
       the library)
 
-```
+```cpp
 
 	
 extern int opt_trace_text_meta_event;

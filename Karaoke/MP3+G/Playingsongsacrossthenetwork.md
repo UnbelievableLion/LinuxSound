@@ -23,7 +23,7 @@ For remote access/control I replace the `run`command
       of the last section by a TCP client/server. On the client,
       controlling the player, I have
 
-```
+```cpp
 
 java SongTableSwing | client 192.168.1.7
       
@@ -32,7 +32,7 @@ java SongTableSwing | client 192.168.1.7
 
 while on the (Raspberry Pi/CubieBoard) server I run
 
-```
+```cpp
 
 #!/bin/bash
 set -x
@@ -61,7 +61,7 @@ The client/server files are just standard TCP files.
       server, and the server prints the same line to standard output.
       Here is `client.c`:
 
-```
+```cpp
 
 #include <stdio.h> 
 #include <sys/types.h>
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 
 and here is `server.c`
 
-```
+```cpp
 
 #include <stdio.h> 
 #include <sys/types.h> 

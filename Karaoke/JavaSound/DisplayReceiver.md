@@ -11,7 +11,7 @@ The DisplayReceiver decodes the notes and text sent to it.
       In turn, it passes these to a MidiGUI to show them.
       This class is
 
-```
+```cpp
 
       
       /**

@@ -2,6 +2,4 @@
 ##  Files 
 
 
-Source files in this chapter are [
-	here
-      ](all.zip) .
+Source files in this chapter are [here](all.zip) .

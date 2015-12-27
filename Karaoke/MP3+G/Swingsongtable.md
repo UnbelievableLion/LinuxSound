@@ -3,11 +3,11 @@
 
 
 This is mainly code to get the different song tables loaded
-      and to buld the Swing interface. It also filters the
-      showing table based on patterns matched.
-      The originally loaded table is kept for restoration and
-      patching matching.
-      The code for `SongTableSwing`is
+and to buld the Swing interface. It also filters the
+showing table based on patterns matched.
+The originally loaded table is kept for restoration and
+patching matching.
+The code for `SongTableSwing`is
 
 ```cpp
 

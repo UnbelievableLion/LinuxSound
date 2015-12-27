@@ -3,12 +3,12 @@
 
 
 These two programs from jsresources.org dump a MIDI file to the console.
-      The `MidiSystem`creates a `Sequence`from a file.
-      Each track of the sequence is looped through and each event within each
-      track is examined. While it would be possible to print _in situ_ ,
-      each event is passed to a `Receiver`object which in this case
-      is `DumpReceiver`. That object could do anything, but in this case
-      just prints the event to stdout.
+The `MidiSystem`creates a `Sequence`from a file.
+Each track of the sequence is looped through and each event within each
+track is examined. While it would be possible to print _in situ_ ,
+each event is passed to a `Receiver`object which in this case
+is `DumpReceiver`. That object could do anything, but in this case
+just prints the event to stdout.
 
 
 DumpSequence.java is
@@ -751,9 +751,7 @@ public class DumpReceiver
 ```
 
 
-There are several sites with legal free MIDI files. The file [
-	Amy Winehouse - Rehab
-      ](http://files.mididb.com/amy-winehouse/rehab.mid) gives the result
+There are several sites with legal free MIDI files. The file [Amy Winehouse - Rehab](http://files.mididb.com/amy-winehouse/rehab.mid) gives the result
 
 ```
 

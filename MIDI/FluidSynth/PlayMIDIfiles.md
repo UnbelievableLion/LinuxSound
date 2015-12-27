@@ -8,13 +8,13 @@ The FluidSynth API consists of
 + A synthesizer created using `new_fluid_synth`
 + An audio player created using `new_fluid_audio_driver`which runs in a separate thread
 + A "settings" object which can be used to control many features
-	  of the other components, created by `new_fluid_settings`and modified by calls such as `fluid_settings_setstr`
+of the other components, created by `new_fluid_settings`and modified by calls such as `fluid_settings_setstr`
 
 A typical program to play a sequence of MIDI files using ALSA follows.
-      It creates the various objects, sets the audio player to use ALSA
-      and then adds each soundfont and MIDI file to the player.
-      The call to `fluid_player_play`then plays each MIDI file
-      in turn:
+It creates the various objects, sets the audio player to use ALSA
+and then adds each soundfont and MIDI file to the player.
+The call to `fluid_player_play`then plays each MIDI file
+in turn:
 
 ```cpp
 

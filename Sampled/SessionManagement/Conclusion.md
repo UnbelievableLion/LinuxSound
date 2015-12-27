@@ -3,8 +3,8 @@
 
 
 This chapter has looked at some of the session management
-      systems. The situation is not particularly satisfactory
-      and there is substantial room for improvement.
+systems. The situation is not particularly satisfactory
+and there is substantial room for improvement.
 
 ***
 
@@ -17,16 +17,10 @@ Copyright © Jan Newmarch, jan@newmarch.name
 </a>
 
 
-"Programming and Using Linux Sound - in depth"by [
-  Jan Newmarch
-](https://jan.newmarch.name) is licensed under a [
-  Creative Commons Attribution-ShareAlike 4.0 International License
-](http://creativecommons.org/licenses/by-sa/4.0/) .
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-Based on a work at [
-  https://jan.newmarch.name/LinuxSound/
-](https://jan.newmarch.name/LinuxSound/) .
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
 
 
 If you like this book, please contribute using PayPal

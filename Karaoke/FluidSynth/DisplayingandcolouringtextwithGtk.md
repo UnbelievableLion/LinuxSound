@@ -3,26 +3,26 @@
 
 
 While there are many ways in which Karaoke text can be
-      displayed, a common pattern is to display two lines of
-      text, the currently playing line and the next one.
-      The current line is progressively highlighted and 
-      on completion is
-      replaced by the next line.
+displayed, a common pattern is to display two lines of
+text, the currently playing line and the next one.
+The current line is progressively highlighted and
+on completion is
+replaced by the next line.
 
 
 In the Java chapter we did that. But the Java libraries have
-      not been polished and are distinctly slow and heavyweight.
-      They also seem to be low on Oracle's development schedule
-      for Java.
-      So here we look at an alternative GUI and make use of the
-      FluidSynth library. The Gtk library is chosen for reasons
-      outlined in an [ earlier chapter ](../../Diversions/Gtk/) on Gtk.
+not been polished and are distinctly slow and heavyweight.
+They also seem to be low on Oracle's development schedule
+for Java.
+So here we look at an alternative GUI and make use of the
+FluidSynth library. The Gtk library is chosen for reasons
+outlined in an [earlier chapter](../../Diversions/Gtk/) on Gtk.
 
 
-The first task is to build up an array of lyric lines 
-      as the file is loaded. We are asssuming KAR format files
-      with upfront information as to title, etc, prefixed
-      by '@', and newlines prefixed by '\'.
+The first task is to build up an array of lyric lines
+as the file is loaded. We are asssuming KAR format files
+with upfront information as to title, etc, prefixed
+by '@', and newlines prefixed by '\'.
 
 ```cpp
 
@@ -154,25 +154,25 @@ int onload_callback(void *data, fluid_player_t *player) {
 
 
 The standard GUI part is to build an interface consisting of
-      two labels, one above the other to hold lines of lyrics.
-      This is just ordinary Gtk.
+two labels, one above the other to hold lines of lyrics.
+This is just ordinary Gtk.
 
 
 The final part is to handle lyric or text events from the
-      sequencer. If the event is a '\', then the current text
-      in a label must be replaced with new text, afer a small
-      pause. Otherwise, the text in the label has to be
-      progressively coloured to indicate what is next
-      to be played.
+sequencer. If the event is a '\', then the current text
+in a label must be replaced with new text, afer a small
+pause. Otherwise, the text in the label has to be
+progressively coloured to indicate what is next
+to be played.
 
 
-In the [ earlier chapter ](../../Diversions/Gtk/) on Gtk we discussed using Cairo to draw in pixbufs, and 
-      Pango to structure the text. The Gtk Label understands
-      Pango directly, so we just use Pango to format the 
-      text and display it in the label. This involves
-      constructing an HTML string with the first part coloured
-      red and the rest in black. This can be set in the label,
-      and there is no need to use Cairo.
+In the [earlier chapter](../../Diversions/Gtk/) on Gtk we discussed using Cairo to draw in pixbufs, and
+Pango to structure the text. The Gtk Label understands
+Pango directly, so we just use Pango to format the
+text and display it in the label. This involves
+constructing an HTML string with the first part coloured
+red and the rest in black. This can be set in the label,
+and there is no need to use Cairo.
 
 
 The program is `gtkkaraoke_player.c` _Warning: the following program crashes regularly

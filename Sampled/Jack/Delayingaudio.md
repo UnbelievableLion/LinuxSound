@@ -3,31 +3,31 @@
 
 
 While this book is not about audio effects, we can easily
-      introduce one effect - latency - by just delaying sounds.
-      Now this - and any time consuming actions - are against
-      the spirit (and implementation!) of Jack, so it can only
-      be done in co-operation with the Jack model.
+introduce one effect - latency - by just delaying sounds.
+Now this - and any time consuming actions - are against
+the spirit (and implementation!) of Jack, so it can only
+be done in co-operation with the Jack model.
 
 
 The simplest idea is just to throw in `sleep`commands at the right places. This would assume that
-      calls to the `process`callback happen
-      asynchronously but they don't - they happen 
-      synchronously within the Jack processing thread.
-      Activities which cost time aren't allowed.
-      If you try it, you will will end up with lots
-      of xruns at best, seizures of Jack at worst.
+calls to the `process`callback happen
+asynchronously but they don't - they happen
+synchronously within the Jack processing thread.
+Activities which cost time aren't allowed.
+If you try it, you will will end up with lots
+of xruns at best, seizures of Jack at worst.
 
 
 In this case the solution is straightforward: keep a buffer
-      in which previous inputs are kept, and read older entries
-      out of this buffer when output is requested. A "big enough"
-      wrap-around array will do this, where old entries are read out
-      and new entries read in.
+in which previous inputs are kept, and read older entries
+out of this buffer when output is requested. A "big enough"
+wrap-around array will do this, where old entries are read out
+and new entries read in.
 
 
 The following program `delay.c`will copy
-      the left channel in real time, but delay the left channel
-      by 4096 samples:
+the left channel in real time, but delay the left channel
+by 4096 samples:
 
 ```cpp
 

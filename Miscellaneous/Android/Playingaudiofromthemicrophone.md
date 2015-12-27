@@ -24,17 +24,17 @@ Best so far: http://stackoverflow.com/questions/2413426/playing-an-arbitrary-ton
 
 
 Similar stuff at http://www.speakingcode.com/2012/01/01/playing-with-android-audiotrack-to-generate-sounds/
-      Playing with Android AudioTrack to Generate Sounds, but no code
+Playing with Android AudioTrack to Generate Sounds, but no code
 
 
 Code at http://masterex.github.com/archive/2012/05/28/android-audio-synthesis.html
-      Android: Crafting a Metronome with Audio Synthesis
+Android: Crafting a Metronome with Audio Synthesis
 
 
 Replaying the audio recorded from the microphone to the output device makes use of two
-      objects: an `AudioRecord`to capture data from the microphone and an `AudioTrack`to send it to the output device. The previous program for
-      recording audio just needs to write the data to an `AudioTrack`object
-      instead of to a file.
+objects: an `AudioRecord`to capture data from the microphone and an `AudioTrack`to send it to the output device. The previous program for
+recording audio just needs to write the data to an `AudioTrack`object
+instead of to a file.
 
 
 The code is PlayMicrophone.java:
@@ -216,9 +216,9 @@ public class PlayMicrophoneActivity extends Activity {
 ```
 
 
-This app requires RECORD_AUDIO permission. 
-      In the AndroidManifest file this is
-      given by
+This app requires RECORD_AUDIO permission.
+In the AndroidManifest file this is
+given by
 
 ```
 
@@ -233,7 +233,7 @@ This app requires RECORD_AUDIO permission.
 
 
 On my ASUS Transformer with 4.0, the input and output devices both require
-      a minimum buffer of 8192 bytes with a sample rate of 44100hz.
-      The latency is poor: 330 milliseconds and is similar to other reports.
-      It is not usable for
-      realtime record and playback. The new APIs in 4.1 may improve the situation.
+a minimum buffer of 8192 bytes with a sample rate of 44100hz.
+The latency is poor: 330 milliseconds and is similar to other reports.
+It is not usable for
+realtime record and playback. The new APIs in 4.1 may improve the situation.

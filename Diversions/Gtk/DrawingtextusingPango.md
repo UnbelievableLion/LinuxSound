@@ -3,18 +3,14 @@
 
 
 While Cairo can draw any form of text, the functions such as `cairo_show_text`do not have much flexibility.
-      To draw in, say, multiple colours will involve much work.
-      Pango is a library for handling all aspects of text.
-      There is a [
-	Pango Reference Manual
-      ](https://developer.gnome.org/pango/stable/) .
-      A good tutorial is at [
-	The Pango connection: Part 2
-      ](http://www.ibm.com/developerworks/library/l-u-pango2/) .
+To draw in, say, multiple colours will involve much work.
+Pango is a library for handling all aspects of text.
+There is a [Pango Reference Manual](https://developer.gnome.org/pango/stable/) .
+A good tutorial is at [The Pango connection: Part 2](http://www.ibm.com/developerworks/library/l-u-pango2/) .
 
 
 The simplest way of colouring text (and some other effects)
-      is to create the text marked up with HTML such as
+is to create the text marked up with HTML such as
 
 ```cpp
 
@@ -24,7 +20,7 @@ gchar *markup_text = "<span foreground=\"red\">hello </span><span foreground=\"b
 
 
 which has "hello" in red and "world" in black. This is then parsed into the
-      text itself "ed black" and a set of attribute markups.
+text itself "ed black" and a set of attribute markups.
 
 ```cpp
 
@@ -38,8 +34,8 @@ pango_parse_markup (markup_text, -1,0, &attrs, &text, NULL, NULL);
 
 
 This can be rendered into a Cairo context by creating a `PangoLayout`from the Cairo context, laying out
-      the text with its attributes in the Pango layout and then
-      showing this layout in the Cairo context:
+the text with its attributes in the Pango layout and then
+showing this layout in the Cairo context:
 
 ```cpp
 
@@ -57,12 +53,12 @@ pango_cairo_show_layout (cr, layout);
 
 
 (Yes, there is a lot of jumping around between libraries in all
-      of this!).
+of this!).
 
 
 Just as before, once all content has been drawn into the Cairo
-      context, it can be extracted as a pixbuf from the Cairo
-      surface destination, set into the `GtkImage`and added to the Gtk event queue.
+context, it can be extracted as a pixbuf from the Cairo
+surface destination, set into the `GtkImage`and added to the Gtk event queue.
 
 
 The complete program is `gtk_play_video_pango.c`:

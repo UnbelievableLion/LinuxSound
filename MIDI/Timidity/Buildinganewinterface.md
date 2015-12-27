@@ -5,16 +5,14 @@
 
 
 You can build your own interfaces and add them to TiMidity without
-      changing or recompiling TiMidity. Such interfaces are built as
-      dynamically loadable shared libraries, and are loaded when 
-      TiMidity starts.
+changing or recompiling TiMidity. Such interfaces are built as
+dynamically loadable shared libraries, and are loaded when
+TiMidity starts.
 
 
 You have to be a little careful with compile and link flags
-      to build these libraries 
-      (see [
-	Building shared objects in Linux
-      ](http://stackoverflow.com/questions/7252550/loadable-bash-builtin) ). To build the shared object `if_my_interface.so`from `my_interface.c`I use
+to build these libraries
+(see [Building shared objects in Linux](http://stackoverflow.com/questions/7252550/loadable-bash-builtin) ). To build the shared object `if_my_interface.so`from `my_interface.c`I use
 
 ```
 
@@ -27,13 +25,13 @@ gcc -shared -o if_my_interface.so my_interface.o
 
 
 TiMidity will only load files that begin with `if_`.
-      They can reside in any directory, with the default being
-      something like `/usr/lib/timidity`or `/usr/local/lib/timidity`(see the "Supported dynamic load interfaces" directory
-      from `timidity -h`).
+They can reside in any directory, with the default being
+something like `/usr/lib/timidity`or `/usr/local/lib/timidity`(see the "Supported dynamic load interfaces" directory
+from `timidity -h`).
 
 
 The defaulty directory to load dynamic modules can be overridden
-      by the option `-d`as in
+by the option `-d`as in
 
 ```
 
@@ -47,10 +45,10 @@ timidity -d. -ik --trace 54154.mid
 
 
 Each interface must have a unique function that can be called
-      by the dynamic loader. Recall that interfaces are selected by the
-      command line option `-i`, such as `timidity -iT ...`to choose the VT100 interface.
-      Your interface must have a single ASCII letter identifier
-      which isn't used by any other interface, say `m`for "my interface". The loader will then look for a function
+by the dynamic loader. Recall that interfaces are selected by the
+command line option `-i`, such as `timidity -iT ...`to choose the VT100 interface.
+Your interface must have a single ASCII letter identifier
+which isn't used by any other interface, say `m`for "my interface". The loader will then look for a function
 
 ```
 
@@ -62,9 +60,9 @@ ControlMode *interface_m_loader(void)
 
 
 where the "m" in the function name is the identifier.
-      This function is simple: it just returns the address of a
-      structure of type `ControlMode`which is defined
-      elsewhere in the interface's code:
+This function is simple: it just returns the address of a
+structure of type `ControlMode`which is defined
+elsewhere in the interface's code:
 
 ```cpp
 
@@ -106,8 +104,8 @@ typedef struct {
 
 
 which defines information about the interface and a set of functions
-      which are called by TiMidity in response to events and actions
-      within TiMidity. For example, for "my interface" this structure is
+which are called by TiMidity in response to events and actions
+within TiMidity. For example, for "my interface" this structure is
 
 ```cpp
 
@@ -135,24 +133,17 @@ ControlMode ctl=
 
 Some of these fields are obvious, some are less so:
 
-+ __ `open`__:
-This is called to set which files are used for I/O...
-+ __ `close`__:
-... and to close them
-+ __ `pass_playing_list`__:
-This function is passed a list of files to play.
-	  The most likely action is to walk through this
-	  list, calling `play_midi_file`on each
-+ __ `read`__:
-Not sure yet
-+ __ `write`__:
-Not sure yet
-+ __ `cmsg`__:
-Called with information messages
-+ __ `event`__:
-This is the major function for handling MIDI control events.
-	  Typically it will be a big switch for each type of control
-	  event
++ __ `open`__: This is called to set which files are used for I/O...
++ __ `close`__: ... and to close them
++ __ `pass_playing_list`__: This function is passed a list of files to play.
+The most likely action is to walk through this
+list, calling `play_midi_file`on each
++ __ `read`__: Not sure yet
++ __ `write`__: Not sure yet
++ __ `cmsg`__: Called with information messages
++ __ `event`__: This is the major function for handling MIDI control events.
+Typically it will be a big switch for each type of control
+event
 
 
 
@@ -160,24 +151,22 @@ This is the major function for handling MIDI control events.
 
 
 This is messy. A typical interface will need to know some of the
-      constants and functions used by TiMidity. While these are organised
-      logically for TiMidity, they are not organised conveniently for a
-      new interface. So you have to keep pulling in extra includes, which point
-      to other externals, which require more includes, etc. These may be in
-      different directories such `timidity`and `utils`so you have to point to many different include directories.
+constants and functions used by TiMidity. While these are organised
+logically for TiMidity, they are not organised conveniently for a
+new interface. So you have to keep pulling in extra includes, which point
+to other externals, which require more includes, etc. These may be in
+different directories such `timidity`and `utils`so you have to point to many different include directories.
 
 
 Note that you will need the TiMidity source code to get these
-      include files, downloaded from [
-        SourceForge TiMidity++
-      ](http://sourceforge.net/projects/timidity/?source=dlp) .
+include files, downloaded from [SourceForge TiMidity++](http://sourceforge.net/projects/timidity/?source=dlp) .
 
 ###  My simple interface 
 
 
 This basically does the same as the "dumb" interface
-      built into TiMidity. It is loaded from the current directory
-      and invoked by
+built into TiMidity. It is loaded from the current directory
+and invoked by
 
 ```
 
@@ -464,17 +453,17 @@ ControlMode *interface_k_loader(void)
 
 
 When I tried to run the interface using the standard package
-      TiMidity v2.13.2-40.1 it crashed in a memory free call.
-      The code is stripped, so tracking down why is not easy
-      and I haven't bothered to do so yet - I'm not sure what
-      libraries, versions of code, etc, the package distro was 
-      compiled against.
+TiMidity v2.13.2-40.1 it crashed in a memory free call.
+The code is stripped, so tracking down why is not easy
+and I haven't bothered to do so yet - I'm not sure what
+libraries, versions of code, etc, the package distro was
+compiled against.
 
 
 I had built my own copy of TiMidity from source.
-      This worked fine. Note that when you build TiMidity from
-      source, you will need to specify that it can load dynamic
-      modules, for example by
+This worked fine. Note that when you build TiMidity from
+source, you will need to specify that it can load dynamic
+modules, for example by
 
 ```
 
@@ -488,10 +477,10 @@ congfigure --enable-audio=alsa --enable-vt100 --enable-debug --enable-dynamic
 
 
 We can take the code from playing a video given earlier and put it
-      as the "back end" of a TiMidity systems as a "video" interface.
-      Essentially all that needs to be done is to change `ctl_open`from the simple interface to call
-      the Gtk code to play the video, and change the identity
-      of the interface.
+as the "back end" of a TiMidity systems as a "video" interface.
+Essentially all that needs to be done is to change `ctl_open`from the simple interface to call
+the Gtk code to play the video, and change the identity
+of the interface.
 
 
 The new "video" interface is `video_player_interface.c`
@@ -782,11 +771,11 @@ if_video_player.so: video_player_interface.c video_code.o
 
 
 You may hit a hiccup with running this Gtk-based interface: Gtk version
-      mismatch :-(. The current builds of TiMidity either do not have the Gtk
-      interface compiled in, or have Gtk version 2. If Gtk is not compiled in,
-      you should have no problem. Otherwise, if you have compiled this interface
-      with Gtk version 3, you will get runtime errors about type mismatches,
-      inability to load widgets and no visual display.
+mismatch :-(. The current builds of TiMidity either do not have the Gtk
+interface compiled in, or have Gtk version 2. If Gtk is not compiled in,
+you should have no problem. Otherwise, if you have compiled this interface
+with Gtk version 3, you will get runtime errors about type mismatches,
+inability to load widgets and no visual display.
 
 
 Check for Gtk in the executable by

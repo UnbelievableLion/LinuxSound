@@ -3,9 +3,9 @@
 
 
 The architecture of Linux sound systems is complex, and new
-      wrinkles are being added on a regular basis. However, this is the
-      same for any audio system. Successive chapters will flesh
-      out the detals of many of these components.
+wrinkles are being added on a regular basis. However, this is the
+same for any audio system. Successive chapters will flesh
+out the detals of many of these components.
 
 ***
 
@@ -20,16 +20,10 @@ Copyright © Jan Newmarch, jan@newmarch.name
 </a>
 
 
-"Programming and Using Linux Sound - in depth"by [
-  Jan Newmarch
-](https://jan.newmarch.name) is licensed under a [
-  Creative Commons Attribution-ShareAlike 4.0 International License
-](http://creativecommons.org/licenses/by-sa/4.0/) .
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-Based on a work at [
-  https://jan.newmarch.name/LinuxSound/
-](https://jan.newmarch.name/LinuxSound/) .
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
 
 
 If you like this book, please contribute using PayPal

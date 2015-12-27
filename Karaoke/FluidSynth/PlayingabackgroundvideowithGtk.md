@@ -2,15 +2,15 @@
 ##  Playing a background video with Gtk 
 
 
-The chapter on [ Gtk ](../../Diversions/Gtk/) showed how to play a background video with images (using Pixbufs),
-      text (using Cairo) and coloured text (using Pango).
-      We can extend that by adding in the dynamic text display
-      for playing Karaoke.
+The chapter on [Gtk](../../Diversions/Gtk/) showed how to play a background video with images (using Pixbufs),
+text (using Cairo) and coloured text (using Pango).
+We can extend that by adding in the dynamic text display
+for playing Karaoke.
 
 
 We capture each lyric line in a structure which keeps the whole
-      of the line, the part that has been sung already, the Pango
-      markup for the line and the Pango attributes:
+of the line, the part that has been sung already, the Pango
+markup for the line and the Pango attributes:
 
 ```cpp
 
@@ -25,13 +25,13 @@ typedef struct _coloured_line_t {
 
 
 This is updated each time a MIDI Lyric event occurs, in a
-      thread listening to the FluidSynth sequencer.
+thread listening to the FluidSynth sequencer.
 
 
 A separate thread plays the video, and on each frame overlays
-      the frame image with the current and next lyric.
-      This is set into a `GdkImage`for display
-      by Gtk.
+the frame image with the current and next lyric.
+This is set into a `GdkImage`for display
+by Gtk.
 
 
 The program is `gtkkaraoke_player_video_pango.c`

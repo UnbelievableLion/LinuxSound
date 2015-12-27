@@ -3,10 +3,10 @@
 
 
 The Raspberry Pi uses the ALSA driver snd_bcm2835, and this can manage
-      HDMI output. The command `alsa-info`is not present, but as this is a shell
-      script it can be copied from elsewhere  and will run on the RPi. 
-      Some of the usual configuration files and
-      commands on a larger distro are missing, but it shows on the soft float Debian distro
+HDMI output. The command `alsa-info`is not present, but as this is a shell
+script it can be copied from elsewhere  and will run on the RPi.
+Some of the usual configuration files and
+commands on a larger distro are missing, but it shows on the soft float Debian distro
 
 ```
 

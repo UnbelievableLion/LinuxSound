@@ -5,25 +5,21 @@
 
 
  `alsamixer`runs within a terminal window and allows
-      you to select sound cards and controls interfaces on those cards.
-      It looks like![alt text](alsamixer.png)
+you to select sound cards and controls interfaces on those cards.
+It looks like![alt text](alsamixer.png)
 
 
  `amixer`is a command line applications with similar functions.
 
 
-Compared to the general mixer functions described in [
-	 the Basic chapter
-      ](../Basic/) , the mixer functions are quite limited:
+Compared to the general mixer functions described in [the Basic chapter](../Basic/) , the mixer functions are quite limited:
 
 + Setting the playback and capture volumes on output and input channels
 + Muting or unmuting a card
 
-The document [
-	Sound configuration on Raspberry Pi with ALSA
-      ](http://blog.scphillips.com/2013/01/sound-configuration-on-raspberry-pi-with-alsa/) by Stephen C Phillips
-      is applicable
-      to all other ALSA systems and not just the Raspberry Pi.
+The document [Sound configuration on Raspberry Pi with ALSA](http://blog.scphillips.com/2013/01/sound-configuration-on-raspberry-pi-with-alsa/) by Stephen C Phillips
+is applicable
+to all other ALSA systems and not just the Raspberry Pi.
 
 ###  alsactl 
 
@@ -33,8 +29,8 @@ Simple control programs for ALSA configurations.
 ###  speaker-test 
 
 
-This command allows you to test which outputs go where. 
-      For e.g. 5 channel sound, running
+This command allows you to test which outputs go where.
+For e.g. 5 channel sound, running
 
 ```
 
@@ -156,16 +152,16 @@ card 2: Pro [SB X-Fi Surround 5.1 Pro], device 1: USB Audio [USB Audio #1]
 
 
 The cards are often given names such as "hw:0" or "hw:2.2"
-      in programs such as `qjackctl`(see the chapter on Jack).
-      The term "hw" refers to hardware devices. The major number refers to the
-      card number, the minor number to the device number.
-      The _name_ of the device is in [...] brackets.
+in programs such as `qjackctl`(see the chapter on Jack).
+The term "hw" refers to hardware devices. The major number refers to the
+card number, the minor number to the device number.
+The _name_ of the device is in [...] brackets.
 
 
 Devices may also be known by _aliases_ .
-      The command `aplay -L`lists _device aliases_ .
-      For example, the "hdmi" alias is defined on my system in
-      the configuration file ` /etc/asound.conf`
+The command `aplay -L`lists _device aliases_ .
+For example, the "hdmi" alias is defined on my system in
+the configuration file ` /etc/asound.conf`
 
 ```
 
@@ -193,7 +189,7 @@ so that "hdmi:0" is really "hw:1,3": card 1, device 3.
 
 
 Other aliases may be defined to cover a range of devices, parameterised by
-      card and device. For example, `/usr/share/alsa/pcm/surround40.conf`defines
+card and device. For example, `/usr/share/alsa/pcm/surround40.conf`defines
 
 ```
 
@@ -236,7 +232,7 @@ pcm.!surround40 {
 
 
 This defines for example "surround40:CARD=PCH,DEV=0" as an alias for hw:0,0
-      on my system (PCH is card 0).
+on my system (PCH is card 0).
 
 
 I don't know an easy programmatic way to go from "card 1, device 3" to "hdmi:0".
@@ -370,21 +366,19 @@ iec958:CARD=Pro,DEV=0
 
 
 This tutorial by Volker Schatz explains what is going on in ALSA
-      configuration files and looks really good: [
-	A close look at ALSA
-      ](http://www.volkerschatz.com/noise/alsa.html) 
+configuration files and looks really good: [A close look at ALSA](http://www.volkerschatz.com/noise/alsa.html) 
 
 
 We just note one thing: the default ALSA device is "hw:0". This is
-      hard-coded into ALSA. But it can be overridden in configuration files.
-      This is done for example by PulseAudio - see next chapter.
+hard-coded into ALSA. But it can be overridden in configuration files.
+This is done for example by PulseAudio - see next chapter.
 
 ###  alsa-info 
 
 
 This will collect information about your system and save it in a file.
-      It is a shell script that gives an enormous amount of information.
-      Here is a heavily elided subset of the information:
+It is a shell script that gives an enormous amount of information.
+Here is a heavily elided subset of the information:
 
 ```
 
@@ -666,13 +660,13 @@ state.PCH {
 
 
 Many applications can directly use ALSA
-      by appropriate commandline arguments.
+by appropriate commandline arguments.
 
 ####  MPlayer 
 
 
 To play a file to an ALSA device using `mplayer`,
-      use code such as
+use code such as
 
 ```
 
@@ -689,7 +683,7 @@ mplayer -ao alsa:device=hw=1.0 -srate 48000  bryan.mp3
 
 
 To play a file to an ALSA device using `vlc`,
-      use code such as
+use code such as
 
 ```
 
@@ -706,7 +700,7 @@ vlc --aout alsa ...
 
 
 To play a file to an ALSA device using `timidity`,
-      use code such as
+use code such as
 
 ```
 

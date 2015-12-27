@@ -3,11 +3,11 @@
 
 
 There is a principal song table containing all the songs.
-      This may have filters applied to it to show, say, only the
-      Beatles songs.
-      In addition, the visitors to my house have built up a collection
-      of "favourite" songs. Each of these is its own song table.
-      The UI for this is the Swing application `SongTableSwing.java`:
+This may have filters applied to it to show, say, only the
+Beatles songs.
+In addition, the visitors to my house have built up a collection
+of "favourite" songs. Each of these is its own song table.
+The UI for this is the Swing application `SongTableSwing.java`:
 
 ```cpp
 

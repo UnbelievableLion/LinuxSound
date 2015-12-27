@@ -10,17 +10,17 @@ There are three implementations that I have been able to access.
 
 
 The Raspberry Pi has a Broadcom GPU (graphics processing unit) and
-      Broadcom support OpenMAX IL. The include files needed to build applications
-      are in `/opt/vc/include/IL`, `/opt/vc/include`and `/opt/vc/include/interface/vcos/pthreads `.
-      The libraries that need to be linked are in the `/opt/vc/lib`directory and are `openmaxil`and `bcm_host`.
+Broadcom support OpenMAX IL. The include files needed to build applications
+are in `/opt/vc/include/IL`, `/opt/vc/include`and `/opt/vc/include/interface/vcos/pthreads `.
+The libraries that need to be linked are in the `/opt/vc/lib`directory and are `openmaxil`and `bcm_host`.
 
 
 The Broadcom libraries need additional code to be called as well as
-      standard OpenMAX IL functions. In addition, there are a number of
-      (legal) extensions to OpenMAX IL that are not found in the specification
-      or in other implementations. These are described in `/opt/vc/include/IL/OMX_Broadcom.h`.
-      For these reasons I define `RASPBERRY_PI`to allow
-      these to be dealt with.
+standard OpenMAX IL functions. In addition, there are a number of
+(legal) extensions to OpenMAX IL that are not found in the specification
+or in other implementations. These are described in `/opt/vc/include/IL/OMX_Broadcom.h`.
+For these reasons I define `RASPBERRY_PI`to allow
+these to be dealt with.
 
 
 The compile line for e.g. `listcomponents.c`is
@@ -37,28 +37,22 @@ cc -g -DRASPBERRY_PI -I /opt/vc/include/IL -I /opt/vc/include \
 ```
 
 
-The Broadcom implementation is closed source. It appears to be a [
-	thin wrapper
-      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590) around their GPU API, and they [
-	will not
-      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=276235#p276235) release any details of that API. This means that you cannot extend the set of
-      components, or the codecs supported, since there are no details of how to build new components.
-      While the set of components is reasonable, at present there is no support for codecs
-      other than PCM, and there is no support of non-GPU hardware such as USB soundcards.
+The Broadcom implementation is closed source. It appears to be a [thin wrapper](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590) around their GPU API, and they [will not](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=276235#p276235) release any details of that API. This means that you cannot extend the set of
+components, or the codecs supported, since there are no details of how to build new components.
+While the set of components is reasonable, at present there is no support for codecs
+other than PCM, and there is no support of non-GPU hardware such as USB soundcards.
 
 
- [
-	OtherCrashOverride
-      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590) says he has managed to get the Broadcom components running under the LIM
-      implementation, but I haven't confirmed that yet.
+ [OtherCrashOverride](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=287590#p287590) says he has managed to get the Broadcom components running under the LIM
+implementation, but I haven't confirmed that yet.
 
 ####  Bellagio 
 
 
 The Bellagio library does not require additional code or have any extensions.
-      There are a few minor bugs, so I define `BELLAGIO`to handle them.
-      I built from source, but didn't install, so the includes and libraries
-      are in a funny place. My compile line is
+There are a few minor bugs, so I define `BELLAGIO`to handle them.
+I built from source, but didn't install, so the includes and libraries
+are in a funny place. My compile line is
 
 ```
 
@@ -89,7 +83,7 @@ The Bellagio code is open source.
 
 
 Downloading the 1.1 version was a hassle  because the 1.1 download uses a Git repo that has
-      disappeared (as of Feb, 2013). Instead you have to run
+disappeared (as of Feb, 2013). Instead you have to run
 
 ```
 
@@ -104,20 +98,18 @@ Downloading the 1.1 version was a hassle  because the 1.1 download uses a Git re
 ```
 
 
-"You have to copy the root.mk in build to a top level folder containing all 
-      the code and rename it Makefile. The root.readme file has build instructions."
-      Thanks to [
-	OtherCrashOverride
-      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=286516#p286516) for these instructions.
+"You have to copy the root.mk in build to a top level folder containing all
+the code and rename it Makefile. The root.readme file has build instructions."
+Thanks to [OtherCrashOverride](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=33101&p=286516#p286516) for these instructions.
 
 
 Building the library had some minor hiccups. I had to comment out a couple
-      of lines from one video file as it referred to non-existent structure fields,
-      and had to remove `-Werrors`from one `Makefile.am`as otherwise a warning about an unused variable would abort the compile.
+of lines from one video file as it referred to non-existent structure fields,
+and had to remove `-Werrors`from one `Makefile.am`as otherwise a warning about an unused variable would abort the compile.
 
 
 The library build puts files in a new directory in my HOME. I have found some
-      minor bugs in the implementation so far. My compile line is
+minor bugs in the implementation so far. My compile line is
 
 ```
 
@@ -147,81 +139,77 @@ The LIM code is open source.
 ####  Hardware supported versions 
 
 
-A list of hardware supported versions is at [
-	OpenMAX IL Conformant Products
-      ](http://www.khronos.org/conformance/adopters/conformant-products#openmaxil) .
+A list of hardware supported versions is at [OpenMAX IL Conformant Products](http://www.khronos.org/conformance/adopters/conformant-products#openmaxil) .
 
 ###  OpenMAX IL concepts 
 
 
 The OpenMAX IL API is quite distinct from that of OpenMAX AL.
-      The basic concept is of a _Component_ , which is an audio/video
-      (or other) processing unit of some type, such as a volume control, a mixer,
-      an output device. Each Component has zero or more input and
-      output _ports_ , and each port can have one or more _buffers_ that carry data.
+The basic concept is of a _Component_ , which is an audio/video
+(or other) processing unit of some type, such as a volume control, a mixer,
+an output device. Each Component has zero or more input and
+output _ports_ , and each port can have one or more _buffers_ that carry data.
 
 
 OpenMAX IL is typically meant for use by an A/V framework of some kind,
-      such as OpenMAX AL. In addition to OpenMAX AL, there is curently
-      a GStreamer plugin that uses OpenMAX IL underneath.
-      But one can also build standalone applications where direct calls
-      are made into the OpenMAX IL API. Collectively, these are all
-      known as _IL clients_ .
+such as OpenMAX AL. In addition to OpenMAX AL, there is curently
+a GStreamer plugin that uses OpenMAX IL underneath.
+But one can also build standalone applications where direct calls
+are made into the OpenMAX IL API. Collectively, these are all
+known as _IL clients_ .
 
 
 The OpenMAX IL API is difficult to work with directly. Error messages are
-      frequently quite useless and threads will block without explanation
-      until everything is _exactly_ right - and silently blocking
-      doesn't give you any clues about what isn't right. In addition,
-      the examples I have to work with don't follow the specification
-      exactly correctly which can lead to much wasted time.
+frequently quite useless and threads will block without explanation
+until everything is _exactly_ right - and silently blocking
+doesn't give you any clues about what isn't right. In addition,
+the examples I have to work with don't follow the specification
+exactly correctly which can lead to much wasted time.
 
 
 OpenMAX IL components use buffers to carry data. A component will
-      usually process data from an input buffer and place it on an
-      output buffer. This processing is not visible to the API,
-      and so allows vendors to implement components in hardware or software,
-      built on top of other A/V components, etc. OpenMAX IL gives
-      mechanisms for setting and getting parameters of components,
-      for calling standard functions on the components, or for
-      getting data in and out of components.
+usually process data from an input buffer and place it on an
+output buffer. This processing is not visible to the API,
+and so allows vendors to implement components in hardware or software,
+built on top of other A/V components, etc. OpenMAX IL gives
+mechanisms for setting and getting parameters of components,
+for calling standard functions on the components, or for
+getting data in and out of components.
 
 
 While some of the OpenMAX IL calls are synchronous,
-      those that require possibly substantial amounts of processing
-      are asynchronous, communicating the results through
-      callback functions. This leads naturally to a multi-threaded
-      processing model, although OpenMAX IL does not visibly use any
-      thread libraries and should be agnostic to how an IL client
-      uses threads. The Bellagio examples use pthreads
-      while the Broadcom examples for the Raspberry Pi use
-      Broadcom's [
-	VideoCore O/S (vcos) 
-      ](https://github.com/raspberrypi/userland/blob/master/interface/vcos/vcos_semaphore.h) threads.
+those that require possibly substantial amounts of processing
+are asynchronous, communicating the results through
+callback functions. This leads naturally to a multi-threaded
+processing model, although OpenMAX IL does not visibly use any
+thread libraries and should be agnostic to how an IL client
+uses threads. The Bellagio examples use pthreads
+while the Broadcom examples for the Raspberry Pi use
+Broadcom's [VideoCore O/S (vcos)](https://github.com/raspberrypi/userland/blob/master/interface/vcos/vcos_semaphore.h) threads.
 
 
 There are two mechanisms for getting data into and out of components.
-      The first is where the IL client makes calls on the component.
-      All components are required to support this mechanism.
-      The second is where a _tunnel_ is set up between
-      two components for data to flow along a shared buffer.
-      A component is not required to support this mechanism.
+The first is where the IL client makes calls on the component.
+All components are required to support this mechanism.
+The second is where a _tunnel_ is set up between
+two components for data to flow along a shared buffer.
+A component is not required to support this mechanism.
 
 ###  OpenMAX IL components 
 
 
 OpenMAX IL in 1.1.2 lists a number of standard components, including (for audio)
-      a decoder, an encoder, a mixer, a reader, a renderer, a writer,
-      a capturer and a processor.
-      An IL client gets such a component by calling `OMX_GetHandle()`,
-      passing in the name of the component. This is a problem: the components
-      do not have a standard name. The 1.1.2 specification says:
+a decoder, an encoder, a mixer, a reader, a renderer, a writer,
+a capturer and a processor.
+An IL client gets such a component by calling `OMX_GetHandle()`,
+passing in the name of the component. This is a problem: the components
+do not have a standard name. The 1.1.2 specification says:
 
 
    > Since components are requested by name, a naming convention is defined. OpenMAX IL
-	component names are zero terminated strings with the following format:
-	“OMX.<vendor_name>.<vendor_specified_convention>”.
-	For example:
+component names are zero terminated strings with the following format:
+“OMX.<vendor_name>.<vendor_specified_convention>”.
+For example:
 
 
 OMX.CompanyABC.MP3Decoder.productXYZ
@@ -232,33 +220,31 @@ No standardization among component names is dictated across different vendors.
 
 
 The Bellagio library (you need the source package to see these files) lists in
-      its README only two audio components:
+its README only two audio components:
 
 + OMX audio volume control
 + OMX audio mixer component
 
-and their names (from the example test files) are "OMX.st.volume.component" and 
-      "OMX.st.audio.mixer" respectively. The company behind Bellagio is [
-	STMicroelectronics
-      ](http://www.st.com/internet/com/home/home.jsp) which explains the "st".
+and their names (from the example test files) are "OMX.st.volume.component" and
+"OMX.st.audio.mixer" respectively. The company behind Bellagio is [STMicroelectronics](http://www.st.com/internet/com/home/home.jsp) which explains the "st".
 
 
 The Broadcom OpenMAX IL implementation used on the Raspberry Pi is much better
-      documented. If you download the firmware-master file for the Raspberry Pi
-      it lists the IL components in the documentation/ilcomponents directory.
-      This lists the components audio_capture,
-      audio_decode,
-      audio_encode,
-      audio_lowpower,
-      audio_mixer,
-      audio_processor,
-      audio_render and
-      audio_splitter.
+documented. If you download the firmware-master file for the Raspberry Pi
+it lists the IL components in the documentation/ilcomponents directory.
+This lists the components audio_capture,
+audio_decode,
+audio_encode,
+audio_lowpower,
+audio_mixer,
+audio_processor,
+audio_render and
+audio_splitter.
 
 
-Many of the openMAX IL function calls in the Broadcom examples are 
-      buried in Broadcom convenience functions
-      such as
+Many of the openMAX IL function calls in the Broadcom examples are
+buried in Broadcom convenience functions
+such as
 
 ```cpp
 
@@ -272,20 +258,20 @@ ilclient_create_component(st->client, &st->audio_render,
 
 
 which wraps around `OMX_GetHandle()`. But at least the `ilclient.h`states "Component names as provided are automatically prefixed with
-      'OMX.broadcom.' before passing to the IL core.". So we can conclude that the real names
-      are e.g. "OMX.broadcom.audio_render" etc.
+'OMX.broadcom.' before passing to the IL core.". So we can conclude that the real names
+are e.g. "OMX.broadcom.audio_render" etc.
 
 
 There is a simple way of programmatically getting the supported components.
-      First initialise the OpenMAX system by `OMX_init()`and then make calls to `OMX_ComponentNameEnum()`.
-      For successive index values it returns a unique name each time,
-      until it finally returns an error value of `OMX_ErrorNoMore`.
+First initialise the OpenMAX system by `OMX_init()`and then make calls to `OMX_ComponentNameEnum()`.
+For successive index values it returns a unique name each time,
+until it finally returns an error value of `OMX_ErrorNoMore`.
 
 
 Each component may support a number of _roles_ . These are given by `OMX_GetRolesOfComponent`. The 1.1 specification lists classes
-      of audio components and associated roles in section 8.6 "Standard Audio 
-      Components". The LIM library matches these, while Bellagio and Broadcom
-      do not.
+of audio components and associated roles in section 8.6 "Standard Audio
+Components". The LIM library matches these, while Bellagio and Broadcom
+do not.
 
 
 The program is listcomponents.c:
@@ -447,11 +433,11 @@ No more components
 
 
 which is not quite correct: the OpenMAX IL specification says that each somponent
-      must appear once only, not repeated.
+must appear once only, not repeated.
 
 
 The Raspberry Pi reports a large number of components but does not define a
-      role for any of them:
+role for any of them:
 
 ```
 
@@ -582,9 +568,9 @@ No more components
 
 
 We will next look at how to get information about the OpenMAX IL
-      system and any component that we use.
-      All IL clients must initialise OpenMAX IL by calling `OMX_Init()`.
-      Nearly all functions return error values, and the style used by Bellagio is
+system and any component that we use.
+All IL clients must initialise OpenMAX IL by calling `OMX_Init()`.
+Nearly all functions return error values, and the style used by Bellagio is
 
 ```cpp
 
@@ -603,11 +589,11 @@ This looks like a reasonable style to me, so I follow it in the sequel.
 
 
 The next requirement is to get a _handle_ to a component.
-      This requires the vendor's name for the component,
-      which can be found using the `listcomponents.c`program above. The function `OMX_GetHandle`takes some parameters
-      including a set of _callback_ functions. These are needed to
-      track behaviour of the application, but are not needed for the example
-      in this section. This code shows how to get a handle to the Bellagio Volume component:
+This requires the vendor's name for the component,
+which can be found using the `listcomponents.c`program above. The function `OMX_GetHandle`takes some parameters
+including a set of _callback_ functions. These are needed to
+track behaviour of the application, but are not needed for the example
+in this section. This code shows how to get a handle to the Bellagio Volume component:
 
 ```cpp
 
@@ -627,34 +613,34 @@ The next requirement is to get a _handle_ to a component.
 
 
 The component has ports and the ports have channels. Getting and setting
-      information about these is done by the functions `OMX_GetParameter()`, `OMX_SetParameter()`, `OMX_GetConfig()`and `OMX_GetConfig()`. The ...Parameter calls are made before the
-      component is "loaded", ...Config calls are made after it is loaded.
+information about these is done by the functions `OMX_GetParameter()`, `OMX_SetParameter()`, `OMX_GetConfig()`and `OMX_GetConfig()`. The ...Parameter calls are made before the
+component is "loaded", ...Config calls are made after it is loaded.
 
 
 C is not an O/O language and this is an ordinary function call (well, actually
-      it's a macro). In an O/O language it would be a method of an object taking another
-      object as parameter as in `component.method(object)`.
-      In OpenMAX IL the Get/Set function takes the calling "object" as first parameter
-      - the component,
-      an indicator of what type of "object" the method's parameter is - 
-      an index into possible "object"
-      types, and a structure for the parameter object. 
-      The index values are related to structures in Table 4-2
-      "Audio Coding Types by Index" of the 1.1 specification.
+it's a macro). In an O/O language it would be a method of an object taking another
+object as parameter as in `component.method(object)`.
+In OpenMAX IL the Get/Set function takes the calling "object" as first parameter
+- the component,
+an indicator of what type of "object" the method's parameter is -
+an index into possible "object"
+types, and a structure for the parameter object.
+The index values are related to structures in Table 4-2
+"Audio Coding Types by Index" of the 1.1 specification.
 
 
 The calls take a (pointer to a) structure for filling in or extracting values.
-      The structures are all normalised so that they share common fields such as the
-      size of the structure. In Bellagio examples, this is done by a macro `setHeader()`.
-      The structure passed in to get port information is usually a generic structure
-      of type `OMX_PORT_PARAM_TYPE`.
-      Some fields can be accessed directly; some need a typecast to a more specialised
-      type; and some buried down in unions and have to be extracted.
+The structures are all normalised so that they share common fields such as the
+size of the structure. In Bellagio examples, this is done by a macro `setHeader()`.
+The structure passed in to get port information is usually a generic structure
+of type `OMX_PORT_PARAM_TYPE`.
+Some fields can be accessed directly; some need a typecast to a more specialised
+type; and some buried down in unions and have to be extracted.
 
 
 Ports are labelled by integer indices. There are different ports for different functions,
-      such as audio, image, video and other.
-      To get information about the starting value for audio ports, use:
+such as audio, image, video and other.
+To get information about the starting value for audio ports, use:
 
 ```cpp
 
@@ -675,13 +661,13 @@ Ports are labelled by integer indices. There are different ports for different f
 
 
 The macro `setHeader`justs fills in header information such as version numbers,
-      and the size of the data structure.
+and the size of the data structure.
 
 
 Particular ports may now be queried about their capablilies.
-      We can query for the type of the port (audio or otherwise),
-      the direction (input or output) and information
-      about the MIME type supported.
+We can query for the type of the port (audio or otherwise),
+the direction (input or output) and information
+about the MIME type supported.
 
 ```cpp
 
@@ -718,30 +704,28 @@ Particular ports may now be queried about their capablilies.
 
 
 The Bellagio library returns "raw/audio" for the MIME type supported by
-      its volume control component.
-      This is not a valid MIME type as listed by [
-	IANA MIME Media Types 
-      ](http://www.iana.org/assignments/media-types) , though. The value returned from the encoding is zero,
-      corresponding to `OMX_AUDIO_CodingUnused`which also
-      does not seem to be correct.
+its volume control component.
+This is not a valid MIME type as listed by [IANA MIME Media Types](http://www.iana.org/assignments/media-types) , though. The value returned from the encoding is zero,
+corresponding to `OMX_AUDIO_CodingUnused`which also
+does not seem to be correct.
 
 
 If we try the same program on the Raspberry Pi component `audio_render`and on the LIM component `OMX.limoi.alsa_sink`we get NULL for the MIME type
-      but an encoding value of 2 which is `OMX_AUDIO_CodingPCM`.
-      PCM has a MIME type of `audio/L16`so NULL seems inappropriate.
+but an encoding value of 2 which is `OMX_AUDIO_CodingPCM`.
+PCM has a MIME type of `audio/L16`so NULL seems inappropriate.
 
 
 An OpenMAX IL library allows a port to be queried for the data types it supports.
-      This is done by querying for a `OMX_AUDIO_PARAM_PORTFORMATTYPE`object using the index ` OMX_IndexParamAudioPortFormat`.
-      According to the specification, for each index from zero upwards
-      a call to `GetParameter()`should return an encoding such as `OMX_AUDIO_CodingPCM`or `OMX_AUDIO_CodingMp3`until
-      there are no more supported formats, on which it returns `OMX_ErrorNoMore`.
+This is done by querying for a `OMX_AUDIO_PARAM_PORTFORMATTYPE`object using the index ` OMX_IndexParamAudioPortFormat`.
+According to the specification, for each index from zero upwards
+a call to `GetParameter()`should return an encoding such as `OMX_AUDIO_CodingPCM`or `OMX_AUDIO_CodingMp3`until
+there are no more supported formats, on which it returns `OMX_ErrorNoMore`.
 
 
 The Bellagio code returns a value of `OMX_AUDIO_CodingUnused`which is not correct. The LIM code does not set a value at all,
-      so you just get garbage. The Broadcom implementation works okay,
-      but as discussed below returns values that are not actually supported.
-      So there is limited value in this call...
+so you just get garbage. The Broadcom implementation works okay,
+but as discussed below returns values that are not actually supported.
+So there is limited value in this call...
 
 
 This code tests this:
@@ -842,7 +826,7 @@ void getSupportedAudioFormats(int indentLevel, int portNumber) {
 
 
 Note that the code contains enum values such as `OMX_AUDIO_CodingATRAC3`which are specific to the Broadcom library. These are legal values according to an
-      OpenMAX IL extension mechanism, but of course are not portable values.
+OpenMAX IL extension mechanism, but of course are not portable values.
 
 
 The Bellagio library incorrectly returns `OMX_AUDIO_CodingUnused`for every index value.
@@ -878,18 +862,17 @@ The Broadcom library can return lots of values. For example, for the `audio_deco
 
 
 Regrettably, none of these are actually supported except for PCM.
-      According to [
-	jamesh](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=272804#p272804) in "OMX_AllocateBuffer fails for audio decoder component":
+According to [jamesh](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=70&t=28313&p=272804#p272804) in "OMX_AllocateBuffer fails for audio decoder component":
 
 
-   > The way it works is that the component passes back success for all the codecs it 
-	can _potentially_ support. (i.e. all the codecs we've ever had going). 
-	That is then constrained by what codecs are actually installed. 
-	It would be better to run time detect which codecs are present, 
-	but that code has never been written since its never been required.
-	It's also unlikely ever to be done as Broadcom no longer support 
-	audio codecs in this way - they have moved off the Videocore to 
-	the host CPU since they are now powerful enough to handle any audio decoding task
+   > The way it works is that the component passes back success for all the codecs it
+can _potentially_ support. (i.e. all the codecs we've ever had going).
+That is then constrained by what codecs are actually installed.
+It would be better to run time detect which codecs are present,
+but that code has never been written since its never been required.
+It's also unlikely ever to be done as Broadcom no longer support
+audio codecs in this way - they have moved off the Videocore to
+the host CPU since they are now powerful enough to handle any audio decoding task
 
 
 
@@ -1503,8 +1486,8 @@ Error in getting other OMX_PORT_PARAM_TYPE parameter
 
 
 The LIM implementation throws errors when the component does not support
-      a mode (here an audio component does not support video, image or other).
-      This is against the 1.1 specification which says
+a mode (here an audio component does not support video, image or other).
+This is against the 1.1 specification which says
 
 ```
 
@@ -1522,67 +1505,65 @@ The LIM implementation throws errors when the component does not support
 
 
 I suppose you could argue that an `alsa_sink`component isn't
-      a standard one, so it is allowed. Well, okay...
+a standard one, so it is allowed. Well, okay...
 
 ###  Playing PCM audio files 
 
 
 Playing audio to an output device requires use of an "audio_render"
-      device. This is one of the standard devices in the 1.1 specification,
-      and is included in the Broadcom Raspberry Pi library but not in the
-      Bellagio library. 
-      LIM has a component "alsa_sink" which plays the same role.
+device. This is one of the standard devices in the 1.1 specification,
+and is included in the Broadcom Raspberry Pi library but not in the
+Bellagio library.
+LIM has a component "alsa_sink" which plays the same role.
 
 
 The structure of a program to play audio is
 
 + initialise the library and audio render component
 + Continually fill input buffers and ask the component
-	  to empty the buffers
+to empty the buffers
 + Capture events from the component saying that a buffer
-	  has been emptied in order to schedule re-filling
-	  the buffer and requesting it to be emptied
+has been emptied in order to schedule re-filling
+the buffer and requesting it to be emptied
 + Clean up on completion
 
 Note that the Raspberry Pi audio render component will _only_ play PCM data
-      and that the LIM alsa_sink component only plays back at 44,100hz.
+and that the LIM alsa_sink component only plays back at 44,100hz.
 
 ####  State 
 
 
-Initialising the component is a multi-step process that depends on 
-      the state of the component. Components are created in the `Loaded`state. They transition from one state to another
-      through an `OMX_SendCommand(handle, OMX_CommandStateSet, <next state>, <param>)`.
-      The next state from `Loaded`should be `Idle`and from there to `Executing`.  There are other states
-      which we need not be concerned about.
+Initialising the component is a multi-step process that depends on
+the state of the component. Components are created in the `Loaded`state. They transition from one state to another
+through an `OMX_SendCommand(handle, OMX_CommandStateSet, <next state>, <param>)`.
+The next state from `Loaded`should be `Idle`and from there to `Executing`.  There are other states
+which we need not be concerned about.
 
 
 Requests to change state are asynchronous. The send command returns
-      immediately (well, within 5 milliseconds). When the actual change
-      of state occurs an event handler callback function is called.
+immediately (well, within 5 milliseconds). When the actual change
+of state occurs an event handler callback function is called.
 
 ####  Threads 
 
 
 Some commands require a component to be in a particular state.
-      Requests to put a component into a state are asynchronous.
-      So a request can be made by a client but then the client might
-      have to wait until the state change has occurred. This is best done
-      by the client suspending operation of its thread until woken
-      up by the state change occurring in the event handler.
+Requests to put a component into a state are asynchronous.
+So a request can be made by a client but then the client might
+have to wait until the state change has occurred. This is best done
+by the client suspending operation of its thread until woken
+up by the state change occurring in the event handler.
 
 
 
 
 
 Linux/Unix has standardised on the Posix pthreads library for
-      managing multiple threads. For our purposes we use two parts
-      from this library: the ability to place a _mutex_ around critical sections, and the ability to suspend/wake up
-      threads based on _conditions_ .
-      Pthreads are covered in many places, with a short and good
-      tutorial by Blaise Barney at [
-	POSIX Threads Programming
-      ](https://computing.llnl.gov/tutorials/pthreads/#Misc) .
+managing multiple threads. For our purposes we use two parts
+from this library: the ability to place a _mutex_ around critical sections, and the ability to suspend/wake up
+threads based on _conditions_ .
+Pthreads are covered in many places, with a short and good
+tutorial by Blaise Barney at [POSIX Threads Programming](https://computing.llnl.gov/tutorials/pthreads/#Misc) .
 
 
 The functions and data we use are
@@ -1647,27 +1628,25 @@ void mutex_init() {
 
 
 Hungarian notation was invented by Charles Simonyi to add
-      type or functional information to variable, structure and field
-      names. A form was heavily used in the Microsoft Windows SDK.
-      A simplified form is used in OpenMAX IL by prefixing variables,
-      fields, etc including the following:
+type or functional information to variable, structure and field
+names. A form was heavily used in the Microsoft Windows SDK.
+A simplified form is used in OpenMAX IL by prefixing variables,
+fields, etc including the following:
 
 + 'n' prefixes a number of some kind
 + 'p' prefixes a pointer
 + 's' prefixes a structure or a string
 + 'c' prefixes a callback function
 
-The value of such conventions is highly [
-	debatable...
-      ](http://en.wikipedia.org/wiki/Hungarian_notation) 
+The value of such conventions is highly [debatable...](http://en.wikipedia.org/wiki/Hungarian_notation) 
 
 ####  Callbacks 
 
 
 There are two types of callback functions relevant to this example:
-      event callbacks which occur on changes of state and some other events,
-      and empty buffer callbacks which occur when a component has emptied an input
-      buffer. These are registered by
+event callbacks which occur on changes of state and some other events,
+and empty buffer callbacks which occur when a component has emptied an input
+buffer. These are registered by
 
 ```cpp
 
@@ -1684,31 +1663,31 @@ err = OMX_GetHandle(&handle, componentName, NULL /*app private data */, &callbac
 
 
 Each component has a number of ports that have to be configured.
-      The ports are some of the component's _resources_ .
-      Each port starts off as _enabled_ , but may be set to _disabled_ by `OMX_SendCommand(handle, OMX_CommandPortDisable, <port number>, NULL)`.
+The ports are some of the component's _resources_ .
+Each port starts off as _enabled_ , but may be set to _disabled_ by `OMX_SendCommand(handle, OMX_CommandPortDisable, <port number>, NULL)`.
 
 
 Enabled ports can have _buffers_ allocated for transfer of data
-      into and out of the component. This can be done in two ways: `OMX_AllocateBuffer`asks the component to perform the
-      allocation for the client, while with `OMX_UseBuffer`the client hands a buffer to the component. As there may be buffer
-      memory alignment issues, I prefer to let the component do the allocation.
+into and out of the component. This can be done in two ways: `OMX_AllocateBuffer`asks the component to perform the
+allocation for the client, while with `OMX_UseBuffer`the client hands a buffer to the component. As there may be buffer
+memory alignment issues, I prefer to let the component do the allocation.
 
 
 Here is a tricky part. In order to allocate or use buffers on a component,
-      a request must be made to transition from `Loaded`state
-      to `Idle`. So a call to `OMX_SendCommand(handle, OMX_CommandStateSet, OMX_StateIdle, <param>)`.
-      must be made before buffers are allocated. _But_ the transition
-      to `Idle`will not take place 
-      until each port is either disabled or all buffers
-      for it are allocated.
+a request must be made to transition from `Loaded`state
+to `Idle`. So a call to `OMX_SendCommand(handle, OMX_CommandStateSet, OMX_StateIdle, <param>)`.
+must be made before buffers are allocated. _But_ the transition
+to `Idle`will not take place
+until each port is either disabled or all buffers
+for it are allocated.
 
 
 This last step cost me nearly a week of head scratching.
-      The `audio_render`component has two ports: an input audio
-      port and a time update port. While I had configured the audio port
-      correctly, I had not disabled the time port because I hadn't realised it had one. 
-      Consequently the transition to `Idle`never took place... Code to handle this
-      is
+The `audio_render`component has two ports: an input audio
+port and a time update port. While I had configured the audio port
+correctly, I had not disabled the time port because I hadn't realised it had one.
+Consequently the transition to `Idle`never took place... Code to handle this
+is
 
 ```cpp
 
@@ -1835,15 +1814,15 @@ Setting parameters for the audio port is
 
 
 OpenMAX has a standard audio render component. But what device does it
-      render to? The inbuilt sound card? A USB sound card? That is not
-      a part of OpenMAX IL - there isn't even a way to list the audio
-      devices - only the audio components.
+render to? The inbuilt sound card? A USB sound card? That is not
+a part of OpenMAX IL - there isn't even a way to list the audio
+devices - only the audio components.
 
 
 OpenMAX has an extension mechanism which can be used by an OpenMAX
-      implementor to answer questions like this. The Broadcom core implementation
-      has extension types `OMX_CONFIG_BRCMAUDIODESTINATIONTYPE`(and `OMX_CONFIG_BRCMAUDIOSOURCETYPE`) which can be used
-      to set the audio destination (source) device. Code to do this is
+implementor to answer questions like this. The Broadcom core implementation
+has extension types `OMX_CONFIG_BRCMAUDIODESTINATIONTYPE`(and `OMX_CONFIG_BRCMAUDIOSOURCETYPE`) which can be used
+to set the audio destination (source) device. Code to do this is
 
 ```cpp
 
@@ -1869,34 +1848,34 @@ void setOutputDevice(const char *name) {
 
 
 Here is where it descends into murkiness again: the header file
-      <IL/OMX_Broadcom.h> states that the default value of `sName`is "local" but doesn't give any other values.
-      The Raspberry Pi forums say that this refers to the 3.5mm analog
-      audio out, and that HDMI is chosen by using the value "hdmi".
-      No other values are documented, and it seems that the Broadcom OpenMAX IL
-      does not support any other audio devices: in particular, USB audio
-      devices are not supported by the current Broadcom OpenMAX IL
-      components for either input or output. So you can't use
-      OpenMAX IL for say audio capture on the Raspberry Pi since it
-      has no Broadcom supported audio input.
+<IL/OMX_Broadcom.h> states that the default value of `sName`is "local" but doesn't give any other values.
+The Raspberry Pi forums say that this refers to the 3.5mm analog
+audio out, and that HDMI is chosen by using the value "hdmi".
+No other values are documented, and it seems that the Broadcom OpenMAX IL
+does not support any other audio devices: in particular, USB audio
+devices are not supported by the current Broadcom OpenMAX IL
+components for either input or output. So you can't use
+OpenMAX IL for say audio capture on the Raspberry Pi since it
+has no Broadcom supported audio input.
 
 ####  Main loop 
 
 
 Playing the audio file once all the ports are set up consists of
-      filling buffers, waiting for them to empty and then re-filling them until 
-      the data is finished. There are two possible styles:
+filling buffers, waiting for them to empty and then re-filling them until
+the data is finished. There are two possible styles:
 
 + fill the buffers once in the main loop and then continue to
-	  fill and empty them in the empty buffer callbacks
+fill and empty them in the empty buffer callbacks
 + in the main loop, fill and empty the buffers continually,
-	  waiting between each fill for the buffer to empty
+waiting between each fill for the buffer to empty
 
 The Bellagio example use the first technique. However, the 1.2 specification says that
-      "...the IL client shall not
-      call IL core or component functions from within an IL callback context" so 
-      this is not a good technique. The Raspberry Pi examples use the second technique,
-      but use a non-standard call to find the latency and delay for that time.
-      It is better to just set up more pthreads conditions and block on those.
+"...the IL client shall not
+call IL core or component functions from within an IL callback context" so
+this is not a good technique. The Raspberry Pi examples use the second technique,
+but use a non-standard call to find the latency and delay for that time.
+It is better to just set up more pthreads conditions and block on those.
 
 
 This leads to a main loop of

@@ -4,8 +4,6 @@
 
 
 
-+  [
-	    Subtitling with Linux Tutorial
-	  ](http://sub.wordnerd.de/linux-subs.html) 
++  [Subtitling with Linux Tutorial](http://sub.wordnerd.de/linux-subs.html) 
 
 

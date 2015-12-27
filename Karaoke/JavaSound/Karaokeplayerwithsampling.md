@@ -3,19 +3,19 @@
 
 
 The Karaoke player described so far is functionally equivalent to kmidi and pykar.
-      It plays KAR files, shows the notes and scrolls through the lyrics. To sing along
-      with it, you need to use an ALSA or PulseAudio player.
+It plays KAR files, shows the notes and scrolls through the lyrics. To sing along
+with it, you need to use an ALSA or PulseAudio player.
 
 
 But Java can also play sampled sounds, as discussed in an earlier chapter.
-      So that code can be brought into the Karaoke player to give a more complete solution.
-      For MIDI, Java normally gives only a
-      Gervill synthesizer which is a software synthesizer that plays out through
-      The PulseAudio default device.
-      The actual output device is not accessible through Java, and is controlled by
-      the underlying PulseAudio output device. But for sampled media, the input devices
-      can be controlled. So in the following code a selection box allows choice of sampled
-      input device, and leaves the output device to the default.
+So that code can be brought into the Karaoke player to give a more complete solution.
+For MIDI, Java normally gives only a
+Gervill synthesizer which is a software synthesizer that plays out through
+The PulseAudio default device.
+The actual output device is not accessible through Java, and is controlled by
+the underlying PulseAudio output device. But for sampled media, the input devices
+can be controlled. So in the following code a selection box allows choice of sampled
+input device, and leaves the output device to the default.
 
 ```cpp
 

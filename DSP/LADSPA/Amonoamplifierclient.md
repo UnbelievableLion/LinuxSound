@@ -3,36 +3,35 @@
 
 
 The `applyplugin`program shows how clients can use
-      LADSPA plugins in a general way. Unfortunately, the
-      necessary generality makes it harder to see what is being
-      done. In this section we just look at a simple client
-      that uses the `amp_mono`plugin to halve the
-      volume of a file.
+LADSPA plugins in a general way. Unfortunately, the
+necessary generality makes it harder to see what is being
+done. In this section we just look at a simple client
+that uses the `amp_mono`plugin to halve the
+volume of a file.
 
 
 From running `analyseplugin`on the `amp.so`file we can find that it contains
-      a mono and stereo plugin. In the following program
-      the `main`function loads the plugin file,
-      gets a handle to the `ladspa_descriptor`structure and then looks through the descriptors until
-      it finds the `amp_mono`plugin.
+a mono and stereo plugin. In the following program
+the `main`function loads the plugin file,
+gets a handle to the `ladspa_descriptor`structure and then looks through the descriptors until
+it finds the `amp_mono`plugin.
 
 
 We know there are three ports: control, input and output,
-      so we look through the list of ports to assign indices
-      and connect the relevant arrays to the plugin descriptor.
-      The control port only needs the address of a
-      float value which is the amount of amplification that
-      will occur.
+so we look through the list of ports to assign indices
+and connect the relevant arrays to the plugin descriptor.
+The control port only needs the address of a
+float value which is the amount of amplification that
+will occur.
 
 
 The `run_plugin`function then just loops,
-      reading samples from the imput file, applying the plugin
-      and writing to the output file.
-      I've used the [
-	libsndfile](http://www.mega-nerd.com/libsndfile/) library to simplify reading and writing
-      files in whatever format they are in.
-      I've also used the `load.c`file from the
-      LADSPA package to simplify loading the plugin library.
+reading samples from the imput file, applying the plugin
+and writing to the output file.
+I've used the [libsndfile](http://www.mega-nerd.com/libsndfile/) library to simplify reading and writing
+files in whatever format they are in.
+I've also used the `load.c`file from the
+LADSPA package to simplify loading the plugin library.
 
 
 The program is `mono_amp.c`:
@@ -207,5 +206,5 @@ int main(int argc, char *argv[]) {
 ```
 
 
-it is run just by calling `mono_amp`, 
-      no arguments.
+it is run just by calling `mono_amp`,
+no arguments.

@@ -3,15 +3,15 @@
 
 
 I've built this system for my home environment where I have
-      a regular group of friends visiting. We each have our
-      favourite songs to sing and so we have made up lists
-      on scraps of paper which get lost, have wine spilt on them, etc.
-      So this system includes favourite lists of songs.
+a regular group of friends visiting. We each have our
+favourite songs to sing and so we have made up lists
+on scraps of paper which get lost, have wine spilt on them, etc.
+So this system includes favourite lists of songs.
 
 
 Each favourites list is essentially just another `SongTable`. But I have put a `JList`around the table to display it. The `JList`uses a `DefaultListModel`, and
-      the constructor loads a song table into this list
-      by iterating through the table and adding elements
+the constructor loads a song table into this list
+by iterating through the table and adding elements
 
 ```cpp
 
@@ -31,24 +31,24 @@ Other Swing code adds three buttons along the bottom:
 + Play song
 
 Adding a song to the list means taking the selected item
-      from the main song table and adding it to this table.
-      The main table is passed into the constructor and just
-      kept for the purpose of getting its selection. The
-      selected object is added to both the Swing `JList`and to the favourites `SongTable`.
+from the main song table and adding it to this table.
+The main table is passed into the constructor and just
+kept for the purpose of getting its selection. The
+selected object is added to both the Swing `JList`and to the favourites `SongTable`.
 
 
 "Playing a song" is done in a simple way: the full path
-      to the song is written to standard output, newline
-      terminated. Another program in a pipeline can then pick
-      this up - see later.
+to the song is written to standard output, newline
+terminated. Another program in a pipeline can then pick
+this up - see later.
 
 
 Favourites aren't much good if they don't persist from one
-      day to the next! So the same object storage method as before is used 
-      as with the full song table. Each favourites file is saved on each
-      change. There are some Linux/Unix dependencies here, in that
-      application information is stored in a subdirectory
-      beginning with a "." in the user's home directory.
+day to the next! So the same object storage method as before is used
+as with the full song table. Each favourites file is saved on each
+change. There are some Linux/Unix dependencies here, in that
+application information is stored in a subdirectory
+beginning with a "." in the user's home directory.
 
 
 The code for `Favourites`is

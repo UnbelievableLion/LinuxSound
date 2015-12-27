@@ -3,10 +3,10 @@
 
 
 Each device is represented by a `Mixer`object.
-      Ask the `AudioSystem`for a list of these.
-      Each mixer has a set of target (output) lines and source
-      (input lines). Query each mixer about these separately.
-      The program is DeviceInfo.java:
+Ask the `AudioSystem`for a list of these.
+Each mixer has a set of target (output) lines and source
+(input lines). Query each mixer about these separately.
+The program is DeviceInfo.java:
 
 ```cpp
 
@@ -90,4 +90,4 @@ Mixers:
 
 
 This shows both PulseAudio and ALSA mixers.
-      Further queries could show what the supported formats are, for example.
+Further queries could show what the supported formats are, for example.

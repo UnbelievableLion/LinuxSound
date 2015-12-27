@@ -6,14 +6,12 @@ These examples are taken from the appendices of the OpenSL ES specification.
 They have not been tested.
 
 The programming model for OpenSL ES is that of _interfaces_ and _objects_ .
-      The programming _language_ is C, so one of the common mechanisms for writing O/O style code
-      in C is used (see e.g. [
-	Object-Oriented Programming In C
-      ](http://www.drdobbs.com/object-oriented-programming-in-c/184402190?pgno=1) ). Interfaces are represented by structures containing function pointers for
-      methods. An object which implements the interface is of the interface type, with the
-      methods as particular functions. Calling a method involves calling the
-      appropriate function in the structure. The "this" object is always passed in as the
-      first parameter of the function as in
+The programming _language_ is C, so one of the common mechanisms for writing O/O style code
+in C is used (see e.g. [Object-Oriented Programming In C](http://www.drdobbs.com/object-oriented-programming-in-c/184402190?pgno=1) ). Interfaces are represented by structures containing function pointers for
+methods. An object which implements the interface is of the interface type, with the
+methods as particular functions. Calling a method involves calling the
+appropriate function in the structure. The "this" object is always passed in as the
+first parameter of the function as in
 
 ```cpp
 
@@ -31,15 +29,15 @@ There does not seem to be any inheritance model, but then that isn't necessary h
 
 
 Note that every function returns a value that can be tested for sucess or fail.
-      Objects that are created are passed as address parameters for filling.
-      The application is responsible for freeing any memory allocated during this
-      by calling `Destroy()`on the object.
+Objects that are created are passed as address parameters for filling.
+The application is responsible for freeing any memory allocated during this
+by calling `Destroy()`on the object.
 
 
 An OpenSL (or OpenMAX AL) application is started by creating an "engine" using `slCreateEngine()`. This is the only global function in the library.
-      From then on, objects are obtained from the engine or other objects by a call
-      to `GetInterface()`or `CreateXYZ`on the engine or object. 
-      For example,
+From then on, objects are obtained from the engine or other objects by a call
+to `GetInterface()`or `CreateXYZ`on the engine or object.
+For example,
 
 ```cpp
 
@@ -54,7 +52,7 @@ An OpenSL (or OpenMAX AL) application is started by creating an "engine" using `
 
 
 The model for playing audio is not very complex, just verbose.
-      It consists of
+It consists of
 
 + Initialise the system
 + Prepare a data source
@@ -130,8 +128,8 @@ The model for playing audio is not very complex, just verbose.
 
 
 The callback in this case uses a data structure to hold all of the data and pointers
-      to the start and current position of the data. This is for this application,
-      and is not a part of OpenSL
+to the start and current position of the data. This is for this application,
+and is not a part of OpenSL
 
 ```cpp
 
@@ -439,9 +437,9 @@ int sl_main( void )
 
 
 The ability to record audio in OpenSL ES is an option for the implementation.
-      Consequently, we cannot guarantee that there is any microphone or
-      similar device. The main difference in this program from the previous one
-      is that checks need to be performed first on the input devices:
+Consequently, we cannot guarantee that there is any microphone or
+similar device. The main difference in this program from the previous one
+is that checks need to be performed first on the input devices:
 
 ```cpp
 
@@ -492,8 +490,8 @@ The ability to record audio in OpenSL ES is an option for the implementation.
 
 
 The other major differences are that the engine is used to create
-      an audio recorder rather than a player, and that the recorded
-      sounds are saved to a file.
+an audio recorder rather than a player, and that the recorded
+sounds are saved to a file.
 
 ```cpp
 

@@ -3,23 +3,23 @@
 
 
 The copy example does not show the detail of what is
-      in the buffers: the contents are `jack_default_audio_sample_t`'s.
-      What these are is described in the macro `JACK_DEFAULT_AUDIO_TYPE`with
-      default value "32 bit float mono audio"
+in the buffers: the contents are `jack_default_audio_sample_t`'s.
+What these are is described in the macro `JACK_DEFAULT_AUDIO_TYPE`with
+default value "32 bit float mono audio"
 
 
 To do anything more than simply pass audio through,
-      you need to handle the data in this format.
-      The example program `simple_client.c`fills an array with 32-bit floating point sine
-      curve values. On each call to `process`it copies data from the sine curve array into
-      the output buffers. The increment into the sine
-      curve array is different for left and right channels
-      to give a different note on each channel.
+you need to handle the data in this format.
+The example program `simple_client.c`fills an array with 32-bit floating point sine
+curve values. On each call to `process`it copies data from the sine curve array into
+the output buffers. The increment into the sine
+curve array is different for left and right channels
+to give a different note on each channel.
 
 
 Note that the calculation of the sine curve array
-      is _not_ done within the `process`function - that would be too slow and would cause
-      latency.
+is _not_ done within the `process`function - that would be too slow and would cause
+latency.
 
 
 The program is

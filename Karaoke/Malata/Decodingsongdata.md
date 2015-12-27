@@ -2,14 +2,14 @@
 ##  Decoding song data 
 
 
-It would be easy if all songs contained English text in the data. 
-      But I only found the above four. So the rest must be encoded
-      in some way.
+It would be easy if all songs contained English text in the data.
+But I only found the above four. So the rest must be encoded
+in some way.
 
 
-A couple that I looked at seemed a bit messy. So I settled 
-      (for no particular reason) on Don Gibson's "Oh Lonesome Me".
-      By playing the song on the Malata, the headers were
+A couple that I looked at seemed a bit messy. So I settled
+(for no particular reason) on Don Gibson's "Oh Lonesome Me".
+By playing the song on the Malata, the headers were
 
 ```
 
@@ -52,7 +52,7 @@ Running `bvi`on the data file gives
 
 
 From the songs with English, I know the song title starts at 0x2A,
-      and we have to do this match:
+and we have to do this match:
 
 ```
 
@@ -66,9 +66,9 @@ L  :  /  D  o  n     G  i  b  s  o  n  /
 
 
 The obvious thing to try is a substitution cipher: for example,
-      the 'o's are encoded as 0x5c while the 'O's are 0x7c.
-      It's a game of pattern matching, and the answer is the following
-      piece of C code
+the 'o's are encoded as 0x5c while the 'O's are 0x7c.
+It's a game of pattern matching, and the answer is the following
+piece of C code
 
 ```cpp
 
@@ -182,8 +182,8 @@ int main(int argc, char **argv) {
 
 
 The substitutions here are grouped in fours, but of course there
-      is no reason why they should be. (This is repeated in some
-      other decodings, but not all.).
+is no reason why they should be. (This is repeated in some
+other decodings, but not all.).
 
 
 Following application of that substitution, the file looks like
@@ -216,26 +216,26 @@ Following application of that substitution, the file looks like
 
 
 Which is much more readable! it doesn't quite follow the lyrics
-      though - an issue for later.
+though - an issue for later.
 
 
 The next occurrence of this substitution cipher is at file
-      10281, song number 20326 "Give me all night" 
-      so there are other substitutions used,
-      of course! Then at 10326, song number 20371 "Stand By Your Man"
+10281, song number 20326 "Give me all night"
+so there are other substitutions used,
+of course! Then at 10326, song number 20371 "Stand By Your Man"
 
 
 So then I tried another song, California dreaming, song 20088, file 10043.
-      That was pretty straightforward. Other songs using this substitution
-      are 20033 Heartbreaker, file 9988, 20082 Another Girl, file 10037,
-      20213 Don't talk, file 10168, 20382 Things we Said Today, file 10336.
-      I also tried some others: no pattern as to song numbers.
+That was pretty straightforward. Other songs using this substitution
+are 20033 Heartbreaker, file 9988, 20082 Another Girl, file 10037,
+20213 Don't talk, file 10168, 20382 Things we Said Today, file 10336.
+I also tried some others: no pattern as to song numbers.
 
 
 However, the label for the substitution pattern appears
-      to be byte 0x26. Here we another coincidence: the byte which
-      is mapped to the space character ' ' is 0x20 less than byte
-      0x26. e.g. the substitution for songs like file 10337 is
+to be byte 0x26. Here we another coincidence: the byte which
+is mapped to the space character ' ' is 0x20 less than byte
+0x26. e.g. the substitution for songs like file 10337 is
 
 ```cpp
 
@@ -265,14 +265,14 @@ However, the label for the substitution pattern appears
 
 
 and byte 0x26 for that file is 0xB5, and 0x20 = 0xB5 - 0x95.
-      Maybe the pattern is just based on these bytes (e.g. what is
-      byte 0x27 - an index into pattern types?).
+Maybe the pattern is just based on these bytes (e.g. what is
+byte 0x27 - an index into pattern types?).
 
 
 To be followed up...
 
 
 There is one critival issue in this: it isn't only the English
-      alphabetic characters that are encoded: others are too.
-      But I have no clues as to what the other 65000+ Unicode
-      characters should be!
+alphabetic characters that are encoded: others are too.
+But I have no clues as to what the other 65000+ Unicode
+characters should be!

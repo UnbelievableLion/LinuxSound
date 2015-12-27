@@ -2,9 +2,7 @@
 ##  MPlayer 
 
 
-According to the MPlayer page [
-	Subtitles and OSD
-      ](http://www.mplayerhq.hu/DOCS/HTML/en/subosd.htm) The formats recognised by `mplayer`are
+According to the MPlayer page [Subtitles and OSD](http://www.mplayerhq.hu/DOCS/HTML/en/subosd.htm) The formats recognised by `mplayer`are
 
 + VOBsub
 + OGM

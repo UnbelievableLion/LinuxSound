@@ -3,19 +3,19 @@
 
 
 Device information is found by querying `MidiSystem`for its
-      list of `DeviceInfo`objects. Each information object contains
-      fields such as Name and Vendor. The actual device may be found using this
-      information object by `MidiSystem.getMidiDevice(info)`.
-      The device may then be queried for its receivers and transmitters and
-      its type as sequencer or synthesizer.
+list of `DeviceInfo`objects. Each information object contains
+fields such as Name and Vendor. The actual device may be found using this
+information object by `MidiSystem.getMidiDevice(info)`.
+The device may then be queried for its receivers and transmitters and
+its type as sequencer or synthesizer.
 
 
 One annoying part is that you
-      cannot get a list of all the devices's transmitters and receivers, only those
-      that are _open_ . You can ask for the default transmitter and
-      receiver which will implicitly open them. So you can see that the list may
-      be empty before asking for the default, but will be non-empty afterwards
-      if there is a default! if there are no defaults, a `MidiUnavailableException`exception will be thrown.
+cannot get a list of all the devices's transmitters and receivers, only those
+that are _open_ . You can ask for the default transmitter and
+receiver which will implicitly open them. So you can see that the list may
+be empty before asking for the default, but will be non-empty afterwards
+if there is a default! if there are no defaults, a `MidiUnavailableException`exception will be thrown.
 
 
 The program is:

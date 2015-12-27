@@ -3,9 +3,9 @@
 
 
 A line in an ASS file essentially consists of a time to start
-      display, a time to finish the display and the text itself.
-      However, Karaoke users are accustomed to the text being 
-      highlighted as it is played.
+display, a time to finish the display and the text itself.
+However, Karaoke users are accustomed to the text being
+highlighted as it is played.
 
 
 ASS supports two major highlight styles:
@@ -14,16 +14,15 @@ ASS supports two major highlight styles:
 + The text is highlighted by filling from the left
 
 These effects are done by embedding "Karaoke overrides"
-      into the text. These are in {} brackets with a duration
-      time in hundredths of a second.
+into the text. These are in {} brackets with a duration
+time in hundredths of a second.
 
 
 The details are
 
-+ __Word highlighting__:
-An override of the form {\k<time>}
-	  will highlight the following word for _time_ hundredths of a second.
-	  An example would be
++ __Word highlighting__: An override of the form {\k<time>}
+will highlight the following word for _time_ hundredths of a second.
+An example would be
 ```
 
 	    
@@ -32,10 +31,9 @@ An override of the form {\k<time>}
 	  
 ```
 
-+ __Fill highlighting__:
-An override of the form {\kf<time>}
-	  will progressively fill up the following word for _time_ hundredths of a second.
-	  An example would be
++ __Fill highlighting__: An override of the form {\kf<time>}
+will progressively fill up the following word for _time_ hundredths of a second.
+An example would be
 ```
 
 	    

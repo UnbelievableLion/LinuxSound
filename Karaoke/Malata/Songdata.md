@@ -2,28 +2,27 @@
 ##  Song data 
 
 
-Most of this section was discovered by [
-	thanth](http://karaoke-engineering.996290.n3.nabble.com/Arirang-MIDI-Karaoke-DVD-storage-file-struct-and-MP3-Extraction-td467.html) .
-      However, he only deals with a single data file, and as the Malata has
-      more, it becomes more complex.
+Most of this section was discovered by [thanth](http://karaoke-engineering.996290.n3.nabble.com/Arirang-MIDI-Karaoke-DVD-storage-file-struct-and-MP3-Extraction-td467.html) .
+However, he only deals with a single data file, and as the Malata has
+more, it becomes more complex.
 
 
 There are four data files: MULTAK.DAT, MULTAK.DA1, MULTAK.DA2
-      and MULTAK.DA3. The primary data file is MULTAK.DAT, and this contains
-      tables of pointers to song data. The other files seem to just contain
-      the song data.
+and MULTAK.DA3. The primary data file is MULTAK.DAT, and this contains
+tables of pointers to song data. The other files seem to just contain
+the song data.
 
 
 The number of songs (minus one) is in byte-swapped order at 0x14E in
-      MULTAK.DAT. In my files, this is "FB 3D" which when swapped to
-      "3D FB" is one less than the number of songs, 0x3DFC (15868).
-      This was identified by thanth.
+MULTAK.DAT. In my files, this is "FB 3D" which when swapped to
+"3D FB" is one less than the number of songs, 0x3DFC (15868).
+This was identified by thanth.
 
 
 Starting at 0xD20 is a table of 4 byte numbers (prefixed by
-      "FF 00 FF FF" which are indexes into the table of song data.
-      If the bytes are "b0 b1 b2 b3" then thanth discovered that
-      the song data starts at
+"FF 00 FF FF" which are indexes into the table of song data.
+If the bytes are "b0 b1 b2 b3" then thanth discovered that
+the song data starts at
 
 ```
 
@@ -36,9 +35,9 @@ Starting at 0xD20 is a table of 4 byte numbers (prefixed by
 
 
 Actually, it is more complex than that: for the songs with data
-      on the first disk MULTAK.DAT this is the case. The table also
-      contains pointers to data in the other files, and for these
-      the formula is
+on the first disk MULTAK.DAT this is the case. The table also
+contains pointers to data in the other files, and for these
+the formula is
 
 ```
 
@@ -48,27 +47,27 @@ Actually, it is more complex than that: for the songs with data
 
 
 That is, the data in these later files starts immediately
-      with no offset.
+with no offset.
 
 
 The file for each song is given in the top half of the fourth byte
-      of the song index: (b3 >> 4), where zero is MULTAK.DAT,
-      one is MULTAK.DA1, etc.
+of the song index: (b3 >> 4), where zero is MULTAK.DAT,
+one is MULTAK.DA1, etc.
 
 
-At the locations of the song data pointers is either 
-      the phrase "OK" which means a
-      "simple song" or "FF FF" which means "complex song",
-      according to thanth. Simple songs just contain
-      lyrics and MIDI data, while complex songs also have
-      MP3 data. I haven't yet found any information about the
-      size of the data for each song.
+At the locations of the song data pointers is either
+the phrase "OK" which means a
+"simple song" or "FF FF" which means "complex song",
+according to thanth. Simple songs just contain
+lyrics and MIDI data, while complex songs also have
+MP3 data. I haven't yet found any information about the
+size of the data for each song.
 
 
 The program `SongData.java`splits the MULTAK
-      files into individual song data files. It only saves a
-      part of the data for each song, since I don't know where the 
-      data finishes.
+files into individual song data files. It only saves a
+part of the data for each song, since I don't know where the
+data finishes.
 
 ```cpp
 

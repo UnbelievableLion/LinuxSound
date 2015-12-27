@@ -1,6 +1,4 @@
 
 ##  Resources 
 
-+  [
-	  libao Documentation
-	](http://www.xiph.org/ao/doc/) 
++  [libao Documentation](http://www.xiph.org/ao/doc/) 

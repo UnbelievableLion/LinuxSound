@@ -3,34 +3,32 @@
 
 
 The command `strings`shows that song titles are in
-      several files, including `MALATAS4.IDX`.
-      This seems to contain the most song titles, so I looked at that.
+several files, including `MALATAS4.IDX`.
+This seems to contain the most song titles, so I looked at that.
 
 
 The block of song titles starts at 0x5F000. Before that is a bunch
-      of nulls. To confirm this, the first song in my Malata songbook
-      is "1001次吵架" and I can see the string "1001" as the first entry
-      in that table.
+of nulls. To confirm this, the first song in my Malata songbook
+is "1001次吵架" and I can see the string "1001" as the first entry
+in that table.
 
 
-This first song contains Chinese characters in the title, and the site [
-	GB Code Table
-      ](http://www.ansell-uebersetzungen.com/gborder.html) by Mary Ansell confirms that they are encoded using 
-      GB2312.
+This first song contains Chinese characters in the title, and the site [GB Code Table](http://www.ansell-uebersetzungen.com/gborder.html) by Mary Ansell confirms that they are encoded using
+GB2312.
 
 
 The song titles are just concatenated, for example as
-      "AlrightAmourAndyAngelAre You ReadyAsk For MoreBABY I'M YOUR MANBACK HOME".
-      So there must be a table somewhere showing start and end of each title.
-      I looked for any table giving offsets of the start of songs
-      from 0x5F000. There is such a table, at 0x800! After playing with 
-      that for a while, it turns out that this table consists
-      of records of 25 bytes.
-      I'm not sure of the start of the records from 0x800: 
-      if I take a starting offset of one,
-      then  bytes 19 and 20 hold the
-      offset into the song title table while byte 25 is the length of the song title.
-      But the offset could be higher.
+"AlrightAmourAndyAngelAre You ReadyAsk For MoreBABY I'M YOUR MANBACK HOME".
+So there must be a table somewhere showing start and end of each title.
+I looked for any table giving offsets of the start of songs
+from 0x5F000. There is such a table, at 0x800! After playing with
+that for a while, it turns out that this table consists
+of records of 25 bytes.
+I'm not sure of the start of the records from 0x800:
+if I take a starting offset of one,
+then  bytes 19 and 20 hold the
+offset into the song title table while byte 25 is the length of the song title.
+But the offset could be higher.
 
 
 The language appears to be specified in byte 11:
@@ -43,8 +41,8 @@ The language appears to be specified in byte 11:
 
 
 The song number is a bit sneaky: in bytes 15-17 are 3 hexadecimal numbers.
-      If they are concatenated then they are the song number.
-      For example, for the song Medley One, the record is
+If they are concatenated then they are the song number.
+For example, for the song Medley One, the record is
 
 ```
 
@@ -54,11 +52,11 @@ The song number is a bit sneaky: in bytes 15-17 are 3 hexadecimal numbers.
 
 
 Bytes 15, 16, 17 are "02 01 35" (in hex) and this is the song number
-      20135 for the Beatles "Medley One".
+20135 for the Beatles "Medley One".
 
 
 The earliest English song is 20001 "7Days" and the last one is
-      20501 "Take Me To Your Heart"
+20501 "Take Me To Your Heart"
 
 
 We currently have
@@ -238,7 +236,7 @@ class SongTitles {
 
 
 
-One table finishes at 0xF5260, maybe starting another at 0xF5800. 
-      Another table starts at 0x88000 and finishes about 0x9ADF0.
-      Another starts at 0x9B000 and finishes at 0x9B2B0
-      I don't know what is in these tables.
+One table finishes at 0xF5260, maybe starting another at 0xF5800.
+Another table starts at 0x88000 and finishes about 0x9ADF0.
+Another starts at 0x9B000 and finishes at 0x9B2B0
+I don't know what is in these tables.

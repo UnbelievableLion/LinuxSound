@@ -3,26 +3,20 @@
 
 
 With the disappearance of pixmaps from Gtk 3.0, Cairo is now the
-      only real way of assembling multiple components into an image.
-      General Cairo information is at [
-	Cairo documentation
-      ](http://cairographics.org/documentation/) ,
-      a tutorial is at [
-	Cairo graphics tutorial
-      ](http://zetcode.com/gfx/cairo/) and information about overlaying onto images is at [
-	Images in Cairo
-      ](http://zetcode.com/gfx/cairo/cairoimages/) .
+only real way of assembling multiple components into an image.
+General Cairo information is at [Cairo documentation](http://cairographics.org/documentation/) ,
+a tutorial is at [Cairo graphics tutorial](http://zetcode.com/gfx/cairo/) and information about overlaying onto images is at [Images in Cairo](http://zetcode.com/gfx/cairo/cairoimages/) .
 
 
 Cairo takes sources and a destination. The sources can be changed,
-      and frequently are: from an image source, to a colour source, etc.
-      The destination is where the drawn stuff ends up.
+and frequently are: from an image source, to a colour source, etc.
+The destination is where the drawn stuff ends up.
 
 
 Destinations can be in memory or at a variety of backends.
-      We want in an in-memory destination so that we can extract
-      a pixbuf from it, with all operations done on the client side.
-      We create a destination as a _surface_ of type `cairo_surface_t`and set it into a _Cairo context_ of type `cairo_t`by
+We want in an in-memory destination so that we can extract
+a pixbuf from it, with all operations done on the client side.
+We create a destination as a _surface_ of type `cairo_surface_t`and set it into a _Cairo context_ of type `cairo_t`by
 
 ```cpp
 
@@ -34,11 +28,11 @@ cairo_t *cr = cairo_create(surface);
 
 
 The cairo context `cr`is then used to set sources, perform drawing, etc.
-      At the end of this we will extract a pixmap from the `surface`.
+At the end of this we will extract a pixmap from the `surface`.
 
 
 The first step is to set the source to the pixbuf for each frame
-      of the video and to `paint`this to the destination by
+of the video and to `paint`this to the destination by
 
 ```cpp
 
@@ -49,7 +43,7 @@ cairo_paint (cr);
 
 
 We can overlay another image on top of this by changing the source
-      to the overlay image and painting that:
+to the overlay image and painting that:
 
 ```cpp
 
@@ -60,13 +54,13 @@ cairo_paint (cr);
 
 
 Note that Cairo will do any alpha blending that is required if
-      the overlay has "transparent" pixels.
+the overlay has "transparent" pixels.
 
 
 To draw the text, we need to reset the source to an RGB surface,
-      set all the parameters for the text, and draw the text
-      into the
-      destination. This is done by
+set all the parameters for the text, and draw the text
+into the
+destination. This is done by
 
 ```cpp
 
@@ -83,10 +77,10 @@ cairo_show_text (cr, "hello");
 ```
 
 
-Finally we want to extract the fnal image from the destination and set 
-      it into the `GdkImage`for display. Here there is another
-      difference between Gtk 2.0 and Gtk 3.0: Gtk 3.0 has a function `gdk_pixbuf_get_from_surface`which will return a `GdKPixbuf`; Gtk 2.0 has no such function.
-      We only look at the Gtk 3.0 version for now
+Finally we want to extract the fnal image from the destination and set
+it into the `GdkImage`for display. Here there is another
+difference between Gtk 2.0 and Gtk 3.0: Gtk 3.0 has a function `gdk_pixbuf_get_from_surface`which will return a `GdKPixbuf`; Gtk 2.0 has no such function.
+We only look at the Gtk 3.0 version for now
 
 ```cpp
 

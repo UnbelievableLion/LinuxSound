@@ -5,7 +5,7 @@
 
 
 This shows you information about the PulseAudio server, its devices and clients.
-      The following three screen dumps show the type of information it gives.
+The following three screen dumps show the type of information it gives.
 
 
 ![alt text](images/paman1.png)
@@ -20,15 +20,15 @@ This shows you information about the PulseAudio server, its devices and clients.
 
 
  `pavumeter`is a simple meter for showing input or output levels
-      of the default devices. When run by `pavumeter`it shows the
-      playback device as in
+of the default devices. When run by `pavumeter`it shows the
+playback device as in
 
 
 ![alt text](images/pavumeter-playback.png)
 
 
 while if it is run by `pavumeter --record`it shows the record device
-      as in
+as in
 
 
 ![alt text](images/pavumeter-record.png)
@@ -40,27 +40,27 @@ while if it is run by `pavumeter --record`it shows the record device
 
 
  `pavucontrol`allows you to control the input and ouput volumes of the
-      different connected audio devices:
+different connected audio devices:
 
 
 ![alt text](images/pavucontrol.png)
 
 
 With these tabs, `pavucontrol`is a device-level mixer,
-      able to control the overall volume to individual devices.
+able to control the overall volume to individual devices.
 
 
 One of the special advantages of PulseAudio is that it can perform
-      application-level mixing. If two audio sources write to the same 
-      PulseAudio device, the audio will be mixed to the output device. `pavucontrol`can show the multiple applications using
-      the Playback tab, showing all applications or all streams 
-      currently being mixed. Each stream can have its channel volumes
-      individually controlled.
+application-level mixing. If two audio sources write to the same
+PulseAudio device, the audio will be mixed to the output device. `pavucontrol`can show the multiple applications using
+the Playback tab, showing all applications or all streams
+currently being mixed. Each stream can have its channel volumes
+individually controlled.
 
 
 For example, Karaoke on the cheap can be done by setting
-      the straight-through module for the microphone to speaker
-      by
+the straight-through module for the microphone to speaker
+by
 
 ```
 
@@ -72,7 +72,7 @@ pactl load-module module-loopback latency_msec=1
 
 
 while the Karoake file is played by a Karaoke player
-      such as `kmid`through `timidity`e.g.
+such as `kmid`through `timidity`e.g.
 
 ```
 
@@ -84,7 +84,7 @@ kmid nightsin.kar
 
 
 While these two are running, relative volumes can be controlled
-      by use of `pavucontrol`:
+by use of `pavucontrol`:
 
 
 ![alt text](images/pavumixer.png)
@@ -96,8 +96,8 @@ While these two are running, relative volumes can be controlled
 
 
 The `gnome-control-center sound`allows full view and control of
-       the attached sound devices, including selection of the default input and
-      output devices. It looks like
+the attached sound devices, including selection of the default input and
+output devices. It looks like
 
 
 ![alt text](images/sound-center.png)
@@ -106,11 +106,11 @@ The `gnome-control-center sound`allows full view and control of
 
 
 These are command line tools to record and playback sound files.
-      They are all symbolic links to the same code, just differently named links.
-      The default format is PCM s16.
-      There are many options, but they don't always do quite what you want them to.
-      For example, to play from the default record device to the default playback
-      device with minimum latency,
+They are all symbolic links to the same code, just differently named links.
+The default format is PCM s16.
+There are many options, but they don't always do quite what you want them to.
+For example, to play from the default record device to the default playback
+device with minimum latency,
 
 ```
 
@@ -127,8 +127,8 @@ This actually has a latency of about 50 msec.
 
 
 These two commands do basically the same thing. ` pacmd `is
-      the interactive version with more options.
-      For example ` pacmd `with the command ` list-sinks `includes
+the interactive version with more options.
+For example ` pacmd `with the command ` list-sinks `includes
 
 ```
 
@@ -205,9 +205,7 @@ These two commands do basically the same thing. ` pacmd `is
 
 
 PulseAudio uses its own naming conventions. The names of source devices
-      (such as microphones) can be found using code from the [
-	PulseAudio FAQ
-      ](http://www.freedesktop.org/wiki/Software/PulseAudio/FAQ#How_do_I_record_stuff.3F) :
+(such as microphones) can be found using code from the [PulseAudio FAQ](http://www.freedesktop.org/wiki/Software/PulseAudio/FAQ#How_do_I_record_stuff.3F) :
 
 ```
 
@@ -268,12 +266,12 @@ pactl load-module module-loopback latency_msec=1
 
 
 When loaded, sound is internally routed from the input device to the output
-      device. The latency is effectively zero.
+device. The latency is effectively zero.
 
 
 If you load this module into, say. your laptop, be careful about unplugging
-      speakers, microphones, etc. The internal speaker and microphone are close enough
-      to set up a feedback loop. Unload module number N by
+speakers, microphones, etc. The internal speaker and microphone are close enough
+to set up a feedback loop. Unload module number N by
 
 ```
 
@@ -290,8 +288,8 @@ pactl unload-module N
 
 
 Output from `pacmd`shows PulseAudio uses ALSA.
-      The relationship is deeper: the default ALSA device is "hw:0"
-      but PulseAudio overrides that. In `/etc/asound.conf`is a hook to load `/etc/alsa/pulse-default.conf`and this contains
+The relationship is deeper: the default ALSA device is "hw:0"
+but PulseAudio overrides that. In `/etc/asound.conf`is a hook to load `/etc/alsa/pulse-default.conf`and this contains
 
 ```
 
@@ -311,4 +309,4 @@ which replaces the default device with a PulseAudio module.
 
 
 Opening the default ALSA device will actually call into PulseAudio
-      which will then call back into ALSA with the devices it chooses.
+which will then call back into ALSA with the devices it chooses.

@@ -3,14 +3,14 @@
 
 
 I actually want to play songs from my server disk to a
-      Raspberry Pi or CubieBoard connected to my TV,
-      and control the play from a netbook sitting on my
-      lap. (Later I will try to get Android code running to
-      do the same.). This is a distributed system.
+Raspberry Pi or CubieBoard connected to my TV,
+and control the play from a netbook sitting on my
+lap. (Later I will try to get Android code running to
+do the same.). This is a distributed system.
 
 
 Mounting server files on a computer is simple: you can use
-      NFS, Samba, ... I am currently using `sshfs`as in
+NFS, Samba, ... I am currently using `sshfs`as in
 
 ```
 
@@ -20,8 +20,8 @@ sshfs -o idmap=user -o rw -o allow_other newmarch@192.168.1.101:/home/httpd/html
 
 
 For remote access/control I replace the `run`command
-      of the last section by a TCP client/server. On the client,
-      controlling the player, I have
+of the last section by a TCP client/server. On the client,
+controlling the player, I have
 
 ```cpp
 
@@ -56,10 +56,10 @@ done
 
 
 The client/server files are just standard TCP files.
-      The client reads a newline-terminated string
-      from standard input and writes it to the
-      server, and the server prints the same line to standard output.
-      Here is `client.c`:
+The client reads a newline-terminated string
+from standard input and writes it to the
+server, and the server prints the same line to standard output.
+Here is `client.c`:
 
 ```cpp
 

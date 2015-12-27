@@ -3,11 +3,11 @@
 
 
 All files have a lyric block followed by a music block. The lyric block is compressed
-      and it has been discovered that this is LZW compression. This decompresses to a set
-      of 4-byte chunks. The first two bytes are characters of the lyric.
-      For 1-byte encodings such as English or Vietnamese, the first byte is one character
-      and the second is either zero or another character (two byts such as "\r\n").
-      For two byte encodings such as GB-2312, the two bytes form one character.
+and it has been discovered that this is LZW compression. This decompresses to a set
+of 4-byte chunks. The first two bytes are characters of the lyric.
+For 1-byte encodings such as English or Vietnamese, the first byte is one character
+and the second is either zero or another character (two byts such as "\r\n").
+For two byte encodings such as GB-2312, the two bytes form one character.
 
 
 The next two bytes are the length of time the character string plays for.
@@ -16,22 +16,22 @@ The next two bytes are the length of time the character string plays for.
 
 
 Each lyric block starts with strings such as "#0001
-      @@00@12
-      @Help Yourself
-      @
-      @@Tom Jones
-      "
-      The language code is in there as NN in "@00@NN". The song title, writer, singer are clear.
-      (Note: these characters are all 4 bytes apart!). For English it is "12" and so on.
+@@00@12
+@Help Yourself
+@
+@@Tom Jones
+"
+The language code is in there as NN in "@00@NN". The song title, writer, singer are clear.
+(Note: these characters are all 4 bytes apart!). For English it is "12" and so on.
 
 
 Bytes 0 and 1 of each block are a character in the lyric. Bytes 2 and 3 are the duration
-      of each character. To turn them into MIDI data, the durations have to be turned into
-      start/stop of each character.
+of each character. To turn them into MIDI data, the durations have to be turned into
+start/stop of each character.
 
 
 My Java program to do this is
-      SongExtracter.java
+SongExtracter.java
 
 ```cpp
 
@@ -1053,7 +1053,7 @@ java SongExtracter <song number >
 
 
 The program to convert these MIDI files to Karaoke KAR files is
-      KARConverter.java
+KARConverter.java
 
 ```cpp
 

@@ -3,9 +3,9 @@
 
 
 There are many codecs for sound, and more are being devised
-      all the time. They vary between being codecs, containers
-      or both, and come with a variety of features, some with
-      encumbrances such as patents.
+all the time. They vary between being codecs, containers
+or both, and come with a variety of features, some with
+encumbrances such as patents.
 
 ***
 
@@ -20,16 +20,10 @@ Copyright © Jan Newmarch, jan@newmarch.name
 </a>
 
 
-"Programming and Using Linux Sound - in depth"by [
-  Jan Newmarch
-](https://jan.newmarch.name) is licensed under a [
-  Creative Commons Attribution-ShareAlike 4.0 International License
-](http://creativecommons.org/licenses/by-sa/4.0/) .
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-Based on a work at [
-  https://jan.newmarch.name/LinuxSound/
-](https://jan.newmarch.name/LinuxSound/) .
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
 
 
 If you like this book, please contribute using PayPal

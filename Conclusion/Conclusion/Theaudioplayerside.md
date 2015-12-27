@@ -3,11 +3,11 @@
 
 
 On the audio player, a service has to listen for URLs to be played.
-      Each song will be pulled off the file server by an HTTP request
-      (using a tool such as `wget`).
-      This should maintain a queue of requests, playing the next song
-      as the previous one completes. This should show the queue, so is
-      implemented using a Java program showing a Swing list.
+Each song will be pulled off the file server by an HTTP request
+(using a tool such as `wget`).
+This should maintain a queue of requests, playing the next song
+as the previous one completes. This should show the queue, so is
+implemented using a Java program showing a Swing list.
 
 
 The program is `Player.java`:
@@ -245,6 +245,6 @@ public class Player extends JFrame {
 
 
 It contains buttons to control the speed of play
-      and to stop play. More importantly, it hands control
-      to different shell scripts based on the type of file
-      downloaded.
+and to stop play. More importantly, it hands control
+to different shell scripts based on the type of file
+downloaded.

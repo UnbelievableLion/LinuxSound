@@ -3,9 +3,9 @@
 
 
 There's nothing special here. It just loads the tables for
-      each person and builds a `Favourites`object
-      which it places in a `JTabbedPane`.
-      It also adds in a "NEW" tab to add additional users.
+each person and builds a `Favourites`object
+which it places in a `JTabbedPane`.
+It also adds in a "NEW" tab to add additional users.
 
 
 The code for `AllFavourites`is

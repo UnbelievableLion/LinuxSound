@@ -3,13 +3,13 @@
 
 
 It is common in a movie on TV to see a fixed image layered
-      on top of the video. Subtitles can be an example of dynamic
-      images but may be text overlaid instead. This section just 
-      considers one image on top of another.
+on top of the video. Subtitles can be an example of dynamic
+images but may be text overlaid instead. This section just
+considers one image on top of another.
 
 
 In Gtk 2.0 it is surprisingly easy: draw one pixbuf into a
-      pixmap and then draw the overlay pixbuf into the same pixmap.
+pixmap and then draw the overlay pixbuf into the same pixmap.
 
 ```cpp
 
@@ -34,19 +34,15 @@ gtk_widget_queue_draw(image);
 
 
 Gtk 3.0 does not seem so straightforward as pixmaps have disappeared.
-      Various pages suggest using Cairo surfaces instead and later sections
-      will look at that. But the page on the [
-	The GdkPixbuf Structure
-      ](https://developer.gnome.org/gdk-pixbuf/unstable/gdk-pixbuf-The-GdkPixbuf-Structure.html) suggests that - as long as you get the data types aligned - you
-      can just write the pixels of the second image into the pixbuf
-      data of the first. The page (although old) [
-	Gdk-pixbuf
-      ](http://openbooks.sourceforge.net/books/wga/graphics-gdk-pixbuf.html) is a useful tutorial on Gdk pixbufs.
-      One of the details you have to get right is the _rowstride_ of each image: the two-dimensional image 
-      is stored as a linear array of bytes and the rowstride tells how
-      many bytes make up a row. Typically there are 3 or 4 bytes per
-      pixel (for RGB or RGB+alpha) and these also need to be matched between
-      the images.
+Various pages suggest using Cairo surfaces instead and later sections
+will look at that. But the page on the [The GdkPixbuf Structure](https://developer.gnome.org/gdk-pixbuf/unstable/gdk-pixbuf-The-GdkPixbuf-Structure.html) suggests that - as long as you get the data types aligned - you
+can just write the pixels of the second image into the pixbuf
+data of the first. The page (although old) [Gdk-pixbuf](http://openbooks.sourceforge.net/books/wga/graphics-gdk-pixbuf.html) is a useful tutorial on Gdk pixbufs.
+One of the details you have to get right is the _rowstride_ of each image: the two-dimensional image
+is stored as a linear array of bytes and the rowstride tells how
+many bytes make up a row. Typically there are 3 or 4 bytes per
+pixel (for RGB or RGB+alpha) and these also need to be matched between
+the images.
 
 
 The program `gtk_play_video_overlay.c`is

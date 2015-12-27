@@ -3,12 +3,12 @@
 
 
 Jack uses ports which carry mono 32-bit data. Each port has a name as a string,
-      and poperties such as input and output.
-      Once a connection to a Jack server has been made, queries for ports known
-      to the server can be made using `jack_get_ports`.
-      If the arguments are `NULL`or zero then al ports are
-      returned, or patterns can be used to restrict the port names returned.
-      Once a port name is found it can be turned into a `jack_port_t`and its properties can be queried.
+and poperties such as input and output.
+Once a connection to a Jack server has been made, queries for ports known
+to the server can be made using `jack_get_ports`.
+If the arguments are `NULL`or zero then al ports are
+returned, or patterns can be used to restrict the port names returned.
+Once a port name is found it can be turned into a `jack_port_t`and its properties can be queried.
 
 
 A program to do this is `listports.c`:

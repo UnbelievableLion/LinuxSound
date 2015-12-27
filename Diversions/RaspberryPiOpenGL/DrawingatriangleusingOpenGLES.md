@@ -3,21 +3,19 @@
 
 
 The previous example did the absolute minimum of OpenGL calls,
-      just clearing the background. In this setion we do a bit more,
-      by using OpenGL calls to clear the background and repeatedly
-      draw a triangle (the same one!) multiple times a second.
-      The code is just adapted from Chapter 2 of the [
-	OpenGL ES 2.0 Programming Guide
-      ](http://opengles-book.com/es2/index.html) 
+just clearing the background. In this setion we do a bit more,
+by using OpenGL calls to clear the background and repeatedly
+draw a triangle (the same one!) multiple times a second.
+The code is just adapted from Chapter 2 of the [OpenGL ES 2.0 Programming Guide](http://opengles-book.com/es2/index.html) 
 
 
 The essential differences from the Programming Guide are
 
 + We don't give any explanations of the OpenGL code -
-	  the Guide has an exhaustive description
+the Guide has an exhaustive description
 + They hide the grubby details of building OpenGL programs
-	  in OS-specific modules such as `esUtils.c`,
-	  while we explicitly show the RPi stuff here
+in OS-specific modules such as `esUtils.c`,
+while we explicitly show the RPi stuff here
 
 The program is [triangle.c](triangle.c) :
 

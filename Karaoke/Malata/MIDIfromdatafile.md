@@ -3,8 +3,8 @@
 
 
 Here is where I am currently stuck.
-      The data files are _not_ MIDI files.
-      For example, song 10383 Lovers by Abba is
+The data files are _not_ MIDI files.
+For example, song 10383 Lovers by Abba is
 
 ```
 
@@ -31,7 +31,7 @@ Here is where I am currently stuck.
 
 
 This isn't a MIDI file. From my Sonken, I have a MIDI file for this
-      song (obviously not the same recording) which looks like
+song (obviously not the same recording) which looks like
 
 ```
 
@@ -81,7 +81,7 @@ The lyrics start after a sequence "18 07 18 07 18 07 18 07 00 26".
 
 
 A much trickier problem is that the lyrics are not contiguous!
-      They should be
+They should be
 
 ```
 
@@ -108,9 +108,9 @@ But if we look at the file, lines 2 and 4 are missing:
 ```
 
 
-For the missing line 2, there is some sort of pointer 
-      "09 6E 08 5E 01 00 1D 01 1E 26",
-      and it turns out that the missing lines are elsewhere:
+For the missing line 2, there is some sort of pointer
+"09 6E 08 5E 01 00 1D 01 1E 26",
+and it turns out that the missing lines are elsewhere:
 
 ```
 
@@ -127,36 +127,36 @@ For the missing line 2, there is some sort of pointer
 
 
 The Malata displays two lines at a time.
-      All of the first lines form a chunk. The second lines form another
-      chunk, later on. I haven't found an offset or length
-      to say where this second chunk occurs.
-      Each line appears to consist of a delta value (I guess) 
-      for the delay of the lyric, followed by a lyric character.
+All of the first lines form a chunk. The second lines form another
+chunk, later on. I haven't found an offset or length
+to say where this second chunk occurs.
+Each line appears to consist of a delta value (I guess)
+for the delay of the lyric, followed by a lyric character.
 
 
 Between lines is a section that starts with the character
-      '^' and finishes with the character '&'.
-      I haven't any idea what is in these sections apart from two
-      observations:
+'^' and finishes with the character '&'.
+I haven't any idea what is in these sections apart from two
+observations:
 
 + The character 0xFF appears twice: the first time it
-	  signals a shift from first line lyrics to second line
-	  lyrics. The next time it occurs it signals the end
-	  of the lyrics.
+signals a shift from first line lyrics to second line
+lyrics. The next time it occurs it signals the end
+of the lyrics.
 + Several times the sequence  "09 6E 08 5E 01 00 1D 01 1E 26"
-	  occurs. This seems to signal a long break (e.g. for a solo)
-	  in the lyrics. In the "Lovers" song this occurs several times:
-	  it occurs in the first line, but sometimes the second line
-	  is played immediately, sometimes it is delayed until after
-	  the next first line is played.
-	  I haven't resolved this yet :-(
+occurs. This seems to signal a long break (e.g. for a solo)
+in the lyrics. In the "Lovers" song this occurs several times:
+it occurs in the first line, but sometimes the second line
+is played immediately, sometimes it is delayed until after
+the next first line is played.
+I haven't resolved this yet :-(
 
 
 
 
 The file `printLyrics.c`gives a  dump fo the lyrics
-      for songs like Lovers (non-coded lyrics) plus the
-      deltas (assumed) and the stuff between lines
+for songs like Lovers (non-coded lyrics) plus the
+deltas (assumed) and the stuff between lines
 
 ```cpp
 

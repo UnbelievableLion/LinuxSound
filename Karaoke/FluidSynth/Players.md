@@ -3,7 +3,7 @@
 
 
  `fluidsynth`is a command line MIDI player.
-      It runs under ALSA with a command line
+It runs under ALSA with a command line
 
 ```
 

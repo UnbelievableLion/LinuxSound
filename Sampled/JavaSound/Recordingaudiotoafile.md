@@ -3,15 +3,15 @@
 
 
 Most of the work to do this is in preparation of an audio input stream.
-      Once that is done the method `write`of `AudioSystem`will copy input from the audio input stream to the output file.
+Once that is done the method `write`of `AudioSystem`will copy input from the audio input stream to the output file.
 
 
 To prepare the audio input stream:
 
 + Create an `AudioFormat`object describing the parameters
-	  of the input
+of the input
 + The microphone _produces_ audio. So it needs a `TargetDataLine`.
-	  So create a `DataLine.Info`for a target dataline.
+So create a `DataLine.Info`for a target dataline.
 + Ask the `AudioSystem`for a line satisfying the information
 + Wrap the line in an `AudioInputStream`
 
@@ -19,7 +19,7 @@ The output is just a Java `File`.
 
 
 Then use the `AudioSystem`function `write()`to copy the stream to the file.
-      The UML class diagram is
+The UML class diagram is
 
 
 ![alt text](Recorder.png)

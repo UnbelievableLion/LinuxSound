@@ -3,9 +3,9 @@
 
 
 Ideally, a Karaoke system should have a "look ahead" mechanism whereby
-      you can see the next line before having to sing it. This can be done by
-      showing two lines of text with overlapping times at different heights.
-      The algorithm is:
+you can see the next line before having to sing it. This can be done by
+showing two lines of text with overlapping times at different heights.
+The algorithm is:
 
 ```
 

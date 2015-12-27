@@ -4,9 +4,7 @@
 
 Well, it's not hard...
 
-+ In order to pull out the lyrics form a KAR or MIDI file, use the Java `DumpSequence`given in the [
-	    MIDI - JavaSound 
-	  ](../../MIDI/JavaSound/) chapter, as in
++ In order to pull out the lyrics form a KAR or MIDI file, use the Java `DumpSequence`given in the [MIDI - JavaSound](../../MIDI/JavaSound/) chapter, as in
 ```
 
 	    
@@ -19,7 +17,7 @@ java DumpSequence  song.kar  > song.dump
 to get a dump of all events
 
 + For line-only display, use the following Python script to extract the lyrics and
-	  save them in ASS format
+save them in ASS format
 ```
 
 	
@@ -139,7 +137,7 @@ python lyric2ass4kar.py song.dump > song.ass
 ```
 
 + For fill lyrics display, use the following Python script to extract the lyrics and
-	  save them in ASS format
+save them in ASS format
 ```
 
 	
@@ -286,7 +284,7 @@ python lyric2karaokeass4kar.py song.dump > song.ass
 ```
 
 + For multiline lyrics display, use the following Python script to extract the lyrics and
-	  save them in ASS format
+save them in ASS format
 ```
 
 	
@@ -473,9 +471,9 @@ lame song.wav song.mp3
 	  
 ```
 
-+ Find a suitable video-only file for your background - 
-	  I used one off my Karaoke disks - and then merge
-	  then into an MKV file:
++ Find a suitable video-only file for your background -
+I used one off my Karaoke disks - and then merge
+then into an MKV file:
 ```
 
 	    
@@ -489,7 +487,7 @@ mkvmerge -o 54154.mkv 54154.mp3 54154.ass BACK01.MPG
 
 
 The resultant MKV file can then by played as a standalone
-      file by MPlayer:
+file by MPlayer:
 
 ```
 
@@ -501,7 +499,7 @@ mplayer song.mkv
 
 
 It can also be played by VLC, but only with the ASS file
-      present
+present
 
 ```
 
@@ -513,14 +511,14 @@ vlc song.mkv
 
 
 Screen captures were shown before, depending on the Karaoke effect
-      chosen.
+chosen.
 
 
 Timing is however an issue: the default MIDI tempo is 120 beats per minute
-      and a common tick rate is 30 ticks per beat. This leads to a rate of
-      60 MIDI ticks per second. However, we are now playing MP3 files and ASS files
-      neither of which are MIDI files any more and
-      which are not necessarily synchronised, and with a rate of 60 ticks per
-      second in converting from MIDI to ASS, the lyrics run too slow.
-      Experimentally I have found 62.9 to be a reasonable rate for at least
-      some files...
+and a common tick rate is 30 ticks per beat. This leads to a rate of
+60 MIDI ticks per second. However, we are now playing MP3 files and ASS files
+neither of which are MIDI files any more and
+which are not necessarily synchronised, and with a rate of 60 ticks per
+second in converting from MIDI to ASS, the lyrics run too slow.
+Experimentally I have found 62.9 to be a reasonable rate for at least
+some files...

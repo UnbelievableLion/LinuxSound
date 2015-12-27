@@ -3,13 +3,13 @@
 
 
 The DisplayReceiver collects both ShortMessages as a Receiver
-      and MetaMessages as a MetaEventListener. These are needed
-      to see both the notes and the lyrics.
+and MetaMessages as a MetaEventListener. These are needed
+to see both the notes and the lyrics.
 
 
 The DisplayReceiver decodes the notes and text sent to it.
-      In turn, it passes these to a MidiGUI to show them.
-      This class is
+In turn, it passes these to a MidiGUI to show them.
+This class is
 
 ```cpp
 

@@ -2,32 +2,32 @@
 ##  Playing lyrics using Pnago + Cairo + Xlib 
 
 
-I want to be able to play my Karaoke files on the Raspberry Pi and similar 
-      Systems on a Chip (SOCs). Unfortuanately the rapsberry Pi has a grossly
-      underpowered CPU, so I have ended up using a [CubieBoard 2](http://cubieboard.org/2013/06/19/cubieboard2-is-here/) .
+I want to be able to play my Karaoke files on the Raspberry Pi and similar
+Systems on a Chip (SOCs). Unfortuanately the rapsberry Pi has a grossly
+underpowered CPU, so I have ended up using a [CubieBoard 2](http://cubieboard.org/2013/06/19/cubieboard2-is-here/) .
 
 
 Even then I don't know how to program the GPU, so anything involving heavy graphics
-      is not possible on this CPU. Any of the MIDI players hit close to (or over) 100%
-      CPU usage just be themselves. So the system discussed in the next section,
-      showing background video, isn't feasible.
+is not possible on this CPU. Any of the MIDI players hit close to (or over) 100%
+CPU usage just be themselves. So the system discussed in the next section,
+showing background video, isn't feasible.
 
 
 In this section we use TiMidity as MIDI player with a minimal backend to display
-      the lyrics as they are played. The lowest level of GUI support is used, namely
-      Xlib. This can be used to draw text using low-level Xlib calls such as `XDrawImageString`. This wrks fine with ASCII languages, and with
-      appropriate font choices, with other languages in the ISO-8859 family.
+the lyrics as they are played. The lowest level of GUI support is used, namely
+Xlib. This can be used to draw text using low-level Xlib calls such as `XDrawImageString`. This wrks fine with ASCII languages, and with
+appropriate font choices, with other languages in the ISO-8859 family.
 
 
-Asian languages are harder to deal with in standard C. They involve one or two byte 
-      characters when using an encoding such as UTF-8. To manage these. it is easiest
-      to switch to a library designed to handle them such, such as Cairo.
+Asian languages are harder to deal with in standard C. They involve one or two byte
+characters when using an encoding such as UTF-8. To manage these. it is easiest
+to switch to a library designed to handle them such, such as Cairo.
 
 
 Cairo is good for drawing simple text. For e.g. Chinese characters you have to
-      find a font that will allow you to draw them. Alternatively, you can jump
-      up one further level to Pango. Pango looks after all the font issues and
-      produces glyphs which are sent to the X server.
+find a font that will allow you to draw them. Alternatively, you can jump
+up one further level to Pango. Pango looks after all the font issues and
+produces glyphs which are sent to the X server.
 
 
 that approach is adopted in the following interface, `x_code.c`

@@ -3,29 +3,27 @@
 
 
 The `SongTable`builds up a vector of `SongInformation`objects by traversing the file
-      tree.
+tree.
 
 
 If there are many songs (say, in the thousands)
-      this can lead to a slow startup time. To reduce this,
-      once a table is loaded, it is saved to disk as a persistent
-      object by writing it to an `ObjectOutputStream`.
-      The next time the program is started, an attempt is made to
-      read it back from this using an `ObjectInputStream`.
-      Note that we do _not_ use the [
-	Java Persistence API
-      ](http://en.wikibooks.org/wiki/Java_Persistence/What_is_Java_persistence%3F) -
-      designed for J2EE, it is too heavyweight for our purpose here.
+this can lead to a slow startup time. To reduce this,
+once a table is loaded, it is saved to disk as a persistent
+object by writing it to an `ObjectOutputStream`.
+The next time the program is started, an attempt is made to
+read it back from this using an `ObjectInputStream`.
+Note that we do _not_ use the [Java Persistence API](http://en.wikibooks.org/wiki/Java_Persistence/What_is_Java_persistence%3F) -
+designed for J2EE, it is too heavyweight for our purpose here.
 
 
-The `SongTable`also includes code to build 
-      smaller song tables based on matches between patterns
-      and the title (or artist or number). It can search
-      for matches between a pattern and a song and build a new
-      table based on the matches. It contains a pointer to
-      the original table for restoration later.
-      This allows searches for patterns to use the same
-      data structure.
+The `SongTable`also includes code to build
+smaller song tables based on matches between patterns
+and the title (or artist or number). It can search
+for matches between a pattern and a song and build a new
+table based on the matches. It contains a pointer to
+the original table for restoration later.
+This allows searches for patterns to use the same
+data structure.
 
 
 The code for `SongTable`is

@@ -2,36 +2,34 @@
 ##  Making TiMidity into  a library 
 
 
-TiMidity is not designed as a library and you have to convince it 
-      otherwise. That isn't hard, by messing around with the build system.
+TiMidity is not designed as a library and you have to convince it
+otherwise. That isn't hard, by messing around with the build system.
 
 ###  Managed environments hook 
 
 
 A system whereby the application is in control doesn't work so well in a
-      managed environment such as Windows (or probably the many more recent
-      ones such as Android). In such environments you can't call Timidity's `main`, but rather the `main`function belonging
-      to the framework. This in turn will call an appropriate function
-      in the application.
+managed environment such as Windows (or probably the many more recent
+ones such as Android). In such environments you can't call Timidity's `main`, but rather the `main`function belonging
+to the framework. This in turn will call an appropriate function
+in the application.
 
 
 To make use of such hooks, you need to download the source code of
-      Timidity, either from a package manager or from the [
-	TiMidity++
-      ](http://timidity.sourceforge.net/) web site.
+Timidity, either from a package manager or from the [TiMidity++](http://timidity.sourceforge.net/) web site.
 
 
 For Timidity, the variations on the `main`function are in
-      the file `timidity/timidity.c`. Controlled by various define's,
-      you can have `main`or `win_main`. One of the more
-      interesting defines is `ANOTHER_MAIN`. If this is defined,
-      none of the versions of the `main`function are
-      compiled and you end with main-free object modules.
+the file `timidity/timidity.c`. Controlled by various define's,
+you can have `main`or `win_main`. One of the more
+interesting defines is `ANOTHER_MAIN`. If this is defined,
+none of the versions of the `main`function are
+compiled and you end with main-free object modules.
 
 
 If you build Timidity from the toplevel source directory
-      in the following way, it will produce an
-      error that the `main`function is not defined:
+in the following way, it will produce an
+error that the `main`function is not defined:
 
 ```
 
@@ -44,16 +42,16 @@ make
 
 
 That's the hook you need to take Timidity from being a standalone
-      application to being able to be called as a library from another
-      application. Note that you _cannot_ just remove `timidity/timidity.c`from the build - that file
-      contains too many other critical functions!
+application to being able to be called as a library from another
+application. Note that you _cannot_ just remove `timidity/timidity.c`from the build - that file
+contains too many other critical functions!
 
 ###  Building the library 
 
 
 To build Timidity as a static library, remove the `main`function as above and attempt to build timidity.
-      I found I needed to also specify which output system I wanted to use,
-      such as ALSA:
+I found I needed to also specify which output system I wanted to use,
+such as ALSA:
 
 ```
 
@@ -67,14 +65,14 @@ make
 
 
 This builds several `.ar`files and lots of object `.o`modules, but fails to build
-      the final `timidity`executable as (of course) there
-      is no `main`function. It also leaves a bunch of unlinked
-      files in the `timidity`subdirectory.
+the final `timidity`executable as (of course) there
+is no `main`function. It also leaves a bunch of unlinked
+files in the `timidity`subdirectory.
 
 
 You can
-      collect all of the object modules into an archive file by
-      running this from the top of the TiMidity source directory:
+collect all of the object modules into an archive file by
+running this from the top of the TiMidity source directory:
 
 ```
 
@@ -87,11 +85,11 @@ ranlib libtimidity.a
 
 
 Since you will have to build Timidity from the source,
-      check that it is working in normal mode before you try to
-      build this alternative library version.
-      That way you can find out that you need, say,
-      the `libasound-dev`library in order to use
-      ALSA, before you get mixed up in this other stuff!
+check that it is working in normal mode before you try to
+build this alternative library version.
+That way you can find out that you need, say,
+the `libasound-dev`library in order to use
+ALSA, before you get mixed up in this other stuff!
 
 ###  Library entry points 
 
@@ -118,9 +116,9 @@ They do not seem to be defined in any convenient header file.
 
 
 The real Timidity application is coded to work on many different
-      operating systems with many different versions of libraries.
-      Most of those dependencies are taken care of in building the
-      object files and library as above.
+operating systems with many different versions of libraries.
+Most of those dependencies are taken care of in building the
+object files and library as above.
 
 
 A minimal application just wraps our own `main`around the library entry points in `my_main.c`:
@@ -169,7 +167,7 @@ int main(int argc, char **argv)
 
 
 The compile command needs to bring in the Timidity library
-      and any other required library, and is for an ALSA application
+and any other required library, and is for an ALSA application
 
 ```
 
@@ -184,33 +182,31 @@ my_timidity: my_main.o
 
 
 As a more complex example, we look at playing a video file
-      while also playing a MIDI file. We assume that the video
-      file has no audio component and there is no attempt to
-      perform any synchronisation between the two streams -
-      that is an extra order of complexity!
+while also playing a MIDI file. We assume that the video
+file has no audio component and there is no attempt to
+perform any synchronisation between the two streams -
+that is an extra order of complexity!
 
 
 To play a video file we make use of the FFMpeg library
-      to decode a video stream into video frames. We then
-      need to display the frames in some kind of GUI object,
-      and there are very, very many toolkits for doing this :-(.
-      I've chosen the GTK toolkit as it underlies Gnome, is in
-      C, supports many other things such as i18n and so on.
-      I've based my code on [
-	An ffmpeg and SDL Tutorial
-      ](http://dranger.com/ffmpeg/) by Stephen Dranger which uses the SDL toolkit for display.
+to decode a video stream into video frames. We then
+need to display the frames in some kind of GUI object,
+and there are very, very many toolkits for doing this :-(.
+I've chosen the GTK toolkit as it underlies Gnome, is in
+C, supports many other things such as i18n and so on.
+I've based my code on [An ffmpeg and SDL Tutorial](http://dranger.com/ffmpeg/) by Stephen Dranger which uses the SDL toolkit for display.
 
 
 This runs the video and the MIDI in separate threads using the `pthreads`package. I've cheated a bit by hard-coding
-      the names of the files and fixing the size of the video frames.
-      It was a real b*mmer getting it to work under GTK3.0 as that
-      has removed pixmaps and it took too, too long to find out what
-      was going on.
+the names of the files and fixing the size of the video frames.
+It was a real b*mmer getting it to work under GTK3.0 as that
+has removed pixmaps and it took too, too long to find out what
+was going on.
 
 
 I've split the code into two files, one to play the video using Gtk
-      and the other to play the TiMidity library and invoke the
-      video. The video playing file is `video_code.c`:
+and the other to play the TiMidity library and invoke the
+video. The video playing file is `video_code.c`:
 
 ```cpp
 

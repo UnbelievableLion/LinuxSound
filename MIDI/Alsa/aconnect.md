@@ -3,8 +3,8 @@
 
 
 the program `aconnect.c`can be used to test for sequencer servers
-      and clients such as sequencers. I have set two clients running: Timidity and
-      seqdemo (discussed later). The command
+and clients such as sequencers. I have set two clients running: Timidity and
+seqdemo (discussed later). The command
 
 ```
 
@@ -35,9 +35,7 @@ client 129: 'ALSA Sequencer Demo' [type=user]
 
 
 The code for aconnect.c is
-      from [
-	SourceArchive
-      ](http://alsa-utils.sourcearchive.com/documentation/1.0.8-4/aconnect_8c-source.html) 
+from [SourceArchive](http://alsa-utils.sourcearchive.com/documentation/1.0.8-4/aconnect_8c-source.html) 
 
 ```cpp
 

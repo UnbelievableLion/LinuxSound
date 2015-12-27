@@ -3,16 +3,16 @@
 
 
 The OpenMAX component `image_resize`will decode a JPEG image, but only to YUV format.
-      Broadcom has an additional non-standard component `resize`which can not only resize
-      an uncompresssed image but also convert it
-      to RGB format.
+Broadcom has an additional non-standard component `resize`which can not only resize
+an uncompresssed image but also convert it
+to RGB format.
 
 
 Matt Ownby and Anthong Sale did a marvellous job
-      of unravelling the sequence of steps required
-      to set up tunnelling between a decoder and resizer.
-      Their logic is captured in the `portSettingsChanged`function. This adds tunnelling to the
-      decoder program given earlier.
+of unravelling the sequence of steps required
+to set up tunnelling between a decoder and resizer.
+Their logic is captured in the `portSettingsChanged`function. This adds tunnelling to the
+decoder program given earlier.
 
 ```cpp
 
@@ -151,21 +151,21 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 
 
 The only change we make to their code is to add a function
-      to dump the decoded and converted RGB image as a TGA file.
-      The function `save_image_as_TGA`is called
-      when the output buffer of the resizer is non-empty.
-      Just a few wrinkles in this. The image has a height and width.
-      The resizer will have aligned those up to a 16-byte
-      multiple, the Stride and the SliceHeight.
-      We have asked for a 32-bit format 
-      ( ` OMX_COLOR_Format32bitABGR8888`)
-      and so we have to specify this. The TGA format is specified [here](http://www.fileformat.info/format/tga/egff.htm) .
+to dump the decoded and converted RGB image as a TGA file.
+The function `save_image_as_TGA`is called
+when the output buffer of the resizer is non-empty.
+Just a few wrinkles in this. The image has a height and width.
+The resizer will have aligned those up to a 16-byte
+multiple, the Stride and the SliceHeight.
+We have asked for a 32-bit format
+( ` OMX_COLOR_Format32bitABGR8888`)
+and so we have to specify this. The TGA format is specified [here](http://www.fileformat.info/format/tga/egff.htm) .
 
 
 The co-ordinate system between TGA and the Broadcom is inverted.
-      We are lazy here because it simplifies the code, and save the
-      image upside down. The source is almost completely
-      from the RPi `/opt/vc/src/hello_pi/hello_jpeg/jpeg.c`program, here as [decodejpeg2rgb.c](decodejpeg2rgb.c) :
+We are lazy here because it simplifies the code, and save the
+image upside down. The source is almost completely
+from the RPi `/opt/vc/src/hello_pi/hello_jpeg/jpeg.c`program, here as [decodejpeg2rgb.c](decodejpeg2rgb.c) :
 
 ```cpp
 

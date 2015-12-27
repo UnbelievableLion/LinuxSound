@@ -3,41 +3,41 @@
 
 
 The MidiGUI is called by two methods: setLyric() and
-      setNote(). The GUI consists of three main areas: 
-      an area to give a "piano" view of the melody as it is
-      played (pianoPanel), an area to
-      show the complete set of melody notes (melodyPanel) and a set of Panels
-      to show the lyrics. setNote() is fairly straightforward
-      in that it just calls drawNote() in the pianoPanel.
-      setLyric() is considerably more complex.
+setNote(). The GUI consists of three main areas:
+an area to give a "piano" view of the melody as it is
+played (pianoPanel), an area to
+show the complete set of melody notes (melodyPanel) and a set of Panels
+to show the lyrics. setNote() is fairly straightforward
+in that it just calls drawNote() in the pianoPanel.
+setLyric() is considerably more complex.
 
 
 Most Karaoke players show a couple of lines of text for the
-      lyrics. As lyrics are played, typically the text will
-      change colour to match. When the end of a line is reached,
-      focus will switch to the next line, and the previous
-      line will be replaced with another line of lyrics.
+lyrics. As lyrics are played, typically the text will
+change colour to match. When the end of a line is reached,
+focus will switch to the next line, and the previous
+line will be replaced with another line of lyrics.
 
 
-Each line must hold a line of lyrics. 
-      The line must be able to react to lyrics as they are played.
-      This is handled by an AttributedTextPanel, shown later.
-      The main task is to feed changes
-      in lyrics through to the selected panel so that it can display
-      them in the correct colours.
+Each line must hold a line of lyrics.
+The line must be able to react to lyrics as they are played.
+This is handled by an AttributedTextPanel, shown later.
+The main task is to feed changes
+in lyrics through to the selected panel so that it can display
+them in the correct colours.
 
 
 The other principal task for the MidiGUI here is to switch focus
-      between AttributedTextPanel's when end of line is detected
-      and to update the next line of text. 
-      The new lines of text can't
-      come from the lyrics as they are played, but must instead
-      be constructed from the sequence containing all of the notes
-      and lyrics. The convenience class SequenceInformation
-      (shown later)
-      takes a Sequence object and has a method to extract an array
-      of LyricLine objects. Each panel displaying a line
-      is given a line from this array.
+between AttributedTextPanel's when end of line is detected
+and to update the next line of text.
+The new lines of text can't
+come from the lyrics as they are played, but must instead
+be constructed from the sequence containing all of the notes
+and lyrics. The convenience class SequenceInformation
+(shown later)
+takes a Sequence object and has a method to extract an array
+of LyricLine objects. Each panel displaying a line
+is given a line from this array.
 
 ```cpp
 

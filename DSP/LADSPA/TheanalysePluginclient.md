@@ -3,10 +3,10 @@
 
 
 The `analysePlugin`client loads
-      a plugin file and then does a dump of all the information
-      given about each plugin in the file. It is really
-      just a long-winded plough through all the possibilities,
-      printing out information. Its code is:
+a plugin file and then does a dump of all the information
+given about each plugin in the file. It is really
+just a long-winded plough through all the possibilities,
+printing out information. Its code is:
 
 ```cpp
 

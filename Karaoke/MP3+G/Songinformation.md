@@ -3,10 +3,10 @@
 
 
 The information about each song should include its path
-      in the file system, the name of the artist(s), the title
-      of the song and any other useful information. This information
-      has to be pulled out of the the file path of the song.
-      In my current setup, files look like
+in the file system, the name of the artist(s), the title
+of the song and any other useful information. This information
+has to be pulled out of the the file path of the song.
+In my current setup, files look like
 
 ```
 
@@ -18,9 +18,9 @@ The information about each song should include its path
 
 
 Each song has a reasonably unique identifier ("SK-50154"),
-      a unique path and an artist and title. 
-      Reasonably straight-forward pattern matching code can
-      extract these parts:
+a unique path and an artist and title.
+Reasonably straight-forward pattern matching code can
+extract these parts:
 
 ```cpp
 
@@ -49,9 +49,9 @@ if (fname.endsWith(".zip") ||
 
 
 The `SongInformation`class captures this
-      information and also includes methods for pattern matching
-      of a string against the various fields. For example,
-      to check if a title matches,
+information and also includes methods for pattern matching
+of a string against the various fields. For example,
+to check if a title matches,
 
 ```cpp
 
@@ -62,11 +62,9 @@ public boolean titleMatch(String pattern) {
 ```
 
 
-This gives a case-independent match using 
-      Java regular expression support.
-      See [
-	Java Regex Tutorial
-      ](http://www.vogella.com/articles/JavaRegularExpressions/article.html) by Lars Vogel for more details.
+This gives a case-independent match using
+Java regular expression support.
+See [Java Regex Tutorial](http://www.vogella.com/articles/JavaRegularExpressions/article.html) by Lars Vogel for more details.
 
 
 The complete `SongInformation`file is

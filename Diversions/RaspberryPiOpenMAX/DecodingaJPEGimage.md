@@ -3,17 +3,16 @@
 
 
 OpenMAX on the RPi has a standard component `OMX.broadcom.image_decode`.
-      The RPi documentation for it is [
-	here ](http://home.nouwen.name/RaspberryPi/documentation/ilcomponents/image_decode.html) . It has two ports. The input port has (3) buffers to take a JPEG
-      image, and one output port for the decoded image.
-      The input buffers have a default size, and if the image is large you just
-      cycle through them, filling and emptying each buffer in turn.
+The RPi documentation for it is [here](http://home.nouwen.name/RaspberryPi/documentation/ilcomponents/image_decode.html) . It has two ports. The input port has (3) buffers to take a JPEG
+image, and one output port for the decoded image.
+The input buffers have a default size, and if the image is large you just
+cycle through them, filling and emptying each buffer in turn.
 
 
 The program starts off fairly easily in `main`by reading the JPEG file into a byte-buffer of the right size.
-      The call to `bcm_host_init`is required to
-      initialise the Broadcom libraries. The JPEG image decoder
-      is then created and asked to decode the image.
+The call to `bcm_host_init`is required to
+initialise the Broadcom libraries. The JPEG image decoder
+is then created and asked to decode the image.
 
 ```cpp
 
@@ -56,8 +55,8 @@ main(int argc, char *argv[])
 
 
 The call to `setupOpenMaxJpegDecoder`builds some
-      data structures and calls to `prepareImageDecoder`to initialise the decoder and `startupImageDecoder`to move it into executing state, so that it can then decode
-      the image.
+data structures and calls to `prepareImageDecoder`to initialise the decoder and `startupImageDecoder`to move it into executing state, so that it can then decode
+the image.
 
 ```cpp
 
@@ -99,15 +98,15 @@ setupOpenMaxJpegDecoder(OPENMAX_JPEG_DECODER ** pDecoder)
 
 
 The call to `prepareImageDecoder`creates the
-      component and establishes its input and output port numbers
-      (which should be 320 and 321 respectively by the OpenMAX
-      specification). These two ports are disabled, but they
-      are enabled to have buffers.
+component and establishes its input and output port numbers
+(which should be 320 and 321 respectively by the OpenMAX
+specification). These two ports are disabled, but they
+are enabled to have buffers.
 
 
 The function `startupImageDecoder`is a heavy-duty
-      function. It has to establish the format that it will
-      accept from the input file by
+function. It has to establish the format that it will
+accept from the input file by
 
 ```cpp
 
@@ -144,8 +143,8 @@ Then it queries for the buffer requirements, building an ` OMX_PARAM_PORTDEFINIT
 
 
 Then we can make a call to enable the input port,
-      allocate the input buffers and wait for the port
-      to become enabled
+allocate the input buffers and wait for the port
+to become enabled
 
 ```cpp
 
@@ -189,9 +188,9 @@ Then we can make a call to enable the input port,
 
 
 Finally, we can move the component into executing state.
-      But being paranoic about the behaviour of this API,
-      we wait to ensure that it actually does make the state
-      transition requested:
+But being paranoic about the behaviour of this API,
+we wait to ensure that it actually does make the state
+transition requested:
 
 ```cpp
 
@@ -217,36 +216,36 @@ Finally, we can move the component into executing state.
 
 
 The function `decodeImage`starts up normally enough.
-      It loads the input buffers in a circular fashion
-      from the JPEG image loaded
-      into the `sourceImage`array.
-      Each buffer is emptied by a call to ` OMX_EmptyThisBuffer`. When the entire image
-      has been loaded, the final buffer has the ` OMX_BUFFERFLAG_EOS`flag set to indicate
-      that the image is complete.
+It loads the input buffers in a circular fashion
+from the JPEG image loaded
+into the `sourceImage`array.
+Each buffer is emptied by a call to ` OMX_EmptyThisBuffer`. When the entire image
+has been loaded, the final buffer has the ` OMX_BUFFERFLAG_EOS`flag set to indicate
+that the image is complete.
 
 
 The snag with this component is that you don't know how large the decoded
-      image will be until the decoder has done at least some work on it.
-      So while the input buffers can be assigned statically up front,
-      filled and emptied, we don't know what the size of the
-      output buffer should be.
-      Fortunately OpneMAX manages this
-      by raising
-      a `PortSettingsChanged`event
-      when enough information is gained from the JPEG image
-      to know the size of the decoded image.
+image will be until the decoder has done at least some work on it.
+So while the input buffers can be assigned statically up front,
+filled and emptied, we don't know what the size of the
+output buffer should be.
+Fortunately OpneMAX manages this
+by raising
+a `PortSettingsChanged`event
+when enough information is gained from the JPEG image
+to know the size of the decoded image.
 
 
 If we were into concurrent programming, we would catch
-      a `PortSettingsChanged`event in an
-      event handling thread and work from there.
-      The `ilclient`library tries to force a
-      sequential mode of operation. So whenever a buffer
-      is emptied, the application will go into a loop
-      either waiting for a `PortSettingsChanged`event to occur and timing out after 5 milliseconds
-      (I think)
-      if it doesn't or exiting if the input buffer is empty.
-      This code is a bit messy!
+a `PortSettingsChanged`event in an
+event handling thread and work from there.
+The `ilclient`library tries to force a
+sequential mode of operation. So whenever a buffer
+is emptied, the application will go into a loop
+either waiting for a `PortSettingsChanged`event to occur and timing out after 5 milliseconds
+(I think)
+if it doesn't or exiting if the input buffer is empty.
+This code is a bit messy!
 
 ```cpp
 
@@ -291,18 +290,18 @@ If we were into concurrent programming, we would catch
 
 
 If a `PortSettingsChanged`event occurs,
-      the application calls `portSettingsChanged`in the main thread. This queries the (single) output port
-      for the width and height values now set, switches
-      the component to enabled state, allocates a buffer
-      and waits for it to move to enabled state.
-      We can also collect information about the
-      format of the decoded image as well as other
-      features such as size.
+the application calls `portSettingsChanged`in the main thread. This queries the (single) output port
+for the width and height values now set, switches
+the component to enabled state, allocates a buffer
+and waits for it to move to enabled state.
+We can also collect information about the
+format of the decoded image as well as other
+features such as size.
 
 
 Once the output buffer has been created, we can make a
-      call to fill the buffer. We should only have to do this once,
-      so a flag `bFilled`is used to control this.
+call to fill the buffer. We should only have to do this once,
+so a flag `bFilled`is used to control this.
 
 ```cpp
 
@@ -340,10 +339,10 @@ Once the output buffer has been created, we can make a
 
 
 Once the input buffers have been filled and emptied
-      the output buffer has been sized, allocated and
-      a call made to fill it, the application has nothing
-      to do but wait until the output buffer is filled.
-      OpenMAX should generate a `OMX_BUFFERFLAG_EOS`when this happens, so we just wait
+the output buffer has been sized, allocated and
+a call made to fill it, the application has nothing
+to do but wait until the output buffer is filled.
+OpenMAX should generate a `OMX_BUFFERFLAG_EOS`when this happens, so we just wait
 
 ```cpp
 
@@ -366,12 +365,12 @@ Once the input buffers have been filled and emptied
 
 
 Ooops! the EOS event doesn't seem to get generated in
-      practice (contrary to the specification) but the program
-      seems to work anyway :-(.
+practice (contrary to the specification) but the program
+seems to work anyway :-(.
 
 
 At this point we can do something like save the decoded
-      image to a file, or do further processing.
+image to a file, or do further processing.
 
 
 The final code is [jpeg-decoder.c](jpeg-decoder.c) 

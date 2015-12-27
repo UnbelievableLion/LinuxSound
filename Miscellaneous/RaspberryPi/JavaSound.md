@@ -3,8 +3,8 @@
 
 
 I installed OpenJDK version 6, the default Java install at present.
-      The program `DeviceInfo`was  given in the JavaSound Sampled chapter
-      The output from this on the RPi is
+The program `DeviceInfo`was  given in the JavaSound Sampled chapter
+The output from this on the RPi is
 
 ```
 
@@ -40,10 +40,10 @@ Mixers:
 
 
 Althjough this is using the PulseAudio mixer, pulse audio isn't actually running
-      (at this stage)!
-      So it can only use the ALSA interface.
+(at this stage)!
+So it can only use the ALSA interface.
 
 
 The program `PlayAudioFile`was  given in the JavaSound Sampled chapter.
-      This can play .wav files okay. But it can't play Ogg-Vorbis or MP3 files and throws
-      anUnsupportedAudioFileException.
+This can play .wav files okay. But it can't play Ogg-Vorbis or MP3 files and throws
+anUnsupportedAudioFileException.

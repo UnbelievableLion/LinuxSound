@@ -3,47 +3,47 @@
 
 
 The simple API is ... simple. By contrast, the asynchronous API is
-      large and complex. There are also very few examples of using this
-      API.
+large and complex. There are also very few examples of using this
+API.
 
 
 Nearly all interaction with this API is asynchronous.
-      A call is made to the PulseAudio server and when the response
-      is ready, a library invokes a callback function that you
-      will have passed to it when making the library call.
-      This avoids the need for user code to either block or make
-      polling calls.
+A call is made to the PulseAudio server and when the response
+is ready, a library invokes a callback function that you
+will have passed to it when making the library call.
+This avoids the need for user code to either block or make
+polling calls.
 
 
 The essential structure is
 
 + Create a PulseAudio mainloop (synchronous - pa_mainloop_new)
 + Get the mainloop API object, a table of mainloop functions
-	  (synchronous - pa_mainloop_get_api)
+(synchronous - pa_mainloop_get_api)
 + Get a context object to talk to the PulseAudio server
-	  (synchronous - pa_context_new)
+(synchronous - pa_context_new)
 + Establish a connection to the PulseAudio server.
-	  This is asynchronous -  pa_context_connect
+This is asynchronous -  pa_context_connect
 + Register a callback for context state changes from the server
-	  -  pa_context_set_state_callback
+-  pa_context_set_state_callback
 + Commence the event processing loop - (pa_mainloop_run
 + Within the context state callback, determine what state
-	  has changed e.g. the connection has been established
-+ Within this callback, set up, for example, 
-	  record or playback streams
+has changed e.g. the connection has been established
++ Within this callback, set up, for example,
+record or playback streams
 + Establish further callbacks for these streams
 + Within the stream callbacks, do more processing,
-	  such as saving a recording stream to file
+such as saving a recording stream to file
 
 Steps (1) - (7) will be common to most applications.
-      The context state callback wil be called in response to changes
-      in the server. These are state changes such as `PA_CONTEXT_CONNECTIN`, `PA_CONTEXT_SETTING_NAME`and so on. The change of relevance to most applications will be `PA_CONTEXT_READY`. This signifies that the application
-      can make requests of the server in its steady state.
+The context state callback wil be called in response to changes
+in the server. These are state changes such as `PA_CONTEXT_CONNECTIN`, `PA_CONTEXT_SETTING_NAME`and so on. The change of relevance to most applications will be `PA_CONTEXT_READY`. This signifies that the application
+can make requests of the server in its steady state.
 
 
 In step (8) the application will set its own behaviour.
-      This is done by setting up further callback functions for various 
-      operations, such as listing devices or playing audio.
+This is done by setting up further callback functions for various
+operations, such as listing devices or playing audio.
 
 ###  List of devices 
 
@@ -60,7 +60,7 @@ pa_context_get_sink_info_list(c, sinklist_cb, NULL)
 
 
 where `c`is the context, `sinklist_cb`is the application's callback
-      and `NULL`is user data passed to the callback.
+and `NULL`is user data passed to the callback.
 
 
 The callback is called as
@@ -75,8 +75,8 @@ void sinklist_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
 
 
 The parameter `eol`can take three values: negative means a failure
-      of some kind; zero means a valid entry for `pa_sink_info`; positive means that there are no more
-      valid entries in the list.
+of some kind; zero means a valid entry for `pa_sink_info`; positive means that there are no more
+valid entries in the list.
 
 
 The structure `pa_sink_info`is defined as
@@ -116,24 +116,20 @@ struct {
 
 
 Further information about this structure is maintained in the
-      Doxygen entry [
-	pa_sink_info Struct Reference
-      ](http://freedesktop.org/software/pulseaudio/doxygen/structpa__sink__info.html) 
+Doxygen entry [pa_sink_info Struct Reference](http://freedesktop.org/software/pulseaudio/doxygen/structpa__sink__info.html) 
 
 
 For information, the major fields are the `name`and the `description`. The `index`is an opaque index into
-      some data structure and is used in many PulseAudio functions. 
-      The `proplist`is a map of general information that may contain interesting information.
-      This can be retrieved by iterating through the map.
+some data structure and is used in many PulseAudio functions.
+The `proplist`is a map of general information that may contain interesting information.
+This can be retrieved by iterating through the map.
 
 
 There is a similar callback and data structures for input devices.
 
 
 A program to list input and output devices current when the application connects
-      to the server is [
-	 palist_devices.c:
-      ](palist_devices.c) 
+to the server is [palist_devices.c:](palist_devices.c) 
 
 ```cpp
 
@@ -360,58 +356,52 @@ Sink: name alsa_output.usb-Creative_Technology_Ltd_SB_X-Fi_Surround_5.1_Pro_0000
 ```
 
 
-An alternative program with the same effect is [
-	PulseAudio: An Async Example To Get Device Lists
-      ](http://www.ypass.net/blog/2009/10/pulseaudio-an-async-example-to-get-device-lists) by Igor Brezac and Eric Connell.
-      It doesn't follow quite as complex a route as the above,
-      as it only queries the server for its devices.
-      However, it uses its own state machine to track where in the
-      callback process it is!
+An alternative program with the same effect is [PulseAudio: An Async Example To Get Device Lists](http://www.ypass.net/blog/2009/10/pulseaudio-an-async-example-to-get-device-lists) by Igor Brezac and Eric Connell.
+It doesn't follow quite as complex a route as the above,
+as it only queries the server for its devices.
+However, it uses its own state machine to track where in the
+callback process it is!
 
 ###  Monitoring ongoing changes: new sources and sinks 
 
 
 The last program listed the source and sink devices registered
-      with PulseAudio at the time a connection to the server was established.
-      However, when a new device is connected or an existing device is
-      disconnected, PulseAudio registers a changes in the context and this
-      can also be monitored by callbacks.
+with PulseAudio at the time a connection to the server was established.
+However, when a new device is connected or an existing device is
+disconnected, PulseAudio registers a changes in the context and this
+can also be monitored by callbacks.
 
 
 The key to doing this is to _subscribe_ to context changes by `pa_context_subscribe`. This takes a context, a mask of
-      subscription events and user data. Possible values of the mask are
-      described at [
-	Subscription event mask
-      ](http://freedesktop.org/software/pulseaudio/doxygen/def_8h.html#ad4e7f11f879e8c77ae5289145ecf6947) and include `PA_SUBSCRIPTION_MASK_SINK`for changes in sinks
-      and `PA_SUBSCRIPTION_MASK_SINK_INPUT`for sink input events.
+subscription events and user data. Possible values of the mask are
+described at [Subscription event mask](http://freedesktop.org/software/pulseaudio/doxygen/def_8h.html#ad4e7f11f879e8c77ae5289145ecf6947) and include `PA_SUBSCRIPTION_MASK_SINK`for changes in sinks
+and `PA_SUBSCRIPTION_MASK_SINK_INPUT`for sink input events.
 
 
 Setting the callback function to monitor these changes
-      is a bit odd.
-      The function `pa_context_subscribe`takes a callback function
-      of type `pa_context_success_cb`but this doesn't contain
-      information about what caused the callback.
-      Instead, it is better to first call `pa_context_set_subscribe_callback`which takes a
-      callback function of type ` 	pa_context_subscribe_cb_t`which _does_ get passed such information and then use `NULL`for the callback in `pa_context_subscribe`!
+is a bit odd.
+The function `pa_context_subscribe`takes a callback function
+of type `pa_context_success_cb`but this doesn't contain
+information about what caused the callback.
+Instead, it is better to first call `pa_context_set_subscribe_callback`which takes a
+callback function of type ` 	pa_context_subscribe_cb_t`which _does_ get passed such information and then use `NULL`for the callback in `pa_context_subscribe`!
 
 
 Within a ` 	pa_context_subscribe_cb_t`subscription callback, the cause of the callback can be
-      examined and appropriate code called. If a new subscription to a sink
-      is found, then information about the sink can be found by ` pa_context_get_sink_info_by_index`which takes
-      another callback! after chasing through all these callbacks, you can
-      eventually get information about new devices.
+examined and appropriate code called. If a new subscription to a sink
+is found, then information about the sink can be found by ` pa_context_get_sink_info_by_index`which takes
+another callback! after chasing through all these callbacks, you can
+eventually get information about new devices.
 
 
 Note that the callback function used by `pa_context_get_sink_info_list`and the callback
-      function used by `pa_context_get_sink_info_by_index`are the same - the callback is called once per sink device
-      regardless of whether it is a singleton or one of a list
-      of devices.
+function used by `pa_context_get_sink_info_by_index`are the same - the callback is called once per sink device
+regardless of whether it is a singleton or one of a list
+of devices.
 
 
 A program to list devices on connection and also to list changes
-      as devices are connected or disconnected is [
-	palist_devices_ongoing.c:
-      ](palist_devices_ongoing.c) 
+as devices are connected or disconnected is [palist_devices_ongoing.c:](palist_devices_ongoing.c) 
 
 ```cpp
 
@@ -613,16 +603,13 @@ int main(int argc, char *argv[]) {
 
 
 If you download the source for PulseAudio
-      from [
-	FreeDesktop.org](http://www.freedesktop.org/wiki/Software/PulseAudio/Download) you will find a program `pacat.c`in the `utils`directory. This program uses some of the "private" API and will not
-      compile using the "public" libraries. It also has
-      all the bells and whistles that you would expect from a production program. 
-      I've taken
-      this and stripped out the complexities so that you can find your
-      way into this API.
-      The file is [
-	parec.c:
-      ](parec.c) 
+from [FreeDesktop.org](http://www.freedesktop.org/wiki/Software/PulseAudio/Download) you will find a program `pacat.c`in the `utils`directory. This program uses some of the "private" API and will not
+compile using the "public" libraries. It also has
+all the bells and whistles that you would expect from a production program.
+I've taken
+this and stripped out the complexities so that you can find your
+way into this API.
+The file is [parec.c:](parec.c) 
 
 ```cpp
 
@@ -853,29 +840,29 @@ int main(int argc, char *argv[]) {
 
 
 Recording  an input stream is done within a stream read callback by the
-      call `pa_stream_peek`.
-      Similarly, playing an output stream is done by a stream write callback
-      by the call `pa_stream_write`.
+call `pa_stream_peek`.
+Similarly, playing an output stream is done by a stream write callback
+by the call `pa_stream_write`.
 
 
 In the following program
-      the callback is set within the PA_CONTEXT_READY branch of the context
-      state change callback. The stream write callback is passed the number
-      of bytes the consuming stream is prepared to receive, so read that number
-      of bytes from the file and write them to the stream.
+the callback is set within the PA_CONTEXT_READY branch of the context
+state change callback. The stream write callback is passed the number
+of bytes the consuming stream is prepared to receive, so read that number
+of bytes from the file and write them to the stream.
 
 
 Care has to be taken at the end of file. There may be unplayed material in
-      PulseAudio's output buffers. This needs to be drained before the program
-      can exit. This is done by the function `pa_stream_drain`.
-      On end of file, first set the stream write callback to null so that the
-      output stream doesn't keep calling for more input, and then drain the stream.
-      A stream drain complete callback will be called on completion of this, so the
-      program can then exit (or do something else).
+PulseAudio's output buffers. This needs to be drained before the program
+can exit. This is done by the function `pa_stream_drain`.
+On end of file, first set the stream write callback to null so that the
+output stream doesn't keep calling for more input, and then drain the stream.
+A stream drain complete callback will be called on completion of this, so the
+program can then exit (or do something else).
 
 
 In this program we include many more callbacks than in earlier ones, to show
-      the range of features that can be monitored.
+the range of features that can be monitored.
 
 
 The program is [pacat2.c:](pacat2.c) 
@@ -1311,47 +1298,47 @@ int main(int argc, char *argv[]) {
 
 
 With the latency set to the default, the number of bytes that can be written on each
-      callback is 65470 bytes. This gives a minimum latency of 65470/44100 secs, or about
-      1500 msecs. 
-      With the latency and process time both set to 1msec, 
-      the buffer size is about 1440 bytes, for a latency
-      of 32 msecs.
+callback is 65470 bytes. This gives a minimum latency of 65470/44100 secs, or about
+1500 msecs.
+With the latency and process time both set to 1msec,
+the buffer size is about 1440 bytes, for a latency
+of 32 msecs.
 
 ###  Play a file using I/O callbacks 
 
 
 Writing a file to an output stream is simple:
-      read from a file into a buffer, and keep emptying the buffer by
-      writing to the stream.  Reading from a file is straightforward:
-      use the standard Unix `read`function. You request a read of a
-      number of bytes, and the `read`function returns the number of bytes
-      actually read.
-      This was discussed in the last section.
+read from a file into a buffer, and keep emptying the buffer by
+writing to the stream.  Reading from a file is straightforward:
+use the standard Unix `read`function. You request a read of a
+number of bytes, and the `read`function returns the number of bytes
+actually read.
+This was discussed in the last section.
 
 
 The program in the PulseAudio distribution uses a more complex system.
-      It uses I/O-ready callbacks to pass some handling to an I/O callback.
-      This makes use of two functions:
+It uses I/O-ready callbacks to pass some handling to an I/O callback.
+This makes use of two functions:
 
 +  ` pa_stream_writable_size`tells how many bytes can be
-	  written to the stream
+written to the stream
 +  `pa_stream_write`writes a number of bytes to a stream
 
 The logic becomes: fill a buffer by reading from the file, and at the
-      same time write as many bytes as possible from the buffer to the stream,
-      upto the limit
-      of the buffer size or however many bytes the stream can take, whichever
-      is smaller.
+same time write as many bytes as possible from the buffer to the stream,
+upto the limit
+of the buffer size or however many bytes the stream can take, whichever
+is smaller.
 
 
 In PulseAudio this is done asynchronously,
-      using callback functions. The two relevant functions are
+using callback functions. The two relevant functions are
 
 + 
 
 The function `pa_stream_set_write_callback()`registers a
-	  callback that will be called whenever the stream is ready to be
-	  written to. Registering the callback looks like
+callback that will be called whenever the stream is ready to be
+written to. Registering the callback looks like
 
 ```
 
@@ -1363,7 +1350,7 @@ The function `pa_stream_set_write_callback()`registers a
 
 
 The callback is passed the stream to write to (s) and the number
-	  of bytes that can be written (length):
+of bytes that can be written (length):
 
 ```
 
@@ -1376,9 +1363,9 @@ void stream_write_callback(pa_stream *s, size_t length, void *userdata)
 + 
 
 A callback to read from files is registered by one of the functions
-	  kept in the `mainloop_api`table. The registering function
-	  is `io_new`and is passed a Unix file descriptor for the file
-	  and the callback function. Reigstering the callback looks like
+kept in the `mainloop_api`table. The registering function
+is `io_new`and is passed a Unix file descriptor for the file
+and the callback function. Reigstering the callback looks like
 
 ```
 
@@ -1405,31 +1392,31 @@ void stdin_callback(pa_mainloop_api *mainloop_api, pa_io_event *stdio_event,
 
 
 (Note: the PulseAudio code does a `dup2`from the source file's
-	  descriptor to `STDIN_FILENO`- which matches the name of the
-	  function. I can't see the point of that, and their code uses `fd`anyway.)
+descriptor to `STDIN_FILENO`- which matches the name of the
+function. I can't see the point of that, and their code uses `fd`anyway.)
 
 
 When should these callbacks be registered? The stream write callback can
-      be registered at any time after the stream has been created which is done by `pa_stream_new`. For the stdin callback, I could only get it
-      to work properly by registering it once the stream was ready i.e.
-      in the ` PA_STREAM_READY`branch of the stream state callback
-      function.
+be registered at any time after the stream has been created which is done by `pa_stream_new`. For the stdin callback, I could only get it
+to work properly by registering it once the stream was ready i.e.
+in the ` PA_STREAM_READY`branch of the stream state callback
+function.
 
 
 So after all that, what is the logic of the program?
 
 + In the stdin callback:
 + if the buffer has stuff in it, then just return - no point in adding
-	      any more
+any more
 + if the buffer is empty, then query the stream to see how much can be written
-	      to it
+to it
 + if the stream says no more, then just read something into the buffer and return
 + if the stream can be written to, then read from the file into the buffer
-	      and write it to the stream
+and write it to the stream
 + In the stream write callback:
 + if the buffer is non-empty, write its contents to the stream
 
-The program to play from a file presently looks like [ pacat.c:](pacat.c) 
+The program to play from a file presently looks like [pacat.c:](pacat.c) 
 
 ```cpp
 
@@ -1920,25 +1907,23 @@ int main(int argc, char *argv[]) {
 ###  Controlling latency 
 
 
-Managing latency is described at [
-	Software/PulseAudio/Documentation/Developer/Clients/LatencyControl
-      ](http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/Developer/Clients/LactencyControl) . In brief:
+Managing latency is described at [Software/PulseAudio/Documentation/Developer/Clients/LatencyControl](http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/Developer/Clients/LactencyControl) . In brief:
 
 
 
 
 
-   > In your code you then have to do the following when calling pa_stream_connect_playback() 
-	resp. pa_stream_connect_record():
-> + Pass PA_STREAM_ADJUST_LATENCY in the flags parameter. 
-	    Only if this flag is set PA will reconfigure the low-level 
-	    device's buffer size and adjust it to the latency you specify.
-> + Pass a pa_buffer_attr struct in the buffer_attr parameter. 
-	    In the fields of this struct make sure to initialize every 
-	    single field to (uint32_t) -1, with the exception of tlength (for playback) 
-	    resp. fragsize (for recording). Initialize those to the latency 
-	    you want to achieve. Use pa_usec_to_bytes(&ss, ...) to convert 
-	    the latency from a time unit to bytes.
+   > In your code you then have to do the following when calling pa_stream_connect_playback()
+resp. pa_stream_connect_record():
+> + Pass PA_STREAM_ADJUST_LATENCY in the flags parameter.
+Only if this flag is set PA will reconfigure the low-level
+device's buffer size and adjust it to the latency you specify.
+> + Pass a pa_buffer_attr struct in the buffer_attr parameter.
+In the fields of this struct make sure to initialize every
+single field to (uint32_t) -1, with the exception of tlength (for playback)
+resp. fragsize (for recording). Initialize those to the latency
+you want to achieve. Use pa_usec_to_bytes(&ss, ...) to convert
+the latency from a time unit to bytes.
 
 
 
@@ -1976,8 +1961,8 @@ The extra code is:
 
 
 PulseAudio also has mechanisms to estimate the latency of the devices.
-      It uses information from timing events.
-      A timer event callback has to be declared, as in
+It uses information from timing events.
+A timer event callback has to be declared, as in
 
 
 
@@ -1992,7 +1977,7 @@ PulseAudio also has mechanisms to estimate the latency of the devices.
 
 
 The timer event callback is a "single shot" calback.  It installs a stream update timer callback
-      and sets up another timer callback:
+and sets up another timer callback:
 
 ```
 
@@ -2045,7 +2030,7 @@ void stream_update_timing_callback(pa_stream *s, int success, void *userdata) {
 
 
 With latency left to PulseAudio by setting  fragsize and tlength to -1,
-      I got:
+I got:
 
 ```
 
@@ -2668,39 +2653,39 @@ int main(int argc, char *argv[]) {
 ```
 
 
-When the latency is set to 1 msec for everything, the actual latency is 
-      about 16-28 msec. I couldn't detect it.
+When the latency is set to 1 msec for everything, the actual latency is
+about 16-28 msec. I couldn't detect it.
 
 ###  Setting the volume on devices 
 
 
 Each device can have its input or output volume controlled by
-      PulseAudio. The principal calls for sinks are `pa_context_set_sink_volume_by_name`and ` pa_context_set_sink_volume_by_index`with similar
-      calls for sources.
+PulseAudio. The principal calls for sinks are `pa_context_set_sink_volume_by_name`and ` pa_context_set_sink_volume_by_index`with similar
+calls for sources.
 
 
 These calls make use of a structure `pa_cvolume`.
-      This stucture can be manipulated using calls such as
+This stucture can be manipulated using calls such as
 
 +  ` pa_cvolume_init`
 +  `pa_cvolume_set`
 +  `pa_cvolume_mute`
 
 In the following program we set the volume on a particular device
-      by reading integer values from stdin and using these to set the
-      value. Such a loop should probably best take place in a separate thread
-      to the PulseAudio framework. Rather than introducing application
-      threading here, we make use of an alternative set of PulseAudio
-      calls which set up a separate thread for the PulseAudio main loop.
-      These calls are
+by reading integer values from stdin and using these to set the
+value. Such a loop should probably best take place in a separate thread
+to the PulseAudio framework. Rather than introducing application
+threading here, we make use of an alternative set of PulseAudio
+calls which set up a separate thread for the PulseAudio main loop.
+These calls are
 
 +  ` pa_threaded_mainloop`instead of ` pa_mainloop`
 +  ` pa_threaded_mainloop_get_api`instead of ` pa_mainloop_get_api`
 +  `pa_threaded_mainloop_start`instead of `pa_mainloop_start`
 
 The threaded calls allow us to start PulseAudio in its own thread,
-      and leave the current thread for reading volume values. This gives
-      the relatively simple program [pavolume.c:](pavolume.c) 
+and leave the current thread for reading volume values. This gives
+the relatively simple program [pavolume.c:](pavolume.c) 
 
 ```cpp
 
@@ -2801,15 +2786,15 @@ int main(int argc, char *argv[]) {
 
 
 PulseAudio is a server that talks to devices at the bottom layer and to clients
-      at the top layer. The clients are producers and consumers of audio.
-      One of the roles of PulseAudio is to mix signals from different source clients
-      to shared output devices. In order to do this, PulseAudio keeps track
-      of registrations by clients, and can make these available to _other_ clients by suitbale callbacks.
+at the top layer. The clients are producers and consumers of audio.
+One of the roles of PulseAudio is to mix signals from different source clients
+to shared output devices. In order to do this, PulseAudio keeps track
+of registrations by clients, and can make these available to _other_ clients by suitbale callbacks.
 
 
 The program palist_clients.c is very similar to the program
-      palist_devices.c. The principal difference is that when the 
-      context changes state to `PA_CONTEXT_READY`the application subscribes to `PA_SUBSCRIPTION_MASK_CLIENT`instead of `(PA_SUBSCRIPTION_MASK_SINK|PA_SUBSCRIPTION_MASK_SOURCE)`and the subscription callback asks for `pa_context_get_client_info`instead of `pa_context_get_source_info`.
+palist_devices.c. The principal difference is that when the
+context changes state to `PA_CONTEXT_READY`the application subscribes to `PA_SUBSCRIPTION_MASK_CLIENT`instead of `(PA_SUBSCRIPTION_MASK_SINK|PA_SUBSCRIPTION_MASK_SOURCE)`and the subscription callback asks for `pa_context_get_client_info`instead of `pa_context_get_source_info`.
 
 
 The program [palist_clients.c](palist_clients.c) is
@@ -3054,24 +3039,24 @@ Found a new client index 341 name test eol 0
 
 
 Clients can act as sources: programs such as `mplayer`and `vlc`do just that, sending streams to PulseAudio.
-      Other clients can act as sinks. The clients themselves are monitored
-      by the previous program. To monitor their _activity_ you set the mask on `pa_subscribe_callback`to `(PA_SUBSCRIPTION_MASK_CLIENT | PA_SUBSCRIPTION_MASK_SINK_INPUT | 					PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT)`.
-      Within the subscription
-      callback you make calls to `pa_context_get_sink_input_info`within the ` PA_SUBSCRIPTION_EVENT_SINK_INPUT`branch
-      and similarly for the source output.
+Other clients can act as sinks. The clients themselves are monitored
+by the previous program. To monitor their _activity_ you set the mask on `pa_subscribe_callback`to `(PA_SUBSCRIPTION_MASK_CLIENT | PA_SUBSCRIPTION_MASK_SINK_INPUT | 					PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT)`.
+Within the subscription
+callback you make calls to `pa_context_get_sink_input_info`within the ` PA_SUBSCRIPTION_EVENT_SINK_INPUT`branch
+and similarly for the source output.
 
 
 The sink input callback is passed the structure `pa_sink_input_info`. This contains the familiar `name`and `index`fields but also
-      has an integer field `client`. This links the sink input
-      back to the index of the client responsible for the sink.
-      In the following program we list all the clients as well, so that
-      these links can followed visually. Programatically, PulseAudio makes you
-      keep much information (such as what clients have what indices)
-      yourself: this is ignored here.
+has an integer field `client`. This links the sink input
+back to the index of the client responsible for the sink.
+In the following program we list all the clients as well, so that
+these links can followed visually. Programatically, PulseAudio makes you
+keep much information (such as what clients have what indices)
+yourself: this is ignored here.
 
 
 The program to list clients and monitor changes in their input and
-      output streams is [pamonitor_clients.c:](pamonitor_clients.c) 
+output streams is [pamonitor_clients.c:](pamonitor_clients.c) 
 
 ```cpp
 
@@ -3337,29 +3322,29 @@ Found a new client index 342 name test eol 0
 ###  Controlling the volume of a sink client 
 
 
-One of the significant features of PulseAudio is that not only can it 
-      mix streams to a device, but it can also control the volume of each stream.
-      This is in addition to the volume control of each device.
-      In `pavucontrol`you can see this under the Playback
-      tab, where the volume of playback clients can be adjusted.
+One of the significant features of PulseAudio is that not only can it
+mix streams to a device, but it can also control the volume of each stream.
+This is in addition to the volume control of each device.
+In `pavucontrol`you can see this under the Playback
+tab, where the volume of playback clients can be adjusted.
 
 
 Programatically this is done by calling `pa_context_set_sink_input_volume`with parameters
-      the index of the sink input and the volume.
-      In the following program we follow what we did in the
-      pavolume_client.c program where we set PulseAudio to run
-      in a separate thread and input values for the volume in the
-      main thread. A slight difference is that we have to wait for a client
-      to start up a sink input, which we do by sleeping until the
-      sink input callback assigns a non-zero value to the `sink_index`variable. Crude, yes. In a program such
-      as `pavucontrol`the GUI runs in separate threads
-      anyway and we do not need to rsort to such simple tricks.
+the index of the sink input and the volume.
+In the following program we follow what we did in the
+pavolume_client.c program where we set PulseAudio to run
+in a separate thread and input values for the volume in the
+main thread. A slight difference is that we have to wait for a client
+to start up a sink input, which we do by sleeping until the
+sink input callback assigns a non-zero value to the `sink_index`variable. Crude, yes. In a program such
+as `pavucontrol`the GUI runs in separate threads
+anyway and we do not need to rsort to such simple tricks.
 
 
 The program is [pavolume_sink.c](pavolume_sink.c) .
-      If you play a file using
-      e.g. `mplayer`then its volume can be adjusted
-      by this program.
+If you play a file using
+e.g. `mplayer`then its volume can be adjusted
+by this program.
 
 ```cpp
 

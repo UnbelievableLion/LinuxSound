@@ -89,7 +89,16 @@ class ChapterParser():
  
         if type(tag).__name__ == 'NavigableString':
             # string.strip messes up on a utf-8 unicode string
-            self.section_file.write(string.strip(tag.string.encode('utf-8')))           
+            # so we need to encode it first
+            #
+            # We need to strip whitespace from the string, 
+            # as it usually seems to start and end with '\n'
+            #
+            # Then it may have embedded whitespace which can make
+            # part of the string look like program code, so that
+            # has to be taken out too
+
+            self.write_stripped_lines(string.strip(tag.string.encode('utf-8')))
             return
 
         #print "Parsing tag", tag.name
@@ -103,7 +112,7 @@ class ChapterParser():
             href = tag['href']
             text = tag.string
             if text <> None:
-                self.section_file.write(' [' + text.encode('utf-8') + '](' + href + ') ')
+                self.section_file.write(' [' + string.strip(text.encode('utf-8')) + '](' + href + ') ')
             else:
                 self.section_file.write(str(tag))
 
@@ -132,7 +141,7 @@ class ChapterParser():
             self.section_file.write("+ __")
             children = tag.children
             self.parse_all_tags(children)
-            self.section_file.write("__:\n")
+            self.section_file.write("__: ")
 
         elif tag.name == 'p':
             self.section_file.write("\n\n")
@@ -190,6 +199,20 @@ class ChapterParser():
             children = tag.children
             self.parse_all_tags(children)
             #print tag.string
+
+    def write_stripped_lines(self, str):
+        lines = string.split(str, "\n")
+
+        # terminate all lines except last with \n:
+        # HTML reader will chop half-way through a line
+        # and entities ('&lt;') are a data chunk of their own 
+        num_lines = len(lines)
+        n = 0
+        for line in lines:
+            self.section_file.write(string.strip(line))
+            if n < num_lines-1:
+                self.section_file.write("\n")
+            n += 1
 
     def write_program_lines(self, str):
         # write out str by lines

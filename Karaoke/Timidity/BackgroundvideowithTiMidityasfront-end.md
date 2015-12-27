@@ -30,5 +30,5 @@ timidity -d. -iv --trace  --trace-text-meta
 
 
 As before, it crashes TiMidity from the Ubuntu distro
-      but works fine with TiMidity built from source in
-      the current Linux environment.
+but works fine with TiMidity built from source in
+the current Linux environment.

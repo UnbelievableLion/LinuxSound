@@ -3,18 +3,17 @@
 
 
 Most drawing using RPi's GPU seems to be based around OpenGL ES.
-      In order to use this we need to get an EGLSurface upon which
-      OpenGL ES calls can be made.
+In order to use this we need to get an EGLSurface upon which
+OpenGL ES calls can be made.
 
 
 The EGLSurface is a generic type which has to be backed by
-      a specific implementation for the device/hardware/etc which
-      you want to draw into. 
-      The page [ 
-	    Raspberry Pi VideoCore APIs ](http://elinux.org/Raspberry_Pi_VideoCore_APIs) gives a quick overview of the APIs involved.
-      Basically, to get to the EGLSurface you have to use the Dispmanx
-      window system, which is reportedly being deprecated but is still
-      used in all the demos and code that I have seen.
+a specific implementation for the device/hardware/etc which
+you want to draw into.
+The page [Raspberry Pi VideoCore APIs](http://elinux.org/Raspberry_Pi_VideoCore_APIs) gives a quick overview of the APIs involved.
+Basically, to get to the EGLSurface you have to use the Dispmanx
+window system, which is reportedly being deprecated but is still
+used in all the demos and code that I have seen.
 
 
 The relevant Dispmanx calls are
@@ -55,7 +54,7 @@ The relevant Dispmanx calls are
 
 
 At the end of this you have a window stored in `dispman_element`that can be used as a native window
-      object later.
+object later.
 
 
 Initialising EGL is done in the standard way of
@@ -68,7 +67,7 @@ Initialising EGL is done in the standard way of
 + Create an EGL window surface
 
 Apart from the last step, this follows standard EGL
-      programming:
+programming:
 
 ```cpp
 
@@ -115,7 +114,7 @@ Apart from the last step, this follows standard EGL
 
 
 The next step is to link the Dispmanx window to the EGL window
-      surface. This uses a structure of type `EGL_DISPMANX_WINDOW_T`which is filled in from the Dispmanx information:
+surface. This uses a structure of type `EGL_DISPMANX_WINDOW_T`which is filled in from the Dispmanx information:
 
 ```cpp
 
@@ -146,9 +145,9 @@ eglMakeCurrent(display, surface, surface, context);
 
 
 In this section we do the absolute minimum: having got an
-      EGL surface talking to the GPU, we just use OpenGL ES
-      calls to set the background of the buffer to red
-      and then display the buffer by swapping EGL buffers:
+EGL surface talking to the GPU, we just use OpenGL ES
+calls to set the background of the buffer to red
+and then display the buffer by swapping EGL buffers:
 
 ```cpp
 
@@ -163,9 +162,8 @@ In this section we do the absolute minimum: having got an
 ```
 
 
-The complete program is [
-	rectangle.c](rectangle.c) and just displays a large red
-      square:
+The complete program is [rectangle.c](rectangle.c) and just displays a large red
+square:
 
 ```cpp
 
@@ -314,7 +312,7 @@ main(int argc, char *argv[])
 
 
 Compiling the program uses a horrendous mess of defines
-      and libraries, probably not all of which are needed!
+and libraries, probably not all of which are needed!
 
 ```
 

@@ -3,8 +3,8 @@
 
 
 An Mp3+G pair is pulled off the server as a ZIP file.
-      After unzipping, it can be played by `vlc`. `vlc`can use a Lua interface to which you
-      can send commands such as "faster", "slower".
+After unzipping, it can be played by `vlc`. `vlc`can use a Lua interface to which you
+can send commands such as "faster", "slower".
 
 
 The script is `playZip`

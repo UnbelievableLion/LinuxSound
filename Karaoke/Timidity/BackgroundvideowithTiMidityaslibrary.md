@@ -3,7 +3,7 @@
 
 
 The code for this follows the same structure as the code
-      in the [ MIDI TiMidity](../..MIDI/Timidity/) chapter. It is is in the file `gtkkaraoke_player_video_pango.`:
+in the [MIDI TiMidity](../..MIDI/Timidity/) chapter. It is is in the file `gtkkaraoke_player_video_pango.`:
 
 ```cpp
 

@@ -5,15 +5,15 @@
 The following example OpenMAX_AL_playback.c is from the OpenMAX AL specification.
 It has not been tested by me!
 
-The functionality of this program for the audio component 
-      overlaps that of the OpenSL_playback.c
-      program given earlier. The structure is very similar. The most notable
-      difference is that all functions and constants that begin with `SL`for OpenSL ES
-      now begin with `XA`for OpenMAX AL.
+The functionality of this program for the audio component
+overlaps that of the OpenSL_playback.c
+program given earlier. The structure is very similar. The most notable
+difference is that all functions and constants that begin with `SL`for OpenSL ES
+now begin with `XA`for OpenMAX AL.
 
 
 This program also allows some user interaction to pause/start the playback
-      as well as checking the loudspeaker availability.
+as well as checking the loudspeaker availability.
 
 
 The code is

@@ -3,29 +3,29 @@
 
 
 Tunnelling gives an end-to-end means of decoding and rendering
-      an image. If we wanted to do things in the middle - say, overlay
-      some text - we would need to have access to the intermediate
-      stages. In this section we repeat the previous section, but
-      without using tunnelling.
+an image. If we wanted to do things in the middle - say, overlay
+some text - we would need to have access to the intermediate
+stages. In this section we repeat the previous section, but
+without using tunnelling.
 
 
 We have to explicitly manage the communication between the
-      decode and render components. For the decode component,
-      we have to allocate a buffer.
-      We don't want to copy data between decode and render
-      buffers so the render component _uses_ the
-      decoder's output buffers. Then as the decoder fills
-      its output buffer, the render component empties that
-      same buffer.
+decode and render components. For the decode component,
+we have to allocate a buffer.
+We don't want to copy data between decode and render
+buffers so the render component _uses_ the
+decoder's output buffers. Then as the decoder fills
+its output buffer, the render component empties that
+same buffer.
 
 
 There are multiple hiccups along the way
 
 + Lots of information has to be copied from the
-	  decode port to the render port.
-	  We can't just use a `memcpy`because the decoder has a structure for an _image_ while the render has a
-	  structure for a _video_ , and these
-	  do not align.
+decode port to the render port.
+We can't just use a `memcpy`because the decoder has a structure for an _image_ while the render has a
+structure for a _video_ , and these
+do not align.
 ```cpp
 
 	    
@@ -60,9 +60,9 @@ There are multiple hiccups along the way
 ```
 
 + The decode component has one output buffer
-	  while the render component has three input
-	  buffers. We re-use one buffer and set the 
-	  other two to `NULL`
+while the render component has three input
+buffers. We re-use one buffer and set the
+other two to `NULL`
 ```cpp
 
 	    
@@ -102,9 +102,9 @@ amp;decoder->ppRenderInputBufferHeader[n],
 ```
 
 + Even though we feed the size of the shared buffer into `UseBuffer`call, the field `nAllocLen`does not get set correctly
-	  (how do we know: because of an illegal parameter
-	  error, and then using the debugger to guess at what
-	  isn't right).
+(how do we know: because of an illegal parameter
+error, and then using the debugger to guess at what
+isn't right).
 ```cpp
 
 	    
@@ -116,4 +116,4 @@ amp;decoder->ppRenderInputBufferHeader[n],
 
 
 Apart from that, it is the usual games of playing with
-      state, enabling and disabling ports until it works
+state, enabling and disabling ports until it works

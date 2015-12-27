@@ -3,54 +3,54 @@
 
 
 A typical use of an audio system is to play files containing audio data
-      to some output device. Ogg Vorbis is an open, patent free system that
-      defines the Vorbis codec to compress raw data into smaller streams,
-      and the Ogg container format to frame the data and make it easier
-      for applications to manage.
+to some output device. Ogg Vorbis is an open, patent free system that
+defines the Vorbis codec to compress raw data into smaller streams,
+and the Ogg container format to frame the data and make it easier
+for applications to manage.
 
 
 An "Ogg Vorbis" file is an Ogg container of Vorbis encoded data.
-      Playing such a file consists of reading the file, extracting the
-      Vorbis stream from the Ogg frames, decoding the compressed Vorbis
-      stream into, say, a PCM stream and then handing that to some renderer
-      that will play the PCM stream on an output device.
+Playing such a file consists of reading the file, extracting the
+Vorbis stream from the Ogg frames, decoding the compressed Vorbis
+stream into, say, a PCM stream and then handing that to some renderer
+that will play the PCM stream on an output device.
 
 ###  Decoding an Ogg Vorbis file to a PCM stream 
 
 
 There are no standard OpenMAX IL components to decode Ogg
-      frame data. The `audio_decode`component _may_ decode a Vorbis stream, but to use that would first require
-      extracting the Vorbis stream from the Ogg frames.
-      We consider how to do that in a later section.
+frame data. The `audio_decode`component _may_ decode a Vorbis stream, but to use that would first require
+extracting the Vorbis stream from the Ogg frames.
+We consider how to do that in a later section.
 
 
 The LIM package has a non-standard component `OMX.limoi.ogg_dec`which plays the role `audio_decoder_with_framing.ogg`.
-      This can directly manage Ogg frames of Vorbis
-      data, and decode it into a PCM stream.
+This can directly manage Ogg frames of Vorbis
+data, and decode it into a PCM stream.
 
 
 The OpenMAX IL specification shows in Figure 2.5 that in
-      an "in-context" framework where the component runs in
-      the same thread as the application, then the callback
-      must complete before a call to OMX_FillThis Buffer or to
-      OMX_EmptyThisBuffer returns. So the calback should not
-      make further calls to  OMX_FillThis Buffer or to
-      OMX_EmptyThisBuffer or it will just build up a long stack
-      of uncompleted calls. This won't happen if they run in 
-      separate threads, so the calls coud be okay.
+an "in-context" framework where the component runs in
+the same thread as the application, then the callback
+must complete before a call to OMX_FillThis Buffer or to
+OMX_EmptyThisBuffer returns. So the calback should not
+make further calls to  OMX_FillThis Buffer or to
+OMX_EmptyThisBuffer or it will just build up a long stack
+of uncompleted calls. This won't happen if they run in
+separate threads, so the calls coud be okay.
 
 
 The Broadcom, LIM and Bellagio packages all use separate threads,
-      and all their examples make re-entrant calls. It's easier to write
-      the code that way. So we follow that, as we don't have any
-      example packages where such calls should not be made.
+and all their examples make re-entrant calls. It's easier to write
+the code that way. So we follow that, as we don't have any
+example packages where such calls should not be made.
 
 
 With those provisos in mind, the code is fairly straightforward:
-      when an input buffer is emptied, fill it and empty it again,
-      and when an output buffer is filled, empty it and fill it again.
-      The program is `ogg_decode.c`. it reads from an Ogg
-      Vorbis file and saves in a PCM file.
+when an input buffer is emptied, fill it and empty it again,
+and when an output buffer is filled, empty it and fill it again.
+The program is `ogg_decode.c`. it reads from an Ogg
+Vorbis file and saves in a PCM file.
 
 ```cpp
 
@@ -572,23 +572,22 @@ int main(int argc, char** argv) {
 
 
 We shall use the LIM components and the LIM OpenMAX IL implementation
-      to demonstrate this.
-      There are no appropriate components in the Bellagio or Broadcom cores.
+to demonstrate this.
+There are no appropriate components in the Bellagio or Broadcom cores.
 
 
 This problem requires the use and interaction
-      between _two_ components. In this case, it will be the `OMX.limoi.ogg_dec`and the `OMX.limoi.alsa_sink`components.
-      The `OMX.limoi.ogg_dec`component will take data from an
-      Ogg Vorbis stream, extract the Vorbis data and decode it to PCM.
-      The `OMX.limoi.alsa_sink`component can render this PCM
-      stream to an ALSA output device.
+between _two_ components. In this case, it will be the `OMX.limoi.ogg_dec`and the `OMX.limoi.alsa_sink`components.
+The `OMX.limoi.ogg_dec`component will take data from an
+Ogg Vorbis stream, extract the Vorbis data and decode it to PCM.
+The `OMX.limoi.alsa_sink`component can render this PCM
+stream to an ALSA output device.
 
 
 Using the `info`program, we can establish the following
-      characteristics of each component:
+characteristics of each component:
 
-+ __ `OMX.limoi.ogg_dec`__:
-
++ __ `OMX.limoi.ogg_dec`__: 
 ```
 
 	     
@@ -617,8 +616,7 @@ Error in getting other OMX_PORT_PARAM_TYPE parameter
 	   
 ```
 
-+ __ `OMX.limoi.alsa_sink`__:
-
++ __ `OMX.limoi.alsa_sink`__: 
 ```
 
 	    
@@ -642,18 +640,18 @@ Error in getting other OMX_PORT_PARAM_TYPE parameter
 
 
 The decoder has a minimum of four input and four output buffers.
-      The renderer only requires two input buffers, and of course
-      has no output buffers. We will need to take the output from
-      the decoder buffers and put them into the renderer's input
-      buffers. It isn't totally clear to me whether or not you are
-      required to use all of the buffers, but
-      you can add extra buffers. It would be easier coding
-      if we had the same number of buffers at each stage!
+The renderer only requires two input buffers, and of course
+has no output buffers. We will need to take the output from
+the decoder buffers and put them into the renderer's input
+buffers. It isn't totally clear to me whether or not you are
+required to use all of the buffers, but
+you can add extra buffers. It would be easier coding
+if we had the same number of buffers at each stage!
 
 
  _Should this be an aside?_ If you look at the LIM component
-      "OMX.limoi.ffmpeg.decode.video" it has a minimum of 64 buffers.
-      But if you look at the example LIM code `limoi-core/test/decode.c`you see the following:
+"OMX.limoi.ffmpeg.decode.video" it has a minimum of 64 buffers.
+But if you look at the example LIM code `limoi-core/test/decode.c`you see the following:
 
 ```
 
@@ -671,17 +669,17 @@ Now this is _not_ correct! The 1.1 specification in section 3.1.2.12.1 says
 
 
    >  `nBufferCountMin`is a _read-only_ [emphasis added]
-	field that specifies the minimum number of
-	buffers that the port requires. The component shall define this non-zero default
-	value.
+field that specifies the minimum number of
+buffers that the port requires. The component shall define this non-zero default
+value.
 
 
 
 
 
  `nBufferSize`is a _read-only_ [emphasis added]
-	field that specifies the minimum size in bytes for
-	buffers that are allocated for this port.
+field that specifies the minimum size in bytes for
+buffers that are allocated for this port.
 
 
 
@@ -689,27 +687,27 @@ and this example resets these read-only fields.
 
 
 So what I've done is to make the number of buffers configurable by a #define
-      and set this number in all of the components ports.
+and set this number in all of the components ports.
 
 
 The callback logic I use is
 
 + Decode EmptyBuffer Done: refill the buffer from the input file
-	  and empty it
+and empty it
 + Decode FillBufferDone: set the  corresponding alsa_sink input buffer
-	  to point to the decoder output buffer data 
-	  and call EmptyThis Buffer on the alsa_sink
-+ Alsa Sink EmptyBufferDone: fill the 
-	  corresponding output decode buffer
+to point to the decoder output buffer data
+and call EmptyThis Buffer on the alsa_sink
++ Alsa Sink EmptyBufferDone: fill the
+corresponding output decode buffer
 
 Thus the decoder output and renderer input buffers are linked by the IL client,
-      while the decoder input buffer is emptied by the decoder component independently.
-      In an earlier version I tried to link all three buffers,
-      but this always eventually deadlocked with a decoder input buffer not 
-      emptying properly.
+while the decoder input buffer is emptied by the decoder component independently.
+In an earlier version I tried to link all three buffers,
+but this always eventually deadlocked with a decoder input buffer not
+emptying properly.
 
 
-The code is [play_ogg.c ](OpenMAX_IL/LIM/play_ogg.c) 
+The code is [play_ogg.c](OpenMAX_IL/LIM/play_ogg.c) 
 
 ```cpp
 

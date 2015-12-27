@@ -3,16 +3,16 @@
 
 
 I'm on a Linux system and I use Linux/Unix utilities and applications.
-      Equivalents exist under other O/S's such as Windows and Apple.
+Equivalents exist under other O/S's such as Windows and Apple.
 
 ###  Song information 
 
 
 The Unix command `strings`lists all the ASCII 8-bit encoded
-      strings in a file that are at least 4 characters long. Running
-      this command on all the DVD files shows that  DTSMUS20.DKD is the 
-      only one with lots of english-language strings, and these
-      strings are the song titles on the DVD.
+strings in a file that are at least 4 characters long. Running
+this command on all the DVD files shows that  DTSMUS20.DKD is the
+only one with lots of english-language strings, and these
+strings are the song titles on the DVD.
 
 
 A brief selection is
@@ -34,14 +34,14 @@ A brief selection is
 
 
 The actual strings that would show on your disk depends of course
-      on the songs on it. You would need some english language titles
-      on it for this to work, of course!
+on the songs on it. You would need some english language titles
+on it for this to work, of course!
 
 
 To make further progress you need a binary editor. I use `bvi`. `emacs`has a binary editor
-      mode as well. Search in there for a song title you know is
-      on the disk. For example, searching for the Beatles "Here Comes The Sun"
-      shows the block
+mode as well. Search in there for a song title you know is
+on the disk. For example, searching for the Beatles "Here Comes The Sun"
+shows the block
 
 ```
 
@@ -57,23 +57,19 @@ To make further progress you need a binary editor. I use `bvi`. `emacs`has a bin
 ```
 
 
-The string  "Here Comes The Sun" starts at 0xAA94C followed by 
-      a null byte. This is followed at 0xAA95F by the null-terminated
-      "Beatles". Immediately before this is 4 bytes.
-      The length of these two strings (including the null bytes) and the 4 bytes 
-      is 0x1F and this is the first of the 4 preceding bytes.
-      So the block consists of a 4-byte header followed by a null-terminated
-      song title followed by a null-terminated artist.
-      Byte 1 is the length of the song information block including the
-      4 byte header.
+The string  "Here Comes The Sun" starts at 0xAA94C followed by
+a null byte. This is followed at 0xAA95F by the null-terminated
+"Beatles". Immediately before this is 4 bytes.
+The length of these two strings (including the null bytes) and the 4 bytes
+is 0x1F and this is the first of the 4 preceding bytes.
+So the block consists of a 4-byte header followed by a null-terminated
+song title followed by a null-terminated artist.
+Byte 1 is the length of the song information block including the
+4 byte header.
 
 
-Byte 2 of the header block is 0x12. jim75 at [
-	Decoding JBK 6628 DVD Karaoke Disc
-      ](http://old.nabble.com/Decoding-JBK-6628-DVD-Karaoke-Disc-td12261269.html) discovered the document [
-	JBK_Manual%5B1%5D.doc
-      ](http://old.nabble.com/file/p12261269/JBK_Manual%255B1%255D.doc) .
-      In there is a list of country codes:
+Byte 2 of the header block is 0x12. jim75 at [Decoding JBK 6628 DVD Karaoke Disc](http://old.nabble.com/Decoding-JBK-6628-DVD-Karaoke-Disc-td12261269.html) discovered the document [JBK_Manual%5B1%5D.doc](http://old.nabble.com/file/p12261269/JBK_Manual%255B1%255D.doc) .
+In there is a list of country codes:
 
 ```
 
@@ -105,12 +101,12 @@ Byte 2 of the header block is 0x12. jim75 at [
 
 
 The Beatle's song has 0x12 in byte 2 of the header and this matches
-      the country codes in the table. This is confirmed by looking at
-      other language files (later).
+the country codes in the table. This is confirmed by looking at
+other language files (later).
 
 
 I've discovered later that the WMA files have their own codes.
-      So far I have seen
+So far I have seen
 
 ```
 
@@ -127,27 +123,27 @@ I guess you can see the pattern with the earlier ones!
 
 
 Bytes 3 and 4 of the header are 0xD389 which is 54153 in decimal.
-      This is one less than the song number in the book (54154).
-      So bytes 3 and 4 are a 16-bit short integer, one less than the
-      song index in the book.
+This is one less than the song number in the book (54154).
+So bytes 3 and 4 are a 16-bit short integer, one less than the
+song index in the book.
 
 
 This pattern is repeated throughout the file, so that each record
-      is of this format.
+is of this format.
 
 ###  Beginning/end of data 
 
 
 There is a long sequence of bytes near the beginning of the file
-      "01 01 01 01 01 ...".
-      This finishes on my file at 0x9F23. By comparing the index number
-      with those in my song book, I confirm this is the start of the Korean
-      songs, and probably the start of all songs.
-      I haven't found any table giving me this start value.
+"01 01 01 01 01 ...".
+This finishes on my file at 0x9F23. By comparing the index number
+with those in my song book, I confirm this is the start of the Korean
+songs, and probably the start of all songs.
+I haven't found any table giving me this start value.
 
 
 Checking a number
-      of songs gives me this table:
+of songs gives me this table:
 
 + English songs start at 60x9562D, song 24452 type 0x12
 + Cantonese at 0x8F5D2, song 13701 type 3
@@ -160,33 +156,33 @@ Checking a number
 + Mandarin (1 char) at 0x413BE, song 1388 type 3
 
 I can't find the Vietnamese songs, though. There don't seem to
-      any on my disk. My song book is lying!
-      I guess there is some table somewhere giving these start points, but 
-      I haven't found it - these were all found by looking at my song
-      book and then in the file.
+any on my disk. My song book is lying!
+I guess there is some table somewhere giving these start points, but
+I haven't found it - these were all found by looking at my song
+book and then in the file.
 
 
-The end of the block is signalled by a sequence of 
-      "FF FF FF FF ..." at 0x136C92.
+The end of the block is signalled by a sequence of
+"FF FF FF FF ..." at 0x136C92.
 
 
 But there is lots of stuff
-      both before and after the song information block.
-      I don't know what it means.
+both before and after the song information block.
+I don't know what it means.
 
 ###  Chinese songs 
 
 
 The first English song in my book is "Gump by Al Wierd", song
-      number 24452. In the table of contents file DTSMUS20.DK this is at
-      0x9562D (611885). The entry before this is
-      "20 03 3A 04 CE D2 B4 F2 C1 CB D2 BB CD A8 B2 BB CB B5 BB B0 B5 C4 B5 E7 BB B0 B8 F8 C4 E3 00 00". The song code is "3A 04" i.e. 14852 which is song
-      number 14853 (one offset, remember!). When I play that song on my
-      karaoke machine I'm in luck: the first character of the song is "我",
-      which I recognise as the word "I" (in Pinyin: wo3). 
-      It's encoding in the file is "CE D2".
-      I've got Chinese input installed on my computer so I can search for this
-      Chinese character.
+number 24452. In the table of contents file DTSMUS20.DK this is at
+0x9562D (611885). The entry before this is
+"20 03 3A 04 CE D2 B4 F2 C1 CB D2 BB CD A8 B2 BB CB B5 BB B0 B5 C4 B5 E7 BB B0 B8 F8 C4 E3 00 00". The song code is "3A 04" i.e. 14852 which is song
+number 14853 (one offset, remember!). When I play that song on my
+karaoke machine I'm in luck: the first character of the song is "我",
+which I recognise as the word "I" (in Pinyin: wo3).
+It's encoding in the file is "CE D2".
+I've got Chinese input installed on my computer so I can search for this
+Chinese character.
 
 
 A Google search for "unicode value of 我" shows me
@@ -206,9 +202,7 @@ A Google search for "unicode value of 我" shows me
 ```
 
 
-and then looking up 0x6211 on [
-	Unicode Search 
-      ](http://www.khngai.com/chinese/tools/codeunicode.php) gives gold:
+and then looking up 0x6211 on [Unicode Search](http://www.khngai.com/chinese/tools/codeunicode.php) gives gold:
 
 ```
 
@@ -223,59 +217,57 @@ and then looking up 0x6211 on [
 
 
 There's the CED2 in the second line as GB Code.
-      So there you go: the character set is GB
-      (probably GB2312 with EUC-CN encoding) with code for 我 as CED2.
+So there you go: the character set is GB
+(probably GB2312 with EUC-CN encoding) with code for 我 as CED2.
 
 
-Just to make sure: using the table by Mary Ansell at [
-	GB Code Table
-      ](http://www.ansell-uebersetzungen.com/gborder.html) the bytes "CE D2 B4 F2 C1 CB D2 BB CD A8 B2 BB CB B5 BB B0 B5 
-      C4 B5 E7 BB B0 B8 F8 C4 E3" translate into
-      "我 打 了 一 通 ..." which is indeed the song.
+Just to make sure: using the table by Mary Ansell at [GB Code Table](http://www.ansell-uebersetzungen.com/gborder.html) the bytes "CE D2 B4 F2 C1 CB D2 BB CD A8 B2 BB CB B5 BB B0 B5
+C4 B5 E7 BB B0 B8 F8 C4 E3" translate into
+"我 打 了 一 通 ..." which is indeed the song.
 
 ###  Other languages 
 
 
 I'm not familiar with other language encodings so haven't investigated
-      the Thai, Vietnamese, etc.
-      The Korean seems to be EUC-KR.
+the Thai, Vietnamese, etc.
+The Korean seems to be EUC-KR.
 
 ###  Programs 
 
 
 The earlier investigations by others have created programs in C or C++.
-      These are generally standalone programs. I would like to build a
-      collection of reusable modules, so I have chosen Java as
-      implementation language.
+These are generally standalone programs. I would like to build a
+collection of reusable modules, so I have chosen Java as
+implementation language.
 
 ####  Java goodies 
 
 
 Java is a good O/O language which supports good design.
-      It includes a Midi player and Midi classes.
-      It supports multiple language encodings so it is easy to
-      switch from, say GB-2312 to Unicode.
-      It has good cross-platform GUI support.
+It includes a Midi player and Midi classes.
+It supports multiple language encodings so it is easy to
+switch from, say GB-2312 to Unicode.
+It has good cross-platform GUI support.
 
 ####  Java baddies 
 
 
-Java doesn't support unsigned integer types. This sucks _really_ badly here since so many data types are unsigned for these programs. 
-      Even bytes in Java are signed :-(.
-      Here are some of the tricks :-(.
+Java doesn't support unsigned integer types. This sucks _really_ badly here since so many data types are unsigned for these programs.
+Even bytes in Java are signed :-(.
+Here are some of the tricks :-(.
 
 + Make all types the next size up: byte to int, int to long, long to long...
-	  Just hope that unsigned longs aren't really needed
+Just hope that unsigned longs aren't really needed
 + If you need an unsigned byte and you've got an int, and you need
-	  it to fit into 8 bits, cast to a byte and hope it's not too big :-(
-+ Typecast all over the place to keep the compiler happy 
-	  e.g. when a byte is required  from an int, ` (byte) n `
+it to fit into 8 bits, cast to a byte and hope it's not too big :-(
++ Typecast all over the place to keep the compiler happy
+e.g. when a byte is required  from an int, ` (byte) n `
 + Watch signs all over the place. If you want to right shift a number,
-	  the operator >> preserves sign extensions so eg in binary
-	  1XYZ... shifts to 1111XYZ.. You need to use  >>> which results
-	  in 0001XYZ.
+the operator >> preserves sign extensions so eg in binary
+1XYZ... shifts to 1111XYZ.. You need to use  >>> which results
+in 0001XYZ.
 + If you want to assign an unsigned byte to an int, watch signs again.
-	  You may need
+You may need
 ```
 
 	    
@@ -285,8 +277,8 @@ Java doesn't support unsigned integer types. This sucks _really_ badly here sinc
 ```
 
 + To build an unsigned int from 2 unsigned bytes, signs will stuff you again:
-	  n = (b1 << 8) + b2 will get it wrong if either b1 or b2 is -ve.
-	  Instead use
+n = (b1 << 8) + b2 will get it wrong if either b1 or b2 is -ve.
+Instead use
 ```
 
 	    
@@ -299,7 +291,7 @@ Java doesn't support unsigned integer types. This sucks _really_ badly here sinc
 
 
 The song class contains information about a single song and is given here:
-      SongInformation.java
+SongInformation.java
 
 ```cpp
 
@@ -403,7 +395,7 @@ public class SongInformation {
 
 
 The song table class holds a list of song information objects and is given by
-       SongTable.java
+SongTable.java
 
 ```cpp
 
@@ -644,13 +636,13 @@ public class SongTable {
 ```
 
 
-You may need to adjust the constant values in the file-based 
-      constructor for this to work properly for you.
+You may need to adjust the constant values in the file-based
+constructor for this to work properly for you.
 
 
 A Java program using Swing to allow display and searching of the song
-      titles is
-      SongTableSwing.java
+titles is
+SongTableSwing.java
 
 ```cpp
 
@@ -990,4 +982,4 @@ public class SongTableSwing extends JPanel {
 
 
 When "play" is selected it will print the song id to standard output for use in
-      a pipeline.
+a pipeline.

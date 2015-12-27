@@ -46,8 +46,6 @@ Default system synthesizer is Gervill
 
 
 Programs like DumpSequence work okay. But the SimpleMidiPlayer hits 80% CPU
-      usage and is unusable.
-      So any idea of a Karaoke player using Java on the RPi is simply not on :-(.
-      There is a thread on the Raspberry Pi site discussing [
-	problems with sound
-      ](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=38&t=11009) .
+usage and is unusable.
+So any idea of a Karaoke player using Java on the RPi is simply not on :-(.
+There is a thread on the Raspberry Pi site discussing [problems with sound](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=38&t=11009) .

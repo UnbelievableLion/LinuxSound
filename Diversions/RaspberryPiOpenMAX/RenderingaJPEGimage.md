@@ -3,26 +3,26 @@
 
 
 In order to display am image we need to _render_ it
-      on some output device. There is no specific component to
-      render images. Broadcom has a `video_render`which will accept _both_ a video stream or a single image.
-      Now this component only has one input port, and that port is
-      a _video_ port. If we want to take an image from an output _image_ port, we would have to play some format
-      conversion games. Or, we can connect an image output port
-      to a video input port by using a tunnel, and let the
-      components sort it out themselves. This is much easier!
+on some output device. There is no specific component to
+render images. Broadcom has a `video_render`which will accept _both_ a video stream or a single image.
+Now this component only has one input port, and that port is
+a _video_ port. If we want to take an image from an output _image_ port, we would have to play some format
+conversion games. Or, we can connect an image output port
+to a video input port by using a tunnel, and let the
+components sort it out themselves. This is much easier!
 
 
 To render a JPEG image, we only need to use an `image_decode`and a `video_render`component. We need to set up the input port for the decoder
-      as in the last example. The video render component has no
-      output port so nothing needs to be done for that.
-      The two ports which are  connected by a tunnel do all necessary
-      setups and conversions themselves. So this is actually
-      simpler than the last program: load and empty input
-      buffers with the JPEG image, setup the tunnel
-      when port settings change, and ... that's
-      it! Note that we still defer setting up the tunnel
-      until the port settings have changed - otherwise
-      the buffer sizes would be wrong.
+as in the last example. The video render component has no
+output port so nothing needs to be done for that.
+The two ports which are  connected by a tunnel do all necessary
+setups and conversions themselves. So this is actually
+simpler than the last program: load and empty input
+buffers with the JPEG image, setup the tunnel
+when port settings change, and ... that's
+it! Note that we still defer setting up the tunnel
+until the port settings have changed - otherwise
+the buffer sizes would be wrong.
 
 
 The program is [renderjpeg.c](renderjpeg.c) 

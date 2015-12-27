@@ -3,7 +3,7 @@
 
 
 Pulse has a "simple" API and a far more complex asynchronous API.
-      The simple API may be good enough for your needs.
+The simple API may be good enough for your needs.
 
 
 The simple API has a small set of functions
@@ -33,20 +33,18 @@ int 	pa_simple_flush (pa_simple *s, int *error)
 
 
 A program to play from a file to the default output device is
-      from the PulseAudio site.
-      The basic structure is
+from the PulseAudio site.
+The basic structure is
 
 + Create a new playback stream (pa_simple_new)
 + Read blocks from the file (read)...
 + ...and write them to the stream (pa_simple_write)
 + Finish by flushing the stream (pa_simple_drain)
 
-The program is [
-	pacat-simple.c
-      ](http://freedesktop.org/software/pulseaudio/doxygen/examples.html) .
-      Rather weirdly, it does a `dup2`to map the open file descriptor
-      onto `stdin`and then reads from `stdin`. This isn't
-      necessary - what not just read from the original file descriptor?
+The program is [pacat-simple.c](http://freedesktop.org/software/pulseaudio/doxygen/examples.html) .
+Rather weirdly, it does a `dup2`to map the open file descriptor
+onto `stdin`and then reads from `stdin`. This isn't
+necessary - what not just read from the original file descriptor?
 
 ```cpp
 
@@ -179,9 +177,7 @@ finish:
 
 
 A program to record to a file from the default input device is
-      from the Pulse Audio site [
-	parec-simple.c
-      ](http://freedesktop.org/software/pulseaudio/doxygen/examples.html) The basic structure is
+from the Pulse Audio site [parec-simple.c](http://freedesktop.org/software/pulseaudio/doxygen/examples.html) The basic structure is
 
 + Create a new recording stream (pa_simple_new)
 + Read blocks from the stream (pa_simple_read)...
@@ -189,8 +185,8 @@ A program to record to a file from the default input device is
 + Finish by releasing the stream (pa_simple_free)
 
 Note that you need to tell PulseAudio the format to write
-      the data, using a pa_sample_spec. Two channel, 44100hz and
-      PCM 16 bit little-endian is chosen.
+the data, using a pa_sample_spec. Two channel, 44100hz and
+PCM 16 bit little-endian is chosen.
 
 ```cpp
 
@@ -296,17 +292,17 @@ finish:
 
 
 The output from this is a PCM s16 file. You can convert it to
-      another format using Sox
-      (e.g. sox -c 2 -r 44100 tmp.s16 tmp.wav), 
-      or import it as raw data into
-      Audacity and play it directly.
+another format using Sox
+(e.g. sox -c 2 -r 44100 tmp.s16 tmp.wav),
+or import it as raw data into
+Audacity and play it directly.
 
 
-How good are these for real-time audio? The first program 
-      can show
-      the latency (turn the "#if 0" to "#if 1").
-      This code can also be copied into the second one.
-      The results are not good:
+How good are these for real-time audio? The first program
+can show
+the latency (turn the "#if 0" to "#if 1").
+This code can also be copied into the second one.
+The results are not good:
 
 + recording has a latency of 11 msecs on my laptop
 + playback has a latency of 130 msecs!
@@ -314,10 +310,8 @@ How good are these for real-time audio? The first program
 
 
 You can combine the two programs to copy from the
-      microphone to the speaker using a record and a playback stream.
-      The program is [
-	 pa-mic-2-speaker-simple.c
-      ](pa-mic-2-speaker-simple.c) :
+microphone to the speaker using a record and a playback stream.
+The program is [pa-mic-2-speaker-simple.c](pa-mic-2-speaker-simple.c) :
 
 ```cpp
 
@@ -422,4 +416,4 @@ finish:
 
 
 Try running this and you will discover that the
-      the latency is noticeable and unsatisfactory.
+the latency is noticeable and unsatisfactory.

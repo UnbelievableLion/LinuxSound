@@ -3,9 +3,7 @@
 
 
 IceS is one of the ways that Icecast can get its audio streams.
-      See [
-	IceS v2.0 Documentation
-      ](http://www.icecast.org/docs/ices-2.0.2/) 
+See [IceS v2.0 Documentation](http://www.icecast.org/docs/ices-2.0.2/) 
 
 ***
 
@@ -20,16 +18,10 @@ Copyright © Jan Newmarch, jan@newmarch.name
 </a>
 
 
-"Programming and Using Linux Sound - in depth"by [
-  Jan Newmarch
-](https://jan.newmarch.name) is licensed under a [
-  Creative Commons Attribution-ShareAlike 4.0 International License
-](http://creativecommons.org/licenses/by-sa/4.0/) .
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-Based on a work at [
-  https://jan.newmarch.name/LinuxSound/
-](https://jan.newmarch.name/LinuxSound/) .
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
 
 
 If you like this book, please contribute using PayPal

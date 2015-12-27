@@ -3,31 +3,31 @@
 
 
 The file MULATAS4.IDX, we have determined, holds a table of
-      25 byte blocks starting at 0x800. The current knowledge of
-      these blocks is
+25 byte blocks starting at 0x800. The current knowledge of
+these blocks is
 11language (00 is GB2132, 07 is English)15-17song number in song book (read the hex number as decimal)19-20offset of song title into table at 0x5F00025length of title
 
 
 
 
 The song data is spread across files MULTAK.DAT - MULTAK.DA4.
-      At 0xd20 in MULTAK.DAT is a table of 4 bytes indexes.
-      Each index translates into a starting location in the various
-      data files. These are of type "simple" (probably MIDI data only)
-      and "complex" (MIDI plus MP3).
+At 0xd20 in MULTAK.DAT is a table of 4 bytes indexes.
+Each index translates into a starting location in the various
+data files. These are of type "simple" (probably MIDI data only)
+and "complex" (MIDI plus MP3).
 
 
 The problem now is to link the song information to its data.
 
 
 Using the starting points of each data file, we can extract, say,
-      a few thousand bytes from each file. The correct length is at present
-      unknown. I saved them them as files 1, 2, 3, ..., 15460.
+a few thousand bytes from each file. The correct length is at present
+unknown. I saved them them as files 1, 2, 3, ..., 15460.
 
 
-With them all in separate files, I tried to see if any of them 
-      were recognisable. Completely by fluke by running `strings`looking for Fool on the Hill (which I knew was on the disk), I hit upon song
-      10397 by searching for "hill", with `bvi`showing
+With them all in separate files, I tried to see if any of them
+were recognisable. Completely by fluke by running `strings`looking for Fool on the Hill (which I knew was on the disk), I hit upon song
+10397 by searching for "hill", with `bvi`showing
 
 ```
 
@@ -42,7 +42,7 @@ With them all in separate files, I tried to see if any of them
 
 
 This song isn't in my song book, but it is in the list I pulled out
-      of MALATAS4.IDX:
+of MALATAS4.IDX:
 
 ```
 
@@ -55,7 +55,7 @@ So song title 20442 has its song data in file 10397.
 
 
 With this clue, doing something like `strings -f -n 30 *`quickly shows up other files with english text. Enough to draw up
-      a table
+a table
 IDSong # in bookIndex to dataSong titleS12024710202NEXT 100 YEARSS22042810383LoversS32044210397What dreams are...S42015410109Only sleeping
 
 and this is just linear:
@@ -68,6 +68,6 @@ data index = song number - 10045
 
 
 NB: this only works for some songs - I guess the English ones!
-      If this pattern holds for all English songs, the earliest data
-      file is (20001-10045) = 9956 and the last one is
-      (20501-10045) = 10456.
+If this pattern holds for all English songs, the earliest data
+file is (20001-10045) = 9956 and the last one is
+(20501-10045) = 10456.

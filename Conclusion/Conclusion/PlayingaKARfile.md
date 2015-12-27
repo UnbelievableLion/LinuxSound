@@ -3,14 +3,14 @@
 
 
 KAR files ripped of the Sonken player may have audio plus
-      lyrics, or lyrics only with the audio in a linked WMA files.
-      The MIDI player `timidity`can be used to play
-      the KAR part, but for WMA files another player such as `mplayer`is needed.
+lyrics, or lyrics only with the audio in a linked WMA files.
+The MIDI player `timidity`can be used to play
+the KAR part, but for WMA files another player such as `mplayer`is needed.
 
 
 An annoying part of `timidity`is that you cannot set the
-      Jack output device to connect to. So you need to wait till it has
-      registered with Jack, and then call `jack-connect`to link it to `jack-rack`.
+Jack output device to connect to. So you need to wait till it has
+registered with Jack, and then call `jack-connect`to link it to `jack-rack`.
 
 
 The shell script is `playKar`:

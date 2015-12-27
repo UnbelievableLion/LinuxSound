@@ -1,27 +1,13 @@
 
 ##  Resources 
 
-+  [
-	    Introducing GStreamer
-	  ](http://www.cin.ufpe.br/~cinlug/wiki/index.php/Introducing_GStreamer) by Marcelo Lira
-+  [
-	    GStreamer
-	  ](http://developer.gnome.org/platform-overview/stable/gstreamer) by Gnome Project
-+  [
-	    Multipurpose multimedia processing with GStreamer
-	  ](http://www.ibm.com/developerworks/aix/library/au-gstreamer.html?ca=dgr-lnxw07GStreamer) by Maciej Katafiasz
-+  [
-	    GStreamer FAQ
-	  ](http://gstreamer.freedesktop.org/data/doc/gstreamer/head/faq/html/) 
-+  [
-		A playbin is a highlevel, automatic, audio and video player
-	  ](http://pygstdocs.berlios.de/pygst-tutorial/playbin.html) 
-+  [
-		GStreamer Transcoding
-	  ](http://gentrans.sourceforge.net/docs/head/manual/html/howto.html) 
-+  [
-		GStreamer plugins reference
-	  ](http://gstreamer.freedesktop.org/documentation/) 
++  [Introducing GStreamer](http://www.cin.ufpe.br/~cinlug/wiki/index.php/Introducing_GStreamer) by Marcelo Lira
++  [GStreamer](http://developer.gnome.org/platform-overview/stable/gstreamer) by Gnome Project
++  [Multipurpose multimedia processing with GStreamer](http://www.ibm.com/developerworks/aix/library/au-gstreamer.html?ca=dgr-lnxw07GStreamer) by Maciej Katafiasz
++  [GStreamer FAQ](http://gstreamer.freedesktop.org/data/doc/gstreamer/head/faq/html/) 
++  [A playbin is a highlevel, automatic, audio and video player](http://pygstdocs.berlios.de/pygst-tutorial/playbin.html) 
++  [GStreamer Transcoding](http://gentrans.sourceforge.net/docs/head/manual/html/howto.html) 
++  [GStreamer plugins reference](http://gstreamer.freedesktop.org/documentation/) 
 ***
 
 ***
@@ -35,16 +21,10 @@ Copyright © Jan Newmarch, jan@newmarch.name
 </a>
 
 
-"Programming and Using Linux Sound - in depth"by [
-  Jan Newmarch
-](https://jan.newmarch.name) is licensed under a [
-  Creative Commons Attribution-ShareAlike 4.0 International License
-](http://creativecommons.org/licenses/by-sa/4.0/) .
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-Based on a work at [
-  https://jan.newmarch.name/LinuxSound/
-](https://jan.newmarch.name/LinuxSound/) .
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
 
 
 If you like this book, please contribute using PayPal

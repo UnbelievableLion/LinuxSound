@@ -3,13 +3,13 @@
 
 
 The `MediaPlayer`will take the URL of an audio file - in some versions
-      of Android and for some file types. This is sad, particularly for me since
-      Android 2.2 won't stream Ogg files and  my media player can't be upgraded
-      from 2.2.
+of Android and for some file types. This is sad, particularly for me since
+Android 2.2 won't stream Ogg files and  my media player can't be upgraded
+from 2.2.
 
 
 When an app can't stream a file from the web, we have to do silly tricks like
-      downloading it locally and then playing it. That code looks like
+downloading it locally and then playing it. That code looks like
 
 ```cpp
 
@@ -104,9 +104,9 @@ public class HttpPlayerActivity extends Activity {
 ```
 
 
-This app requires access to the internet to get the resource. 
-      In the AndroidManifest file this is
-      given by
+This app requires access to the internet to get the resource.
+In the AndroidManifest file this is
+given by
 
 ```
 

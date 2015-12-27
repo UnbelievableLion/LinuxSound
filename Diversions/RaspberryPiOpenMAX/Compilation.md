@@ -3,11 +3,11 @@
 
 
 Just to add a wrinkle to OpenMAX's complexity, you have to be
-      careful to get all the flags correct in compiling programs -
-      or, guess what? - things don't work then either. I
-      suspect it is things like word-alignment that are critical,
-      but I've haven't checked
-      OpenMAX in detail. Here are what seems to work:
+careful to get all the flags correct in compiling programs -
+or, guess what? - things don't work then either. I
+suspect it is things like word-alignment that are critical,
+but I've haven't checked
+OpenMAX in detail. Here are what seems to work:
 
 ```
 

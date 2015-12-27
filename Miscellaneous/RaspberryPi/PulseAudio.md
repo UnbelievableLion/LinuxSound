@@ -3,7 +3,7 @@
 
 
 PulseAudio installs okay from the repositories and runs with no problems.
-      The output from pulsedevlist is
+The output from pulsedevlist is
 
 ```
 

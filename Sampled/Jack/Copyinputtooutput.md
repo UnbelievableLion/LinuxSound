@@ -3,15 +3,15 @@
 
 
 The Jack source code distribution has an "example clients"
-      subdirectory. Included in there is a client `thru_client.c`which just copies
-      input to output. The processing heart of
-      this example is the function `process`.
-      This takes a number of frames available on
-      both input and output as parameter.
-      This loops through the (stereo) channels,
-      gets corresponding input and output buffers (for
-      input and output pipelines) and copies
-      data from input to corresponding output.
+subdirectory. Included in there is a client `thru_client.c`which just copies
+input to output. The processing heart of
+this example is the function `process`.
+This takes a number of frames available on
+both input and output as parameter.
+This loops through the (stereo) channels,
+gets corresponding input and output buffers (for
+input and output pipelines) and copies
+data from input to corresponding output.
 
 
 The code is

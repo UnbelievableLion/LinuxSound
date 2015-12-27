@@ -3,7 +3,7 @@
 
 
 The following examples need to be linked to various libraries.
-      So far, they need to be
+So far, they need to be
 
 ```
 

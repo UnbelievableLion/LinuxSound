@@ -3,11 +3,11 @@
 
 
 The last bit of the puzzle is how TiMidity will show the
-      lyrics. There is no supplied plugin that will display
-      lyrics in the right format. The flags `--trace --trace-meta-text`will make
-      the lyrics available in real-time to a plugin.
-      I wrote one based on Xlib, with drawing done by Cairo and Pango.
-      It  is `x_code.c`
+lyrics. There is no supplied plugin that will display
+lyrics in the right format. The flags `--trace --trace-meta-text`will make
+the lyrics available in real-time to a plugin.
+I wrote one based on Xlib, with drawing done by Cairo and Pango.
+It  is `x_code.c`
 
 ```cpp
 

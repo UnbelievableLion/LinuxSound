@@ -3,16 +3,14 @@
 
 
 To play Mpeg files, OGV files or similar, a decoder is
-      required. The main contenders seem to be GStreamer and 
-      FFMpeg. For no particular reason I chose FFMpeg.
+required. The main contenders seem to be GStreamer and
+FFMpeg. For no particular reason I chose FFMpeg.
 
 
 The following program reads from a video file and stores
-      the first five frames to disk. It is taken directly
-      from [
-	An ffmpeg and SDL Tutorial
-      ](http://dranger.com/ffmpeg/) by Stephen Dranger.
-      The program is `play_video.c`:
+the first five frames to disk. It is taken directly
+from [An ffmpeg and SDL Tutorial](http://dranger.com/ffmpeg/) by Stephen Dranger.
+The program is `play_video.c`:
 
 ```cpp
 

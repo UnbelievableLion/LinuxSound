@@ -3,14 +3,14 @@
 
 
 Disk I/O cannot be performed within the Jack processing
-      loop: it is just too slow.
-      To save input to file requires use of a separate thread
-      to manage disk I/O and pass control between the
-      Jack and disk threads.
+loop: it is just too slow.
+To save input to file requires use of a separate thread
+to manage disk I/O and pass control between the
+Jack and disk threads.
 
 
 The program `capture_client.c`from the
-      examples does this:
+examples does this:
 
 ```cpp
 

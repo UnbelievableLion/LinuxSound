@@ -3,20 +3,20 @@
 
 
 The OpenGL ES Programming Guide includes an example of drawing
-      a simple image using an array of pixels. Realistically, it notes
-      that the image data is more likely to be read from a file.
-      In this section we fill in the details.
+a simple image using an array of pixels. Realistically, it notes
+that the image data is more likely to be read from a file.
+In this section we fill in the details.
 
 
 There are many, many different file formats, some lossy, some lossless,
-      some compressed, some not, some with metadata, some without.
-      In this section we just use [TGA](http://www.fileformat.info/format/tga/egff.htm) - an
-      uncompressed format with enough useful metadata, simple to load.
+some compressed, some not, some with metadata, some without.
+In this section we just use [TGA](http://www.fileformat.info/format/tga/egff.htm) - an
+uncompressed format with enough useful metadata, simple to load.
 
 
 TGA files can be created from e.g. JPEG files by using the `convert`utility from the Gimp drawing system.
-      It is simple to convert a file: just give the appropriate
-      file extensions:
+It is simple to convert a file: just give the appropriate
+file extensions:
 
 ```
 
@@ -31,24 +31,24 @@ convert image.jpg image.tga
 
 
 A TGA file has a header section which gives the width and height of the
-      image from which its size can be calculated. The default format will
-      be RGB, as 24-bit pixels. Reading in such a file is just a matter
-      of locating the dimensions, malloc'ing the right size buffer,
-      skipping to the start of the image data and reading it all in.
+image from which its size can be calculated. The default format will
+be RGB, as 24-bit pixels. Reading in such a file is just a matter
+of locating the dimensions, malloc'ing the right size buffer,
+skipping to the start of the image data and reading it all in.
 
 
 The default is for the origin of the image to be the bottom lefthand
-      corner, with the y-axis growing up. OpenGL ES on the other hand
-      has the origin in the top lefthand corner with the y-axis growing down.
-      So the image will be upside down. This can be fixed by reading the data
-      in differently, or by using an OpenGL ES reflection.
+corner, with the y-axis growing up. OpenGL ES on the other hand
+has the origin in the top lefthand corner with the y-axis growing down.
+So the image will be upside down. This can be fixed by reading the data
+in differently, or by using an OpenGL ES reflection.
 
 
 Getting a native window is done as before. Using the OpenGL ES Programming
-      Guide example, we also need to substitute our image array for their
-      2x2 array, adjusting the image bounds. Apart from those, there is no real
-      change.
-      The program is [image.c](image.c) 
+Guide example, we also need to substitute our image array for their
+2x2 array, adjusting the image bounds. Apart from those, there is no real
+change.
+The program is [image.c](image.c) 
 
 ```cpp
 
@@ -567,16 +567,10 @@ Copyright © Jan Newmarch, jan@newmarch.name
 </a>
 
 
-"Programming and Using Linux Sound - in depth"by [
-  Jan Newmarch
-](https://jan.newmarch.name) is licensed under a [
-  Creative Commons Attribution-ShareAlike 4.0 International License
-](http://creativecommons.org/licenses/by-sa/4.0/) .
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-Based on a work at [
-  https://jan.newmarch.name/LinuxSound/
-](https://jan.newmarch.name/LinuxSound/) .
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
 
 
 If you like this book, please contribute using PayPal

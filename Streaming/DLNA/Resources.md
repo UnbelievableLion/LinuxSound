@@ -1,6 +1,4 @@
 
 ##  Resources 
 
-+  [
-	    DLNA Home page
-	  ](http://www.dlna.org/) 
++  [DLNA Home page](http://www.dlna.org/) 

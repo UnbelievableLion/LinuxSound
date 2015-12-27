@@ -6,21 +6,17 @@ LADISH is designed as the successor to LASH and is available in the repositories
 
 
 LADISH can start, stop and configure sessions. In particular, it can setup
-      different Jack configurations. This means that you do not start Jack and then
-      start LADISH, but the other way around: start the GUI tool `gladish`,
-      configure Jack and then start a session.
-      The process is described in the [
-	LADI Session Handler
-      ](http://ladish.org/wiki/tutorial) Wiki - follow it, in particular connecting Jack to, say, ALSA.
-      Otherwise you will get no sound!
-      See also [
-	The LADI Session Handler
-      ](http://www.penguinproducer.com/Blog/2011/12/the-ladi-session-handler/) by the Penguin Producer.
+different Jack configurations. This means that you do not start Jack and then
+start LADISH, but the other way around: start the GUI tool `gladish`,
+configure Jack and then start a session.
+The process is described in the [LADI Session Handler](http://ladish.org/wiki/tutorial) Wiki - follow it, in particular connecting Jack to, say, ALSA.
+Otherwise you will get no sound!
+See also [The LADI Session Handler](http://www.penguinproducer.com/Blog/2011/12/the-ladi-session-handler/) by the Penguin Producer.
 
 
 Once set up, start a new Studio and then start applications from its
-      Applications menu. To run `mplayer`you need to give the full
-      command such as
+Applications menu. To run `mplayer`you need to give the full
+command such as
 
 ```
 
@@ -32,8 +28,8 @@ Once set up, start a new Studio and then start applications from its
 
 
 You can start `jack_mixer`from the Applications menu
-      and then add two new sets of input ports, as in the Jack chapter.
-      After reconnecting them, you end with a connection graph like
+and then add two new sets of input ports, as in the Jack chapter.
+After reconnecting them, you end with a connection graph like
 
 
 ![alt text](ladish-session.png)
@@ -43,7 +39,7 @@ You can start `jack_mixer`from the Applications menu
 
 
 Connection graphs are stored as an XML file in `$HOME/.ladish`.
-      For example, the above graph is stored as
+For example, the above graph is stored as
 
 ```
 
@@ -165,36 +161,34 @@ ladish Studio configuration.
 
 
 The full command to restart `mplayer`is stored in this file,
-      as are all the connections made.
+as are all the connections made.
 
 
 On stopping and restarting a session, `mplayer`is started
-      with the same MP3 file, but has the default connections. 
-      It ignores the connections of the LADISH session.
-      Similarly, `jack_mixer`is restarted, but the 
-      additional ports have to be recreated by hand - this is not a LADISH
-      aware application so it runs at Level 0.
-      However, once created, the LADISH reconnections are made okay.
+with the same MP3 file, but has the default connections.
+It ignores the connections of the LADISH session.
+Similarly, `jack_mixer`is restarted, but the
+additional ports have to be recreated by hand - this is not a LADISH
+aware application so it runs at Level 0.
+However, once created, the LADISH reconnections are made okay.
 
 
-A list of LADISH-aware applications is at [
-	ladish: LADI Session Handler
-      ](http://wiki.linuxaudio.org/apps/all/ladish) 
+A list of LADISH-aware applications is at [ladish: LADI Session Handler](http://wiki.linuxaudio.org/apps/all/ladish) 
 
 
 From the user's viewpoint, the difference between these session managers are
 
 + Jack applications can be started in any manner and will be picked up
-	  by the Jack session manager.
-	  However, any specific command-line parameters will be lost
+by the Jack session manager.
+However, any specific command-line parameters will be lost
 + Applications need to be started by the LADISH session manager in
-	  order to be managed by it.
-	  However, it can record command line parameters and restart the
-	  application using them
+order to be managed by it.
+However, it can record command line parameters and restart the
+application using them
 
 From the developer's viewpoint (see later), the difference between these session managers are
 
-+ Jack session aware applications can be started in any manner 
-	  and will encode the command line required to restart them
-	  in the program
++ Jack session aware applications can be started in any manner
+and will encode the command line required to restart them
+in the program
 + 

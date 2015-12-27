@@ -3,31 +3,31 @@
 
 
 The `amp`file contains a stereo amplifier
-      as well as a mono amplifier. This causes several differences
-      to managing the plugin. there are now two input ports and
-      two output ports, but still only one control port for the 
-      amplification factor. We need an array of input ports
-      and an array of output ports. This just adds a little
-      complexity.
+as well as a mono amplifier. This causes several differences
+to managing the plugin. there are now two input ports and
+two output ports, but still only one control port for the
+amplification factor. We need an array of input ports
+and an array of output ports. This just adds a little
+complexity.
 
 
 The major difference is in handling the streams: `libsndfile`returns _frames_ of sound, with the two channels of a stereo signal
-      interleaved. These have to be split out into separate
-      channels for each input port, and then the two
-      output ports have to interleaved back together.
+interleaved. These have to be split out into separate
+channels for each input port, and then the two
+output ports have to interleaved back together.
 
 
 Adding a GUI such as GTK is fairly straightforward.
-      The following code just shows a slider to control
-      the volume. The GUI code and the LADSPA code must
-      obviously run in different (POSIX) threads.
-      There is really only one tricky point: the control
-      value is not supposed to change during execution
-      of the `run`function.
-      This could be protected by locks, but in this case
-      that is too heavyweight: just keep a copy of the
-      control as modified by the slider, and bring that
-      across before each call to `run`.
+The following code just shows a slider to control
+the volume. The GUI code and the LADSPA code must
+obviously run in different (POSIX) threads.
+There is really only one tricky point: the control
+value is not supposed to change during execution
+of the `run`function.
+This could be protected by locks, but in this case
+that is too heavyweight: just keep a copy of the
+control as modified by the slider, and bring that
+across before each call to `run`.
 
 
 The code is written to use GTK v3 and is:
@@ -292,5 +292,5 @@ int main(int argc, char** argv) {
 ```
 
 
-It is run just by calling `stereo_amp`, 
-      no arguments.
+It is run just by calling `stereo_amp`,
+no arguments.

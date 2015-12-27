@@ -3,9 +3,9 @@
 
 
 This chapter has shown how to use TiMidity as MIDI player
-      for a Karaoke system. On my laptop it uses less than 60% of CPU
-      with Gtk 3.0,
-      better than the 100% of FluidSynth.
+for a Karaoke system. On my laptop it uses less than 60% of CPU
+with Gtk 3.0,
+better than the 100% of FluidSynth.
 
 ***
 
@@ -18,16 +18,10 @@ Copyright © Jan Newmarch, jan@newmarch.name
 </a>
 
 
-"Programming and Using Linux Sound - in depth"by [
-  Jan Newmarch
-](https://jan.newmarch.name) is licensed under a [
-  Creative Commons Attribution-ShareAlike 4.0 International License
-](http://creativecommons.org/licenses/by-sa/4.0/) .
+"Programming and Using Linux Sound - in depth"by [Jan Newmarch](https://jan.newmarch.name) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) .
 
 
-Based on a work at [
-  https://jan.newmarch.name/LinuxSound/
-](https://jan.newmarch.name/LinuxSound/) .
+Based on a work at [https://jan.newmarch.name/LinuxSound/](https://jan.newmarch.name/LinuxSound/) .
 
 
 If you like this book, please contribute using PayPal

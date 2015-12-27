@@ -2,15 +2,13 @@
 ##  Jack session API 
 
 
-See [
-	the session API
-      ](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) at trac.
+See [the session API](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) at trac.
 
 
 Applications that can be managed by Jack Sessions (JS) may be JS aware at Level 1
-      or JS unaware. For the unaware ones, the best that can be done is for the session
-      manager to maybe start and stop them. For the JS aware applications, they must
-      be set up to
+or JS unaware. For the unaware ones, the best that can be done is for the session
+manager to maybe start and stop them. For the JS aware applications, they must
+be set up to
 
 + Register with a JS manager
 + Respond to messages from the JS manager
@@ -19,24 +17,24 @@ Applications that can be managed by Jack Sessions (JS) may be JS aware at Level 
 Response to a JS message will generally
 
 + Save the application's state into a file,
-	  where the directory is given by the session manager
+where the directory is given by the session manager
 + Reply to the session manager with a command that can be used to restart
-	  the application, with enough information that it can restore its state
-	  (typically the name of the file in which it stored its state information)
+the application, with enough information that it can restore its state
+(typically the name of the file in which it stored its state information)
 
-JS aware clients identify themselves to the session manager by a UUID 
-      (unique universal identifier). It doesn't seem to matter what this is
-      or how it is generated: the client application just makes it up as 
-      long as it is an integer represented as a string.
-      This is passed to the session manager when registering, but should
-      also be passed back to the client when it is restarted by the
-      session manager. This is done by a command line argument
-      to the application, and the format of the command line is also
-      up to the client.
+JS aware clients identify themselves to the session manager by a UUID
+(unique universal identifier). It doesn't seem to matter what this is
+or how it is generated: the client application just makes it up as
+long as it is an integer represented as a string.
+This is passed to the session manager when registering, but should
+also be passed back to the client when it is restarted by the
+session manager. This is done by a command line argument
+to the application, and the format of the command line is also
+up to the client.
 
 
-A simple case might be two options `-u`for UUID and `-f`for saved state file. This would be parsed 
-      using `getopt`by
+A simple case might be two options `-u`for UUID and `-f`for saved state file. This would be parsed
+using `getopt`by
 
 ```cpp
 
@@ -62,8 +60,8 @@ int main(int argc, char **argv) {
 
 
 The application could then restore its state using the information
-      it has previously stored in the state file, and then
-      register again with a session manager by
+it has previously stored in the state file, and then
+register again with a session manager by
 
 ```cpp
 
@@ -75,15 +73,14 @@ jack_set_session_callback(client, session_callback, NULL);
 
 
 The callback function `session_callback`is invoked whenever
-      the session manager needs to communicate with the application. It takes
-      a `jack_session_event`and whatever was passed as the
-      last argument to `jack_set_session_callback`.
+the session manager needs to communicate with the application. It takes
+a `jack_session_event`and whatever was passed as the
+last argument to `jack_set_session_callback`.
 
 
 The job of the callback is then to save state information,
-      pass information back to the session manager and perhaps exit
-      (from [
-	trac - the session API](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) ):
+pass information back to the session manager and perhaps exit
+(from [trac - the session API](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) ):
 
 ```cpp
 
@@ -106,15 +103,14 @@ int session_callback(jack_session_event_t *ev) {
 ```
 
 
- [
-	trac](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) suggests that if this is run in a
-      multi-threaded environment such as GTK, it should be run when other
-      threads are idle e.g. by `g_idel_add`.
+ [trac](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) suggests that if this is run in a
+multi-threaded environment such as GTK, it should be run when other
+threads are idle e.g. by `g_idel_add`.
 
 
 WE can illustrate this with the `delay`program from the
-      Jack chapter. Adding in the extra code gives a revised `delay.c`.
-      I have enclosed the extra code with `#ifdef JACK_SESSION`for ease in seeing the changes.
+Jack chapter. Adding in the extra code gives a revised `delay.c`.
+I have enclosed the extra code with `#ifdef JACK_SESSION`for ease in seeing the changes.
 
 ```cpp
 

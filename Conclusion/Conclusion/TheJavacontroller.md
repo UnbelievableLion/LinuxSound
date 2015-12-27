@@ -86,14 +86,14 @@ This includes methods to perform Boolean pattern matches on the object.
 
 
 Multiple songs are stored in a `SongTable`which is basically
-      a `Vector`of `SongInformation`objects.
-      This table is serialisable so that it can be stored and then loaded
-      quickly from the HTTP server. 
-      The class contains some messy code to initialise the table if it is
-      serialised from a directory or from a list of files.
-      Apart from that, it contains code to build a (smaller) song table from a set
-      of pattern matches. This is useful from returning tables that meet
-      a pattern such as the artist being the Beatles.
+a `Vector`of `SongInformation`objects.
+This table is serialisable so that it can be stored and then loaded
+quickly from the HTTP server.
+The class contains some messy code to initialise the table if it is
+serialised from a directory or from a list of files.
+Apart from that, it contains code to build a (smaller) song table from a set
+of pattern matches. This is useful from returning tables that meet
+a pattern such as the artist being the Beatles.
 
 
 The table is given by `SongTable.java`:

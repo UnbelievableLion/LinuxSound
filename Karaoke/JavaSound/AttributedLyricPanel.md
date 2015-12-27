@@ -3,21 +3,21 @@
 
 
 The panel to display a line of lyrics must be able
-      to show text in two colours: the lyrics already played
-      and the lyrics yet to be played. The Java AttributedText
-      class is useful for this, as the text can be marked with
-      different attributes such as colours. This is wrapped in
-      an AttributedTextPanel, shown later.
+to show text in two colours: the lyrics already played
+and the lyrics yet to be played. The Java AttributedText
+class is useful for this, as the text can be marked with
+different attributes such as colours. This is wrapped in
+an AttributedTextPanel, shown later.
 
 
 One minor wrinkle concerns language. Chinese has both the
-      character form and a Romanised form called PinYin.
-      Chinese speakers can read the character form. People
-      like me can only understand the PinYin form.
-      So if the language is Chinese then the AttributedTextPanel
-      shows the PinYin alongside the Chinese characters.
-      The language identity should be passed to the 
-      AttributedLyricPanel as well.
+character form and a Romanised form called PinYin.
+Chinese speakers can read the character form. People
+like me can only understand the PinYin form.
+So if the language is Chinese then the AttributedTextPanel
+shows the PinYin alongside the Chinese characters.
+The language identity should be passed to the
+AttributedLyricPanel as well.
 
 
 The AttributedLyricPanel is

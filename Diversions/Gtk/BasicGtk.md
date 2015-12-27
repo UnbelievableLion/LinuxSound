@@ -3,15 +3,13 @@
 
 
 Gtk is a fairly standard GUI toolkit. Simple programs
-      are described in many tutorials such as [
-	First programs in GTK+
-      ](http://zetcode.com/tutorials/gtktutorial/firstprograms/) Refer to such tutorials for the basics in Gtk programming.
+are described in many tutorials such as [First programs in GTK+](http://zetcode.com/tutorials/gtktutorial/firstprograms/) Refer to such tutorials for the basics in Gtk programming.
 
 
 We just include the following example without explanation
-      which uses three child widgets, two buttons and one label. 
-      The label will hold an integer number. 
-      The buttons will increase or decrease this number.
+which uses three child widgets, two buttons and one label.
+The label will hold an integer number.
+The buttons will increase or decrease this number.
 
 ```cpp
 
@@ -85,19 +83,13 @@ We just include the following example without explanation
 
 
 Gtk, like every other GUI toolkit, has a large number of widgets.
-      These are listed in the [
-	GTK+ 3 Reference Manual
-      ](https://developer.gnome.org/gtk3/3.0/) .
-      This includes the widget [
-	GtkImage
-      ](https://developer.gnome.org/gtk3/3.0/GtkImage.html) .
-      As would be expected from the name, it can take a set of pixels from somewhere
-      and build them into an image which can be displayed.
+These are listed in the [GTK+ 3 Reference Manual](https://developer.gnome.org/gtk3/3.0/) .
+This includes the widget [GtkImage](https://developer.gnome.org/gtk3/3.0/GtkImage.html) .
+As would be expected from the name, it can take a set of pixels from somewhere
+and build them into an image which can be displayed.
 
 
-The following example is from [
-	CS 23 Software Design and Implementation Lecture notes GTK+ Programming
-      ](http://www.cs.dartmouth.edu/~xy/cs23/gtk.html) and shows an image loaded from a file:
+The following example is from [CS 23 Software Design and Implementation Lecture notes GTK+ Programming](http://www.cs.dartmouth.edu/~xy/cs23/gtk.html) and shows an image loaded from a file:
 
 ```cpp
 

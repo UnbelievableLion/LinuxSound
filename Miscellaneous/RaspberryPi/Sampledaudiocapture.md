@@ -3,8 +3,8 @@
 
 
 The RPi does not have an audio-in or line-in port.
-      I connected my SoundBlaster USB card through a powered USB hub.
-      It shows up with `arecord -l`as
+I connected my SoundBlaster USB card through a powered USB hub.
+It shows up with `arecord -l`as
 
 ```
 
@@ -24,7 +24,7 @@ so that to ALSA it is device `hw:1,0`.
 
 
 The standard program `arecord`works if you get the options
-      correct:
+correct:
 
 ```
 
@@ -50,8 +50,8 @@ aplay -D hw:1,1 -c 2 -r 48000 -f S16_LE tmp.s16
 
 
 
-In the chapter on [ ALSA ](../Sampled/Alsa) I gave the source for a program `alsa_capture.c`.
-      When run by
+In the chapter on [ALSA](../Sampled/Alsa) I gave the source for a program `alsa_capture.c`.
+When run by
 
 ```
 

@@ -2,24 +2,24 @@
 ##  Playing a background video with Gtk 
 
 
-In the chapter on [ FluidSynth ](../FluidSynth/) case:
-      we discussed a program to show lyrics overlaid onto
-      a movie. Apart from the above considerations,
-      the rest of the application follows similarly to the 
-      FluidSynth case:
-      build a set of lyric lines, display them using
-      Pango over Gtk Pixbufs, and when a new lyric event
-      occurs update the corresponding colours in the lyric
-      line.
+In the chapter on [FluidSynth](../FluidSynth/) case:
+we discussed a program to show lyrics overlaid onto
+a movie. Apart from the above considerations,
+the rest of the application follows similarly to the
+FluidSynth case:
+build a set of lyric lines, display them using
+Pango over Gtk Pixbufs, and when a new lyric event
+occurs update the corresponding colours in the lyric
+line.
 
 
 All of the dynamic action needs to occur out of the back-end of TiMidity.
-      particularly in the function `ctl_event`.
-      Other parts such as initialising FFMpeg and Gtk must also occur
-      in the back-end when using standard TiMidity. If TiMidity is used
-      as a library, this initialisation could occur in the front or the
-      back. For simplicity, we just place it all in the back in
-      the file `video_code.c`:
+particularly in the function `ctl_event`.
+Other parts such as initialising FFMpeg and Gtk must also occur
+in the back-end when using standard TiMidity. If TiMidity is used
+as a library, this initialisation could occur in the front or the
+back. For simplicity, we just place it all in the back in
+the file `video_code.c`:
 
 ```cpp
 

@@ -2,15 +2,13 @@
 ##  Applications using Jack 
 
 
-There are many pieces of software using Jack, described in [
-	Applications using JACK
-      ](http://jackaudio.org/applications) 
+There are many pieces of software using Jack, described in [Applications using JACK](http://jackaudio.org/applications) 
 
 ###  mplayer 
 
 
 To run `mplayer`using Jack, add the
-      option `-ao jack`:
+option `-ao jack`:
 
 ```
 
@@ -22,9 +20,9 @@ mplayer -ao jack 54154.mp3
 
 
  `mplayer`used in this way will connect to the
-      Jack `system`output device. To output to
-      another Jack application such as `jack-rack`,
-      append the output application to the audio output command
+Jack `system`output device. To output to
+another Jack application such as `jack-rack`,
+append the output application to the audio output command
 
 ```
 
@@ -38,8 +36,8 @@ mplayer -ao jack:port=jack_rack 54154.mp3
 
 
 VLC will play to Jack output if the [Jack module](https://wiki.videolan.org/Documentation:Modules/jack/) is included.
-      This is available as a downloadable Debian package `vlc-plugin-jack`. You can check if you have it by
-      seeing if jack is listed as a module in `vlc --list`shows ALSA but not Jack.
+This is available as a downloadable Debian package `vlc-plugin-jack`. You can check if you have it by
+seeing if jack is listed as a module in `vlc --list`shows ALSA but not Jack.
 
 
 Play a file using Jack by e.g.
@@ -54,13 +52,13 @@ vlc --aout jack 54154.mp3
 
 
 You should be able to connect to a particular Jack application
-      using the option `--jack-connect-regex <string>`.
+using the option `--jack-connect-regex <string>`.
 
 ###  TiMidity
 
 
 TiMidity is a MIDI player discussed later. It can play
-      to Jack output devices by
+to Jack output devices by
 
 ```
 
@@ -106,14 +104,14 @@ jack_midiseq                jack_zombie
 
 
 For many of these the source code is available in the Jack
-      source code distribution and there is a `man`page for each one.
+source code distribution and there is a `man`page for each one.
 
 
 Running, say, `jack_thru`connects the
-      system capture ports to the `jack_thru`input ports and the `jack_thru`output
-      ports to the system playback ports. You can 
-      then do things such as disconnect ports using "client:port"
-      for the port name as in
+system capture ports to the `jack_thru`input ports and the `jack_thru`output
+ports to the system playback ports. You can
+then do things such as disconnect ports using "client:port"
+for the port name as in
 
 ```
 
@@ -125,17 +123,13 @@ jack_disconnect jack_thru:output_1 system:playback_1
 
 
 These command line tools allow you to do the same kind
-      of actions as `qjackctl`
+of actions as `qjackctl`
 
 ###  Other Jack programs 
 
 
-The page [
-	Applications using JACK
-      ](http://jackaudio.org/applications) lists many applications using Jack.
+The page [Applications using JACK](http://jackaudio.org/applications) lists many applications using Jack.
 
 
-The page [
-	Jack MIDI Apps
-      ](http://apps.linuxaudio.org/apps/categories/jack_midi) at linuxaudio.org
-      lists many MIDI applications using Jack
+The page [Jack MIDI Apps](http://apps.linuxaudio.org/apps/categories/jack_midi) at linuxaudio.org
+lists many MIDI applications using Jack

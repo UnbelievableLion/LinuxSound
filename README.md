@@ -8,9 +8,36 @@ I've been using Linux since kernel 0.99. I'm not a kernel hacker, more of a user
 
 I'm going to rely on the people who really know what they are doing. So rather than re-invent everything from scratch I'm going to borrow the words of experts whenever I can. But the responsibility will still be mine, so please forgive and correct all the errors that I will make...
 
-<div>
 
-If you like this book, please consider contributing using PayPal:
+
+<table border="1">
+<tr>
+<td> 
+   <img alt="Jan Newmarch" src="https://jan.newmarch.name/jan-medium-2010.jpg"> 
+</td>
+<td> Jan Newmarch is Academic Course Manager (ICT) at 
+<a href="http://boxhill.edu.au"> Box Hill Institute </a>
+and Adjunct Professor <a href="http://canberra.edu.au"> Canberra University </a>. 
+His home page is at <a href="https://jan.newmarch.name"> jan.newmarch.name </a>. 
+Jan has been writing books and papers for many years on all sorts of aspects of ICT: distributed programming, user interfaces, audio,Java, Go,  GPUs, Raspberry Pi, X Window system, Wayland, ...
+</td>
+</tr>
+</table>
+
+<div>
+<br/>
+This version of the book is derived from HTML source at
+<a href="https://jan.newmarch.name/LinuxSound/">
+   jan.newmarch.name/LinuxSound
+</a>
+<br/><br/>
+
+<table   style="text-align:center">
+<tr>
+<td width="33%">
+If you like this book, please consider 
+<br/>
+contributing using PayPal:
 
 <br/>
 
@@ -21,9 +48,10 @@ If you like this book, please consider contributing using PayPal:
 </a>
 
 <br/>
-
+</td>
+<td width="33%">
 Or Flattr me:
-
+<br/>
 <a href="https://flattr.com/submit/auto?
   user_id=jannewmarch&url=http://jan.newmarch.name&
   title=Linux%20Sound&
@@ -33,12 +61,17 @@ Or Flattr me:
 <img src="https://api.flattr.com/button/flattr-badge-large.png" 
   alt="Flattr this book" />
 </a>
+</td>
+
 
 </div>
-
+<td width="33%">
 Copyright © Jan Newmarch jan@newmarch.name 
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a>
 
+</td>
+</tr>
+</table>
 
 This work is licensed under a Creative Commons [Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/).

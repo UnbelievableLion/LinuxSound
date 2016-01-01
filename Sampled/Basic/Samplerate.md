@@ -1,5 +1,5 @@
 
-## {{ progress.current.level }} Sample rate
+## {{ file.path }} Sample rate
 
 
 Digitising an analogue signal means taking samples from that signal

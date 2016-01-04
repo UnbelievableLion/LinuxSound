@@ -12,4 +12,4 @@ combining PCM and MIDI: miniFMsynth and
 scheduling MIDI events: miniArp
 +  [MIDI Sequencer API](http://alsa-project.org/alsa-doc/alsa-lib/group___sequencer.html) 
 +  [Sequencer interface](http://alsa-project.org/alsa-doc/alsa-lib/seq.html) 
-+  [ALSA Sequencer System](http://www.alsa-project.org/~tiwai/lk2k/lk2k.html) is an in-depth viewof the sequencer system by Takashi Iwai
++  [ALSA Sequencer System](http://www.alsa-project.org/~tiwai/lk2k/lk2k.html) is an in-depth view of the sequencer system by Takashi Iwai

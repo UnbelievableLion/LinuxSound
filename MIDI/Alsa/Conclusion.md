@@ -2,9 +2,9 @@
 ##  Conclusion 
 
 
-This chapter has built a number of programs using the
-MIDI API and discussed how to use external hardware
-synthesizers and soft sythesizers such as TiMidity.
+This chapter has briefly discussed the MIDI models available under
+Alsa. While there is a substantial programming API behind this,
+we have mainly used the commands ` amidi`, `aplaymidi`and `aconnect`.
 
 ***
 

@@ -40,22 +40,22 @@ import java.io.File;
 public class Recorder extends Thread
 {
     /**
-     * The TargetDataLine that weâll use to read data from
+     * The TargetDataLine that we’ll use to read data from
      */
     private TargetDataLine line;
 
     /**
-     * The audio format type that weâll encode the audio data with
+     * The audio format type that we’ll encode the audio data with
      */
     private AudioFileFormat.Type targetType = AudioFileFormat.Type.WAVE;
 
     /**
-     * The AudioInputStream that weâll read the audio data from
+     * The AudioInputStream that we’ll read the audio data from
      */
     private AudioInputStream inputStream;
 
     /**
-     * The file that weâre going to write data out to
+     * The file that we’re going to write data out to
      */
     private File file;
 
@@ -66,7 +66,7 @@ public class Recorder extends Thread
     {
 	try {
 	    // Create an AudioFormat that specifies how the recording will be performed
-	    // In this example weâll 44.1Khz, 16-bit, stereo
+	    // In this example we’ll 44.1Khz, 16-bit, stereo
 	    AudioFormat audioFormat = new AudioFormat(
 						      AudioFormat.Encoding.PCM_SIGNED,    // Encoding technique
 						      44100.0F,                           // Sample Rate

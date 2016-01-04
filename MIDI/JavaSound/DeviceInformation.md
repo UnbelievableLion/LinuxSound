@@ -99,14 +99,17 @@ public class DeviceInfo {
 	
 	Sequencer sequencer = MidiSystem.getSequencer();
 	System.out.println("Default system sequencer is " + 
-			   sequencer.getDeviceInfo().toString());
+			   sequencer.getDeviceInfo().toString() +
+			   " (" + sequencer.getClass() + ")");
 
 	Synthesizer synthesizer = MidiSystem.getSynthesizer();
 	System.out.println("Default system synthesizer is " + 
-			   synthesizer.getDeviceInfo().toString());
+			   synthesizer.getDeviceInfo().toString() +
+			   " (" + synthesizer.getClass() + ")");
 
     }
 }
+
 	
       
 ```

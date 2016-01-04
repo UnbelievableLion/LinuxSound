@@ -3,7 +3,8 @@
 
 
 the program `aconnect.c`can be used to test for sequencer servers
-and clients such as sequencers. I have set two clients running: Timidity and
+and clients such as sequencers.
+I have set two clients running: Timidity and
 seqdemo (discussed later). The command
 
 ```
@@ -31,6 +32,34 @@ client 129: 'ALSA Sequencer Demo' [type=user]
     0 'ALSA Sequencer Demo'
 	
       
+```
+
+
+When run with the -i option it produces
+
+```
+
+      
+$aconnect -i
+client 0: 'System' [type=kernel]
+    0 'Timer           '
+    1 'Announce        '
+client 14: 'Midi Through' [type=kernel]
+    0 'Midi Through Port-0'
+      
+    
+```
+
+
+The program `aconnect`can establish a connection
+between input and output clients by
+
+```
+
+      
+aconnect in out
+      
+    
 ```
 
 

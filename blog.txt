@@ -1,6 +1,6 @@
 I've been writing Open Content books for many years now, using standard HTML and delivering them from my own web site. This has the advantage of total control of the content and delivery, but the downside of administration, backup, a slow site (I'm on ADSL2), etc.
 
-About a week ago Leven approached me with an offer to put one of my books on Gitbook, an open source Open Content book repository. He converted it to the right format and just left me a few steps to do to put in on Gitbook. I kind of liked it, so I'm looking at puting the rest of my books there. This blog documents from scratch my experience in getting another book there. Why document it? Because there were enough steps in the process, in different places, that a complete description seems worth it.
+About a week ago Leven approached me with an offer to put one of my books on Gitbook, an open source Open Content book repository. He converted it to the right format and just left me a few steps to do to put in on Gitbook. I kind of liked it, so I'm looking at puting the rest of my books there. This blog documents from scratch my experience in getting another book there. Why document it? Because there were enough painful steps in the process, in different places, that a complete description seems worth it.
 
 I'll cover the following topics
 - conversion to Markdown
@@ -12,7 +12,25 @@ Conversion from HTML to Markdown
 
 Gitbook uses Markdown rather than HTML. There are converters, but Leven said that he did it by hand, taking about 1 1/2 hours per chapter. Since I was looking at my Linux Sound book of 40 chapters, by hand would take about 60 hours. So I wrote my own Python programs to convert (my) HTML to Markdown. Not hard: three of them so far, about 400 lines total.
 
-I chose that route rather than using a general converter as Gitbook has a particular format and I know my own HTML conventions inside out. For example each of my chapters has a Preface in a 'div' tag with class 'preface' and one program extracts these out to README.md  files as description for each Markdown chapter. The only real wrinkle is that I pulled each chapter from my own web site using Python's urllib rather than working on the source HTML files. This is because the source files use tricks like server-side includes and my web site is full of other stuff, such as source code for other programs that I used during writing. By pulling the files from the Web, I only get the relevant data after server-side processing.
+I chose that route rather than using a general converter as Gitbook has a particular format and I know my own HTML conventions inside out. For example each of my chapters has a Preface in a 'div' tag with class 'preface' and one program extracts these out to README.md  files as description for each Markdown chapter. The only real wrinkle is that I pulled each chapter from my own web site using Python's urllib rather than working on the source HTML files. This is because my source files use tricks like server-side includes and my web site is full of other stuff, such as source code for other programs that I used during writing. By pulling the files from the Web, I only get the relevant data after server-side processing.
+
+Actually, the Python ended up using a lot of time. I started off by using HTMLParser, which gives me start and end tags and content in between. I really want the content labelled by the tags, so I ended up with a lot of state variables ("in a list item now", etc). This broke down when I hit blockquotes where I had other block elements inside the blockquote: the state model was getting too messy. So I ended up switching to a a DOM-model, using BeautifulSoup. Nice, except that my HTML was not conformant and BeautifulSoup was losing bits of my text. My understanding of HTML block elements was wrong, and I was nesting blocks inside of <p> blocks. The parser was terminating the <p> tags when it saw the nested block element and then losing what I had thought would still be in the <p> block, since it has already finished that block. So another Python program was needed to fix up my HTML to make it more conformant. I checked tjem against the [W3 validator](https://validator.w3.org/nu/).
+
+It was worthwhile: the resulting converted book is over 1300 pages of PDF, too long to convert by hand!
+
+Markdown
+
+The markup language Markdown is not formally specified. That means you have to rely on your understanding of the syntax matching an implementor's understanding and the hope that all implementors agree. As this was my first experience with it, I wasn't sure how muhc trust to put in these. I would be dealing with possibly three implementations of Markdown parsers:
+
+A plugin for the chromium browser
+A parser on Github
+A parser on Gitbook
+
+I only needed to conform to the third, and for one file at least, that had the tightest specifications. If I didn't conform to them, well, it just didn't accept the file. The file was SUMMARY.md and consists of a list of syntactically correct list elements, each element being a Markdown url. This is basically the Table of Contents for the book, so without that the book is useless. It turns out that I should have trusted the chromium plugin, and as it was I kept pushing one erroneous file after another up to Gitbook, which it silently ignored.
+
+Markdown uses whitespace quite rigorously in places: indented text signals program code indented '+' signifies a sublist, and so on. In other places it doesn't care. Where it REALLY cared was in NO spaces between the ']' and '(' of a url: "[...](...)" is legal, "[..] (...)" is not. The chromium plugin was telling me that, while Gitbook was just throwing my file away.
+
+It is still a bit of trial-and-error, but now I try syntax locally on the chromium plugin before pushing it to Gitbook.
 
 Git
 
@@ -22,7 +40,7 @@ git init
 git add -A
 git commit
 
-After modifying any files, do the last two steps again to commit a new version. There are many complexities to git which I can ignore here: noneed for .gitignore files for example, since I created a 'clean' set of project files.
+After modifying any files, do the last two steps again to commit a new version. There are many complexities to git which I can ignore here: only a simple .gitignore file for example, since I created a fairly 'clean' set of project files by pulling down the HTML and associated files from my web site.
 
 Github
 
@@ -35,8 +53,10 @@ and then push the files up by
 git pull github master
 git push github master
 
-If you then go your repository, you should see all your files under the master branch. If you have included a README.md its contents should show below the list of files. It's worth spending time making sure the entries on Github are in good shape before copying them to Gitbook.
+If you then go your repository, you should see all your files under the master branch. If you have included a README.md its contents should show below the list of files. It's worth spending time making sure the entries on Github are in good shape before copying them to Gitbook. After each relevant commit on my site, push them up to Github by just
+
+git push github master
 
 Gitbook
 
-Create an account on http://www.gitbook.com. Then in your acount, click on a New Book, and fill in the details. Once complete you should be presented with a screen including a button to Link to Github
+Create an account on http://www.gitbook.com. Then in your acount, click on a New Book, and fill in the details. Once complete you should be presented with a screen including a button to Link to Github. At this point you have two choices: click on the Link to Github, or click on the more tempting button that gives you a url to manually add to Github. Avoid the temptation: it didn't work for me and cost some more time.

@@ -2,14 +2,17 @@
 ##  Introduction 
 
 
-ALSA suplies a sequencer that can receive MIDI events and play them
-according to the timing information in the events. The clients
-taht can send such events are file readers such as `aplaymidi`or other sequencers. Clients can also read events as they should be played.
-Possible clients include splitters, routers or soft synthesizers such as
+ALSA suplies a sequencer that can receive MIDI events
+from one set of clients and play them
+according to the timing information in the events to other clients.
+The clients
+that can send such events are file readers such as `aplaymidi`or other sequencers. Clients can also read events as they should be played.
+Possible consuming clients include splitters, routers or soft synthesizers such as
 Timidity.
 
 
-Timidity can be run as ALSA sequencer client.
+Timidity can be run as ALSA sequencer client which will consume
+MIDI events and synthesize them.
 From [The TiMidity Howto - Using TiMidity as the ALSA sequencer client](http://linux-audio.com/TiMidity-howto.html) 
 
 ```
@@ -50,9 +53,9 @@ FluidSynth can also be used as a server
 ```
 
 
-The ALSA sequencer seds MIDI "wire" events. This does not include
+The ALSA sequencer sends MIDI "wire" events. This does not include
 MIDI file events such as Text or Lyric Meta-events. This makes it
-pretty useless for a MIDI player. It is possible to modify the
+pretty useless for a Karaoke player. It is possible to modify the
 file reader `aplaymid`to send Meta Events to, say,
 a listener (like the Java MetaEventListener), but as these come
 from the file reader rather than the sequencer they generally arrive well

@@ -24,7 +24,7 @@ The program is [triangle.c](triangle.c) :
 	
 /*
  * code stolen from openGL-RPi-tutorial-master/encode_OGL/
- * and from OpenGLÂ® ES 2.0 Programming Guide
+ * and from OpenGL® ES 2.0 Programming Guide
  */
 
 #include <stdio.h>

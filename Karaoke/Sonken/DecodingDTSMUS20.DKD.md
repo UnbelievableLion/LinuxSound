@@ -587,7 +587,7 @@ public class SongTable {
 	// Should print "54151 Help Yourself Tom Jones"
 	System.out.println(songs.getNumber(54150).toString());
 
-	// Should print "18062 ä¼¦å·´(ææ­) ä¼¦å·´"
+	// Should print "18062 伦巴(恋歌) 伦巴"
 	System.out.println(songs.getNumber(18061).toString());
 
 	System.out.println(songs.artistMatches("Tom Jones").toString());

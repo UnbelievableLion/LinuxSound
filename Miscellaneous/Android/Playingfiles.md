@@ -37,9 +37,7 @@ and installed from the file browser. A player for a single file
 on the SD disk looks like
 
 ```cpp
-
-      
-      package jan.newmarch.DiskPlayer;
+package jan.newmarch.DiskPlayer;
 
 import java.io.File;
 
@@ -88,9 +86,6 @@ public class DiskPlayerActivity extends Activity {
     }
 
 }
-
-      
-    
 ```
 
 
@@ -98,11 +93,7 @@ This app requires access to read the SD card. In the AndroidManifest file this i
 given by
 
 ```
-
-	
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-	
-      
 ```
 
 

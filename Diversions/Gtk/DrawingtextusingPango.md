@@ -13,9 +13,7 @@ The simplest way of colouring text (and some other effects)
 is to create the text marked up with HTML such as
 
 ```cpp
-
 gchar *markup_text = "<span foreground=\"red\">hello </span><span foreground=\"black\">world</span>";
-      
 ```
 
 
@@ -23,13 +21,11 @@ which has "hello" in red and "world" in black. This is then parsed into the
 text itself "ed black" and a set of attribute markups.
 
 ```cpp
-
 gchar *markup_text = "<span foreground=\"red\">hello </span><span foreground=\"black\">world</span>";
 PangoAttrList *attrs;
 gchar *text;
 
 pango_parse_markup (markup_text, -1,0, &attrs, &text, NULL, NULL);
-      
 ```
 
 
@@ -38,7 +34,6 @@ the text with its attributes in the Pango layout and then
 showing this layout in the Cairo context:
 
 ```cpp
-
 PangoLayout *layout;
 PangoFontDescription *desc;
 
@@ -48,7 +43,6 @@ pango_layout_set_text (layout, text, -1);
 pango_layout_set_attributes(layout, attrs);
 pango_cairo_update_layout (cr, layout);
 pango_cairo_show_layout (cr, layout);
-      
 ```
 
 
@@ -64,8 +58,6 @@ surface destination, set into the `GtkImage`and added to the Gtk event queue.
 The complete program is `gtk_play_video_pango.c`:
 
 ```cpp
-
-	
 #include <gtk/gtk.h>
 
 #include <libavcodec/avcodec.h>
@@ -406,7 +398,4 @@ int main(int argc, char** argv)
     
     return 0;
 }
-
-
-      
 ```

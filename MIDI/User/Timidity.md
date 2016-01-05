@@ -11,11 +11,7 @@ Its home page is [Maemo.org](http://maemo.org/packages/view/timidity/)
 Timidity can be used to play MIDI files by giving them on the command line
 
 ```
-
-	
-	  timidity rehab.mid
-	
-      
+timidity rehab.mid
 ```
 
 
@@ -32,11 +28,7 @@ It can also be run as an ALSA server listening on a port
 ( [Using MIDI with UNIX](http://wiki.winehq.org/MIDI) ):
 
 ```
-
-	
-	  timidity -iAD -B2,8 -Os1l -s 44100
-	
-      
+timidity -iAD -B2,8 -Os1l -s 44100
 ```
 
 
@@ -51,20 +43,14 @@ In this mode, ALSA can send messages to it.
 The command
 
 ```
-
-	
-	  aconnect -0
-	
-      
+aconnect -0
 ```
 
 
 will show output such as
 
 ```
-
-	
-	  client 14: 'Midi Through' [type=kernel]
+client 14: 'Midi Through' [type=kernel]
 	  0 'Midi Through Port-0'
 	  laptop:/home/httpd/html/LinuxSound/MIDI/Python/pyPortMidi-0.0.3$aconnect -o
 	  client 14: 'Midi Through' [type=kernel]
@@ -74,8 +60,6 @@ will show output such as
 	  1 'TiMidity port 1 '
 	  2 'TiMidity port 2 '
 	  3 'TiMidity port 3 '
-	
-      
 ```
 
 
@@ -83,11 +67,7 @@ The "Midi Through" port is not useful but the Timidity ports are.
 MIDI files can then be played by an ALSA sequencer such as
 
 ```
-
-	
-	  aplaymidi -p128:0 rehab.mid
-	
-      
+aplaymidi -p128:0 rehab.mid
 ```
 
 ###  Setting Timidity output device 
@@ -97,9 +77,7 @@ The default output for TiMidity can be changed using the `-O`option. TiMidity he
 shows, for example,
 
 ```
-
-	
-	  Available output modes (-O, --output-mode option):
+Available output modes (-O, --output-mode option):
 	  -Os          ALSA pcm device
 	  -Ow          RIFF WAVE file
 	  -Or          Raw waveform data
@@ -108,8 +86,6 @@ shows, for example,
 	  -Ol          List MIDI event
 	  -Om          Write MIDI file
 	  -OM          MOD -> MIDI file conversion
-	
-      
 ```
 
 
@@ -118,11 +94,7 @@ the `-o`option. For example, to play a file using
 the `hw:2`ALSA device, use
 
 ```
-
-	
-	  timidity -Os -o hw:2 ... 
-	
-      
+timidity -Os -o hw:2 ...
 ```
 
 ###  TiMidity and Jack 
@@ -133,11 +105,7 @@ to stop or pause PulseAudio, start the Jack server and then run TiMidity.
 PulseAudion may be paused by e.g.
 
 ```
-
-	
 pasuspender cat
-	
-      
 ```
 
 
@@ -145,22 +113,14 @@ in one terminal. In another, start the Jack daemon
 using ALSA input and output
 
 ```
-
-	
 jackd -dalsa
-	
-      
 ```
 
 
 In a third terminal, run TiMidity
 
 ```
-
-	
 timidity -Oj 54154.mid
-	
-      
 ```
 
 

@@ -13,7 +13,6 @@ The program `capture_client.c`from the
 examples does this:
 
 ```cpp
-
 /*
     Copyright (C) 2001 Paul Davis
     Copyright (C) 2003 Jack O'Quin
@@ -363,6 +362,4 @@ main (int argc, char *argv[])
 
 	exit (0);
 }
-
-      
 ```

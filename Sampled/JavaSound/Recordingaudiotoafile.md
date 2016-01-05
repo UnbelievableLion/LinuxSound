@@ -28,9 +28,6 @@ The UML class diagram is
 The program is:
 
 ```cpp
-
-      
-      
 import javax.sound.sampled.*;
 import java.io.File;
 
@@ -153,6 +150,4 @@ public class Recorder extends Thread
     }
 
 }
-      
-    
 ```

@@ -5,8 +5,6 @@
 Information about each song is stored in a file `SongInformation.java`:
 
 ```cpp
-
-
 package newmarch.songtable;
 
 import java.nio.file.Path;
@@ -77,8 +75,6 @@ public class SongInformation implements Serializable {
 	return index.equalsIgnoreCase(pattern);
     }
 }
-
-      
 ```
 
 
@@ -99,8 +95,6 @@ a pattern such as the artist being the Beatles.
 The table is given by `SongTable.java`:
 
 ```cpp
-
-
 package newmarch.songtable;
 
 import java.util.Vector;
@@ -352,8 +346,6 @@ public class SongTable {
 	System.exit(0);
     }
 }
-
-      
 ```
 
 

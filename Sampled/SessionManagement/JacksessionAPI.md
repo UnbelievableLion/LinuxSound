@@ -37,7 +37,6 @@ A simple case might be two options `-u`for UUID and `-f`for saved state file. Th
 using `getopt`by
 
 ```cpp
-
 int main(int argc, char **argv) {
   int c;
   char *file = NULL;
@@ -55,7 +54,6 @@ int main(int argc, char **argv) {
   }    
   ...
 }
-      
 ```
 
 
@@ -64,11 +62,9 @@ it has previously stored in the state file, and then
 register again with a session manager by
 
 ```cpp
-
 jack_client *client;
 client = jack_client_open("myapp", JackSessionID, NULL, uuid);
-jack_set_session_callback(client, session_callback, NULL); 
-      
+jack_set_session_callback(client, session_callback, NULL);
 ```
 
 
@@ -83,7 +79,6 @@ pass information back to the session manager and perhaps exit
 (from [trac - the session API](http://trac.jackaudio.org/wiki/WalkThrough/Dev/JackSession) ):
 
 ```cpp
-
 int session_callback(jack_session_event_t *ev) {
   char filename[256];
   char command[256];
@@ -99,7 +94,6 @@ int session_callback(jack_session_event_t *ev) {
   jack_session_event_free(ev);
   return 0;
 }
-     
 ```
 
 
@@ -113,8 +107,7 @@ Jack chapter. Adding in the extra code gives a revised `delay.c`.
 I have enclosed the extra code with `#ifdef JACK_SESSION`for ease in seeing the changes.
 
 ```cpp
-
-	/** @file delay.c
+/** @file delay.c
  *
  * @brief This client delays one channel by 4096 framse.
  */
@@ -407,6 +400,4 @@ int main ( int argc, char *argv[] ) {
     jack_client_close ( client );
     exit ( 0 );
 }
-
-      
 ```

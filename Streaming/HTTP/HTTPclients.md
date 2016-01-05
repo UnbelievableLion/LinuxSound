@@ -17,11 +17,7 @@ MPlayer is HTTP-aware:
 just give the URL of the file
 
 ```
-
-	
 mplayer http://localhost/audio/enigma/audio_01.ogg
-	
-      
 ```
 
 
@@ -34,11 +30,7 @@ VLC is also HTTP-aware:
 just give the URL of the file
 
 ```
-
-	
 vlc http://localhost/audio/enigma/audio_01.ogg
-	
-      
 ```
 
 

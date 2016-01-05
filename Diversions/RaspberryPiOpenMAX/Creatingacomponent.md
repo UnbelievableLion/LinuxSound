@@ -38,9 +38,7 @@ error was not so un-helpful.
 A typical component creation will look like
 
 ```cpp
-
-	
- ilclient_create_component(decoder->client,
+ilclient_create_component(decoder->client,
 			&decoder->imageDecoder->component,
 			"image_decode",
 			ILCLIENT_DISABLE_ALL_PORTS
@@ -48,6 +46,4 @@ A typical component creation will look like
 			ILCLIENT_ENABLE_INPUT_BUFFERS
 			|
 			ILCLIENT_ENABLE_OUTPUT_BUFFERS)
-	
-      
 ```

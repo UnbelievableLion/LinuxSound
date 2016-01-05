@@ -51,11 +51,7 @@ operations, such as listing devices or playing audio.
 The function `pa_context_get_sink_info_list`will set up a callback function to list source devices by
 
 ```
-
-	
 pa_context_get_sink_info_list(c, sinklist_cb, NULL)
-	
-      
 ```
 
 
@@ -66,11 +62,7 @@ and `NULL`is user data passed to the callback.
 The callback is called as
 
 ```
-
-	
 void sinklist_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
-	
-      
 ```
 
 
@@ -82,8 +74,6 @@ valid entries in the list.
 The structure `pa_sink_info`is defined as
 
 ```
-
-	
 struct {
   const char *  name;
   uint32_t 	index;
@@ -110,8 +100,6 @@ struct {
   uint8_t 	n_formats;
   pa_format_info ** 	formats;
 } pa_sink_info
-	
-      
 ```
 
 
@@ -132,8 +120,7 @@ A program to list input and output devices current when the application connects
 to the server is [palist_devices.c:](palist_devices.c) 
 
 ```cpp
-
-      /**
+/**
  * palist_devices.c 
  * Jan Newmarch
  */
@@ -269,16 +256,12 @@ int main(int argc, char *argv[]) {
 	exit(1);
     }
 }
-
-      
 ```
 
 
 On my laptop this gives (elided)
 
 ```
-
-	
 Source: name alsa_output.pci-0000_01_00.1.hdmi-stereo.monitor, description Monitor of HDMI Audio stub Digital Stereo (HDMI)
   Properties are: 
    key: device.description, value: Monitor of HDMI Audio stub Digital Stereo (HDMI)
@@ -351,8 +334,6 @@ Sink: name alsa_output.usb-Creative_Technology_Ltd_SB_X-Fi_Surround_5.1_Pro_0000
   Properties are: 
   ...
 **No more sinks
-	
-      
 ```
 
 
@@ -404,8 +385,7 @@ A program to list devices on connection and also to list changes
 as devices are connected or disconnected is [palist_devices_ongoing.c:](palist_devices_ongoing.c) 
 
 ```cpp
-
-      /**
+/**
  * palist_clients.c 
  * Jan Newmarch
  */
@@ -595,8 +575,6 @@ int main(int argc, char *argv[]) {
 	exit(1);
     }
 }
-
-      
 ```
 
 ###  Record a stream 
@@ -612,8 +590,7 @@ way into this API.
 The file is [parec.c:](parec.c) 
 
 ```cpp
-
-      /**
+/**
  * parec.c 
  * Jan Newmarch
  */
@@ -832,8 +809,6 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 }
-
-      
 ```
 
 ###  Play a file 
@@ -868,8 +843,6 @@ the range of features that can be monitored.
 The program is [pacat2.c:](pacat2.c) 
 
 ```cpp
-
-      
 /**
  * pacat2.c 
  * Jan Newmarch
@@ -1292,8 +1265,6 @@ int main(int argc, char *argv[]) {
 
 
 }
-
-      
 ```
 
 
@@ -1341,11 +1312,7 @@ callback that will be called whenever the stream is ready to be
 written to. Registering the callback looks like
 
 ```
-
-	    
- pa_stream_set_write_callback(stream, stream_write_callback, NULL)
-	    
-	  
+pa_stream_set_write_callback(stream, stream_write_callback, NULL)
 ```
 
 
@@ -1353,11 +1320,7 @@ The callback is passed the stream to write to (s) and the number
 of bytes that can be written (length):
 
 ```
-
-	    
 void stream_write_callback(pa_stream *s, size_t length, void *userdata)
-	    
-	  
 ```
 
 + 
@@ -1368,26 +1331,18 @@ is `io_new`and is passed a Unix file descriptor for the file
 and the callback function. Reigstering the callback looks like
 
 ```
-
-	    
- mainloop_api->io_new(mainloop_api,
+mainloop_api->io_new(mainloop_api,
 		      fdin,
 		      PA_IO_EVENT_INPUT,
 		      stdin_callback, NULL))
-	    
-	  
 ```
 
 
 The callback is passed the file descriptor (fd) to read from:
 
 ```
-
-	    
 void stdin_callback(pa_mainloop_api *mainloop_api, pa_io_event *stdio_event, 
                     int fd, pa_io_event_flags_t f, void *userdata)
-	    
-	  
 ```
 
 
@@ -1419,8 +1374,7 @@ and write it to the stream
 The program to play from a file presently looks like [pacat.c:](pacat.c) 
 
 ```cpp
-
-      /***
+/***
   This file is based on pacat.c,  part of PulseAudio.
 
   pacat.c:
@@ -1900,8 +1854,6 @@ int main(int argc, char *argv[]) {
     exit(1); // goto quit
   }
 }
-
-      
 ```
 
 ###  Controlling latency 
@@ -1933,9 +1885,7 @@ The extra code is:
 
 
 ```cpp
-
-	
-    // Set properties of the record buffer
+// Set properties of the record buffer
     pa_zero(buffer_attr);
     buffer_attr.maxlength = (uint32_t) -1;
     buffer_attr.prebuf = (uint32_t) -1;
@@ -1955,8 +1905,6 @@ The extra code is:
       buffer_attr.minreq = (uint32_t) process_time;
     else
       buffer_attr.minreq = (uint32_t) -1;
-	
-      
 ```
 
 
@@ -1968,11 +1916,7 @@ A timer event callback has to be declared, as in
 
 
 ```
-
-	
- pa_context_rttime_new(context, pa_rtclock_now() + TIME_EVENT_USEC, time_event_callback, NULL))
-	
-      
+pa_context_rttime_new(context, pa_rtclock_now() + TIME_EVENT_USEC, time_event_callback, NULL))
 ```
 
 
@@ -1980,8 +1924,6 @@ The timer event callback is a "single shot" calback.  It installs a stream updat
 and sets up another timer callback:
 
 ```
-
-	
 void time_event_callback(pa_mainloop_api *m, 
 				pa_time_event *e, const struct timeval *t, 
 				void *userdata) {
@@ -1994,16 +1936,12 @@ void time_event_callback(pa_mainloop_api *m,
     }
 
     pa_context_rttime_restart(context, e, pa_rtclock_now() + TIME_EVENT_USEC);
-	
-      
 ```
 
 
 The stream update timer callback can then estimate the latency:
 
 ```
-
-	
 void stream_update_timing_callback(pa_stream *s, int success, void *userdata) {
     pa_usec_t l, usec;
     int negative = 0;
@@ -2024,8 +1962,6 @@ void stream_update_timing_callback(pa_stream *s, int success, void *userdata) {
             (float) l * (negative?-1.0f:1.0f));
     fprintf(stderr, "        \r");
 }
-	
-      
 ```
 
 
@@ -2033,8 +1969,6 @@ With latency left to PulseAudio by setting  fragsize and tlength to -1,
 I got:
 
 ```
-
-	
 Time: 0.850 sec; Latency: 850365 usec.
 Time: 0.900 sec; Latency: 900446 usec.
 Time: 0.951 sec; Latency: 950548 usec.
@@ -2051,16 +1985,12 @@ Time: 1.451 sec; Latency: 451400 usec.
 Time: 1.501 sec; Latency: 501465 usec.
 Time: 1.551 sec; Latency: 551587 usec.
 Time: 1.602 sec; Latency: 601594 usec.
-	
-      
 ```
 
 
 With them set to 1 msec, I got:
 
 ```
-
-	
 Time: 1.599 sec; Latency: 939 usec.
 Time: 1.649 sec; Latency: 1105 usec.
 Time: 1.699 sec; Latency: -158 usec.
@@ -2077,16 +2007,13 @@ Time: 2.200 sec; Latency: 406 usec.
 Time: 2.251 sec; Latency: 1461 usec.
 Time: 2.301 sec; Latency: 107 usec.
 Time: 2.351 sec; Latency: 1257 usec.
-	
-      
 ```
 
 
 The program to do all this is [parec-latency.c:](parec-latency.c) 
 
 ```cpp
-
-      /* parec-latency.c */
+/* parec-latency.c */
 
 
 #include <stdio.h>
@@ -2369,8 +2296,6 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 }
-
-      
 ```
 
 ###  Play microphone to speaker 
@@ -2379,8 +2304,7 @@ int main(int argc, char *argv[]) {
 Combining what we have so far, we get [pa-mic-2-speaker.c:](pa-mic-2-speaker.c) 
 
 ```cpp
-
-      /*
+/*
  * Copy from microphone to speaker
  * pa-mic-2-speaker.c
  */
@@ -2648,8 +2572,6 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 }
-
-      
 ```
 
 
@@ -2688,8 +2610,7 @@ and leave the current thread for reading volume values. This gives
 the relatively simple program [pavolume.c:](pavolume.c) 
 
 ```cpp
-
-      /**
+/**
  * pavolume.c 
  * Jan Newmarch
  */
@@ -2778,8 +2699,6 @@ int main(int argc, char *argv[]) {
 					   );
     }
 }
-
-      
 ```
 
 ###  Listing clients 
@@ -2800,8 +2719,7 @@ context changes state to `PA_CONTEXT_READY`the application subscribes to `PA_SUB
 The program [palist_clients.c](palist_clients.c) is
 
 ```cpp
-
-      /**
+/**
  * palist_clients.c 
  * Jan Newmarch
  */
@@ -2994,16 +2912,12 @@ int main(int argc, char *argv[]) {
 	exit(1);
     }
 }
-
-      
 ```
 
 
 The output on my system is (elided)
 
 ```
-
-	
 Found a new client index 0 name ConsoleKit Session /org/freedesktop/ConsoleKit/Session2 eol 0
   Properties are: 
    key application.name, value ConsoleKit Session /org/freedesktop/ConsoleKit/Session2
@@ -3031,8 +2945,6 @@ Found a new client index 248 name PulseAudio Volume Control eol 0
 Found a new client index 341 name test eol 0
   Properties are: 
     ...
-	
-      
 ```
 
 ###  Listing client sources and sinks 
@@ -3059,8 +2971,7 @@ The program to list clients and monitor changes in their input and
 output streams is [pamonitor_clients.c:](pamonitor_clients.c) 
 
 ```cpp
-
-      /**
+/**
  * pamonitor_clients.c 
  * Jan Newmarch
  */
@@ -3297,16 +3208,12 @@ int main(int argc, char *argv[]) {
 	exit(1);
     }
 }
-
-      
 ```
 
 
 The output on my system is
 
 ```
-
-	
 Found a new client index 0 name ConsoleKit Session /org/freedesktop/ConsoleKit/Session2 eol 0
 Found a new client index 4 name XSMP Session on gnome-session as 1057eba7239ba1ec3d136359809598590100000018790044 eol 0
 Found a new client index 5 name GNOME Volume Control Media Keys eol 0
@@ -3315,8 +3222,6 @@ Found a new client index 53 name Metacity eol 0
 Found a new client index 54 name Firefox eol 0
 Found a new client index 248 name PulseAudio Volume Control eol 0
 Found a new client index 342 name test eol 0
-	
-      
 ```
 
 ###  Controlling the volume of a sink client 
@@ -3347,8 +3252,7 @@ e.g. `mplayer`then its volume can be adjusted
 by this program.
 
 ```cpp
-
-      /**
+/**
  * pavolume_sink.c 
  * Jan Newmarch
  */
@@ -3513,6 +3417,4 @@ int main(int argc, char *argv[]) {
 					   );
     }
 }
-
-      
 ```

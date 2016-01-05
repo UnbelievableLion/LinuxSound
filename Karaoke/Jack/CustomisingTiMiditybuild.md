@@ -12,16 +12,12 @@ from source.
 The commands I now use are
 
 ```
-
-	
 ./configure --enable-audio=alsa,jack \
             --enable-interface=xaw,gtk \
             --enable-server \
             --enable-dynamic
 make clean
 make
-	
-      
 ```
 
 
@@ -29,11 +25,7 @@ An interface with key, say 'k', can then be run
 with Jack output by
 
 ```
-
-	
 timidity -d. -ik -Oj --trace  --trace-text-meta 54154.mid
-	
-      
 ```
 
 

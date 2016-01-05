@@ -23,8 +23,4 @@ this is an adaptation of the `SimpleMidiPlayer`given earlier in the chapter and 
 
 ```cpp
 
-      
-      
-      
-    
 ```

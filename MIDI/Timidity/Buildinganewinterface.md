@@ -15,12 +15,8 @@ to build these libraries
 (see [Building shared objects in Linux](http://stackoverflow.com/questions/7252550/loadable-bash-builtin) ). To build the shared object `if_my_interface.so`from `my_interface.c`I use
 
 ```
-
-	
 gcc  -fPIC $(CFLAGS) -c -o my_interface.o my_interface.c
 gcc -shared -o if_my_interface.so my_interface.o
-	
-      
 ```
 
 
@@ -34,11 +30,7 @@ The defaulty directory to load dynamic modules can be overridden
 by the option `-d`as in
 
 ```
-
-	
 timidity -d. -ik --trace 54154.mid
-	
-      
 ```
 
 ###  Entry point 
@@ -51,11 +43,7 @@ Your interface must have a single ASCII letter identifier
 which isn't used by any other interface, say `m`for "my interface". The loader will then look for a function
 
 ```
-
-	
 ControlMode *interface_m_loader(void)
-	
-      
 ```
 
 
@@ -65,14 +53,10 @@ structure of type `ControlMode`which is defined
 elsewhere in the interface's code:
 
 ```cpp
-
-	
 ControlMode *interface_m_loader(void)
 {
     return &ctl;
 }
-	
-      
 ```
 
 ###  ControlMode 
@@ -81,8 +65,6 @@ ControlMode *interface_m_loader(void)
 The `ControlMode`structure is
 
 ```cpp
-
-	
 typedef struct {
   char *id_name, id_character;
   char *id_short_name;
@@ -98,8 +80,6 @@ typedef struct {
   int  (*cmsg)(int type, int verbosity_level, char *fmt, ...);
   void (*event)(CtlEvent *ev);  /* Control events */
 } ControlMode;
-	
-      
 ```
 
 
@@ -108,8 +88,6 @@ which are called by TiMidity in response to events and actions
 within TiMidity. For example, for "my interface" this structure is
 
 ```cpp
-
-	
 ControlMode ctl=
     {
 	"my interface", 'm',
@@ -126,8 +104,6 @@ ControlMode ctl=
 	cmsg,
 	ctl_event
     };
-	
-      
 ```
 
 
@@ -169,18 +145,13 @@ built into TiMidity. It is loaded from the current directory
 and invoked by
 
 ```
-
-	
 timidity -im -d. 54154.mid
-	
-      
 ```
 
 
 The code is in one file, `my_interface.c`:
 
 ```cpp
-
 /*
   my_interface.c
 */
@@ -443,10 +414,6 @@ ControlMode *interface_k_loader(void)
 {
     return &ctl;
 }
-
-
-
-      
 ```
 
 ###  Running my simple interface 
@@ -466,11 +433,7 @@ source, you will need to specify that it can load dynamic
 modules, for example by
 
 ```
-
-	
 congfigure --enable-audio=alsa --enable-vt100 --enable-debug --enable-dynamic
-	
-      
 ```
 
 ###  Playing a background video to a MIDI file 
@@ -486,8 +449,7 @@ of the interface.
 The new "video" interface is `video_player_interface.c`
 
 ```cpp
-
-      /*
+/*
   video_player_interface.c
 */
 
@@ -748,25 +710,18 @@ ControlMode *interface_v_loader(void)
 {
     return &ctl;
 }
-
-
-      
 ```
 
 
 The build command is
 
 ```
-
-	
 video_code.o: video_code.c
         gcc  -fPIC $(CFLAGS) -c -o video_code.o video_code.c $(LIBS3)
 
 if_video_player.so: video_player_interface.c video_code.o
         gcc  -fPIC $(CFLAGS) -c -o video_player_interface.o video_player_interface.c
         gcc -shared -o if_video_player.so video_player_interface.o video_code.o $(LIBS3)
-	
-      
 ```
 
 
@@ -781,9 +736,5 @@ inability to load widgets and no visual display.
 Check for Gtk in the executable by
 
 ```
-
-	
 nm timidity | grep gtk
-	
-      
 ```

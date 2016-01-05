@@ -16,25 +16,17 @@ MIDI events and synthesize them.
 From [The TiMidity Howto - Using TiMidity as the ALSA sequencer client](http://linux-audio.com/TiMidity-howto.html) 
 
 ```
-
-	
 timidity -iA -B2,8 -Os -EFreverb=0
-	
-      
 ```
 
 
 On my computer this produced
 
 ```
-
-	
 Requested buffer size 2048, fragment size 1024
 ALSA pcm 'default' set buffer size 2048, period size 680 bytes
 TiMidity starting in ALSA server mode
 Opening sequencer port: 129:0 129:1 129:2 129:3
-	
-      
 ```
 
 
@@ -45,11 +37,7 @@ FluidSynth can also be used as a server
 ( [Ted's Linux MIDI Guide](http://tedfelix.com/linux/linux-midi.html) ):
 
 ```
-
-	
- fluidsynth --server --audio-driver=alsa -C0 -R1 -l /usr/share/soundfonts/FluidR3_GM.sf2 
-	
-      
+fluidsynth --server --audio-driver=alsa -C0 -R1 -l /usr/share/soundfonts/FluidR3_GM.sf2
 ```
 
 

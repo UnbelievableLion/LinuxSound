@@ -19,11 +19,9 @@ a pixbuf from it, with all operations done on the client side.
 We create a destination as a _surface_ of type `cairo_surface_t`and set it into a _Cairo context_ of type `cairo_t`by
 
 ```cpp
-
 cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 
 						       width, height);
 cairo_t *cr = cairo_create(surface);
-      
 ```
 
 
@@ -35,10 +33,8 @@ The first step is to set the source to the pixbuf for each frame
 of the video and to `paint`this to the destination by
 
 ```cpp
-
 gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
 cairo_paint (cr);
-      
 ```
 
 
@@ -46,10 +42,8 @@ We can overlay another image on top of this by changing the source
 to the overlay image and painting that:
 
 ```cpp
-
 gdk_cairo_set_source_pixbuf(cr, overlay_pixbuf, 300, 200);
 cairo_paint (cr);
-      
 ```
 
 
@@ -63,7 +57,6 @@ into the
 destination. This is done by
 
 ```cpp
-
 // white text
 cairo_set_source_rgb(cr, 1.0, 1.0, 1.0); 
 // this is a standard font for Cairo 
@@ -73,7 +66,6 @@ cairo_select_font_face (cr, "cairo:serif",
 cairo_set_font_size (cr, 20);
 cairo_move_to(cr, 10.0, 50.0);
 cairo_show_text (cr, "hello");
-      
 ```
 
 
@@ -83,23 +75,19 @@ difference between Gtk 2.0 and Gtk 3.0: Gtk 3.0 has a function `gdk_pixbuf_get_f
 We only look at the Gtk 3.0 version for now
 
 ```cpp
-
 pixbuf = gdk_pixbuf_get_from_surface(surface,
 				     0,
 				     0,
 				     width,
 				     height);
 
-gtk_image_set_from_pixbuf((GtkImage*) image, pixbuf); 
-      
+gtk_image_set_from_pixbuf((GtkImage*) image, pixbuf);
 ```
 
 
 The complete program is `gtk_play_video_cairo.c`
 
 ```cpp
-
-	
 #include <gtk/gtk.h>
 
 #include <libavcodec/avcodec.h>
@@ -413,7 +401,4 @@ int main(int argc, char** argv)
     
     return 0;
 }
-
-
-      
 ```

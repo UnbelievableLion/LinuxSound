@@ -5,10 +5,6 @@
 SequenceInformation is given by
 
 ```cpp
-
-      
-      
-
 import javax.sound.midi.*;
 import java.util.Vector;
 
@@ -316,7 +312,4 @@ public class SequenceInformation {
 	return -1;
     }
 }
-
-      
-    
 ```

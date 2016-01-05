@@ -7,11 +7,7 @@ If you wish to use a different soundcard then you can
 spcecify this when starting Jack as in
 
 ```
-
-	
 jackd -dalsa -dhw:0
-	
-      
 ```
 
 
@@ -19,11 +15,7 @@ I have a USB Sound Blaster card, which requires some extra
 parameters
 
 ```
-
-	
 jackd -dalsa -dhw:2 -r 48000 -S
-	
-      
 ```
 
 
@@ -34,22 +26,14 @@ Without the `-S`(16-bit) flag I just get the
 cryptic
 
 ```
-
-	
 ALSA: cannot set hardware parameters for playback
-	
-      
 ```
 
 
 Alternatively, I can run
 
 ```
-
-	
 jackd -dalsa -dplughw:2 -r 48000
-	
-      
 ```
 
 

@@ -14,13 +14,11 @@ the constructor loads a song table into this list
 by iterating through the table and adding elements
 
 ```cpp
-
-	int n = 0;
+int n = 0;
 	java.util.Iterator<SongInformation> iter = favouriteSongs.iterator();
 	while(iter.hasNext()) {
 	    model.add(n++, iter.next());
 	}
-      
 ```
 
 
@@ -54,8 +52,6 @@ beginning with a "." in the user's home directory.
 The code for `Favourites`is
 
 ```cpp
-
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
@@ -206,6 +202,4 @@ public class Favourites extends JPanel {
 	}
     }
 }
-
-      
 ```

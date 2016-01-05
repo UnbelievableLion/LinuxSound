@@ -2,7 +2,6 @@
 ##  Examples 
 
 ```cpp
-
 /*
  *
  * ao_example.c
@@ -89,8 +88,6 @@ int main(int argc, char **argv)
 
   return (0);
 }
-
-      
 ```
 
 ***

@@ -37,8 +37,6 @@ LADSPA package to simplify loading the plugin library.
 The program is `mono_amp.c`:
 
 ```cpp
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <ladspa.h>
@@ -201,8 +199,6 @@ int main(int argc, char *argv[]) {
 
     exit(0);
 }
-
-      
 ```
 
 

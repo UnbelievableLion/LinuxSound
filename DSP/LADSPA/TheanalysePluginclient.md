@@ -9,8 +9,7 @@ just a long-winded plough through all the possibilities,
 printing out information. Its code is:
 
 ```cpp
-
-	/* analyseplugin.c
+/* analyseplugin.c
 
    Free software by Richard W.E. Furse. Do with as you will. No
    warranty. */
@@ -415,6 +414,4 @@ main(const int iArgc, const char ** ppcArgv) {
 /*****************************************************************************/
 
 /* EOF */
-
-      
 ```

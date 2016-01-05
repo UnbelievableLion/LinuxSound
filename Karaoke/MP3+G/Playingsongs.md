@@ -6,7 +6,6 @@ Whenever a song is "played" its file path is written to standard output.
 This makes it suitable for use in a pipeline such as
 
 ```cpp
-
 VLC_OPTS="--play-and-exit --fullscreen"
 
 java  SongTableSwing |
@@ -22,5 +21,4 @@ do
                 vlc $VLC_OPTS /tmp/karaoke/*.mp3
         fi
 done
-      
 ```

@@ -10,8 +10,6 @@ of "favourite" songs. Each of these is its own song table.
 The UI for this is the Swing application `SongTableSwing.java`:
 
 ```cpp
-
-	
 package newmarch.songtable;
 
 import java.awt.*;
@@ -355,8 +353,6 @@ public class SongTableSwing extends JPanel {
 	}
     }
 }
-
-      
 ```
 
 
@@ -366,8 +362,7 @@ public class SongTableSwing extends JPanel {
 The favourites classes are `AllFavourites.java`:
 
 ```cpp
-
-	package newmarch.songtable;
+package newmarch.songtable;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -509,16 +504,12 @@ public class AllFavourites extends JTabbedPane {
     }
 
 }
-
-      
 ```
 
 
 and
 
 ```cpp
-
-	
 package newmarch.songtable;
 
 import java.awt.*;
@@ -755,8 +746,6 @@ public class Favourites extends JPanel {
 	}
     }
 }
-
-      
 ```
 
 

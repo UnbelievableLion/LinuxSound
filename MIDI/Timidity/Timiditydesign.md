@@ -13,13 +13,9 @@ For example, there are ncurses, XaW and dumb interfaces which can be
 invoked at runtime by e.g.
 
 ```
-
-	
 timidity -in ...
 timidity -ia ...
 timidity -id ...
-	
-      
 ```
 
 

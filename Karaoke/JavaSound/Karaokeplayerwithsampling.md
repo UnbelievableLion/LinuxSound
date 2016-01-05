@@ -18,9 +18,7 @@ can be controlled. So in the following code a selection box allows choice of sam
 input device, and leaves the output device to the default.
 
 ```cpp
-
-      
-     /*
+/*
  * KaraokePlayer.java
  *
  */
@@ -69,12 +67,6 @@ public class KaraokePlayerSampled {
         sampledPlayer.playAudio();
     }
 }
-
-
-
-
-      
-    
 ```
 
 
@@ -84,11 +76,6 @@ The code to play the sampled media is pretty much the same as we have seen befor
 
 
 ```cpp
-
-      
-      
-
-
 import java.io.IOException;
 
 import javax.sound.sampled.Line;
@@ -335,6 +322,4 @@ public class SampledPlayer {
 	}
     }
 }
-      
-    
 ```

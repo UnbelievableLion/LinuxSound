@@ -7,7 +7,6 @@ The data files are _not_ MIDI files.
 For example, song 10383 Lovers by Abba is
 
 ```
-
 00000000  00 00 4F 4B 00 00 00 00 00 00 00 00 00 00 00 00 ..OK............
 00000010  00 00 00 00 00 24 00 00 00 07 00 00 00 00 00 00 .....$..........
 00000020  00 00 77 07 00 00 00 12 00 00 4C 6F 76 65 72 73 ..w.......Lovers
@@ -23,7 +22,6 @@ For example, song 10383 Lovers by Abba is
 000000C0  01 5C 00 53 04 69 04 74 06 20 00 64 07 6F 05 77 .\.S.i.t. .d.o.w
 000000D0  05 6E 07 20 00 61 09 6E 07 64 09 20 00 6C 0B 69 .n. .a.n.d. .l.i
 000000E0  09 73 08 74 08 65 09 6E 08 5E 01 00 1D 01 1E 26 .s.t.e.n.^.....&
-      
 ```
 
 
@@ -34,7 +32,6 @@ This isn't a MIDI file. From my Sonken, I have a MIDI file for this
 song (obviously not the same recording) which looks like
 
 ```
-
 00000000  4D 54 68 64 00 00 00 06 00 01 00 03 00 1E 4D 54 MThd..........MT
 00000010  72 6B 00 00 00 2B 00 FF 03 0C 53 6F 66 74 20 4B rk...+....Soft K
 00000020  61 72 61 6F 6B 65 00 FF 01 13 40 4B 4D 49 44 49 araoke....@KMIDI
@@ -49,7 +46,6 @@ song (obviously not the same recording) which looks like
 000000B0  01 01 6E 07 FF 01 01 64 0A FF 01 01 20 07 FF 01 ..n....d.... ...
 000000C0  01 6C 07 FF 01 01 69 07 FF 01 01 73 0A FF 01 01 .l....i....s....
 000000D0  74 0A FF 01 01 65 0A FF 01 01 6E 00 FF 01 01 5C t....e....n....\
-      
 ```
 
 
@@ -59,18 +55,14 @@ and this _is_ a conforming MIDI file.
 Just looking at the lyric part, MIDI files require
 
 ```
-
 <delta> FF 01 <string length>
-      
 ```
 
 
 It is likely that the Malata just has
 
 ```
-
 <delta>  single-char
-      
 ```
 
 
@@ -84,27 +76,23 @@ A much trickier problem is that the lyrics are not contiguous!
 They should be
 
 ```
-
 Sit down and listen
 'cause I've got
 good news for you
 It was in the
 papers today
-      
 ```
 
 
 But if we look at the file, lines 2 and 4 are missing:
 
 ```
-
 000000C0  01 5C 00 53 04 69 04 74 06 20 00 64 07 6F 05 77 .\.S.i.t. .d.o.w
 000000D0  05 6E 07 20 00 61 09 6E 07 64 09 20 00 6C 0B 69 .n. .a.n.d. .l.i
 000000E0  09 73 08 74 08 65 09 6E 08 5E 01 00 1D 01 1E 26 .s.t.e.n.^.....&
 000000F0  01 67 05 6F 05 6F 05 64 07 20 00 6E 08 65 05 77 .g.o.o.d. .n.e.w
 00000100  04 73 07 20 00 66 09 6F 07 72 09 20 00 79 09 6F .s. .f.o.r. .y.o
 00000110  05 75 06 5E 01 00 10 01 33 26 01 70 0D 61 0C 70 .u.^....3&.p.a.p
-      
 ```
 
 
@@ -113,13 +101,11 @@ For the missing line 2, there is some sort of pointer
 and it turns out that the missing lines are elsewhere:
 
 ```
-
 00000790  68 19 5E 01 00 81 C9 1A FF 85 21 26 02 27 02 63 h.^.......!&.'.c
 000007A0  03 61 02 75 03 73 02 65 04 20 00 49 04 27 04 76 .a.u.s.e. .I.'.v
 000007B0  03 65 05 20 00 67 0A 6F 08 74 08 5E 02 00 10 02 .e. .g.o.t.^....
 000007C0  4C 26 02 49 06 74 08 20 00 77 09 61 07 73 09 20 L&.I.t. .w.a.s.
 000007D0  00 69 07 6E 06 20 00 74 07 68 04 65 04 5E 02 00 .i.n. .t.h.e.^..
-      
 ```
 
 
@@ -159,7 +145,6 @@ for songs like Lovers (non-coded lyrics) plus the
 deltas (assumed) and the stuff between lines
 
 ```cpp
-
 #include <stdio.h>
 
 #define NUM_LINES 100
@@ -411,17 +396,13 @@ int main(int argc, char **argv) {
     fclose(ofp);
     exit(0);
 }
-
-
-      
 ```
 
 
 it prints out stuff like
 
 ```
-
- 0:  0: \Sit down and listen     
+0:  0: \Sit down and listen     
     1  0  4  4  6  0  7  5  5  7  0  9  7  9  0  B  9  8  8  9                 8 5E  1  0 1D  1 1E 26 
 47: 47: 'cause I've got          
     2  2  3  2  3  2  4  0  4  4  3  5  0  A  8                                8 5E  2  0 10  2 4C 26 
@@ -434,8 +415,7 @@ it prints out stuff like
 49: 49: Some physician           
     2  5  5  5  7  0  B  9  8  D  C  6  7  6                                   6 5E  2  0 10  2 80 96 26 
  3:  3: had made a discovery     
-    1  4  5  6  0  5  3  4  4  0 1B  0  E  6  5  8  9  8 11  8                 4 5E  1  0 10  1 3F 26 
-      
+    1  4  5  6  0  5  3  4  4  0 1B  0  E  6  5  8  9  8 11  8                 4 5E  1  0 10  1 3F 26
 ```
 
 

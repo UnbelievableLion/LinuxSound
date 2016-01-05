@@ -27,9 +27,7 @@ We can't just use a `memcpy`because the decoder has a structure for an _image_ w
 structure for a _video_ , and these
 do not align.
 ```cpp
-
-	    
-    // need to setup the input for the render with the output of the
+// need to setup the input for the render with the output of the
     // decoder
     portdef.nSize = sizeof(OMX_PARAM_PORTDEFINITIONTYPE);
     portdef.nVersion.nVersion = OMX_VERSION;
@@ -55,8 +53,6 @@ do not align.
 
     ret = OMX_SetParameter(decoder->imageRender->handle,
 			   OMX_IndexParamPortDefinition, &rportdef);
-	    
-	  
 ```
 
 + The decode component has one output buffer
@@ -64,9 +60,7 @@ while the render component has three input
 buffers. We re-use one buffer and set the
 other two to `NULL`
 ```cpp
-
-	    
-   ret = OMX_AllocateBuffer(decoder->imageDecoder->handle,
+ret = OMX_AllocateBuffer(decoder->imageDecoder->handle,
 			     &decoder->pOutputBufferHeader,
 			     decoder->imageDecoder->
 			     outPort,
@@ -97,8 +91,6 @@ amp;decoder->ppRenderInputBufferHeader[n],
 			    0,
 			    NULL);
     }
-	    
-	  
 ```
 
 + Even though we feed the size of the shared buffer into `UseBuffer`call, the field `nAllocLen`does not get set correctly
@@ -106,12 +98,8 @@ amp;decoder->ppRenderInputBufferHeader[n],
 error, and then using the debugger to guess at what
 isn't right).
 ```cpp
-
-	    
-    decoder->ppRenderInputBufferHeader[0]->nAllocLen =
+decoder->ppRenderInputBufferHeader[0]->nAllocLen =
 	decoder->pOutputBufferHeader->nAllocLen;
-	    
-	  
 ```
 
 

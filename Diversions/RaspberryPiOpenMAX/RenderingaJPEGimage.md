@@ -28,8 +28,7 @@ the buffer sizes would be wrong.
 The program is [renderjpeg.c](renderjpeg.c) 
 
 ```cpp
-
-	/*
+/*
 Copyright (c) 2012, Matt Ownby
                     Anthong Sale
 Copyright (c) 2014, Jan Newmarch
@@ -595,6 +594,4 @@ main(int argc, char *argv[])
     free(sourceImage);
     return 0;
 }
-
-      
 ```

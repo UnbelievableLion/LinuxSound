@@ -63,11 +63,7 @@ the straight-through module for the microphone to speaker
 by
 
 ```
-
-	
 pactl load-module module-loopback latency_msec=1
-	
-      
 ```
 
 
@@ -75,11 +71,7 @@ while the Karoake file is played by a Karaoke player
 such as `kmid`through `timidity`e.g.
 
 ```
-
-	
 kmid nightsin.kar
-	
-      
 ```
 
 
@@ -113,11 +105,7 @@ For example, to play from the default record device to the default playback
 device with minimum latency,
 
 ```
-
-	
 pacat -r --latency-msec=1 | pacat -p --latency-msec=1
-	
-      
 ```
 
 
@@ -131,9 +119,7 @@ the interactive version with more options.
 For example ` pacmd `with the command ` list-sinks `includes
 
 ```
-
-	
-	name: <alsa_output.pci-0000_00_1b.0.analog-stereo>
+name: <alsa_output.pci-0000_00_1b.0.analog-stereo>
 	driver: <module-alsa-card.c>
 	flags: HARDWARE HW_MUTE_CTRL HW_VOLUME_CTRL DECIBEL_VOLUME LATENCY FLAT_VOLUME DYNAMIC_LATENCY
 	state: SUSPENDED
@@ -196,9 +182,6 @@ For example ` pacmd `with the command ` list-sinks `includes
 		analog-output: Analog Output (priority 9900)
 		analog-output-headphones: Analog Headphones (priority 9000)
 	active port: <analog-output>
-
-	
-      
 ```
 
 ###  Device names 
@@ -208,47 +191,31 @@ PulseAudio uses its own naming conventions. The names of source devices
 (such as microphones) can be found using code from the [PulseAudio FAQ](http://www.freedesktop.org/wiki/Software/PulseAudio/FAQ#How_do_I_record_stuff.3F) :
 
 ```
-
-	
 pactl list | grep -A2 'Source #' | grep 'Name: .*\.monitor$' | cut -d" " -f2
-	
-      
 ```
 
 
 On my system this produces
 
 ```
-
-	
 alsa_output.pci-0000_01_00.1.hdmi-stereo.monitor
 alsa_output.pci-0000_00_1b.0.analog-stereo.monitor
 alsa_input.pci-0000_00_1b.0.analog-stereo
-	
-      
 ```
 
 
 Similarly the output devices are found by
 
 ```
-
-	
 pactl list | grep -A2 'Sink #' | grep 'Name: .*\.monitor$' | cut -d" " -f2
-	
-      
 ```
 
 
 to give
 
 ```
-
-	
 alsa_output.pci-0000_01_00.1.hdmi-stereo
 alsa_output.pci-0000_00_1b.0.analog-stereo
-	
-      
 ```
 
 ###  Loopback module 
@@ -257,11 +224,7 @@ alsa_output.pci-0000_00_1b.0.analog-stereo
 Using ` pactl`you can load the module `module-loopback`by
 
 ```
-
-	
 pactl load-module module-loopback latency_msec=1
-	
-      
 ```
 
 
@@ -274,11 +237,7 @@ speakers, microphones, etc. The internal speaker and microphone are close enough
 to set up a feedback loop. Unload module number N by
 
 ```
-
-	
 pactl unload-module N
-	
-      
 ```
 
 
@@ -292,16 +251,12 @@ The relationship is deeper: the default ALSA device is "hw:0"
 but PulseAudio overrides that. In `/etc/asound.conf`is a hook to load `/etc/alsa/pulse-default.conf`and this contains
 
 ```
-
-	
 pcm.!default {
     type pulse
     hint {
         description "Default"
     }
 }
-	
-      
 ```
 
 

@@ -12,7 +12,6 @@ In Gtk 2.0 it is surprisingly easy: draw one pixbuf into a
 pixmap and then draw the overlay pixbuf into the same pixmap.
 
 ```cpp
-
 pixmap = gdk_pixmap_new(window->window, 720, 480, -1);
 	
 gdk_draw_pixbuf((GdkDrawable *) pixmap, NULL,
@@ -29,7 +28,6 @@ gdk_draw_pixbuf((GdkDrawable *) pixmap, NULL,
 gtk_image_set_from_pixmap((GtkImage*) image, pixmap, NULL);
 
 gtk_widget_queue_draw(image);
-      
 ```
 
 
@@ -48,8 +46,6 @@ the images.
 The program `gtk_play_video_overlay.c`is
 
 ```cpp
-
-	
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
@@ -385,7 +381,4 @@ int main(int argc, char** argv)
     
     return 0;
 }
-
-
-      
 ```

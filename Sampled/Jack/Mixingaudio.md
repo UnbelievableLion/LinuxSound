@@ -11,11 +11,7 @@ loop between your laptop's microphone and speakers by e.g plugging in headphones
 + Start a player such as `mplayer`which will also connect to the
 playback ports by e.g.
 ```
-
-	    
 mplayer -ao jack <MP3 file >
-	    
-	  
 ```
 
 + Start singing

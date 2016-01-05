@@ -181,9 +181,12 @@ class ChapterParser():
 
             # <pre><code> has a tag.string but
             # <pre> alone requires looking at children???
+            pre_str = ""
             children = tag.children
             for c in children:
-                self.section_file.write(c.string.encode('utf-8'))
+                pre_str += c.string.encode('utf-8')
+            pre_str = string.strip(pre_str)
+            self.section_file.write(pre_str)
             self.section_file.write("\n```\n")
 
         elif tag.name == 'em':

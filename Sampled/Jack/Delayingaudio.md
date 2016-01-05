@@ -30,7 +30,6 @@ the left channel in real time, but delay the left channel
 by 4096 samples:
 
 ```cpp
-
 /** @file delay.c
  *
  * @brief This client delays one channel by 4096 framse.
@@ -290,6 +289,4 @@ main ( int argc, char *argv[] )
     jack_client_close ( client );
     exit ( 0 );
 }
-
-      
 ```

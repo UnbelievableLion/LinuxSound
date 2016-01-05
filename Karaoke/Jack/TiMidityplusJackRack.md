@@ -10,11 +10,7 @@ effects:
 + Run TiMidity with Jack output, an Xaw interface
 and synchronising the lyrics to sound by
 ```
-
-	    
 timidity -ia -B2,8 -Oj -EFverb=0 --trace --trace-text-meta
-	    
-	  
 ```
 
 + Run Jack rack with TAP reverberator and a volume

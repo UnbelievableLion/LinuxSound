@@ -8,8 +8,6 @@ runs at about 100% CPU.
 
 ```cpp
 
-
-      
 ```
 
 ***

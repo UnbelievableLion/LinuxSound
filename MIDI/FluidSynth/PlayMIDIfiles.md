@@ -17,8 +17,6 @@ The call to `fluid_player_play`then plays each MIDI file
 in turn:
 
 ```cpp
-
-      
 #include <fluidsynth.h>
 #include <fluid_midi.h>
 
@@ -56,8 +54,4 @@ int main(int argc, char** argv)
     delete_fluid_settings(settings);
     return 0;
 }
-
-
-      
-    
 ```

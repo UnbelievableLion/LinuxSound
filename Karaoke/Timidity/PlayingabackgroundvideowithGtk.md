@@ -22,8 +22,6 @@ back. For simplicity, we just place it all in the back in
 the file `video_code.c`:
 
 ```cpp
-
-
 #include <gtk/gtk.h>
 
 #include <libavcodec/avcodec.h>
@@ -879,8 +877,6 @@ ControlMode *interface_v_loader(void)
 {
     return &video_ctl;
 }
-
-      
 ```
 
 

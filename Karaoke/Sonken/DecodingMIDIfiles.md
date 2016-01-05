@@ -34,9 +34,6 @@ My Java program to do this is
 SongExtracter.java
 
 ```cpp
-
-	
-      
 import java.io.*;
 import javax.sound.midi.*;
 import java.nio.charset.Charset;
@@ -661,18 +658,12 @@ public class SongExtracter {
 	}
     }
 }
-
-	
-      
 ```
 
 
 with support classes LZW.java
 
 ```cpp
-
-	
-      
 /**
  * Based on code by Mark Nelson
  * http://marknelson.us/1989/10/01/lzw-data-compression/
@@ -892,19 +883,12 @@ public class LZW {
 	return offsetOut;
     }
 }
-	
-      
 ```
 
 
 SongInformation.java
 
 ```cpp
-
-	
-      
-
-
 public class SongInformation {
 
 
@@ -994,19 +978,12 @@ public class SongInformation {
 	return language == lang;
     }
 }
-
-	
-      
 ```
 
 
 and Debug.java
 
 ```cpp
-
-	
-      
-
 public class Debug {
 
     public static final boolean DEBUG = false;
@@ -1023,32 +1000,20 @@ public class Debug {
 	}
     }
 }
-	    
-	    
-	
-      
 ```
 
 
 To compile these, run
 
 ```
-
-	
-    javac SongExtracter.java LZW.java Debug.java SongInformation.java
-	
-      
+javac SongExtracter.java LZW.java Debug.java SongInformation.java
 ```
 
 
 and run by
 
 ```
-
-	
 java SongExtracter <song number >
-	
-      
 ```
 
 
@@ -1056,9 +1021,7 @@ The program to convert these MIDI files to Karaoke KAR files is
 KARConverter.java
 
 ```cpp
-
-	
-      /*
+/*
  * KARConverter.java
  *
  * The output from decodnig the Sonken data is not in
@@ -1408,8 +1371,4 @@ public class KARConverter {
 
 
 /*** KARConverter.java ***/
-
-
-	
-      
 ```

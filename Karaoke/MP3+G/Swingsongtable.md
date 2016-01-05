@@ -10,8 +10,6 @@ patching matching.
 The code for `SongTableSwing`is
 
 ```cpp
-
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
@@ -322,5 +320,4 @@ public class SongTableSwing extends JPanel {
 	}
     }
 }
-      
 ```

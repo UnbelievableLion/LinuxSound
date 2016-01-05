@@ -14,9 +14,7 @@ just prints the event to stdout.
 DumpSequence.java is
 
 ```cpp
-
-      
-      /*
+/*
  *	DumpSequence.java
  *
  *	This file is part of jsresources.org
@@ -242,19 +240,13 @@ public class DumpSequence
 
 
 /*** DumpSequence.java ***/
-
-
-      
-    
 ```
 
 
 DmpReceiver.java is
 
 ```cpp
-
-      
-      /*
+/*
  *	DumpReceiver.java
  *
  *	This file is part of jsresources.org
@@ -744,18 +736,12 @@ public class DumpReceiver
 
 
 /*** DumpReceiver.java ***/
-
-
-      
-    
 ```
 
 
 There are several sites with legal free MIDI files. The file [Amy Winehouse - Rehab](http://files.mididb.com/amy-winehouse/rehab.mid) gives the result
 
 ```
-
-	
 ---------------------------------------------------------------------------
 File: rehab.mid
 ---------------------------------------------------------------------------
@@ -795,6 +781,4 @@ tick 510: [E1 00 40] channel 2: pitch wheel change 8192
 tick 515: [B1 00 00] channel 2: control change 0 value: 0
 tick 520: [C1 22] channel 2: program change 34
 ...
-	
-      
 ```

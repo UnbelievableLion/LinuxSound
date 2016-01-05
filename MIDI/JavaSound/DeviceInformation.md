@@ -21,10 +21,6 @@ if there is a default! if there are no defaults, a `MidiUnavailableException`exc
 The program is:
 
 ```cpp
-
-	
-      
-
 import javax.sound.midi.*;
 import java.util.*;
 
@@ -109,17 +105,12 @@ public class DeviceInfo {
 
     }
 }
-
-	
-      
 ```
 
 
 The output on my system is
 
 ```
-
-	
 MIDI devices:
     Name: Gervill, Decription: Software MIDI Synthesizer, Vendor: OpenJDK
         Device is a synthesizer
@@ -148,6 +139,4 @@ MIDI devices:
             com.sun.media.sound.RealTimeSequencer$SequencerTransmitter@4e13aa4e
 Default system sequencer is Real Time Sequencer
 Default system synthesizer is Gervill
-	
-      
 ```

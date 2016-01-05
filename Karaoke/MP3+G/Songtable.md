@@ -29,8 +29,6 @@ data structure.
 The code for `SongTable`is
 
 ```cpp
-
-
 import java.util.Vector;
 import java.io.FileInputStream;
 import java.io.*;
@@ -224,6 +222,4 @@ public class SongTable {
 	System.exit(0);
     }
 }
-
-      
 ```

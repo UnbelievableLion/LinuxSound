@@ -25,8 +25,6 @@ with upfront information as to title, etc, prefixed
 by '@', and newlines prefixed by '\'.
 
 ```cpp
-
-        
 struct _lyric_t {
     gchar *lyric;
     long tick;
@@ -93,8 +91,6 @@ void build_lyric_lines() {
 	printf("Line is %s\n", g_array_index(lines, GString *, n)->str);
     }  
 }
-	
-      
 ```
 
 
@@ -104,8 +100,6 @@ void build_lyric_lines() {
 This is called from the onload callback
 
 ```cpp
-
-	
 int onload_callback(void *data, fluid_player_t *player) {
     long ticks = 0L;
     lyric_t *plyric;
@@ -145,8 +139,6 @@ int onload_callback(void *data, fluid_player_t *player) {
 
     build_lyric_lines();
 }
-	
-      
 ```
 
 
@@ -184,7 +176,6 @@ The program is `gtkkaraoke_player.c` _Warning: the following program crashes reg
 	in a simple enough way to log a bug report._ 
 
 ```cpp
-
 #include <fluidsynth.h>
 #include <fluid_midi.h>
 #include <string.h>
@@ -646,9 +637,6 @@ int main(int argc, char** argv)
     delete_fluid_settings(settings);
     return 0;
 }
-
-
-      
 ```
 
 

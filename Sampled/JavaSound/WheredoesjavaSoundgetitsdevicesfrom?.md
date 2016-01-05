@@ -13,13 +13,9 @@ JRE runtime.  This is a zip file, and contains the file ` META-INF/services/java
 On my system the contents of this file are
 
 ```
-
-	
 # last mixer is default mixer
 com.sun.media.sound.PortMixerProvider
 com.sun.media.sound.DirectAudioDeviceProvider
-	
-      
 ```
 
 
@@ -36,13 +32,9 @@ to the C functions `PORT_GetPortMixerCount`and `PORT_GetPortMixerDescription`.
 There are three files containing these functions
 
 ```
-
-	
 java/media/src/windows/native/com/sun/media/sound/PLATFORM_API_WinOS_Ports.c
 java/media/src/solaris/native/com/sun/media/sound/PLATFORM_API_SolarisOS_Ports.c
 java/media/src/solaris/native/com/sun/media/sound/PLATFORM_API_LinuxOS_ALSA_Ports.c
-	
-      
 ```
 
 

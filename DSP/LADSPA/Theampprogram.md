@@ -5,7 +5,6 @@
 The code for the `amp`program is
 
 ```cpp
-
 /* amp.c
 
    Free software by Richard W.E. Furse. Do with as you will. No
@@ -370,6 +369,4 @@ ladspa_descriptor(unsigned long Index) {
 /*****************************************************************************/
 
 /* EOF */
-
-      
 ```

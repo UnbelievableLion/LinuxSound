@@ -10,8 +10,6 @@ I wrote one based on Xlib, with drawing done by Cairo and Pango.
 It  is `x_code.c`
 
 ```cpp
-
-	
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -563,8 +561,6 @@ ControlMode *interface_x_loader(void)
 {
     return &video_ctl;
 }
-
-      
 ```
 
 

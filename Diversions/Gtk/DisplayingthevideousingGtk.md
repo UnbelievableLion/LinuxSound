@@ -98,14 +98,12 @@ transcoded to the `picture_RGB`, translate it into
 a `GdkPixbuf`and create the `GtkImage`
 
 ```cpp
-
-	pixbuf = gdk_pixbuf_new_from_data(picture_RGB->data[0], GDK_COLORSPACE_RGB,
+pixbuf = gdk_pixbuf_new_from_data(picture_RGB->data[0], GDK_COLORSPACE_RGB,
 	                                  0, 8, width, height, 
 	                                  picture_RGB->linesize[0], 
                                           pixmap_destroy_notify,
 	                                  NULL);
 	gtk_image_set_from_pixbuf((GtkImage*) image, pixbuf);
-      
 ```
 
 ###  Gtk 2.0 
@@ -137,8 +135,7 @@ video data, create a pixmap, write the pixbuf data into the pixmap,
 and then fill the image with the pixmap data:
 
 ```cpp
-
-	pixbuf = gdk_pixbuf_new_from_data(picture_RGB->data[0], GDK_COLORSPACE_RGB,
+pixbuf = gdk_pixbuf_new_from_data(picture_RGB->data[0], GDK_COLORSPACE_RGB,
              	                          0, 8, width, height, 
 	                                  picture_RGB->linesize[0], 
 	                                  pixmap_destroy_notify,
@@ -150,7 +147,6 @@ and then fill the image with the pixmap data:
 	                GDK_RGB_DITHER_NORMAL, 0, 0);
 
 	gtk_image_set_from_pixmap((GtkImage*) image, pixmap, NULL);
-      
 ```
 
 ###  Threads and Gtk 
@@ -162,10 +158,8 @@ use Posix `pthreads`. The video thread will need to
 be started explicitly by
 
 ```cpp
-
-	pthread_t tid;
+pthread_t tid;
 	pthread_create(&tid, NULL, play_background, NULL);
-      
 ```
 
 
@@ -179,9 +173,7 @@ into non-existent windows.
 The Gtk thread will be started by the call to
 
 ```cpp
-
-	gtk_widget_show (window);
-      
+gtk_widget_show (window);
 ```
 
 
@@ -211,8 +203,6 @@ Finally, the code to play a video in a Gtk application which
 works with both Gtk 2.0 and Gtk 3.0! It is `gtk_play_video.c`:
 
 ```cpp
-
-	
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
@@ -483,7 +473,4 @@ int main(int argc, char** argv)
     
     return 0;
 }
-
-
-      
 ```

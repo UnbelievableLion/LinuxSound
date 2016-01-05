@@ -14,9 +14,6 @@ The UML class diagram is
 The program is:
 
 ```cpp
-
-      
-      
 import java.io.File;
 import java.io.IOException;
 
@@ -192,9 +189,4 @@ public class PlayMicrophone {
     } // playAudioStream
 
 }
-
-
-
-      
-    
 ```

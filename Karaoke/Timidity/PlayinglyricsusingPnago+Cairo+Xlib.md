@@ -33,8 +33,6 @@ produces glyphs which are sent to the X server.
 that approach is adopted in the following interface, `x_code.c`
 
 ```cpp
-
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -594,27 +592,21 @@ ControlMode *interface_x_loader(void)
 {
     return &video_ctl;
 }
-
-      
 ```
 
 
 it is compiled by
 
 ```cpp
-
-        gcc  -fPIC $(CFLAGS) -c -o x_code.o x_code.c $(LIBS)
+gcc  -fPIC $(CFLAGS) -c -o x_code.o x_code.c $(LIBS)
         gcc -shared -o if_x.so x_code.o $(LIBS)
-      
 ```
 
 
 and run by
 
 ```cpp
-
 timidity -d. -ix --trace --trace-text-meta ...
-      
 ```
 
 

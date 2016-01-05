@@ -7,15 +7,11 @@ for a few hundred Australian dollars. This plugs into a PC
 through a USB port. Alsa recognises this by
 
 ```
-
-	
- $ amidi -l
+$ amidi -l
 Dir Device    Name
 IO  hw:2,0,0  SD-20 Part A
 IO  hw:2,0,1  SD-20 Part B
 I   hw:2,0,2  SD-20 MIDI
-	
-      
 ```
 
 
@@ -32,9 +28,7 @@ a MIDI receiver. Selecting an external receiver is done
 by code like
 
 ```cpp
-
-	
-		Receiver	synthReceiver = null;
+Receiver	synthReceiver = null;
 		MidiDevice.Info[] devices;
 		devices = MidiSystem.getMidiDeviceInfo();
 		
@@ -57,17 +51,13 @@ by code like
 			}
 		    }
 		}
-	
-      
 ```
 
 
 Playing an audio file to my SD-20 is done by
 
 ```cpp
-
-      
-      /*
+/*
  *	ExternalMidiPlayer.java
  *
  *	This file adapted from SimpleMidiPlayer of jsresources.org
@@ -395,7 +385,4 @@ public class ExternalMidiPlayer
 
 
 /*** SimpleMidiPlayer.java ***/
-
-      
-    
 ```

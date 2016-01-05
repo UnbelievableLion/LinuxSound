@@ -24,22 +24,14 @@ The details are
 will highlight the following word for _time_ hundredths of a second.
 An example would be
 ```
-
-	    
 {\k100}Here {\k150}comes {\k50}the {\k150}sun
-	    
-	  
 ```
 
 + __Fill highlighting__: An override of the form {\kf<time>}
 will progressively fill up the following word for _time_ hundredths of a second.
 An example would be
 ```
-
-	    
 {\kf100}Here {\kf150}comes {\kf50}the {\kf150}sun
-	    
-	  
 ```
 
 

@@ -33,7 +33,6 @@ across before each call to `run`.
 The code is written to use GTK v3 and is:
 
 ```cpp
-
 #include <gtk/gtk.h>
 
 #include <stdlib.h>
@@ -286,9 +285,6 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-      
-
-      
 ```
 
 

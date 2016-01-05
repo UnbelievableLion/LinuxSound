@@ -6,23 +6,15 @@
 video to a single video file by e.g.
 
 ```
-
-        
 ffmpeg -i Track1.cdg -i Track1.mp3 -y Track1.avi
-        
-      
 ```
 
 
 > or
 
 ```
-
-        
 avconv -i Track1.cdg -i Track1.mp3 test.avi
 avconv -i test.avi -c:v libx264 -c:a copy outputfile.mp4
-        
-      
 ```
 
 

@@ -6,11 +6,7 @@ If you have a current Linux system, PulseAudio is probably
 running. Test by running this from the command line:
 
 ```
-
-	
 ps agx | grep pulse
-	
-      
 ```
 
 
@@ -21,11 +17,7 @@ then it is running already.
 If it isn't running and you have it installed, then start it by
 
 ```
-
-	
 pulseaudio --start
-	
-      
 ```
 
 
@@ -45,11 +37,7 @@ the subcommand has finished.
 For example,
 
 ```
-
-	
 pasuspender -- jackd
-	
-      
 ```
 
 

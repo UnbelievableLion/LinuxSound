@@ -11,11 +11,7 @@ To run `mplayer`using Jack, add the
 option `-ao jack`:
 
 ```
-
-	
 mplayer -ao jack 54154.mp3
-	
-      
 ```
 
 
@@ -25,11 +21,7 @@ another Jack application such as `jack-rack`,
 append the output application to the audio output command
 
 ```
-
-	
 mplayer -ao jack:port=jack_rack 54154.mp3
-	
-      
 ```
 
 ###  VLC 
@@ -43,11 +35,7 @@ seeing if jack is listed as a module in `vlc --list`shows ALSA but not Jack.
 Play a file using Jack by e.g.
 
 ```
-
-	
 vlc --aout jack 54154.mp3
-	
-      
 ```
 
 
@@ -61,11 +49,7 @@ TiMidity is a MIDI player discussed later. It can play
 to Jack output devices by
 
 ```
-
-	
 timidity -Oj 54154.mid
-	
-      
 ```
 
 ###  Jack-supplied programs 
@@ -77,8 +61,6 @@ Jack comes with a large number of clients:
 
 
 ```
-
-	
 jack_alias                  jack_midisine
 jack_bufsize                jack_monitor_client
 jack_connect                jack_multiple_metro
@@ -98,8 +80,6 @@ jack_metro                  jack_transport
 jack_midi_dump              jack_unload
 jack_midi_latency_test      jack_wait
 jack_midiseq                jack_zombie
-	
-      
 ```
 
 
@@ -114,11 +94,7 @@ then do things such as disconnect ports using "client:port"
 for the port name as in
 
 ```
-
-	
 jack_disconnect jack_thru:output_1 system:playback_1
-	
-      
 ```
 
 

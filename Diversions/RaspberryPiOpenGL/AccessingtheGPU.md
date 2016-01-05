@@ -19,9 +19,7 @@ used in all the demos and code that I have seen.
 The relevant Dispmanx calls are
 
 ```cpp
-
-	
-    DISPMANX_ELEMENT_HANDLE_T dispman_element;
+DISPMANX_ELEMENT_HANDLE_T dispman_element;
     DISPMANX_DISPLAY_HANDLE_T dispman_display;
     DISPMANX_UPDATE_HANDLE_T dispman_update;
     VC_RECT_T dst_rect;
@@ -48,8 +46,6 @@ The relevant Dispmanx calls are
                                 0/*layer*/, &dst_rect, 0/*src*/,
                                 &src_rect, DISPMANX_PROTECTION_NONE, 
                                 0 /*alpha*/, 0/*clamp*/, 0/*transform*/);
-	
-      
 ```
 
 
@@ -70,9 +66,7 @@ Apart from the last step, this follows standard EGL
 programming:
 
 ```cpp
-
-	
-    static const EGLint attribute_list[] =
+static const EGLint attribute_list[] =
         {
             EGL_RED_SIZE, 8,
             EGL_GREEN_SIZE, 8,
@@ -108,8 +102,6 @@ programming:
     // create an EGL rendering context
     context = eglCreateContext(display, config, EGL_NO_CONTEXT, context_attributes);
     assert(context!=EGL_NO_CONTEXT);
-	
-      
 ```
 
 
@@ -117,30 +109,22 @@ The next step is to link the Dispmanx window to the EGL window
 surface. This uses a structure of type `EGL_DISPMANX_WINDOW_T`which is filled in from the Dispmanx information:
 
 ```cpp
-
-	
-   EGL_DISPMANX_WINDOW_T nativewindow;
+EGL_DISPMANX_WINDOW_T nativewindow;
 
    nativewindow.element = dispman_element;
    nativewindow.width = screen_width;
    nativewindow.height = screen_height;
    vc_dispmanx_update_submit_sync( dispman_update );
-	
-      
 ```
 
 
 The EGL surface is then created by
 
 ```cpp
-
-	
 surface = eglCreateWindowSurface(display, config, &nativewindow, NULL);
 
 // connect the context to the surface
 eglMakeCurrent(display, surface, surface, context);
-	
-      
 ```
 
 
@@ -150,15 +134,11 @@ calls to set the background of the buffer to red
 and then display the buffer by swapping EGL buffers:
 
 ```cpp
-
-	
-    glClearColor(1.0, 0.0, 0.0, 1.0);
+glClearColor(1.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush();
 
     eglSwapBuffers(display, surface);
-	
-      
 ```
 
 
@@ -166,8 +146,6 @@ The complete program is [rectangle.c](rectangle.c) and just displays a large red
 square:
 
 ```cpp
-
-	
 /*
  * code stolen from openGL-RPi-tutorial-master/encode_OGL/
  */
@@ -306,8 +284,6 @@ main(int argc, char *argv[])
 
     return 0;
 }
-
-      
 ```
 
 
@@ -315,22 +291,14 @@ Compiling the program uses a horrendous mess of defines
 and libraries, probably not all of which are needed!
 
 ```
-
-	
 cc -g  -DUSE_OPENGL -DUSE_EGL -DIS_RPI -DSTANDALONE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DTARGET_POSIX -D_LINUX -fPIC -DPIC -D_REENTRANT -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -U_FORTIFY_SOURCE -Wall -g -DHAVE_LIBOPENMAX=2 -DOMX -DOMX_SKIP64BIT -ftree-vectorize -pipe -DUSE_EXTERNAL_OMX -DHAVE_LIBBCM_HOST -DUSE_EXTERNAL_LIBBCM_HOST -DUSE_VCHIQ_ARM -Wno-psabi -I/opt/vc/include/ -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux -I./ -I/opt/vc/src/hello_pi/libs/ilclient -I/opt/vc/src/hello_pi/libs/vgfont -g -c rectangle.c -o rectangle.o -Wno-deprecated-declarations
 
 cc -o rectangle -Wl,--whole-archive rectangle.o -L/opt/vc/lib/ -lGLESv2 -lEGL -lbcm_host -lvcos -lvchiq_arm -lpthread -lrt -L/opt/vc/src/hello_pi/libs/vgfont -ldl -lm -Wl,--no-whole-archive -rdynamic
-	
-      
 ```
 
 
 However, it can then be run easily by
 
 ```
-
-	
 ./rectangle
-	
-      
 ```

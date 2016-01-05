@@ -30,18 +30,14 @@ This requires one change to one PyKaraoke file: change
 line 190 of `pykar.py`from
 
 ```cpp
-
 sele.Tempo = [(0, 0)]
-      
 ```
 
 
 to
 
 ```cpp
-
 self.Tempo = [(0, 500000)]
-      
 ```
 
 ####  Language encoding 
@@ -66,20 +62,16 @@ A suitable font for Unicode is Cyberbit.ttf.
 The file `pykdb.py`needs the lines
 
 ```cpp
-
-        self.KarEncoding = 'cp1252'  # Default text encoding in karaoke files
+self.KarEncoding = 'cp1252'  # Default text encoding in karaoke files
         self.KarFont = FontData("DejaVuSans.ttf")
-      
 ```
 
 
 changed to
 
 ```cpp
-
-        self.KarEncoding = 'utf-8'  # Default text encoding in karaoke files
+self.KarEncoding = 'utf-8'  # Default text encoding in karaoke files
         self.KarFont = FontData("Cyberbit.ttf")
-      
 ```
 
 

@@ -24,12 +24,8 @@ CD device):
 
 
 ```
-
-          
- $ cdrdao read-cd --driver generic-mmc-raw --device /dev/cdroms/cdrom0 --read-subchan rw_raw mycd.toc
+$ cdrdao read-cd --driver generic-mmc-raw --device /dev/cdroms/cdrom0 --read-subchan rw_raw mycd.toc
  $ python cdgrip.py --with-cddb --delete-bin-toc mycd.toc
-          
-        
 ```
 
 
@@ -40,11 +36,7 @@ e.g. Track1.mp3 and Track1.cdg. When unzipped, `vlc`can play them by giving it t
 MP3 file _only_ to play as in
 
 ```
-
-        
 vlc Track1.mp3
-        
-      
 ```
 
 
@@ -76,23 +68,15 @@ Converting MP3+G to video files
 video to a single video file by e.g.
 
 ```
-
-        
 ffmpeg -i Track1.cdg -i Track1.mp3 -y Track1.avi
-        
-      
 ```
 
 
 > or
 
 ```
-
-        
 avconv -i Track1.cdg -i Track1.mp3 test.avi
 avconv -i test.avi -c:v libx264 -c:a copy outputfile.mp4
-        
-      
 ```
 
 

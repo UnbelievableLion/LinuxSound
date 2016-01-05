@@ -15,8 +15,6 @@ initialise the Broadcom libraries. The JPEG image decoder
 is then created and asked to decode the image.
 
 ```cpp
-
-	
 int
 main(int argc, char *argv[])
 {
@@ -49,8 +47,6 @@ main(int argc, char *argv[])
     free(sourceImage);
     return 0;
 }
-	
-      
 ```
 
 
@@ -59,8 +55,6 @@ data structures and calls to `prepareImageDecoder`to initialise the decoder and 
 the image.
 
 ```cpp
-
-	
 int
 setupOpenMaxJpegDecoder(OPENMAX_JPEG_DECODER ** pDecoder)
 {
@@ -92,8 +86,6 @@ setupOpenMaxJpegDecoder(OPENMAX_JPEG_DECODER ** pDecoder)
 
     return OMXJPEG_OK;
 }
-	
-      
 ```
 
 
@@ -109,9 +101,7 @@ function. It has to establish the format that it will
 accept from the input file by
 
 ```cpp
-
-	
-    // set input image format
+// set input image format
     OMX_IMAGE_PARAM_PORTFORMATTYPE imagePortFormat;
     memset(&imagePortFormat, 0, sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE));
     imagePortFormat.nSize = sizeof(OMX_IMAGE_PARAM_PORTFORMATTYPE);
@@ -120,25 +110,19 @@ accept from the input file by
     imagePortFormat.eCompressionFormat = OMX_IMAGE_CodingJPEG;
     OMX_SetParameter(decoder->imageDecoder->handle,
 		     OMX_IndexParamImagePortFormat, &imagePortFormat);
-	
-      
 ```
 
 
 Then it queries for the buffer requirements, building an ` OMX_PARAM_PORTDEFINITIONTYPE portdef`structure and populating it with a get parameter call.
 
 ```cpp
-
-	
-    // get buffer requirements
+// get buffer requirements
     OMX_PARAM_PORTDEFINITIONTYPE portdef;
     portdef.nSize = sizeof(OMX_PARAM_PORTDEFINITIONTYPE);
     portdef.nVersion.nVersion = OMX_VERSION;
     portdef.nPortIndex = decoder->imageDecoder->inPort;
     OMX_GetParameter(decoder->imageDecoder->handle,
 		     OMX_IndexParamPortDefinition, &portdef);
-	
-      
 ```
 
 
@@ -147,9 +131,7 @@ allocate the input buffers and wait for the port
 to become enabled
 
 ```cpp
-
-	
-    // enable the port and setup the buffers
+// enable the port and setup the buffers
     OMX_SendCommand(decoder->imageDecoder->handle,
 		    OMX_CommandPortEnable,
 		    decoder->imageDecoder->inPort, NULL);
@@ -182,8 +164,6 @@ to become enabled
 	fprintf(stderr, "Did not get port enable %d\n", ret);
 	return OMXJPEG_ERROR_EXECUTING;
     }
-	
-      
 ```
 
 
@@ -193,9 +173,7 @@ we wait to ensure that it actually does make the state
 transition requested:
 
 ```cpp
-
-	
-    // start executing the decoder 
+// start executing the decoder 
     ret = OMX_SendCommand(decoder->imageDecoder-gt;handle,
 			  OMX_CommandStateSet, OMX_StateExecuting, NULL);
     if (ret != 0) {
@@ -210,8 +188,6 @@ transition requested:
 	fprintf(stderr, "Did not receive executing stat %d\n", ret);
 	// return OMXJPEG_ERROR_EXECUTING;
     }
-	
-      
 ```
 
 
@@ -248,9 +224,7 @@ if it doesn't or exiting if the input buffer is empty.
 This code is a bit messy!
 
 ```cpp
-
-	
-	// wait for buffer to empty or port changed event
+// wait for buffer to empty or port changed event
 	int             done = 0;
 	while ((done == 0) || (decoder->pOutputBufferHeader == NULL)) {
 	    if (decoder->pOutputBufferHeader == NULL) {
@@ -284,8 +258,6 @@ This code is a bit messy!
 		sleep(1);
 	    }
 	}
-	
-      
 ```
 
 
@@ -304,9 +276,7 @@ call to fill the buffer. We should only have to do this once,
 so a flag `bFilled`is used to control this.
 
 ```cpp
-
-	
-	// fill the buffer if we have created the buffer
+// fill the buffer if we have created the buffer
 	if (bFilled == 0) {
 	    if ((decoder->pOutputBufferHeader == NULL)) {
 		portSettingsChanged(decoder);
@@ -333,8 +303,6 @@ so a flag `bFilled`is used to control this.
 
 	    bFilled = 1;
 	}
-	
-      
 ```
 
 
@@ -345,9 +313,7 @@ to do but wait until the output buffer is filled.
 OpenMAX should generate a `OMX_BUFFERFLAG_EOS`when this happens, so we just wait
 
 ```cpp
-
-	
-    // wait for end of stream events
+// wait for end of stream events
     int             ret =
 	ilclient_wait_for_event(decoder->imageDecoder->component,
 				OMX_EventBufferFlag,
@@ -359,8 +325,6 @@ OpenMAX should generate a `OMX_BUFFERFLAG_EOS`when this happens, so we just wait
     } else  {
 	fprintf(stderr, "EOS event on image decoder %d\n", ret);
     }
-	
-      
 ```
 
 
@@ -376,8 +340,7 @@ image to a file, or do further processing.
 The final code is [jpeg-decoder.c](jpeg-decoder.c) 
 
 ```cpp
-
-	/*
+/*
 Copyright (c) 2012, Matt Ownby
                     Anthong Sale
 Copyright (c) 2014: Jan Newmarch
@@ -959,6 +922,4 @@ main(int argc, char *argv[])
     printf("Success\n");
     return 0;
 }
-
-      
 ```

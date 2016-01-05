@@ -63,15 +63,11 @@ To build from this package, do the same as you normally
 would:
 
 ```
-
-	
 tar jxf fluidsynth-1.1.6-karaoke.tar.bz2
 cd fluidsynth-1.1.6
 ./configure
 make clean
 make
-	
-      
 ```
 
 
@@ -89,7 +85,6 @@ the lyric lines and the lyric events as they occur
 is `karaoke_player.c`:
 
 ```cpp
-
 #include <fluidsynth.h>
 #include <fluid_midi.h>
 
@@ -182,9 +177,6 @@ int main(int argc, char** argv)
     delete_fluid_settings(settings);
     return 0;
 }
-
-
-      
 ```
 
 
@@ -196,13 +188,9 @@ to compile the program you will need  to pick up the local
 includes and libraries
 
 ```
-
-	
 gcc -g -I fluidsynth-1.1.6/include/ -I fluidsynth-1.1.6/src/midi/ -I fluidsynth-1.1.6/src/utils/ -c -o karaoke_player.o karaoke_player.c
 
 gcc karaoke_player.o -Lfluidsynth-1.1.6/src/.libs -l fluidsynth -o karaoke_player
-	
-      
 ```
 
 
@@ -213,12 +201,8 @@ To run the program, you will also need to pick up the local library
 and the soundfont file:
 
 ```
-
-	
 export LD_LIBRARY_PATH=./fluidsynth-1.1.6/src/.libs/
 ./karaoke_player /usr/share/soundfonts/FluidR3_GM.sf2 54154.mid
-	
-      
 ```
 
 
@@ -228,8 +212,6 @@ export LD_LIBRARY_PATH=./fluidsynth-1.1.6/src/.libs/
 The output for a typical `KAR`file is
 
 ```
-
-	
 Load callback, tracks 1 
 Track 0
 Loaded event #
@@ -246,9 +228,7 @@ Callback: Playing lyric event 2 0
 Callback: Playing lyric event 2 0
 Callback: Playing lyric event 2 0
 Callback: Playing lyric event 2 1
-Callback: Playing lyric event 3 
-	
-      
+Callback: Playing lyric event 3
 ```
 
 

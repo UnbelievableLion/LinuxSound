@@ -25,9 +25,7 @@ diagram for the relevant classes is
 This code is from [Playing an audio file (easy)](http://www.jsresources.org/examples/SimpleMidiPlayer.html) 
 
 ```cpp
-
-      
-      /*
+/*
  *	SimpleMidiPlayer.java
  *
  *	This file is part of jsresources.org
@@ -375,7 +373,4 @@ public class SimpleMidiPlayer
 
 
 /*** SimpleMidiPlayer.java ***/
-
-      
-    
 ```

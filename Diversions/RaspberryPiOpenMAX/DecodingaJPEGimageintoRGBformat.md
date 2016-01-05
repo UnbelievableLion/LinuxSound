@@ -15,8 +15,6 @@ Their logic is captured in the `portSettingsChanged`function. This adds tunnelli
 decoder program given earlier.
 
 ```cpp
-
-	
 int
 portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 {
@@ -145,8 +143,6 @@ portSettingsChanged(OPENMAX_JPEG_DECODER * decoder)
 
     return OMXJPEG_OK;
 }
-	
-      
 ```
 
 
@@ -168,8 +164,7 @@ image upside down. The source is almost completely
 from the RPi `/opt/vc/src/hello_pi/hello_jpeg/jpeg.c`program, here as [decodejpeg2rgb.c](decodejpeg2rgb.c) :
 
 ```cpp
-
-	/*
+/*
 Copyright (c) 2012, Matt Ownby
                     Anthong Sale
 Copyright (c) 2014, Jan Newmarch
@@ -903,6 +898,4 @@ main(int argc, char *argv[])
     free(sourceImage);
     return 0;
 }
-
-      
 ```

@@ -26,14 +26,10 @@ these to be dealt with.
 The compile line for e.g. `listcomponents.c`is
 
 ```
-
-	
 cc -g -DRASPBERRY_PI -I /opt/vc/include/IL -I /opt/vc/include \
    -I /opt/vc/include/interface/vcos/pthreads \
    -o listcomponents listcomponents.c \
    -L /opt/vc/lib -l openmaxil -l bcm_host
-	
-      
 ```
 
 
@@ -55,25 +51,17 @@ I built from source, but didn't install, so the includes and libraries
 are in a funny place. My compile line is
 
 ```
-
-	
 cc  -g -DBELLAGIO -I ../libomxil-bellagio-0.9.3/include/ \
     -o listcomponents listcomponents.c \
     -L ../libomxil-bellagio-0.9.3/src/.libs -l omxil-bellagio
-	
-      
 ```
 
 
 and at run time
 
 ```
-
-	
 export LD_LIBRARY_PATH=../libomxil-bellagio-0.9.3/src/.libs/
 ./listcomponents
-	
-      
 ```
 
 
@@ -86,15 +74,11 @@ Downloading the 1.1 version was a hassle  because the 1.1 download uses a Git re
 disappeared (as of Feb, 2013). Instead you have to run
 
 ```
-
-	
-  git clone git://limoa.git.sourceforge.net/gitroot/limoa/limoi-components
+git clone git://limoa.git.sourceforge.net/gitroot/limoa/limoi-components
   git clone git://limoa.git.sourceforge.net/gitroot/limoa/limoi-core
   git clone git://limoa.git.sourceforge.net/gitroot/limoa/limoi-plugins
   git clone git://limoa.git.sourceforge.net/gitroot/limoa/limutil
   git clone git://limoa.git.sourceforge.net/gitroot/limoa/manifest
-	
-      
 ```
 
 
@@ -112,25 +96,17 @@ The library build puts files in a new directory in my HOME. I have found some
 minor bugs in the implementation so far. My compile line is
 
 ```
-
-	
 cc -g -DLIM -I ../../lim-omx-1.1/LIM/limoi-core/include/ \
    -o listcomponents listcomponents.c \
    -L /home/newmarch/osm-build/lib/ -l limoa -l limoi-core
-	
-      
 ```
 
 
 and at runtime,
 
 ```
-
-	
 export LD_LIBRARY_PATH=/home/newmarch/osm-build/lib/
 ./listcomponents
-	
-      
 ```
 
 
@@ -247,13 +223,9 @@ buried in Broadcom convenience functions
 such as
 
 ```cpp
-
-	
 ilclient_create_component(st->client, &st->audio_render, 
                          "audio_render", 
                          ILCLIENT_ENABLE_INPUT_BUFFERS | ILCLIENT_DISABLE_ALL_PORTS);
-	
-      
 ```
 
 
@@ -277,9 +249,6 @@ do not.
 The program is listcomponents.c:
 
 ```cpp
-
-	
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -367,17 +336,12 @@ int main(int argc, char** argv) {
     */
     exit(0);
 }
-
-	
-      
 ```
 
 
 The output from the Bellagio library is
 
 ```
-
-	
 Component is OMX.st.clocksrc
   Num roles is 1
     role: clocksrc
@@ -427,8 +391,6 @@ Component is OMX.st.audio.mixer
   Num roles is 1
     role: audio.mixer
 No more components
-	
-      
 ```
 
 
@@ -440,8 +402,6 @@ The Raspberry Pi reports a large number of components but does not define a
 role for any of them:
 
 ```
-
-	
 Component is OMX.broadcom.audio_capture
   Num roles is 0
 Component is OMX.broadcom.audio_decode
@@ -501,16 +461,12 @@ Component is OMX.broadcom.write_media
 Component is OMX.broadcom.write_still
   Num roles is 0
 No more components
-	
-      
 ```
 
 
 The output from LIM is
 
 ```
-
-	
 Component is OMX.limoi.alsa_sink
   Num roles is 1
     role: audio_renderer.pcm
@@ -560,8 +516,6 @@ Component is OMX.limoi.video_scheduler
   Num roles is 1
     role: video_scheduler.binary
 No more components
-
-
 ```
 
 ###  Getting information about an IL component 
@@ -573,15 +527,11 @@ All IL clients must initialise OpenMAX IL by calling `OMX_Init()`.
 Nearly all functions return error values, and the style used by Bellagio is
 
 ```cpp
-
-	
-  err = OMX_Init();
+err = OMX_Init();
   if(err != OMX_ErrorNone) {
       fprintf(stderr, "OMX_Init() failed\n", 0);
       exit(1);
   }
-	
-      
 ```
 
 
@@ -596,9 +546,7 @@ track behaviour of the application, but are not needed for the example
 in this section. This code shows how to get a handle to the Bellagio Volume component:
 
 ```cpp
-
-	
-  OMX_HANDLETYPE handle;
+OMX_HANDLETYPE handle;
   OMX_CALLBACKTYPE callbacks;
   OMX_ERRORTYPE err;
 
@@ -607,8 +555,6 @@ in this section. This code shows how to get a handle to the Bellagio Volume comp
       fprintf(stderr, "OMX_GetHandle failed\n", 0);
       exit(1);
   }
-	
-      
 ```
 
 
@@ -643,9 +589,7 @@ such as audio, image, video and other.
 To get information about the starting value for audio ports, use:
 
 ```cpp
-
-	
-  setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
+setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
   err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, &param);
   if(err != OMX_ErrorNone){
       fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
@@ -655,8 +599,6 @@ To get information about the starting value for audio ports, use:
 	 ((OMX_PORT_PARAM_TYPE)param).nStartPortNumber);
   printf("There are %d open ports\n",
 	 ((OMX_PORT_PARAM_TYPE)param).nPorts);
-	
-      
 ```
 
 
@@ -670,9 +612,7 @@ the direction (input or output) and information
 about the MIME type supported.
 
 ```cpp
-
-	
-  OMX_PARAM_PORTDEFINITIONTYPE sPortDef;
+OMX_PARAM_PORTDEFINITIONTYPE sPortDef;
 
   setHeader(&sPortDef, sizeof(OMX_PARAM_PORTDEFINITIONTYPE));
   sPortDef.nPortIndex = 0;
@@ -698,8 +638,6 @@ about the MIME type supported.
 	 sPortDef.nBufferCountMin,
 	 sPortDef.format.audio.cMIMEType,
 	 sPortDef.format.audio.eEncoding);
-	
-      
 ```
 
 
@@ -731,8 +669,6 @@ So there is limited value in this call...
 This code tests this:
 
 ```cpp
-
-	
 void getSupportedAudioFormats(int indentLevel, int portNumber) {
     OMX_AUDIO_PARAM_PORTFORMATTYPE sAudioPortFormat;
 
@@ -820,8 +756,6 @@ void getSupportedAudioFormats(int indentLevel, int portNumber) {
         sAudioPortFormat.nIndex++;
     }
 }
-	
-      
 ```
 
 
@@ -835,9 +769,7 @@ The Bellagio library incorrectly returns `OMX_AUDIO_CodingUnused`for every index
 The Broadcom library can return lots of values. For example, for the `audio_decode`component it returns
 
 ```
-
-	
-      Supported audio formats are:
+Supported audio formats are:
       Supported encoding is MP3
       Supported encoding is PCM
       Supported encoding is AAC
@@ -856,8 +788,6 @@ The Broadcom library can return lots of values. For example, for the `audio_deco
       Supported encoding is ATRACAAL
       Supported encoding is MIDI
       No more formats supported
-	
-      
 ```
 
 
@@ -882,8 +812,6 @@ That's kind of sad, really.
 Putting all the bits together gives the program info.c:
 
 ```cpp
-
-	
 /**
    Based on code
    Copyright (C) 2007-2009 STMicroelectronics
@@ -1342,33 +1270,24 @@ int main(int argc, char** argv) {
 
     exit(0);
 }
-
-	
-    
 ```
 
 
 The Makefile for the Bellagio version is
 
 ```cpp
-
-	
 INCLUDES=-I ../libomxil-bellagio-0.9.3/include/
 LIBS=-L ../libomxil-bellagio-0.9.3/src/.libs -l omxil-bellagio
 CFLAGS = -g
 
 info: info.c
         cc $(FLAGS) $(INCLUDES) -o info info.c $(LIBS)
-	
-      
 ```
 
 
 The output using the Bellagio implementation is
 
 ```
-
-	
 Component name: OMX.st.volume.component version 1.1, Spec version 1.1
 Audio ports:
   Ports start on 0
@@ -1393,32 +1312,24 @@ Image ports:
   No ports of this type
 Other ports:
   No ports of this type
-	
-      
 ```
 
 
 The Makefile for the Raspberry Pi is
 
 ```cpp
-
-	
 INCLUDES=-I /opt/vc/include/IL -I /opt/vc/include -I /opt/vc/include/interface/vcos/pthreads
 CFLAGS=-g -DRASPBERRY_PI
 LIBS=-L /opt/vc/lib -l openmaxil -l bcm_host
 
 info: info.c
 	cc $(CFLAGS) $(INCLUDES) -o info info.c $(LIBS)
-	
-      
 ```
 
 
 The output on the Raspberry Pi for the audio_render component is
 
 ```
-
-	
 Audio ports:
   Ports start on 100
   There are 1 open ports
@@ -1440,16 +1351,12 @@ Image ports:
   No ports of this type
 Other ports:
   No ports of this type
-	
-      
 ```
 
 
 The Makefile for LIM is
 
 ```cpp
-
-	
 INCLUDES=-I ../../lim-omx-1.1/LIM/limoi-core/include/
 #LIBS=-L ../../lim-omx-1.1/LIM/limoi-base/src/.libs -l limoi-base
 LIBS = -L /home/newmarch/osm-build/lib/ -l limoa -l limoi-core
@@ -1457,16 +1364,12 @@ CFLAGS = -g -DLIM
 
 info: info.c
 	cc $(CFLAGS) $(INCLUDES) -o info info.c $(LIBS)
-	
-      
 ```
 
 
 The output on LIM for the alsa_sink component is
 
 ```
-
-	
 Component name: OMX.limoi.alsa_sink version 0.0, Spec version 1.1
 Audio ports:
   Ports start on 0
@@ -1480,8 +1383,6 @@ LIM doesn't set audio formats properly
 Error in getting video OMX_PORT_PARAM_TYPE parameter
 Error in getting image OMX_PORT_PARAM_TYPE parameter
 Error in getting other OMX_PORT_PARAM_TYPE parameter
-	
-      
 ```
 
 
@@ -1490,8 +1391,6 @@ a mode (here an audio component does not support video, image or other).
 This is against the 1.1 specification which says
 
 ```
-
-	
 "All standard components shall support the following parameters:
   o OMX_IndexParamPortDefinition
   o OMX_IndexParamCompBufferSupplier
@@ -1499,8 +1398,6 @@ This is against the 1.1 specification which says
   o OMX_IndexParamImageInit
   o OMX_IndexParamVideoInit
   o OMX_IndexParamOtherInit"
-	
-      
 ```
 
 
@@ -1569,8 +1466,6 @@ tutorial by Blaise Barney at [POSIX Threads Programming](https://computing.llnl.
 The functions and data we use are
 
 ```cpp
-
-	
 pthread_mutex_t mutex;
 OMX_STATETYPE currentState = OMX_StateLoaded;
 pthread_cond_t stateCond;
@@ -1620,8 +1515,6 @@ void mutex_init() {
 	fprintf(stderr, "Can't init empty mutex\n");
     }
 }
-	
-      
 ```
 
 ####  Hungarian notation 
@@ -1649,14 +1542,10 @@ and empty buffer callbacks which occur when a component has emptied an input
 buffer. These are registered by
 
 ```cpp
-
-	
 OMX_CALLBACKTYPE callbacks  = { .EventHandler = cEventHandler,
                                 .EmptyBufferDone = cEmptyBufferDone,
 };
 err = OMX_GetHandle(&handle, componentName, NULL /*app private data */, &callbacks);
-	
-      
 ```
 
 ####  Component resources 
@@ -1690,9 +1579,7 @@ Consequently the transition to `Idle`never took place... Code to handle this
 is
 
 ```cpp
-
-	
-    setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
+setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
     err = OMX_GetParameter(handle, OMX_IndexParamOtherInit, &param);
     if(err != OMX_ErrorNone){
 	fprintf(stderr, "Error in getting OMX_PORT_PARAM_TYPE parameter\n", 0);
@@ -1707,17 +1594,13 @@ is
 	fprintf(stderr, "Error on setting port to disabled\n");
 	exit(1);
     }
-	
-      
 ```
 
 
 Setting parameters for the audio port is
 
 ```cpp
-
-	
-    /** Get audio port information */
+/** Get audio port information */
     setHeader(&param, sizeof(OMX_PORT_PARAM_TYPE));
     err = OMX_GetParameter(handle, OMX_IndexParamAudioInit, &param);
     if(err != OMX_ErrorNone){
@@ -1805,9 +1688,7 @@ Setting parameters for the audio port is
 	printf("PCM mode supported\n");
 	printf("PCM sampling rate %d\n", sPCMMode.nSamplingRate);
 	printf("PCM nChannels %d\n", sPCMMode.nChannels);
-    }   
-	
-      
+    }
 ```
 
 ####  Setting the output device 
@@ -1825,8 +1706,6 @@ has extension types `OMX_CONFIG_BRCMAUDIODESTINATIONTYPE`(and `OMX_CONFIG_BRCMAU
 to set the audio destination (source) device. Code to do this is
 
 ```cpp
-
-	
 void setOutputDevice(const char *name) {
    int32_t success = -1;
    OMX_CONFIG_BRCMAUDIODESTINATIONTYPE arDest;
@@ -1842,8 +1721,6 @@ void setOutputDevice(const char *name) {
        }
    }
 }
-	
-      
 ```
 
 
@@ -1881,9 +1758,7 @@ It is better to just set up more pthreads conditions and block on those.
 This leads to a main loop of
 
 ```cpp
-
-	
-    emptyState = 1;
+emptyState = 1;
     for (;;) {
 	int data_read = read(fd, inBuffers[0]->pBuffer, nBufferSize);
 	inBuffers[0]->nFilledLen = data_read;
@@ -1908,8 +1783,6 @@ This leads to a main loop of
     }
 
     printf("Buffers emptied\n");
-	
-      
 ```
 
 ####  Complete program 
@@ -1918,8 +1791,6 @@ This leads to a main loop of
 The complete program is
 
 ```cpp
-
-	
 /**
    Based on code
    Copyright (C) 2007-2009 STMicroelectronics
@@ -2381,7 +2252,4 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Buffers emptied\n");
     exit(0);
 }
-
-	
-    
 ```

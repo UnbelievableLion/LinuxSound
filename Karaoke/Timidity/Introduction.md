@@ -7,8 +7,6 @@ By default it just plays the MIDI music, with the lyrics
 printed out:
 
 ```
-
-	
 $timidity ../54154.mid
 Requested buffer size 32768, fragment size 8192
 ALSA pcm 'default' set buffer size 32768, period size 8192 bytes
@@ -27,8 +25,6 @@ Here comes the sun
 I said it's alright
 Little
 darling
-	
-      
 ```
 
 
@@ -41,8 +37,6 @@ If you run `timidity`with the `-h`(help)
 option, it will show a screen including something like
 
 ```
-
-	
 Available interfaces (-i, --interface option):
   -in          ncurses interface
   -ie          Emacs interface (invoked from `M-x timidity')
@@ -50,8 +44,6 @@ Available interfaces (-i, --interface option):
   -id          dumb interface
   -ir          remote interface
   -iA          ALSA sequencer interface
-	
-      
 ```
 
 
@@ -74,11 +66,7 @@ You may find the link between documentation and behaviour
 a lttle less than obvious...
 
 ```
-
-	
 timidity --trace ../54154.mid
-	
-      
 ```
 
 
@@ -90,11 +78,7 @@ when they should be sung. But it doesn't display the lyrics
 for `.KAR`files. For that you need the `--trace-text-meta`option:
 
 ```
-
-	
 timidity --trace --trace-text-meta ../54154.kar
-	
-      
 ```
 
 

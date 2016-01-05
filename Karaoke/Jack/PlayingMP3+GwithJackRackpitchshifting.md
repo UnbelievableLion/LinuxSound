@@ -8,9 +8,7 @@ an MP3 file and CDG file with the same root.
 This must be unzipped, and then can be played by giving `vlc`the MP3 filename:
 
 ```cpp
-
 vlc file.mp3
-      
 ```
 
 
@@ -20,9 +18,7 @@ This will pick up the CDG file and display the lyrics.
  `vlc`can be used with Jack by the `--aout jack`option
 
 ```cpp
-
 vlc --aout jack file.mp3
-      
 ```
 
 
@@ -42,9 +38,7 @@ The steps are
 by e.g `pasuspender cat`
 + Start the Jack daemon running as usual by
 ```cpp
-
 jackd -d alsa
-	  
 ```
 
 + Start `qjackctl`so you have some control

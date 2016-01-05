@@ -5,7 +5,6 @@
 This example is taken from [blinking bill]( http://blinkingblip.wordpress.com/2011/10/08/decoding-and-playing-an-audio-stream-using-libavcodec-libavformat-and-libao/) and plays almost any file (Ogg Vorbis, AVI, MP3, etc).
 
 ```cpp
-
 /**
  * Program copyright blinking blip, 2011
  * Downloaded from 
@@ -126,8 +125,6 @@ int main(int argc, char* argv[]) {
  
     return 0;
 }
-
-      
 ```
 
 

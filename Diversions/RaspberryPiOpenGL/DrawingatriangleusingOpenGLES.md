@@ -20,8 +20,6 @@ while we explicitly show the RPi stuff here
 The program is [triangle.c](triangle.c) :
 
 ```cpp
-
-	
 /*
  * code stolen from openGL-RPi-tutorial-master/encode_OGL/
  * and from OpenGL® ES 2.0 Programming Guide
@@ -329,6 +327,4 @@ int main(int argc, char *argv[])
     eglSwapBuffers(p_state->display, p_state->surface);
     esMainLoop(p_state);
 }
-
-      
 ```

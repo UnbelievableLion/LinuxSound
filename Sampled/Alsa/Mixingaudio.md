@@ -14,13 +14,9 @@ discussed earlier can be called multiple times and have the ALSA inputs mixed to
 as in
 
 ```
-
-	
 alsa_playback plug:dmix tmp1.s16 &
 alsa_playback plug:dmix tmp2.s16 &
 alsa_playback plug:dmix tmp3.s16
-	
-      
 ```
 
 
@@ -47,13 +43,9 @@ The PulseAudio plugin can appear as the PCM devices `pulse`or as `default`. So t
 by PulseAudio and rendered by ALSA.
 
 ```
-
-	
 alsa_playback default tmp1.s16 &
 alsa_playback pulse tmp2.s16 &
 alsa_playback default tmp3.s16
-	
-      
 ```
 
 
@@ -73,7 +65,6 @@ Setting the volume is illustrated by the following program,
 based on a function by [trenki](http://stackoverflow.com/users/619295/trenki) at [Set ALSA master volume from C code](http://stackoverflow.com/questions/6787318/set-alsa-master-volume-from-c-code) :
 
 ```cpp
-
 /*
  *
  * From http://stackoverflow.com/questions/6787318/set-alsa-master-volume-from-c-code
@@ -121,7 +112,4 @@ main(int argc, char **args) {
     }
     exit(0);
 }
-
-
-      
 ```

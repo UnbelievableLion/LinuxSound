@@ -42,29 +42,21 @@ some were repeated. So I wrote a shell pipeline to sort these
 strings and count them. The pipeline for one file was
 
 ```
-
-	
-	  strings DTSMUS05.DKD | sort |uniq -c | sort -n -r |less	
-	
-      
+strings DTSMUS05.DKD | sort |uniq -c | sort -n -r |less
 ```
 
 
 This produced results
 
 ```
-
-	
-	  1229 :^y|
+1229 :^y|
 	  1018 j?wK
 	  843 ]/<
 	  756  Seh
 	  747  Ser
 	  747 _\D+P
 	  674 :^yt
-	  234 IRI$	
-	
-      
+	  234 IRI$
 ```
 
 
@@ -72,9 +64,7 @@ The results weren't inspiring. But when I looked inside the files
 to see where "Ser" was occurring, I also saw:
 
 ```
-
-	
-	  q03C3E230  F6 01 00 00 00 02 00 16 00 57 00 69 00 6E 00 64 .........W.i.n.d
+q03C3E230  F6 01 00 00 00 02 00 16 00 57 00 69 00 6E 00 64 .........W.i.n.d
 	  03C3E240  00 6F 00 77 00 73 00 20 00 4D 00 65 00 64 00 69 .o.w.s. .M.e.d.i
 	  03C3E250  00 61 00 20 00 41 00 75 00 64 00 69 00 6F 00 20 .a. .A.u.d.i.o.
 	  03C3E260  00 39 00 00 00 24 00 20 00 34 00 38 00 20 00 6B .9...$. .4.8. .k
@@ -83,9 +73,7 @@ to see where "Ser" was occurring, I also saw:
 	  03C3E290  00 72 00 65 00 6F 00 20 00 31 00 2D 00 70 00 61 .r.e.o. .1.-.p.a
 	  03C3E2A0  00 73 00 73 00 20 00 43 00 42 00 52 00 00 00 02 .s.s. .C.B.R....
 	  03C3E2B0  00 61 01 91 07 DC B7 B7 A9 CF 11 8E E6 00 C0 0C .a..............
-	  03C3E2C0  20 53 65 72 00 00 00 00 00 00 00 40 9E 69 F8 4D  Ser.......@.i.M	
-	
-      
+	  03C3E2C0  20 53 65 72 00 00 00 00 00 00 00 40 9E 69 F8 4D  Ser.......@.i.M
 ```
 
 
@@ -96,20 +84,14 @@ The `strings`command has options to look at e.g. 2-byte
 big-endian character strings. The command
 
 ```
-
-	
-	  strings -e b DTSMUS05.DKD
-	
-      
+strings -e b DTSMUS05.DKD
 ```
 
 
 turned up
 
 ```
-
-	
-	  IsVBR
+IsVBR
 	  DeviceConformanceTemplate
 	  WM/WMADRCPeakReference
 	  WM/WMADRCAverageReference
@@ -117,8 +99,6 @@ turned up
 	  9.00.00.2980
 	  WMFSDKNeeded
 	  0.0.0.0000
-	
-      
 ```
 
 
@@ -129,12 +109,8 @@ According to Gary Kessler's [FILE SIGNATURES TABLE](http://www.garykessler.net/l
 the signature of a WMA file is given by the header
 
 ```
-
-	
-	  30 26 B2 75 8E 66 CF 11
-	  A6 D9 00 AA 00 62 CE 6C	
-	
-      
+30 26 B2 75 8E 66 CF 11
+	  A6 D9 00 AA 00 62 CE 6C
 ```
 
 
@@ -156,9 +132,7 @@ In these records I could see patterns I couldn't understand,
 but also from byte 36 on I could see strings like
 
 ```
-
-	
-	  AIN'T IT FUNNY HOW TIME SLIPS AWAY, Str length: 34
+AIN'T IT FUNNY HOW TIME SLIPS AWAY, Str length: 34
 
 
 	  00000000  10 50 41 10 50 49 10 50 4E 10 50 27 10 50 54 10 .PA.PI.PN.P'.PT.
@@ -168,8 +142,6 @@ but also from byte 36 on I could see strings like
 	  00000040  C1 29 10 20 50 10 51 45 10 21 28 10 21 1E 10 21 .). P.QE.!(.!..!
 	  00000050  3A 14 F1 05 13 31 02 10 C1 0E 11 A1 58 15 A0 00 :....1......X...
 	  00000060  15 70 00 13 A0 A9                               .p....
-	
-      
 ```
 
 
@@ -202,12 +174,8 @@ in the data files.
 To give meaning to this: on my disk at 0x200 is
 
 ```
-
-	
-	  00000200  00 00 00 01 00 00 08 6C 00 00 0F C1 00 00 17 7A 
-	  00000210  00 00 1E 81 00 00 25 21 00 00 2B 8D 00 00 32 B7 
-	
-      
+00000200  00 00 00 01 00 00 08 6C 00 00 0F C1 00 00 17 7A 
+	  00000210  00 00 1E 81 00 00 25 21 00 00 2B 8D 00 00 32 B7
 ```
 
 
@@ -248,9 +216,7 @@ The bottom 8 bits are the index of the song entry in the song index table.
 Pseudocode:
 
 ```
-
-	
-	  songNumber = get number for song from DTSMUS20.DKD
+songNumber = get number for song from DTSMUS20.DKD
 	  superBlockIdx = songNumber >>
 	  indexTableIdx = songNumber & 0xFF
 
@@ -264,8 +230,6 @@ Pseudocode:
 
 	  seek(fileNumber, entryLocation)
 	  read song entry
-	
-      
 ```
 
 ###  Song entries 

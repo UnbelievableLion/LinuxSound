@@ -17,8 +17,6 @@ You need to prepare a file of timing and text instructions.
 The format shown in examples is as a .vtt file and can be
 
 ```
-
-	
 WEBVTT
 
 1
@@ -29,8 +27,6 @@ This is the first line of text, displaying from 1-30 seconds
 00:00:35.000 --> 00:00:50.000
 And the second line of text
 separated over two lines from 35 to 50 seconds
-        
-      
 ```
 
 
@@ -42,15 +38,11 @@ The format of VTT files is specified at [WebVTT: The Web Video Text Tracks Forma
 The HTML then references the A/V files and the subtitle file as in
 
 ```
-
-	
-    <video  controls>
+<video  controls>
       <source src="output.webm" controls>
       <track src="54154.vtt" kind="subtitles" srclang="en" label="English" default />
       <!-- fallback for rubbish browsers -->
     </video>
-	
-      
 ```
 
 

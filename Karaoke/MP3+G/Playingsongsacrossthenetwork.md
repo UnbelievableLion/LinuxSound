@@ -13,9 +13,7 @@ Mounting server files on a computer is simple: you can use
 NFS, Samba, ... I am currently using `sshfs`as in
 
 ```
-
 sshfs -o idmap=user -o rw -o allow_other newmarch@192.168.1.101:/home/httpd/html /server
-      
 ```
 
 
@@ -24,16 +22,13 @@ of the last section by a TCP client/server. On the client,
 controlling the player, I have
 
 ```cpp
-
 java SongTableSwing | client 192.168.1.7
-      
 ```
 
 
 while on the (Raspberry Pi/CubieBoard) server I run
 
 ```cpp
-
 #!/bin/bash
 set -x
 VLC_OPTS="--play-and-exit -f"
@@ -51,7 +46,6 @@ do
 		vlc $VLC_OPTS /tmp/karaoke/*.mp3
 	fi
 done
-      
 ```
 
 
@@ -62,7 +56,6 @@ server, and the server prints the same line to standard output.
 Here is `client.c`:
 
 ```cpp
-
 #include <stdio.h> 
 #include <sys/types.h>
 #include <sys/socket.h> 
@@ -107,16 +100,13 @@ int main(int argc, char *argv[]) {
 	write(sockfd, buf, nread);
 	close(sockfd); 
     }
-} 
-
-      
+}
 ```
 
 
 and here is `server.c`
 
 ```cpp
-
 #include <stdio.h> 
 #include <sys/types.h> 
 #include <sys/socket.h> 
@@ -175,6 +165,4 @@ int main(int argc, char *argv[]) {
 	close(client_sockfd); 
     }
 }
-
-      
 ```

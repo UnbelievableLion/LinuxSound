@@ -19,11 +19,7 @@ It is simple to convert a file: just give the appropriate
 file extensions:
 
 ```
-
-	
 convert image.jpg image.tga
-	
-      
 ```
 
 
@@ -51,8 +47,6 @@ change.
 The program is [image.c](image.c) 
 
 ```cpp
-
-	
 /*
  * code stolen from openGL-RPi-tutorial-master/encode_OGL/
  * and from OpenGL® ES 2.0 Programming Guide
@@ -549,8 +543,6 @@ int main(int argc, char *argv[])
     eglSwapBuffers(p_state->display, p_state->surface);
     esMainLoop(p_state);
 }
-
-      
 ```
 
 

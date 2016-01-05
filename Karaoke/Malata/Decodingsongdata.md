@@ -12,31 +12,26 @@ A couple that I looked at seemed a bit messy. So I settled
 By playing the song on the Malata, the headers were
 
 ```
-
 Oh Lonesome Me
 ORIGINAL:
 Don Gibson
-      
 ```
 
 
 while the lyrics are
 
 ```
-
 Every body's goin'
 out and havin' fun
 I'm just a fool
 for stayin' home
 and havinnone
-      
 ```
 
 
 Running `bvi`on the data file gives
 
 ```
-
 00000000  00 00 4F 4B 00 00 00 00 00 00 00 00 00 00 00 00 ..OK............
 00000010  00 00 00 00 00 20 00 00 00 07 00 00 00 00 00 00 ..... ..........
 00000020  00 00 6D 05 00 00 33 0F 00 00 7C 5B 13 7F 5C 5D ..m...3...|[..\]
@@ -44,7 +39,6 @@ Running `bvi`on the data file gives
 00000040  7F 09 1C 77 5C 5D 13 74 5A 51 40 5C 5D 1C 33 33 ...w\].tZQ@\].33
 00000050  33 1F 33 36 27 37 33 33 32 33 33 33 05 30 30 32 3.36'7332333.002
 00000060  33 33 3D 0B 35 3A 32 33 33 7F 17 37 3C 32 33 32 33=.5:233..7<232
-      
 ```
 
 
@@ -55,13 +49,11 @@ From the songs with English, I know the song title starts at 0x2A,
 and we have to do this match:
 
 ```
-
 7C 5B 13 7F 5C 5D 56 40 5C 5E 56 13 7E 56 1C 7C 61 7A 74 7A 7D 72
 O  h     L  o  n  e  s  o  m  e     M  e  /  O  R  I  G  I  N  A
 
 7F 09 1C 77 5C 5D 13 74 5A 51 40 5C 5D 1C 33 33
 L  :  /  D  o  n     G  i  b  s  o  n  /
-      
 ```
 
 
@@ -71,7 +63,6 @@ It's a game of pattern matching, and the answer is the following
 piece of C code
 
 ```cpp
-
 #include <stdio.h>
 
 int main(int argc, char **argv) {
@@ -176,8 +167,6 @@ int main(int argc, char **argv) {
     fclose(ofp);
     exit(0);
 }
-
-      
 ```
 
 
@@ -189,7 +178,6 @@ other decodings, but not all.).
 Following application of that substitution, the file looks like
 
 ```
-
 00000000  2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E ................
 00000010  2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E ................
 00000020  2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 4F 68 20 4C 6F 6E ..........Oh Lon
@@ -211,7 +199,6 @@ Following application of that substitution, the file looks like
 00000120  20 2E 2E 2E 6D 2E 65 2E 20 2E 66 2E 72 2E 65 2E  ...m.e. .f.r.e.
 00000130  65 2E 2E 2E 2E 2E 2E 2E 2E 2E 2E 54 2E 68 2E 61 e..........T.h.a
 00000140  2E 74 2E 20 2E 6D 2E 69 2E 73 2E 74 2E 61 2E 6B .t. .m.i.s.t.a.k
-      
 ```
 
 
@@ -238,8 +225,7 @@ is mapped to the space character ' ' is 0x20 less than byte
 0x26. e.g. the substitution for songs like file 10337 is
 
 ```cpp
-
-        switch (ch) {
+switch (ch) {
         case 0x95: ch = ' '; break;
 
         case 0xD4: ch = 'a'; break;
@@ -260,7 +246,6 @@ is mapped to the space character ' ' is 0x20 less than byte
         case 0xD8: ch = 'm'; break;
         case 0xDB: ch = 'n'; break;
         ...
-      
 ```
 
 

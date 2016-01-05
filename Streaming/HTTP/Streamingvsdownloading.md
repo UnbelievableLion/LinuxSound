@@ -9,13 +9,9 @@ it can play without worrying about network delays. A simple shell script to
 illustrate this is
 
 ```
-
-	
 wget -O tmp  http://localhost/audio/enigma/audio_01.ogg
 mplayer tmp
 rm tmp
-	
-      
 ```
 
 
@@ -28,11 +24,7 @@ pipeline is large enough to buffer enough of the resource that it can cope
 with network delays. It is illustrated by
 
 ```
-
-	
 wget -O -  http://localhost/audio/enigma/audio_01.ogg | mplayer -
-	
-      
 ```
 
 

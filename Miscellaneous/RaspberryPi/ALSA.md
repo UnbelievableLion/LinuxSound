@@ -9,8 +9,6 @@ Some of the usual configuration files and
 commands on a larger distro are missing, but it shows on the soft float Debian distro
 
 ```
-
-	
 upload=true&script=true&cardinfo=
 !!################################
 !!ALSA Information Script v 0.4.61
@@ -220,8 +218,6 @@ evdev
 [   16.853728] bcm2835 ALSA CARD CREATED!
 [   16.883259] ### BCM2835 ALSA driver init OK ### 
 [   23.608360] smsc95xx 1-1.1:1.0: eth0: link up, 100Mbps, full-duplex, lpa 0x45E1
-	
-      
 ```
 
 

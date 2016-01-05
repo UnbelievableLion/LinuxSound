@@ -25,9 +25,7 @@ If the bytes are "b0 b1 b2 b3" then thanth discovered that
 the song data starts at
 
 ```
-
 (((b0 * 0x3C) + b1) * 0x48 +b2) * 0x800 + 0x10000
-      
 ```
 
 
@@ -40,9 +38,7 @@ contains pointers to data in the other files, and for these
 the formula is
 
 ```
-
 (((b0 * 0x3C) + b1) * 0x48 +b2) * 0x800
-      
 ```
 
 
@@ -70,9 +66,6 @@ part of the data for each song, since I don't know where the
 data finishes.
 
 ```cpp
-
-
-
 import java.io.FileInputStream;
 import java.io.*;
 import java.nio.charset.Charset;
@@ -332,7 +325,6 @@ class SongData {
 	    return false;
     }
 }
-      
 ```
 
 

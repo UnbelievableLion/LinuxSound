@@ -23,11 +23,6 @@ AttributedLyricPanel as well.
 The AttributedLyricPanel is
 
 ```cpp
-
-      
-      
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.*;
@@ -153,6 +148,4 @@ public class AttributedLyricPanel extends JPanel {
 	}
     }
 }
-      
-    
 ```

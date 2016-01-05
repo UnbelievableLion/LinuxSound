@@ -7,8 +7,6 @@ The program `DeviceInfo`was  given in the JavaSound Sampled chapter
 The output from this on the RPi is
 
 ```
-
-	
 Mixers:
    PulseAudio Mixer, version 0.02
     Mixer: org.classpath.icedtea.pulseaudio.PulseAudioMixer@1d05c81
@@ -34,8 +32,6 @@ Mixers:
       Source lines
       Target lines
         PCM target port
-	
-      
 ```
 
 

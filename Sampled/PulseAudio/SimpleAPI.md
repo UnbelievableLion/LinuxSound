@@ -9,8 +9,6 @@ The simple API may be good enough for your needs.
 The simple API has a small set of functions
 
 ```
-
-
 pa_simple * 	pa_simple_new (const char *server, const char *name, pa_stream_direction_t dir, const char *dev, const char *stream_name, const pa_sample_spec *ss, const pa_channel_map *map, const pa_buffer_attr *attr, int *error)
  	Create a new connection to the server.
 void 	pa_simple_free (pa_simple *s)
@@ -24,9 +22,7 @@ int 	pa_simple_read (pa_simple *s, void *data, size_t bytes, int *error)
 pa_usec_t 	pa_simple_get_latency (pa_simple *s, int *error)
  	Return the playback latency.
 int 	pa_simple_flush (pa_simple *s, int *error)
- 	Flush the playback buffer. 
-
-
+ 	Flush the playback buffer.
 ```
 
 ###  Play a file 
@@ -47,8 +43,7 @@ onto `stdin`and then reads from `stdin`. This isn't
 necessary - what not just read from the original file descriptor?
 
 ```cpp
-
-      /***
+/***
  *   This file is part of PulseAudio.
  *
  *   PulseAudio is free software; you can redistribute it and/or modify
@@ -167,10 +162,6 @@ finish:
 
     return ret;
 }
-
-
-
-      
 ```
 
 ###  Record to a file 
@@ -189,8 +180,7 @@ the data, using a pa_sample_spec. Two channel, 44100hz and
 PCM 16 bit little-endian is chosen.
 
 ```cpp
-
-      /***
+/***
   This file is part of PulseAudio.
 
   PulseAudio is free software; you can redistribute it and/or modify
@@ -286,8 +276,6 @@ finish:
 
     return ret;
 }
-
-      
 ```
 
 
@@ -314,8 +302,6 @@ microphone to the speaker using a record and a playback stream.
 The program is [pa-mic-2-speaker-simple.c](pa-mic-2-speaker-simple.c) :
 
 ```cpp
-
-      
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -408,10 +394,6 @@ finish:
 
     return ret;
 }
-
-
-
-      
 ```
 
 

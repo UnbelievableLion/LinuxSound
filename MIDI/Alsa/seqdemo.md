@@ -5,9 +5,7 @@
 The code for seqdemo.c is
 
 ```cpp
-
-      
-      /* seqdemo.c by Matthias Nagorni */
+/* seqdemo.c by Matthias Nagorni */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,7 +78,4 @@ int main(int argc, char *argv[]) {
     }  
   }
 }
-
-      
-    
 ```

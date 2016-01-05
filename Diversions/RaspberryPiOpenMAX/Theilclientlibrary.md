@@ -36,9 +36,7 @@ enabled state. So wait for that to occur, to ensure that
 it does. Typical code is
 
 ```cpp
-
-	
-    // enable output port of decoder
+// enable output port of decoder
     OMX_SendCommand(decoder->imageDecoder->handle,
 		    OMX_CommandPortEnable,
 		    decoder->imageDecoder->outPort, NULL);
@@ -64,8 +62,6 @@ it does. Typical code is
 			    decoder->imageDecoder->outPort, 1, 0,
 			    TIMEOUT_MS);
     printf("Decoder output port enabled\n");
-	
-      
 ```
 
 ###  ilclient errors 
@@ -75,14 +71,10 @@ Calls to the `ilclient`library will sometimes
 throw error messages such as this
 
 ```
-
-	
 assertion failure:ilclient.c:747:ilclient_change_component_state():error == OMX_ErrorNone
 
 Program received signal SIGABRT, Aborted.
 0xb6e41bfc in raise () from /lib/arm-linux-gnueabihf/libc.so.6
-	
-      
 ```
 
 
@@ -95,17 +87,13 @@ inside a debugger such as `gdb`and when it stops,
 ask for a backtrace:
 
 ```
-
-	
 (gdb) where
 #0  0xb6e41bfc in raise () from /lib/arm-linux-gnueabihf/libc.so.6
 #1  0xb6e4597c in abort () from /lib/arm-linux-gnueabihf/libc.so.6
 #2  0xb6f825a4 in ?? () from /opt/vc/lib/libvcos.so
 #3  0xb6f825a4 in ?? () from /opt/vc/lib/libvcos.so
 Backtrace stopped: previous frame identical to this frame (corrupt stack?)
-(gdb) 
-	
-      
+(gdb)
 ```
 
 
@@ -118,8 +106,6 @@ call made: in my case I was trying to change state with
 insufficient resources set:
 
 ```
-
-	
 (gdb) 
 365	    ilclient_change_component_state(decoder->imageRender->component,
 (gdb) step
@@ -130,8 +116,6 @@ ilclient_change_component_state (comp=0x4b150, state=OMX_StateExecuting)
 747	   vc_assert(error == OMX_ErrorNone);
 (gdb) print error
 $1 = OMX_ErrorInsufficientResources
-	
-      
 ```
 
 

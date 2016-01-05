@@ -18,11 +18,7 @@ Karaoke. You can also see the lyrics played in real time
 using the `--trace`option:
 
 ```
-
-	
 timidity -Oj --trace 54154.mid
-	
-      
 ```
 
 

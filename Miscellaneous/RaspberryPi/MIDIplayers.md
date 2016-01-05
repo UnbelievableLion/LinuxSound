@@ -11,8 +11,6 @@ soft float dsitro, but is just about okay on the hard float distro.
 To make the RPi usable, in the `timidity.cfg`file uncomment the lines
 
 ```
-
-	
 ## If you have a slow CPU, uncomment these:
 #opt EFresamp=d         #disable resampling
 #opt EFvlpf=d           #disable VLPF
@@ -24,8 +22,6 @@ To make the RPi usable, in the `timidity.cfg`file uncomment the lines
 #opt p32a               #default to 32 voices with auto reduction
 #opt s32kHz             #default sample frequency to 32kHz
 #opt fast-decay         #fast decay notes
-	
-      
 ```
 
 
@@ -59,12 +55,8 @@ in the following folder:  /etc/security/limits.d
 For example, my user-ID is aere, so the filename I use is: aere.conf
 The file needs to contain the following lines:
 ```
-
-	  
 aere - rtprio 85
 aere - memlock unlimited
-	  
-	
 ```
 
 
@@ -93,11 +85,7 @@ to sample every second
 by the command
 
 ```
-
-	
 perf top -d 1
-	
-      
 ```
 
 
@@ -111,11 +99,7 @@ cases.
 The command `pidstat`can be run by e.g.
 
 ```
-
-	
 pidstat -C fluidsynth -r -u 5
-	
-      
 ```
 
 

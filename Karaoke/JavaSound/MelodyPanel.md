@@ -11,9 +11,6 @@ the relevant part every 50 milliseconds.
 The MelodyPanel is
 
 ```cpp
-
-      
-      
 import java.util.Vector;
 import javax.swing.*;
 import java.awt.*;
@@ -223,7 +220,4 @@ public class MelodyPanel extends JPanel {
     }
 
 }
-
-      
-    
 ```

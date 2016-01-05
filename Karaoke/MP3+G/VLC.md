@@ -14,11 +14,7 @@ Currently VLC cannot adjust pitch, but it does have a plugin to adjust speed
 Once set up, you can send commands such as
 
 ```
-
-	
-rate 1.04	  
-	
-      
+rate 1.04
 ```
 
 
@@ -30,11 +26,7 @@ unchanged.
 Setting up VLC to accept Lua commands from stdin can be done by the command options
 
 ```
-
-	
 vlc -I luaintf --lua-intf cli ...
-	
-      
 ```
 
 

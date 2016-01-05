@@ -5,11 +5,7 @@
 If we choose to use TiMidity as front-end then we need to run it
 
 ```
-
-	
 timidity -d. -iv --trace  --trace-text-meta ...
-	
-      
 ```
 
 
@@ -26,12 +22,8 @@ into TiMidity, but just requires (shortly after initialising
 the library)
 
 ```cpp
-
-	
 extern int opt_trace_text_meta_event;
 opt_trace_text_meta_event = 1;
-	
-      
 ```
 
 

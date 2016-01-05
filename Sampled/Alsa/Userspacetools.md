@@ -33,19 +33,13 @@ This command allows you to test which outputs go where.
 For e.g. 5 channel sound, running
 
 ```
-
-	
 speaker-test -t wav -c 5
-	
-      
 ```
 
 
 will produce on my default sound card the text and audio of
 
 ```
-
-	
 speaker-test 1.0.25
 
 Playback device is default
@@ -64,8 +58,6 @@ was set buffer_size = 419428
  3 - Rear Right
  4 - Center
 Time per period = 12.948378
-	
-      
 ```
 
 
@@ -77,22 +69,14 @@ It will also play the phrases "Front Left" etc to the relevant spekaer.
 Play a file or record to a file. To play the microphone to the speaker,
 
 ```
-
-	
 arecord -r 44100 --buffer-size=128 | aplay --buffer-size=128
-	
-      
 ```
 
 
 or to record it to file
 
 ```
-
-
-	arecord -f dat -d 20 -D hw:0,0 test.wav
-
-
+arecord -f dat -d 20 -D hw:0,0 test.wav
 ```
 
 
@@ -105,8 +89,6 @@ The simplest ways are to run `aplay`and `arecord`with the '-l' option:
 
 +  `arecord -l`
 ```
-
-	    
 **** List of CAPTURE Hardware Devices ****
 card 0: PCH [HDA Intel PCH], device 0: STAC92xx Analog [STAC92xx Analog]
   Subdevices: 1/1
@@ -114,14 +96,10 @@ card 0: PCH [HDA Intel PCH], device 0: STAC92xx Analog [STAC92xx Analog]
 card 2: Pro [SB X-Fi Surround 5.1 Pro], device 0: USB Audio [USB Audio]
   Subdevices: 1/1
   Subdevice #0: subdevice #0
-	    
-	  
 ```
 
 +  `aplay -l`
 ```
-
-	    
 **** List of PLAYBACK Hardware Devices ****
 card 0: PCH [HDA Intel PCH], device 0: STAC92xx Analog [STAC92xx Analog]
   Subdevices: 1/1
@@ -141,8 +119,6 @@ card 2: Pro [SB X-Fi Surround 5.1 Pro], device 0: USB Audio [USB Audio]
 card 2: Pro [SB X-Fi Surround 5.1 Pro], device 1: USB Audio [USB Audio #1]
   Subdevices: 1/1
   Subdevice #0: subdevice #0
-	    
-	  
 ```
 
 
@@ -164,8 +140,6 @@ For example, the "hdmi" alias is defined on my system in
 the configuration file ` /etc/asound.conf`
 
 ```
-
-	
 pcm.hdmi0 {
         type hw
         card 1
@@ -180,8 +154,6 @@ pcm.hdmi2 {
         type hw
         card 1
         device 8 }
-	
-      
 ```
 
 
@@ -192,8 +164,6 @@ Other aliases may be defined to cover a range of devices, parameterised by
 card and device. For example, `/usr/share/alsa/pcm/surround40.conf`defines
 
 ```
-
-	
 pcm.!surround40 {
         @args [ CARD DEV ]
         @args.CARD {
@@ -226,8 +196,6 @@ pcm.!surround40 {
         }
         ...
 }
-	
-      
 ```
 
 
@@ -242,8 +210,6 @@ The set of aliases can be shown using `aplay`and `arecord`:
 
 + The output from `aplay -L`on my system is
 ```
-
-	
 default
     Default
 sysdefault:CARD=PCH
@@ -300,14 +266,10 @@ surround71:CARD=Pro,DEV=0
 iec958:CARD=Pro,DEV=0
     SB X-Fi Surround 5.1 Pro, USB Audio
     IEC958 (S/PDIF) Digital Audio Output
-	
-      
 ```
 
 + The output from `arecord -L`is
 ```
-
-	    
 default
     Default
 sysdefault:CARD=PCH
@@ -355,8 +317,6 @@ surround71:CARD=Pro,DEV=0
 iec958:CARD=Pro,DEV=0
     SB X-Fi Surround 5.1 Pro, USB Audio
     IEC958 (S/PDIF) Digital Audio Output
-	    
-	  
 ```
 
 
@@ -381,8 +341,6 @@ It is a shell script that gives an enormous amount of information.
 Here is a heavily elided subset of the information:
 
 ```
-
-	
 upload=true&script=true&cardinfo=
 !!################################
 !!ALSA Information Script v 0.4.60
@@ -649,8 +607,6 @@ state.PCH {
 		}
 	}
 ...
-	
-      
 ```
 
 
@@ -669,11 +625,7 @@ To play a file to an ALSA device using `mplayer`,
 use code such as
 
 ```
-
-	
 mplayer -ao alsa:device=hw=1.0 -srate 48000  bryan.mp3
-	
-      
 ```
 
 
@@ -686,11 +638,7 @@ To play a file to an ALSA device using `vlc`,
 use code such as
 
 ```
-
-	
 vlc --aout alsa ...
-	
-      
 ```
 
 
@@ -703,11 +651,7 @@ To play a file to an ALSA device using `timidity`,
 use code such as
 
 ```
-
-	
 timidity -Os ...
-	
-      
 ```
 
 

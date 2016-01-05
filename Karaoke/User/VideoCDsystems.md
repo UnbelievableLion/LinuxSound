@@ -27,11 +27,7 @@ VCD disk.
 This may be in your package system, or you can download it from the [GNU developer site](http://www.gnu.org/software/vcdimager/) and build it from source. The video files can then be extracted as MPEG or AVI files by
 
 ```
-
-	
-	  vcdxrip --cdrom-device=/dev/cdrom --rip
-	
-      
+vcdxrip --cdrom-device=/dev/cdrom --rip
 ```
 
 

@@ -22,7 +22,6 @@ This program is just a repeat of the program seen in the chapter
 on [FluidSynth MIDI](../../MIDI/FluidSynth/) .
 
 ```cpp
-
 #include <fluidsynth.h>
 #include <fluid_midi.h>
 
@@ -60,9 +59,6 @@ int main(int argc, char** argv)
     delete_fluid_settings(settings);
     return 0;
 }
-
-
-      
 ```
 
 

@@ -12,9 +12,7 @@ In turn, it passes these to a MidiGUI to show them.
 This class is
 
 ```cpp
-
-      
-      /**
+/**
  * DisplayReceiver
  *
  * Acts as a Midi receiver to the default Java Midi sequencer.
@@ -106,7 +104,4 @@ public class DisplayReceiver implements Receiver,
     }
 
 }
-
-      
-    
 ```

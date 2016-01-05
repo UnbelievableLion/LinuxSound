@@ -9,10 +9,6 @@ Each mixer has a set of target (output) lines and source
 The program is DeviceInfo.java:
 
 ```cpp
-
-      
-
-
 import javax.sound.sampled.*;
 
 public class DeviceInfo {
@@ -40,16 +36,12 @@ public class DeviceInfo {
 	}
     }
 }
-      
-    
 ```
 
 
 A part of the output on my system is
 
 ```
-
-	
 Mixers:
    PulseAudio Mixer, version 0.02
       Source lines
@@ -84,8 +76,6 @@ Mixers:
         interface SourceDataLine supporting 96 audio formats, and buffers of at least 32 bytes
         interface Clip supporting 96 audio formats, and buffers of at least 32 bytes
       Target lines
-	
-      
 ```
 
 

@@ -11,11 +11,7 @@ In the AndroidManifest file this is
 given by
 
 ```
-
-	
-	  <uses-permission android:name="android.permission.INTERNET"/>
-	
-      
+<uses-permission android:name="android.permission.INTERNET"/>
 ```
 
 

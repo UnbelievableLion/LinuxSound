@@ -13,8 +13,6 @@ from [An ffmpeg and SDL Tutorial](http://dranger.com/ffmpeg/) by Stephen Dranger
 The program is `play_video.c`:
 
 ```cpp
-
-	
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
@@ -193,7 +191,4 @@ main(int argc, char **argv) {
     return 0;
 
 }
-
-
-      
 ```

@@ -14,11 +14,7 @@ The Jack framework will talk to these as
 specified on starting the Jack server
 
 ```
-
-	
 jackd -dalsa
-	
-      
 ```
 
 
@@ -26,7 +22,6 @@ If you do want to worry, the examples directory
 contains ALSA examples. The program `alsa_in.c.ok`brings an ALSA input device into the Jack world
 
 ```cpp
-
 /** @file simple_client.c
  *
  * @brief This simple client demonstrates the basic features of JACK
@@ -827,7 +822,4 @@ int main (int argc, char *argv[]) {
     jack_client_close (client);
     exit (0);
 }
-
-
-      
 ```

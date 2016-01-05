@@ -6,11 +6,7 @@ Well, it's not hard...
 
 + In order to pull out the lyrics form a KAR or MIDI file, use the Java `DumpSequence`given in the [MIDI - JavaSound](../../MIDI/JavaSound/) chapter, as in
 ```
-
-	    
 java DumpSequence  song.kar  > song.dump
-	    
-	  
 ```
 
 
@@ -19,9 +15,7 @@ to get a dump of all events
 + For line-only display, use the following Python script to extract the lyrics and
 save them in ASS format
 ```
-
-	
-      #!/usr/bin/python
+#!/usr/bin/python
 
 
 import fileinput
@@ -119,29 +113,19 @@ for line in fileinput.input():
 
     if len(words) >= 3 and words[2] == "Text":
         doLyric(words)
-
-
-	
-      
 ```
 
 
 as in
 
 ```
-
-	
 python lyric2ass4kar.py song.dump > song.ass
-	
-      
 ```
 
 + For fill lyrics display, use the following Python script to extract the lyrics and
 save them in ASS format
 ```
-
-	
-      #!/usr/bin/python
+#!/usr/bin/python
 
 
 import fileinput
@@ -266,29 +250,19 @@ for line in fileinput.input():
 
     if len(words) >= 3 and words[2] == "Text":
         doLyric(words)
-
-
-	
-      
 ```
 
 
 as in
 
 ```
-
-	
 python lyric2karaokeass4kar.py song.dump > song.ass
-	
-      
 ```
 
 + For multiline lyrics display, use the following Python script to extract the lyrics and
 save them in ASS format
 ```
-
-	
-      #!/usr/bin/python
+#!/usr/bin/python
 
 
 import fileinput
@@ -435,51 +409,30 @@ for line in fileinput.input():
 
     if len(words) >= 3 and words[2] == "Text":
         doLyric(words)
-        
-
-
-	
-      
 ```
 
 
 as in
 
 ```
-
-	
 python lyric2karaokeass4kar.py song.dump > song.ass
-	
-      
 ```
 
 + Convert the MIDI sound file to a WAV file using `fluidsynth`:
 ```
-
-	    
 fluidsynth -F song.wav /usr/share/sounds/sf2/FluidR3_GM.sf2 song.kar
-	    
-	  
 ```
 
 + Convert the WAV file to MP3:
 ```
-
-	    
 lame song.wav song.mp3
-	    
-	  
 ```
 
 + Find a suitable video-only file for your background -
 I used one off my Karaoke disks - and then merge
 then into an MKV file:
 ```
-
-	    
 mkvmerge -o 54154.mkv 54154.mp3 54154.ass BACK01.MPG
-	    
-	  
 ```
 
 
@@ -490,11 +443,7 @@ The resultant MKV file can then by played as a standalone
 file by MPlayer:
 
 ```
-
-	
 mplayer song.mkv
-	
-      
 ```
 
 
@@ -502,11 +451,7 @@ It can also be played by VLC, but only with the ASS file
 present
 
 ```
-
-	
 vlc song.mkv
-	
-      
 ```
 
 

@@ -53,8 +53,6 @@ The program is `ogg_decode.c`. it reads from an Ogg
 Vorbis file and saves in a PCM file.
 
 ```cpp
-
-	
 /**
    Based on code
    Copyright (C) 2007-2009 STMicroelectronics
@@ -563,9 +561,6 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Buffers emptied\n");
     exit(0);
 }
-
-	
-    
 ```
 
 ###  Playing an Ogg Vorbis file 
@@ -589,8 +584,6 @@ characteristics of each component:
 
 + __ `OMX.limoi.ogg_dec`__: 
 ```
-
-	     
 Component name: OMX.limoi.ogg_dec version 0.0, Spec version 1.1
 Audio ports:
   Ports start on 0
@@ -612,14 +605,10 @@ LIM doesn't set audio formats properly
 Error in getting video OMX_PORT_PARAM_TYPE parameter
 Error in getting image OMX_PORT_PARAM_TYPE parameter
 Error in getting other OMX_PORT_PARAM_TYPE parameter
-	     
-	   
 ```
 
 + __ `OMX.limoi.alsa_sink`__: 
 ```
-
-	    
 Component name: OMX.limoi.alsa_sink version 0.0, Spec version 1.1
 Audio ports:
   Ports start on 0
@@ -634,8 +623,6 @@ LIM doesn't set audio formats properly
 Error in getting video OMX_PORT_PARAM_TYPE parameter
 Error in getting image OMX_PORT_PARAM_TYPE parameter
 Error in getting other OMX_PORT_PARAM_TYPE parameter
-	    
-	  
 ```
 
 
@@ -654,14 +641,10 @@ if we had the same number of buffers at each stage!
 But if you look at the example LIM code `limoi-core/test/decode.c`you see the following:
 
 ```
-
-	
-        port_def.nBufferCountActual = 2;
+port_def.nBufferCountActual = 2;
         port_def.nBufferCountMin = 2;
         port_def.nBufferSize = bytes;
         OMX_SetParameter(comp, OMX_IndexParamPortDefinition, &port_def);
-	
-      
 ```
 
 
@@ -710,8 +693,6 @@ emptying properly.
 The code is [play_ogg.c](OpenMAX_IL/LIM/play_ogg.c) 
 
 ```cpp
-
-	
 /**
    Contains code
    Copyright (C) 2007-2009 STMicroelectronics
@@ -1347,7 +1328,4 @@ int main(int argc, char** argv) {
     printf("Buffers emptied\n");
     exit(0);
 }
-
-	
-    
 ```

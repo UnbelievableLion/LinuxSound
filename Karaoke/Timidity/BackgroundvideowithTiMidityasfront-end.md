@@ -5,13 +5,9 @@
 The interface needs to be built as a shared library by
 
 ```
-
-	
 if_video.so: video_code.c
         gcc  -fPIC $(CFLAGS) -c -o video_code.o video_code.c $(LIBS)
         gcc -shared -o if_video.so video_code.o $(LIBS)
-	
-      
 ```
 
 
@@ -21,11 +17,7 @@ if_video.so: video_code.c
 TiMidity is then run with options
 
 ```
-
-	
-timidity -d. -iv --trace  --trace-text-meta 
-	
-      
+timidity -d. -iv --trace  --trace-text-meta
 ```
 
 

@@ -11,7 +11,6 @@ It also adds in a "NEW" tab to add additional users.
 The code for `AllFavourites`is
 
 ```cpp
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -94,6 +93,4 @@ public class AllFavourites extends JTabbedPane {
 	}
     }
 }
-
-      
 ```

@@ -20,22 +20,14 @@ It can also be used to record from ALSA devices such as hw:0 or the default devi
 Recording from hw:0 can be done by
 
 ```
-
-	
 ffmpeg -f alsa -i hw:0 test.mp3
-	
-      
 ```
 
 
 and from the default ALSA input by
 
 ```
-
-	
 ffmpeg -f alsa -i default test.mp3
-	
-      
 ```
 
 
@@ -51,11 +43,7 @@ GStreamer allows you to build "pipelines" that can be played using `gst-launch`.
 For example, to play an MP3 file using ALSA you would have the pipeline
 
 ```
-
-	
 gst-launch filesrc location="concept.mp3" ! decodebin ! alsasink
-	
-      
 ```
 
 
@@ -66,9 +54,5 @@ A tutorial is [Multipurpose multimedia processing with GStreamer](http://www.ibm
 It can also play MIDI files by e.g.
 
 ```
-
-	
 gst-launch filesrc location="rehab.mid" ! decodebin ! alsasink
-	
-      
 ```

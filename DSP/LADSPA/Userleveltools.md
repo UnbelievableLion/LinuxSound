@@ -13,8 +13,6 @@ command line tool `listplugins`. By installing
 just LADPSA, the default plugins are
 
 ```
-
-	
 /usr/lib/ladspa/amp.so:
 	Mono Amplifier (1048/amp_mono)
 	Stereo Amplifier (1049/amp_stereo)
@@ -30,8 +28,6 @@ just LADPSA, the default plugins are
 	Sine Oscillator (Freq:control, Amp:control) (1047/sine_fcac)
 /usr/lib/ladspa/noise.so:
 	White Noise Source (1050/noise_white)
-	
-      
 ```
 
 
@@ -39,8 +35,6 @@ More detailed information about each plugin can be found from
 the tool `analyseplugin`. For example for the `amp`plugin,
 
 ```
-
-	
 $analyseplugin amp
 
 Plugin Name: "Mono Amplifier"
@@ -72,8 +66,6 @@ Ports:	"Gain" input, control, 0 to ..., default 1, logarithmic
 	"Output (Left)" output, audio
 	"Input (Right)" input, audio
 	"Output (Right)" output, audio
-	
-      
 ```
 
 
@@ -81,15 +73,11 @@ A simple test of each plugin can be performed using `applyplugin`. When run with
 it gives a usage message:
 
 ```
-
-	
 $applyplugin 
 Usage:	applyplugin [flags] <input Wave file> <output Wave file>
 	<LADSPA plugin file name> <plugin label> <Control1> <Control2>...
 	[<LADSPA plugin file name> <plugin label> <Control1> <Control2>...]...
 Flags:	-s<seconds>  Add seconds of silence after end of input file.
-	
-      
 ```
 
 
@@ -100,9 +88,5 @@ controls. For the `amp`plugin, the file name is `amp.so`, the stereo plugin is `
 and one. To halve the volume of a file containing stereo WAV data,
 
 ```
-
-	
 applyplugin 54154.wav tmp.wav amp.so amp_stereo 0.5
-	
-      
 ```

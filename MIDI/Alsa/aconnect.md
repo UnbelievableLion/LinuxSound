@@ -8,19 +8,13 @@ I have set two clients running: Timidity and
 seqdemo (discussed later). The command
 
 ```
-
-	
 aconnect -o
-	
-      
 ```
 
 
 shows
 
 ```
-
-	
 client 14: 'Midi Through' [type=kernel]
     0 'Midi Through Port-0'
 client 128: 'TiMidity' [type=user]
@@ -30,24 +24,18 @@ client 128: 'TiMidity' [type=user]
     3 'TiMidity port 3 '
 client 129: 'ALSA Sequencer Demo' [type=user]
     0 'ALSA Sequencer Demo'
-	
-      
 ```
 
 
 When run with the -i option it produces
 
 ```
-
-      
 $aconnect -i
 client 0: 'System' [type=kernel]
     0 'Timer           '
     1 'Announce        '
 client 14: 'Midi Through' [type=kernel]
     0 'Midi Through Port-0'
-      
-    
 ```
 
 
@@ -55,11 +43,7 @@ The program `aconnect`can establish a connection
 between input and output clients by
 
 ```
-
-      
 aconnect in out
-      
-    
 ```
 
 
@@ -67,9 +51,7 @@ The code for aconnect.c is
 from [SourceArchive](http://alsa-utils.sourcearchive.com/documentation/1.0.8-4/aconnect_8c-source.html) 
 
 ```cpp
-
-      
-      /*
+/*
  ** connect / disconnect two subscriber ports
  **   ver.0.1.3
  **
@@ -471,8 +453,4 @@ int main(int argc, char **argv)
 
       return 0;
 }
-
-
-      
-    
 ```

@@ -38,15 +38,11 @@ when the two components are in the Loaded state or when the
 ports are disabled. The call `OMX_SetupTunnel`will then connect the two ports as in
 
 ```
-
-	
-    // establish tunnel between decoder output and resizer input
+// establish tunnel between decoder output and resizer input
     OMX_SetupTunnel(decoder->imageDecoder->handle,
 		    decoder->imageDecoder->outPort,
 		    decoder->imageResizer->handle,
 		    decoder->imageResizer->inPort);
-	
-      
 ```
 
 

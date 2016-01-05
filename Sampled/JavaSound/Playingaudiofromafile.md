@@ -27,9 +27,7 @@ The UML class diagram for the relevant classes is
 ![alt text](PlayAudioFile.png)
 
 ```cpp
-
-      
-      import java.io.File;
+import java.io.File;
 import java.io.IOException;
      
 import javax.sound.sampled.AudioFormat;
@@ -135,8 +133,4 @@ public class PlayAudioFile {
 	}
     } // playAudioStream
 } // PlayAudioFile
-
-
-      
-    
 ```

@@ -14,7 +14,6 @@ Once a port name is found it can be turned into a `jack_port_t`and its propertie
 A program to do this is `listports.c`:
 
 ```cpp
-
 /** @file delay.c
  *
  * @brief This client delays one channel by 4096 framse.
@@ -132,6 +131,4 @@ main ( int argc, char *argv[] )
     jack_client_close ( client );
     exit ( 0 );
 }
-
-      
 ```

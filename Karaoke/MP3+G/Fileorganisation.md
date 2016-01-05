@@ -33,9 +33,7 @@ A string representing a file location in, say, a Linux
 or a Windows file system can be turned into a `Path`object by
 
 ```cpp
-
 Path startingDir = FileSystems.getDefault().getPath(dirString);
-      
 ```
 
 
@@ -44,16 +42,12 @@ at each point. The visitor is a subclass of `SimpleFileVisitor<Path>`and for lea
 method
 
 ```cpp
-
 public FileVisitResult visitFile(Path file, BasicFileAttributes attr)
-      
 ```
 
 ```cpp
-
 Visitor pf = new Visitor();
 Files.walkFileTree(startingDir, pf);
-      
 ```
 
 

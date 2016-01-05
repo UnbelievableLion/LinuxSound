@@ -45,9 +45,7 @@ If they are concatenated then they are the song number.
 For example, for the song Medley One, the record is
 
 ```
-
 00 00 00 6D 6F 00 00 00 00 04 07 20 00 02 02 01 35 01 7C A8 9E 02 02 00 0A
-      
 ```
 
 
@@ -62,24 +60,20 @@ The earliest English song is 20001 "7Days" and the last one is
 We currently have
 
 ```
-
 11    language
 15-17 song number
 19,20 offset into song title table
 21,22 offset into artist name table?
 25    length of title
-      
 ```
 
 
 e.g. for Medley One
 
 ```
-
 00 00 00 6D 6F 00 00 00 00 04 07 20 00 02 02 01 35 01 7C A8 9E 02 02 00 0A
                               07          02 01 35 01 7C    9E 02
-                              La          SongNumb SongT    Artis 
-      
+                              La          SongNumb SongT    Artis
 ```
 
 
@@ -89,9 +83,6 @@ I don't at present know what else is in these records.
 A program to list the titles is `SongTitles.java`:
 
 ```cpp
-
-
-
 import java.io.FileInputStream;
 import java.io.*;
 import java.nio.charset.Charset;
@@ -229,7 +220,6 @@ class SongTitles {
 	return true;
     }
 }
-      
 ```
 
 

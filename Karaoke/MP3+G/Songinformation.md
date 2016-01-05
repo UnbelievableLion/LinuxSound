@@ -9,11 +9,7 @@ has to be pulled out of the the file path of the song.
 In my current setup, files look like
 
 ```
-
-	
 /server/KARAOKE/Sonken/SK-50154 - Crosby, Stills - Carry On.mp3
-	
-      
 ```
 
 
@@ -23,7 +19,6 @@ Reasonably straight-forward pattern matching code can
 extract these parts:
 
 ```cpp
-
 Path file = ...
 String fname = file.getFileName().toString();
 if (fname.endsWith(".zip") || 
@@ -41,7 +36,6 @@ if (fname.endsWith(".zip") ||
 						   index,
 						   title,
 						   artist);
-      
 ```
 
 
@@ -54,11 +48,9 @@ of a string against the various fields. For example,
 to check if a title matches,
 
 ```cpp
-
 public boolean titleMatch(String pattern) {
     return title.matches("(?i).*" + pattern + ".*");
 }
-      
 ```
 
 
@@ -70,8 +62,6 @@ See [Java Regex Tutorial](http://www.vogella.com/articles/JavaRegularExpressions
 The complete `SongInformation`file is
 
 ```cpp
-
-
 import java.nio.file.Path;
 import java.io.Serializable;
 
@@ -122,6 +112,4 @@ public class SongInformation implements Serializable {
 	return index.equals(pattern);
     }
 }
-
-      
 ```

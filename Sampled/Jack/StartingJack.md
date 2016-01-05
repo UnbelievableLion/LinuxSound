@@ -6,11 +6,7 @@ The Jack server is `jackd`. It has one required parameter which
 is the sound backend such as ALSA. The minimal command is
 
 ```
-
-	
 jackd -dalsa
-	
-      
 ```
 
 
@@ -20,11 +16,7 @@ stopped, or at least paused while you run Jack. See the previous chapter
 for stopping PulseAudio, To pause it, I usually run this in a terminal window:
 
 ```
-
-	
 pasuspender cat
-	
-      
 ```
 
 
@@ -36,11 +28,7 @@ you enter ctrl-d.
 to run without it, use the option
 
 ```
-
-	
 jackd --no-realtime -dalsa
-	
-      
 ```
 
 
@@ -48,21 +36,13 @@ If you want to run with the realtime scheduler, there are several ways:
 
 + Run the server from the root user
 ```
-
-	    
 sudo jackd -dalsa
-	    
-	  
 ```
 
 + Add a user to the `audio`and `jackuser`group by e.g.
 ```
-
-	    
 useradd -G audio newmarch
 useradd -G jackuser newmarch
-	    
-	  
 ```
 (You will need to logout and back in before this takes effect.)
 
@@ -74,8 +54,6 @@ No apparent systemd or upstart scripts exist for Jack, but there are
 instructions about starting Jack at boot time from [Gentoo jack](http://en.gentoo-wiki.com/wiki/JACK#Starting_jack_manually) :
 
 ```
-
-	
 #!/sbin/runscript
  # This programm will be used by init in order to launch jackd with the privileges
  # and id of the user defined into /etc/conf.d/jackd
@@ -123,19 +101,13 @@ instructions about starting Jack at boot time from [Gentoo jack](http://en.gento
  	done
  	svc_start
  }
-	
-      
 ```
 
 
 File: /etc/conf.d/jackd:
 
 ```
-
-  
-
-
- # owner of jackd process (Must be an existing user.)
+# owner of jackd process (Must be an existing user.)
  JACKDUSER="dom"
 
  # .jackdrc location for that user (Must be existing, JACKDUSER can use
@@ -144,9 +116,6 @@ File: /etc/conf.d/jackd:
 
  # logfile (/dev/null for nowhere)
  LOG=/var/log/jackd.log
-
-
-
 ```
 
 
@@ -155,25 +124,14 @@ Create and save those 2 files. Don't forget to adjust JACKDUSER to the wanted us
 We need to make /etc/init.d/jackd executable:
 
 ```
-
-
-
 # chmod +x /etc/init.d/jackd
-
-
-
 ```
 
 
 Adding the script into the default run-level:
 
 ```
-
-
 # rc-update add jackd default
-
-
-
 ```
 
 

@@ -8,11 +8,7 @@ This is explained at [Why is my Audio (Sound) Output not working?](http://raspbe
 I also used the command
 
 ```
-
-	
 sudo amixer cset numid=3 <n>
-	
-      
 ```
 
 

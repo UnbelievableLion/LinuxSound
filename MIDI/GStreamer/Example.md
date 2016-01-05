@@ -2,11 +2,7 @@
 ##  Example 
 
 ```
-
-
 gst-launch-0.10 filesrc location="rehab.mid" ! decodebin ! alsasink
-
-
 ```
 
 ***

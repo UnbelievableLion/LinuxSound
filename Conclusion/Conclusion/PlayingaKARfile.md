@@ -16,8 +16,7 @@ registered with Jack, and then call `jack-connect`to link it to `jack-rack`.
 The shell script is `playKar`:
 
 ```sh
-
-	#!/bin/bash
+#!/bin/bash
 set -x
 
 HTTP=http:/
@@ -62,8 +61,6 @@ fi
     wait %1
     cd ../Karaoke
 fi
-
-      
 ```
 
 

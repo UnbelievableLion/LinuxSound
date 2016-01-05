@@ -5,9 +5,7 @@
 Best so far: http://stackoverflow.com/questions/2413426/playing-an-arbitrary-tone-with-android
 
 ```
-
-
-    void playSound(){
+void playSound(){
         final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
                 sampleRate, AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
@@ -15,8 +13,6 @@ Best so far: http://stackoverflow.com/questions/2413426/playing-an-arbitrary-ton
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
         audioTrack.play();
     }
-
-
 ```
 
 
@@ -40,9 +36,7 @@ instead of to a file.
 The code is PlayMicrophone.java:
 
 ```cpp
-
-      
-      package jan.newmarch.playmicrophone;
+package jan.newmarch.playmicrophone;
 
 import java.io.FileOutputStream;
 
@@ -210,9 +204,6 @@ public class PlayMicrophoneActivity extends Activity {
 	}
 
 }
-
-      
-    
 ```
 
 
@@ -221,11 +212,7 @@ In the AndroidManifest file this is
 given by
 
 ```
-
-	
-	  <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-	
-      
+<uses-permission android:name="android.permission.RECORD_AUDIO"/>
 ```
 
 

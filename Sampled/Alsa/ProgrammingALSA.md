@@ -38,15 +38,11 @@ Finding information about hardware cards and devices is a multi-step operation.
 The hardware cards first have to be identified. This is done using the [Control interface](http://www.alsa-project.org/alsa-doc/alsa-lib/group___control.html) functions. The ones used are
 
 ```
-
-	
 snd_card_next
 snd_ctl_open
 snd_ctl_pcm_next_device
 snd_ctl_card_info_get_id
 snd_ctl_card_info_get_name
-	
-      
 ```
 
 
@@ -61,11 +57,7 @@ from that using functions such as `snd_ctl_card_info_get_name`.
 In the program that follows, this gives information such as
 
 ```
-
-	
 card 0: PCH [HDA Intel PCH]
-	
-      
 ```
 
 
@@ -89,7 +81,6 @@ The program to find and display card and hardware device information is
 aplay-l.c:
 
 ```cpp
-
 /**
  * aplay-l.c
  *
@@ -206,8 +197,6 @@ main (int argc, char *argv[])
   device_list(SND_PCM_STREAM_CAPTURE);
   device_list(SND_PCM_STREAM_PLAYBACK);
 }
-
-      
 ```
 
 
@@ -217,8 +206,6 @@ main (int argc, char *argv[])
 The output from running `aplay-l`on my system is
 
 ```
-
-	
 **** List of CAPTURE Hardware Devices ****
 card 0: [hw:0,0] PCH [HDA Intel PCH], device 0: STAC92xx Analog [STAC92xx Analog]
   Subdevices: 1/1
@@ -236,8 +223,6 @@ card 1: [hw:1,7] NVidia [HDA NVidia], device 7: HDMI 1 [HDMI 1]
 card 1: [hw:1,8] NVidia [HDA NVidia], device 8: HDMI 2 [HDMI 2]
   Subdevices: 1/1
   Subdevice #0: subdevice #0
-	
-      
 ```
 
 ###  PCM device information
@@ -254,7 +239,6 @@ a pointer to the start of the string/table so that it can be freed.
 The source for this is aplay-L.c:
 
 ```cpp
-
 /**
  * aplay-L.c
  *
@@ -343,8 +327,6 @@ main (int argc, char *argv[])
   printf("\n\n*********** PLAYBACK ***********\n");
   pcm_list(SND_PCM_STREAM_PLAYBACK);
 }
-
-      
 ```
 
 
@@ -354,8 +336,6 @@ main (int argc, char *argv[])
 The outputfrom running `aplay-L`on my system is
 
 ```
-
-	
 *********** CAPTURE ***********
 default
     Default
@@ -419,8 +399,6 @@ surround51:CARD=PCH,DEV=0
 surround71:CARD=PCH,DEV=0
     HDA Intel PCH, STAC92xx Analog
     7.1 Surround output to Front, Center, Side, Rear and Woofer speakers
-	
-      
 ```
 
 
@@ -466,11 +444,9 @@ buffer
 + __Period size__: The number of frames in between each hardware interrupt.
 These are related in the following way:
 ```
-
 Period time = period size x time per frame
             = period size x time per sample
             = period size / sampling rate
-	  
 ```
 So for example if the sampling rate is 48000hz stereo
 and the period size is 8192 frames, then the time between
@@ -479,11 +455,9 @@ hardware interrupts is 8192 / 48000 seconds = 170.5 millseconds
 + __Buffer time__: Time for one buffer
 + __Buffer size__: Size of the buffer in frames. Again there is a relationship
 ```
-
 Time of one buffer =  buffer size in frames x time for one frame
                    = buffer size x number of channels x time for one sample
                    = buffer size x number of channels / sample rate
-	  
 ```
 The buffer size should be a multiple of the period size, and is typically
 twice as big.
@@ -495,7 +469,6 @@ A program to find the range of values of various parameters from the
 initial state is device-info.c:
 
 ```cpp
-
 /**
  * Jan Newmarch
  */
@@ -665,8 +638,6 @@ main (int argc, char *argv[])
 
   exit (0);
 }
-
-      
 ```
 
 
@@ -676,8 +647,6 @@ main (int argc, char *argv[])
 The output from `device-info hw:0`on my system is
 
 ```
-
-	
 *********** CAPTURE ***********
 max channels 2
 min channels 2
@@ -708,8 +677,6 @@ min buffer time 166 usecs
 max buffer time 23777234 usecs
 min buffer size in frames 32
 max buffer size in frames 1048576
-	
-      
 ```
 
 
@@ -721,8 +688,6 @@ The output from `device-info plughw:0`shows how the software
 wrapper can give a wider range of possible values:
 
 ```
-
-	
 *********** CAPTURE ***********
 max channels 10000
 min channels 1
@@ -753,8 +718,6 @@ min buffer time 1 usecs
 max buffer time -1 usecs
 min buffer size in frames 1
 max buffer size in frames -2
-	
-      
 ```
 
 
@@ -774,7 +737,6 @@ A line-by-line breakdown is at [ALSA Tutorial Part 1 - Initialization](http://so
 The following program is from Paul Davis [A Tutorial on Using the ALSA Audio API](http://equalarea.com/paul/alsa-audio.html) alsa_capture.c:
 
 ```cpp
-
 /**
  * alsa_capture.c
  */
@@ -906,8 +868,6 @@ main (int argc, char *argv[])
   snd_pcm_close (capture_handle);
   exit(0);
 }
-
-      
 ```
 
 
@@ -961,7 +921,6 @@ The call to `readi`reads interlaced data.
 The following program is from Paul Davis [A Tutorial on Using the ALSA Audio API](http://equalarea.com/paul/alsa-audio.html) alsa_playback.c:
 
 ```cpp
-
 /**
  * alsa_playback.c
  */
@@ -1074,8 +1033,6 @@ main (int argc, char *argv[])
   snd_pcm_close (playback_handle);
   exit (0);
 }
-
-      
 ```
 
 
@@ -1087,23 +1044,15 @@ Record by `alsa_capture hw:0 tmp.s16`for example.
 Playback by
 
 ```
-
-	
 sox -c 2 -r 44100 tmp.s16 tmp.wav
 mplayer tmp.wav
-	
-      
 ```
 
 
 or by using the next program
 
 ```
-
-	
 alsa_playback hw:0 tmp.s16
-	
-      
 ```
 
 
@@ -1121,11 +1070,7 @@ The program [/test/latency.c](http://www.alsa-project.org/alsa-doc/alsa-lib/_2te
 on a low setting
 
 ```
-
-	
 latency -m 128 -M 128
-	
-      
 ```
 
 
@@ -1135,11 +1080,7 @@ gave a latency of only 0.93 msecs!
 The "poor" latency test of
 
 ```
-
-	
 latency -m 8192 -M 8192 -t 1 -p
-	
-      
 ```
 
 
@@ -1154,8 +1095,6 @@ files, the other is programmatically.
 The following is [claimed to work](http://www.linuxquestions.org/questions/linux-software-2/alsa-latency-configuration-904689/) in the configuration file `/etc/asound.conf`:
 
 ```
-
-	
 pcm.card0 {
   type hw
   card 0
@@ -1185,8 +1124,6 @@ pcm.dmixer {
     1 1
   }
 }
-	
-      
 ```
 
 
@@ -1202,8 +1139,6 @@ Playback of captured sound involves two handles, possibly for different
 cards. The direct method of just combining two of these in a loop
 
 ```cpp
-
-	
 while (1) {
     int nread;
     if ((nread = snd_pcm_readi (capture_handle, buf, BUF_SIZE)) != BUF_SIZE) {
@@ -1224,9 +1159,7 @@ while (1) {
       }
       snd_pcm_prepare(playback_handle);
     }
-} 
-	
-      
+}
 ```
 
 
@@ -1275,7 +1208,6 @@ two buffers of silence work well.
 The resultant program is playback-capture.c:
 
 ```cpp
-
 /**
  * Jan Newmarch
  */
@@ -1525,8 +1457,6 @@ main (int argc, char *argv[])
   snd_pcm_close (playback_handle);
   exit (0);
 }
-
-      
 ```
 
 

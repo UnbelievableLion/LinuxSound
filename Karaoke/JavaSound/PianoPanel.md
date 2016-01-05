@@ -14,9 +14,6 @@ from the sequencer.
 The PianoPanel is
 
 ```cpp
-
-      
-      
 import java.util.Vector;
 import javax.swing.*;
 import java.awt.*;
@@ -136,6 +133,4 @@ public class PianoPanel extends JPanel {
 
     }
 }
-      
-    
 ```

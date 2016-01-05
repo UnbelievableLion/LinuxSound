@@ -37,10 +37,6 @@ these events as well as other events.
 The MidiPlayer is:
 
 ```cpp
-
-      
-      
-
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
@@ -208,6 +204,4 @@ public class MidiPlayer {
 	System.out.println(strMessage);
     }
 }
-      
-    
 ```

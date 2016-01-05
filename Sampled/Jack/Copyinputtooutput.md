@@ -17,7 +17,6 @@ data from input to corresponding output.
 The code is
 
 ```cpp
-
 /** @file thru_client.c
  *
  * @brief This simple through client demonstrates the basic features of JACK
@@ -235,6 +234,4 @@ main ( int argc, char *argv[] )
     jack_client_close ( client );
     exit ( 0 );
 }
-
-      
 ```

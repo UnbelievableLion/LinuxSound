@@ -66,11 +66,7 @@ So I'm running Jack by hand using a plug device,
 which Jack complains about but works anyway:
 
 ```
-
-	 
 jackd -dalsa -dplughw:2 -r 48000
-	 
-       
 ```
 
 

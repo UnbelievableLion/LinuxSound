@@ -32,12 +32,8 @@ in the following way, it will produce an
 error that the `main`function is not defined:
 
 ```
-
-	
 CFLAGS="-DANOTHER_MAIN" ./configure
 make
-	
-      
 ```
 
 
@@ -54,13 +50,9 @@ I found I needed to also specify which output system I wanted to use,
 such as ALSA:
 
 ```
-
-	
 CFLAGS="-DANOTHER_MAIN" ./configure --enable-audio=alsa
 nake clean
 make
-	
-      
 ```
 
 
@@ -75,12 +67,8 @@ collect all of the object modules into an archive file by
 running this from the top of the TiMidity source directory:
 
 ```
-
-	
 ar cru  libtimidity.a */*.o
 ranlib libtimidity.a
-	
-      
 ```
 
 
@@ -97,16 +85,12 @@ ALSA, before you get mixed up in this other stuff!
 Timidity built with `ANOTHER_MAIN`exposes these public entry points
 
 ```
-
-	
 void timidity_start_initialize(void);
 int timidity_pre_load_configuration(void);
 int timidity_post_load_configuration(void);
 void timidity_init_player(void);
 int timidity_play_main(int nfiles, char **files);
 int got_a_configuration;
-	
-      
 ```
 
 
@@ -124,8 +108,6 @@ object files and library as above.
 A minimal application just wraps our own `main`around the library entry points in `my_main.c`:
 
 ```cpp
-
-
 #include <stdio.h>
 
 extern void timidity_start_initialize(void);
@@ -160,9 +142,6 @@ int main(int argc, char **argv)
 
     return main_ret;
 }
-
-
-      
 ```
 
 
@@ -170,12 +149,8 @@ The compile command needs to bring in the Timidity library
 and any other required library, and is for an ALSA application
 
 ```
-
-	
 my_timidity: my_main.o
         gcc -g -o my_timidity my_main.o libtimidity.a  -lasound -lm
-	
-      
 ```
 
 ###  Playing a background video to a MIDI file 
@@ -209,9 +184,6 @@ and the other to play the TiMidity library and invoke the
 video. The video playing file is `video_code.c`:
 
 ```cpp
-
-
-
 #include <gtk/gtk.h>
 
 #include <libavcodec/avcodec.h>
@@ -480,15 +452,12 @@ void *play_gtk(void *args) {
     printf("About to start gtk_main\n");
     gtk_main();
 }
-
-      
 ```
 
 
 The file `video_player.c`is
 
 ```cpp
-
 #include <string.h>
 
 
@@ -535,6 +504,4 @@ int main(int argc, char** argv)
     play_midi(NULL);    
     return 0;
 }
-
-      
 ```

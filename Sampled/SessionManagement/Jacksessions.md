@@ -12,8 +12,7 @@ It stores the session information as an XML file in whatever directory you save 
 this looks like
 
 ```
-
-	<!DOCTYPE qjackctlSession>
+<!DOCTYPE qjackctlSession>
 <session name="session2">
  <client name="jack_mixer">
   <port type="out" name="MAIN L">
@@ -65,9 +64,6 @@ this looks like
   </port>
  </client>
 </session>
-
-
-      
 ```
 
 

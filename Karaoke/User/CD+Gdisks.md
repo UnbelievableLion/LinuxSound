@@ -34,11 +34,7 @@ to use a program like `cdrdao`to rip the
 files to a binary file and then work on that,
 
 ```
-
-          
- $ cdrdao read-cd --driver generic-mmc-raw --device /dev/cdroms/cdrom0 --read-subchan rw_raw mycd.toc
-          
-        
+$ cdrdao read-cd --driver generic-mmc-raw --device /dev/cdroms/cdrom0 --read-subchan rw_raw mycd.toc
 ```
 
 

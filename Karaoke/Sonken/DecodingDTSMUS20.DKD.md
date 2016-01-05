@@ -18,9 +18,7 @@ strings are the song titles on the DVD.
 A brief selection is
 
 ```
-
-	
-	  Come To Me
+Come To Me
 	  Come To Me Boy
 	  Condition Of My Heart
 	  Fly To The Sky
@@ -28,8 +26,6 @@ A brief selection is
 	  Count Down
 	  Cowboy
 	  Crazy
-	
-      
 ```
 
 
@@ -44,16 +40,12 @@ on the disk. For example, searching for the Beatles "Here Comes The Sun"
 shows the block
 
 ```
-
-	
-	  000AA920  12 D3 88 48 65 72 65 20 43 6F 6D 65 73 20 54 68 ...Here Comes Th
+000AA920  12 D3 88 48 65 72 65 20 43 6F 6D 65 73 20 54 68 ...Here Comes Th
 	  000AA930  65 20 52 61 69 6E 20 41 67 61 69 6E 00 45 75 72 e Rain Again.Eur
 	  000AA940  79 74 68 6D 69 63 73 00 1F 12 D3 89 48 65 72 65 ythmics.....Here
 	  000AA950  20 43 6F 6D 65 73 20 54 68 65 20 53 75 6E 00 42  Comes The Sun.B
 	  000AA960  65 61 74 6C 65 73 00 1B 12 D3 8A 48 65 72 65 20 eatles.....Here
 	  000AA970  46 6F 72 20 59 6F 75 00 46 69 72 65 68 6F 75 73 For You.Firehous
-	
-      
 ```
 
 
@@ -72,9 +64,7 @@ Byte 2 of the header block is 0x12. jim75 at [Decoding JBK 6628 DVD Karaoke Disc
 In there is a list of country codes:
 
 ```
-
-	
-	  00 : KOREAN
+00 : KOREAN
 	  01 : CHINESE( reserved )
 	  02 : CHINESE
 	  03 : TAIWANESE
@@ -95,8 +85,6 @@ In there is a list of country codes:
 	  20 : FRENCH
 	  21 : INDIAN
 	  22 : BRASIL
-	
-      
 ```
 
 
@@ -109,13 +97,9 @@ I've discovered later that the WMA files have their own codes.
 So far I have seen
 
 ```
-
-	
-	  83 : CHINESE WMA
+83 : CHINESE WMA
 	  92 : ENGLISH WMA
 	  94 : PHILIPPINE WMA
-	
-      
 ```
 
 
@@ -188,31 +172,23 @@ Chinese character.
 A Google search for "unicode value of 我" shows me
 
 ```
-
-	
-	  [RESOLVED] Converting Unicode Character Literal to Uint16 variable ...
+[RESOLVED] Converting Unicode Character Literal to Uint16 variable ...
 	  www.codeguru.com › ... › C++ (Non Visual C++ Issues)
 	  5 posts - 2 authors - 1 Jul 2011
 
           I've determined that the unicode character '我' has a hex value of 
           0x6211 by looking it up on the "GNOME Character Map 2.32.1" 
           and if I do this....
-	
-      
 ```
 
 
 and then looking up 0x6211 on [Unicode Search](http://www.khngai.com/chinese/tools/codeunicode.php) gives gold:
 
 ```
-
-	
-	  Unicode	6211 (25105)
+Unicode	6211 (25105)
 	  GB Code	CED2 (4650)
 	  Big 5 Code	A7DA
 	  CNS Code	1-4A3C
-	
-      
 ```
 
 
@@ -269,22 +245,14 @@ in 0001XYZ.
 + If you want to assign an unsigned byte to an int, watch signs again.
 You may need
 ```
-
-	    
-	      n = b ≥ 0 ? b : 256 - b
-	    
-	  
+n = b ≥ 0 ? b : 256 - b
 ```
 
 + To build an unsigned int from 2 unsigned bytes, signs will stuff you again:
 n = (b1 << 8) + b2 will get it wrong if either b1 or b2 is -ve.
 Instead use
 ```
-
-	    
-	      n = ((b1 ≥ 0 ? b1 : 256 - b1) << 8) + (b2 ≥ 0 ? b2 : 256 - b2)
-	    
-	  
+n = ((b1 ≥ 0 ? b1 : 256 - b1) << 8) + (b2 ≥ 0 ? b2 : 256 - b2)
 ```
 (no joke!)
 ####  Classes 
@@ -294,11 +262,6 @@ The song class contains information about a single song and is given here:
 SongInformation.java
 
 ```cpp
-
-	
-      
-
-
 public class SongInformation {
 
 
@@ -388,9 +351,6 @@ public class SongInformation {
 	return language == lang;
     }
 }
-
-	
-      
 ```
 
 
@@ -398,9 +358,6 @@ The song table class holds a list of song information objects and is given by
 SongTable.java
 
 ```cpp
-
-	
-      
 import java.util.Vector;
 import java.io.FileInputStream;
 import java.io.*;
@@ -631,8 +588,6 @@ public class SongTable {
 	System.exit(0);
     }
 }
-	
-      
 ```
 
 
@@ -645,9 +600,6 @@ titles is
 SongTableSwing.java
 
 ```cpp
-
-	
-      
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
@@ -976,8 +928,6 @@ public class SongTableSwing extends JPanel {
 	}
     }
 }
-	
-      
 ```
 
 

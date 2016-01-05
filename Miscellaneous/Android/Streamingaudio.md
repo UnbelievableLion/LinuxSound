@@ -12,9 +12,7 @@ When an app can't stream a file from the web, we have to do silly tricks like
 downloading it locally and then playing it. That code looks like
 
 ```cpp
-
-      
-      package jan.newmarch.HttpPlayer;
+package jan.newmarch.HttpPlayer;
 
 import jan.newmarch.HttpPlayer.R;
 
@@ -98,9 +96,6 @@ public class HttpPlayerActivity extends Activity {
 	}
 
 }
-
-      
-    
 ```
 
 
@@ -109,11 +104,7 @@ In the AndroidManifest file this is
 given by
 
 ```
-
-	
-	  <uses-permission android:name="android.permission.INTERNET"/>
-	
-      
+<uses-permission android:name="android.permission.INTERNET"/>
 ```
 
 

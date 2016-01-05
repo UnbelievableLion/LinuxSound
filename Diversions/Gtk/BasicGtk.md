@@ -12,8 +12,7 @@ The label will hold an integer number.
 The buttons will increase or decrease this number.
 
 ```cpp
-
-	#include <gtk/gtk.h>
+#include <gtk/gtk.h>
 
 	gint count = 0;
 	char buf[5];
@@ -78,7 +77,6 @@ The buttons will increase or decrease this number.
 
 	    return 0;
 	}
-      
 ```
 
 
@@ -92,7 +90,6 @@ and build them into an image which can be displayed.
 The following example is from [CS 23 Software Design and Implementation Lecture notes GTK+ Programming](http://www.cs.dartmouth.edu/~xy/cs23/gtk.html) and shows an image loaded from a file:
 
 ```cpp
-
 #include <gtk/gtk.h>
 
 int main( int argc, char *argv[])
@@ -119,5 +116,4 @@ int main( int argc, char *argv[])
 
 	return 0;
 }
-      
 ```

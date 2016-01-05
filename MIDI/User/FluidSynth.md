@@ -6,11 +6,7 @@
 It runs under ALSA with a command line
 
 ```
-
-	
-	  fluidsynth -a alsa -l <soundfont> <files...>
-	
-      
+fluidsynth -a alsa -l <soundfont> <files...>
 ```
 
 
@@ -24,11 +20,7 @@ set to another soundfont.
 You can use FluidSynth to convert MIDI files to WAV files by
 
 ```
-
-	
-	  fluidsynth -F out.wav /usr/share/sounds/sf2/FluidR3_GM.sf2 myfile.mid
-	
-      
+fluidsynth -F out.wav /usr/share/sounds/sf2/FluidR3_GM.sf2 myfile.mid
 ```
 
 ###  Fluidsynth as a server 
@@ -38,11 +30,7 @@ Fluidsynth can be run as a server in the same way as TiMidity.
 Use
 
 ```
-
-	
 fluidsynth --server --audio-driver=alsa /usr/share/sounds/sf2/FluidR3_GM.sf2
-	
-      
 ```
 
 
@@ -50,9 +38,5 @@ Then `a connect -o`will show the ports and it can
 be played to by e.g.
 
 ```
-
-	
 amidi -p 128:0 <midi-file>
-	
-      
 ```

@@ -13,8 +13,6 @@ implemented using a Java program showing a Swing list.
 The program is `Player.java`:
 
 ```cpp
-
-	
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
@@ -237,7 +235,6 @@ public class Player extends JFrame {
 	}
     }
 }
-      
 ```
 
 

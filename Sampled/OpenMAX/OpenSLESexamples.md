@@ -14,11 +14,7 @@ appropriate function in the structure. The "this" object is always passed in as 
 first parameter of the function as in
 
 ```cpp
-
-	
 (*object) -> method(object, ...)
-	
-      
 ```
 
 
@@ -40,12 +36,8 @@ to `GetInterface()`or `CreateXYZ`on the engine or object.
 For example,
 
 ```cpp
-
-	
 (*engine) -> CreateOutputMix(engine, &output_mix...);
 (*output_mix) -> GetInterface(output_mix, SL_IID_VOLUME, &volume, ...);
-	
-      
 ```
 
 ###  Play audio from a buffer 
@@ -63,9 +55,7 @@ It consists of
 ####  Initialise the system 
 
 ```cpp
-
-	
-    SLresult res;
+SLresult res;
     SLObjectItf sl;
     SLEngineOption EngineOption[] = {
 	(SLuint32) SL_ENGINEOPTION_THREADSAFE,
@@ -74,16 +64,12 @@ It consists of
     CheckErr(res);
     /* Realizing the SL Engine in synchronous mode. */
     res = (*sl)->Realize(sl, SL_BOOLEAN_FALSE); CheckErr(res);
-	
-      
 ```
 
 ####  Prepare a data source 
 
 ```cpp
-
-	
-    /* Local storage for Audio data */
+/* Local storage for Audio data */
     SLint16 pcmData[AUDIO_DATA_STORAGE_SIZE];
     /* put something nito pcmData ... not done here */
 
@@ -100,16 +86,12 @@ It consists of
     pcm.endianness = SL_BYTEORDER_LITTLEENDIAN;
     audioSource.pFormat	= (void *)&pcm;
     audioSource.pLocator    = (void *)&bufferQueue;
-	
-      
 ```
 
 ####  Prepare an output sink 
 
 ```cpp
-
-	
-    for (i=0;i<MAX_NUMBER_INTERFACES;i++)
+for (i=0;i<MAX_NUMBER_INTERFACES;i++)
 	{
 	    required[i] = SL_BOOLEAN_FALSE;
 	    iidArray[i] = SL_IID_NULL;
@@ -120,8 +102,6 @@ It consists of
     // Realizing the Output Mix object in synchronous mode.
     res = (*OutputMix)->Realize(OutputMix, SL_BOOLEAN_FALSE);
     CheckErr(res);
-	
-      
 ```
 
 ####  Set up a callback function to be called when the player needs more data 
@@ -132,8 +112,6 @@ to the start and current position of the data. This is for this application,
 and is not a part of OpenSL
 
 ```cpp
-
-	
 /* Structure for passing information to callback function */
 typedef struct CallbackCntxt_ {
     SLPlayItf playItf;
@@ -143,17 +121,13 @@ typedef struct CallbackCntxt_ {
     // Current adress of local audio data storage
     SLuint32 size;
 } CallbackCntxt;
-	
-      
 ```
 
 
 Then we can set up the output sink and callback data
 
 ```cpp
-
-	
-    /* Setup the data sink structure */
+/* Setup the data sink structure */
     locator_outputmix.locatorType = SL_DATALOCATOR_OUTPUTMIX;
     locator_outputmix.outputMix = OutputMix;
     audioSink.pLocator = (void *)&locator_outputmix;
@@ -162,16 +136,12 @@ Then we can set up the output sink and callback data
     cntxt.pDataBase = (void*)&pcmData;
     cntxt.pData = cntxt.pDataBase;
     cntxt.size = sizeof(pcmData);
-	
-      
 ```
 
 ####  Create and start a playback engine 
 
 ```cpp
-
-	
-    /* Set arrays required[] and iidArray[] for SEEK interface
+/* Set arrays required[] and iidArray[] for SEEK interface
        (PlayItf is implicit) */
     required[0] =    SL_BOOLEAN_TRUE;
     iidArray[0] =    SL_IID_BUFFERQUEUE;
@@ -215,25 +185,18 @@ Then we can set up the output sink and callback data
 	{
 	    (*bufferQueueItf)->GetState(bufferQueueItf, &state);
 	}
-
-	
-      
 ```
 
 ####  Clean up 
 
 ```cpp
-
-	
-    /* Make sure player is stopped */
+/* Make sure player is stopped */
     res = (*playItf)->SetPlayState(playItf, SL_PLAYSTATE_STOPPED);
     CheckErr(res);
     /* Destroy the player */
     (*player)->Destroy(player);
     /* Destroy Output Mix object */
     (*OutputMix)->Destroy(OutputMix);
-	
-      
 ```
 
 ####  Full program 
@@ -242,8 +205,6 @@ Then we can set up the output sink and callback data
 The full code is
 
 ```cpp
-
-      
 #include <stdio.h>
 #include <stdlib.h>
 #include "OpenSLES.h"
@@ -428,9 +389,6 @@ int sl_main( void )
     (*sl)->Destroy(sl);
     exit(0);
 }
-
-      
-  
 ```
 
 ###  Record audio 
@@ -442,9 +400,7 @@ similar device. The main difference in this program from the previous one
 is that checks need to be performed first on the input devices:
 
 ```cpp
-
-	
-    res = (*sl)->GetInterface(sl, SL_IID_AUDIOIODEVICECAPABILITIES,
+res = (*sl)->GetInterface(sl, SL_IID_AUDIOIODEVICECAPABILITIES,
 			      (void*)&AudioIODeviceCapabilitiesItf); CheckErr(res);
     numInputs = MAX_NUMBER_INPUT_DEVICES;
     res = (*AudioIODeviceCapabilitiesItf)->GetAvailableAudioInputs(
@@ -484,8 +440,6 @@ is that checks need to be performed first on the input devices:
 	/* Appropriate error message here */
 	exit(1);
     }
-	
-      
 ```
 
 
@@ -494,8 +448,6 @@ an audio recorder rather than a player, and that the recorded
 sounds are saved to a file.
 
 ```cpp
-
-	
 #include <stdio.h>
 #include <stdlib.h>
 #include "OpenSLES.h"
@@ -663,7 +615,4 @@ int sl_main( void )
     (*sl)->Destroy(sl);
     exit(0);
 }
-
-	
-    
 ```

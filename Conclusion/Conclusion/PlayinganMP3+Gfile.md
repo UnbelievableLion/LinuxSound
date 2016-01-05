@@ -10,8 +10,7 @@ can send commands such as "faster", "slower".
 The script is `playZip`
 
 ```sh
-
-	#!/bin/bash
+#!/bin/bash
 
 VLC_OPTS=" -I luaintf --lua-intf cli   --play-and-exit --aout jack"
 
@@ -23,8 +22,6 @@ wget "${HTTP}$*" -O /tmp/karaoke/tmp.zip
 unzip -d /tmp/karaoke /tmp/karaoke/tmp.zip
 rm /tmp/karaoke/tmp.zip
 vlc $VLC_OPTS /tmp/karaoke/*.??3
-
-      
 ```
 
 

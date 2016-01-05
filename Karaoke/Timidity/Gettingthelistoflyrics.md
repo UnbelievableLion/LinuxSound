@@ -18,8 +18,6 @@ the string. Using GLib functions, we can build up an array
 of lines for a `KAR`file by
 
 ```cpp
-
-	
 struct _lyric_t {
     gchar *lyric;
     long tick; // not used here
@@ -86,8 +84,6 @@ static void build_lyric_lines() {
         printf("Line is %s\n", g_array_index(lines, GString *, n)->str);
     }
 }
-	
-      
 ```
 
 

@@ -10,7 +10,6 @@ and then connected to the correct ones. On the other hand, `jack-rack`does not c
 so may need to be connected to the system ports. This is done by e.g.
 
 ```cpp
-
 jack_disconnect TiMidity:port_1 system:playback_1
 jack_disconnect TiMidity:port_2 system:playback_2
 
@@ -19,5 +18,4 @@ jack_connect TiMidity:port_2 jack_rack:in_2
 
 jack_connect jack_rack:out_1 system:playback_1
 jack_connect jack_rack:out_2 system:playback_2
-      
 ```

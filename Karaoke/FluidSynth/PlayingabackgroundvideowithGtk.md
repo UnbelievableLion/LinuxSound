@@ -13,14 +13,12 @@ of the line, the part that has been sung already, the Pango
 markup for the line and the Pango attributes:
 
 ```cpp
-
 typedef struct _coloured_line_t {
     gchar *line;
     gchar *front_of_line;
     gchar *marked_up_line;
     PangoAttrList *attrs;
 } coloured_line_t;
-      
 ```
 
 
@@ -37,7 +35,6 @@ by Gtk.
 The program is `gtkkaraoke_player_video_pango.c`
 
 ```cpp
-
 #include <fluidsynth.h>
 #include <fluid_midi.h>
 #include <string.h>
@@ -770,9 +767,6 @@ int main(int argc, char** argv)
 
     return 0;
 }
-
-
-      
 ```
 
 

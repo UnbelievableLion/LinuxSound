@@ -6,11 +6,7 @@
 It runs under ALSA with a command line
 
 ```
-
-	
 fluidsynth -a alsa -l <soundfont> <files...>
-	
-      
 ```
 
 

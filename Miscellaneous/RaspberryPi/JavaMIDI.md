@@ -5,8 +5,6 @@
 openJDK supports the Java MIDI devices. The program `DeviceInfo`reports
 
 ```
-
-	
 MIDI devices:
     Name: Gervill, Decription: Software MIDI Synthesizer, Vendor: OpenJDK
         Device is a synthesizer
@@ -36,9 +34,6 @@ MIDI devices:
             com.sun.media.sound.RealTimeSequencer$SequencerTransmitter@65a77f
 Default system sequencer is Real Time Sequencer
 Default system synthesizer is Gervill
-
-	
-      
 ```
 
 

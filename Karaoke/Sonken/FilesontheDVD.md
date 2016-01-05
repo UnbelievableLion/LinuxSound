@@ -5,9 +5,7 @@
 My Sonken DVD disk contains these files:
 
 ```
-
-	
-	  BACK01.MPG
+BACK01.MPG
 	  DTSMUS00.DKD
 	  DTSMUS01.DKD
 	  DTSMUS02.DKD
@@ -18,8 +16,6 @@ My Sonken DVD disk contains these files:
 	  DTSMUS07.DKD
 	  DTSMUS10.DKD
 	  DTSMUS20.DKD
-	
-      
 ```
 
 ###   BACK01.MPG 

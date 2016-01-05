@@ -40,10 +40,6 @@ of LyricLine objects. Each panel displaying a line
 is given a line from this array.
 
 ```cpp
-
-      
-      
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -299,9 +295,4 @@ public class MidiGUI extends JFrame {
 	}
     }
 }
-
-
-
-      
-    
 ```

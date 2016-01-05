@@ -19,7 +19,6 @@ as well as checking the loudspeaker availability.
 The code is
 
 ```cpp
-
 /*
  * OpenMAX AL - Audio/Video Playback Example
  */
@@ -264,8 +263,6 @@ int xa_main (void)
     (*engine)->Destroy(engine);
     exit(0);
 }
-
-    
 ```
 
 

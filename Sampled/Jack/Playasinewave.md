@@ -25,7 +25,6 @@ latency.
 The program is
 
 ```cpp
-
 /** @file simple_client.c
  *
  * @brief This simple client demonstrates the basic features of JACK
@@ -246,6 +245,4 @@ main (int argc, char *argv[])
 	jack_client_close (client);
 	exit (0);
 }
-
-      
 ```

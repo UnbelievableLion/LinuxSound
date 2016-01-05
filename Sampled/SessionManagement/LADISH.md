@@ -19,11 +19,7 @@ Applications menu. To run `mplayer`you need to give the full
 command such as
 
 ```
-
-	
-	  mplayer -ao jack 54154.mp3
-	
-      
+mplayer -ao jack 54154.mp3
 ```
 
 
@@ -42,8 +38,7 @@ Connection graphs are stored as an XML file in `$HOME/.ladish`.
 For example, the above graph is stored as
 
 ```
-
-	<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!--
 ladish Studio configuration.
 -->
@@ -155,8 +150,6 @@ ladish Studio configuration.
     <application name="mplayer" uuid="7a9be17b-eb40-4be3-a9dc-82f36bbceeeb" terminal="true" level="0" autorun="true">mplayer -ao jack %2Fhome%2Fhttpd%2Fhtml%2FLinuxSound%2FKaraoke%2FSubtitles%2Fsongs%2F54154.mp3</application>
   </applications>
 </studio>
-
-      
 ```
 
 

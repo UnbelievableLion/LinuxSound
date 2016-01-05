@@ -27,8 +27,6 @@ directory `interface`and include files such as `dumb_c.c`for the dumb interface.
 around a data structure `ControlMode`defined in `timidity/controls.h`:
 
 ```cpp
-
-	
 typedef struct {
   char *id_name, id_character;
   char *id_short_name;
@@ -44,8 +42,6 @@ typedef struct {
   int  (*cmsg)(int type, int verbosity_level, char *fmt, ...);
   void (*event)(CtlEvent *ev);  /* Control events */
 } ControlMode;
-	
-      
 ```
 
 
@@ -62,14 +58,10 @@ pointer to a `CtlEvent`which is
 defined in `timidity/controls.h`:
 
 ```cpp
-
-	
 typedef struct _CtlEvent {
     int type;           /* See above */
     ptr_size_t v1, v2, v3, v4;/* Event value */
 } CtlEvent;
-	
-      
 ```
 
 
@@ -81,8 +73,6 @@ such as `CTLE_NOW_LOADING`and `CTLE_PITCH_BEND`.
 The type of interest to us is `CTLE_LYRIC`.
  `interface/dumb_c.c`
 ```cpp
-
-	
 static void ctl_event(CtlEvent *e)
 {
     switch(e->type) {
@@ -130,8 +120,6 @@ static void ctl_lyric(int lyricid)
         }
     }
 }
-	
-      
 ```
 
 

@@ -744,7 +744,6 @@ void state_cb(pa_context *c, void *userdata) {
   case PA_CONTEXT_CONNECTING:
   case PA_CONTEXT_AUTHORIZING:
   case PA_CONTEXT_SETTING_NAME:
-  default:
     break;
   case PA_CONTEXT_FAILED:
   case PA_CONTEXT_TERMINATED:
@@ -779,9 +778,10 @@ void state_cb(pa_context *c, void *userdata) {
       printf("pa_stream_connect_record() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
-  }
-
     break;
+  }
+  default:
+    return;
   }
 }
 
@@ -1158,7 +1158,6 @@ void state_cb(pa_context *c, void *userdata) {
   case PA_CONTEXT_CONNECTING:
   case PA_CONTEXT_AUTHORIZING:
   case PA_CONTEXT_SETTING_NAME:
-  default:
     break;
   case PA_CONTEXT_FAILED:
   case PA_CONTEXT_TERMINATED:
@@ -1212,9 +1211,10 @@ void state_cb(pa_context *c, void *userdata) {
     }
 
     pa_stream_trigger(stream, stream_success, NULL);
-  }
-
     break;
+  }
+  default:
+    return;
   }
 }
 
@@ -1750,7 +1750,6 @@ void state_cb(pa_context *c, void *userdata) {
   case PA_CONTEXT_CONNECTING:
   case PA_CONTEXT_AUTHORIZING:
   case PA_CONTEXT_SETTING_NAME:
-  default:
     break;
   case PA_CONTEXT_FAILED:
   case PA_CONTEXT_TERMINATED:
@@ -1804,9 +1803,10 @@ void state_cb(pa_context *c, void *userdata) {
     }
 
     pa_stream_trigger(stream, stream_success, NULL);
-  }
-
     break;
+  }
+  default:
+    return;
   }
 }
 
@@ -2204,7 +2204,6 @@ void state_cb(pa_context *c, void *userdata) {
   case PA_CONTEXT_CONNECTING:
   case PA_CONTEXT_AUTHORIZING:
   case PA_CONTEXT_SETTING_NAME:
-  default:
     break;
   case PA_CONTEXT_FAILED:
   case PA_CONTEXT_TERMINATED:
@@ -2260,9 +2259,10 @@ void state_cb(pa_context *c, void *userdata) {
       printf("pa_stream_connect_record() failed: %s", pa_strerror(pa_context_errno(c)));
       exit(1);
     }
-  }
-
     break;
+  }
+  default:
+    return;
   }
 }
 
@@ -2473,7 +2473,6 @@ void state_cb(pa_context *c, void *userdata) {
   case PA_CONTEXT_CONNECTING:
   case PA_CONTEXT_AUTHORIZING:
   case PA_CONTEXT_SETTING_NAME:
-  default:
     break;
   case PA_CONTEXT_FAILED:
   case PA_CONTEXT_TERMINATED:
@@ -2541,10 +2540,10 @@ void state_cb(pa_context *c, void *userdata) {
     } else {
       printf("Set playback callback\n");
     }
-    
-  }
-
     break;
+  }
+  default:
+    return;
   }
 }
 

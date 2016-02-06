@@ -3243,7 +3243,7 @@ main thread. A slight difference is that we have to wait for a client
 to start up a sink input, which we do by sleeping until the
 sink input callback assigns a non-zero value to the `sink_index`variable. Crude, yes. In a program such
 as `pavucontrol`the GUI runs in separate threads
-anyway and we do not need to rsort to such simple tricks.
+anyway and we do not need to resort to such simple tricks.
 
 
 The program is [pavolume_sink.c](pavolume_sink.c) .
